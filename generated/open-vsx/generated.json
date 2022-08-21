@@ -1,0 +1,26 @@
+{
+    "redhat-vscode-yaml": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "redhat-vscode-yaml",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/CHANGELOG.md",
+            "description": "YAML Language Support by Red Hat, with built-in Kubernetes syntax support",
+            "downloadPage": "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/redhat.vscode-yaml-1.9.1.vsix",
+            "homepage": "https://github.com/redhat-developer/vscode-yaml#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-yaml",
+            "marketplacePublisher": "redhat",
+            "name": "vscode-yaml",
+            "publisher": "redhat"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-yaml-1.9.1.zip",
+            "sha256": "sha256-XFg6L+DYhq7cmbnYPkRaZJK5zPTp4yeQR24fCpUGp4I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/redhat.vscode-yaml-1.9.1.vsix"
+        },
+        "version": "1.9.1"
+    }
+}
