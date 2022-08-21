@@ -30,7 +30,7 @@ jobs:
       run: deno run --allow-net=open-vsx.org --allow-write=open-vsx-extensions.toml --no-prompt declare-openvsx.ts
 
     - name: Run nvfetcher
-      run: labmem001@fg001 ~/nix-vscode-marketplace> nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
+      run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
 
     - name: Push changes to main
       run: git pull --rebase --autostash && git push
