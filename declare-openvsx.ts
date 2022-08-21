@@ -26,7 +26,7 @@ const entries = data.map(e => ({
 	passthru: e.passthru
 }])
 
-const extensions = Object.fromEntries([entries[0]])
+const extensions = Object.fromEntries([entries[0], entries[1]])
 
 const tomlandFixSrc = /^src = /gm
 const tomlandFixFetch = /^fetch = /gm
