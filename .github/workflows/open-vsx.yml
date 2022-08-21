@@ -33,7 +33,7 @@ jobs:
       run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
 
     - name: Add and commit
-      run: git add generated && git commit -m "action: Update pkgs"
+      run: git add generated && git commit -m "[action] Update pkgs"
 
     - name: Push changes to main
       run: git pull --rebase --autostash && git push
