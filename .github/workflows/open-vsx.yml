@@ -24,7 +24,7 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Install
-      run: nix-shell -p deno nvfetcher
+      run: nix-env -i deno nvfetcher -f '<nixpkgs>'
 
     - name: Generate TOML
       run: deno run --allow-net=open-vsx.org --allow-write=open-vsx-extensions.toml --no-prompt declare-openvsx.ts
