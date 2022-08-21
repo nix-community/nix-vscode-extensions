@@ -1,7 +1,7 @@
 name: Auto update open-vsx extensions
 
 on:
-  push
+  push:
   schedule:
     # Update every 2 hour
     - cron: "0 */2 * * *"
