@@ -1,0 +1,36 @@
+name: Auto update open-vsx extensions
+
+on:
+  push
+  schedule:
+    # Update every 2 hour
+    - cron: "0 */2 * * *"
+
+jobs:
+  update_pkgs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3.0.2
+
+    - name: Checkout
+      run: git checkout feat-auto-generate
+
+    - name: Install latest nix
+      uses: cachix/install-nix-action@v17
+      with:
+        extra_nix_config: |
+          substituters = https://cache.nixos.org https://nix-community.cachix.org https://fog.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
+        nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Install
+      run: nix-shell -p deno nvfetcher
+
+    - name: Generate TOML
+      run: deno run --allow-net=open-vsx.org --allow-write=open-vsx-extensions.toml --no-prompt declare-openvsx.ts
+
+    - name: Run nvfetcher
+      run: labmem001@fg001 ~/nix-vscode-marketplace> nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
+
+    - name: Push changes to main
+      run: git pull --rebase --autostash && git push
