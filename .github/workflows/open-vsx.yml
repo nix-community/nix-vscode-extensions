@@ -4,7 +4,7 @@ on:
   push:
   schedule:
     # Update every 2 hour
-    - cron: "*/10 * * * *"
+    - cron: "57 * * * *"
 
 jobs:
   update_extensions:
