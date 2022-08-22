@@ -1,9 +1,10 @@
 name: Update OpenVSX Extensions
 
 on:
-  push:
+  # Enable manual trigger
+  workflow_dispatch:
+  # Trigger every day
   schedule:
-    # Update every day
     - cron: "0 0 * * *"
 
 jobs:
