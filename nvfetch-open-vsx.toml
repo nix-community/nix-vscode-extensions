@@ -28,3 +28,18 @@ description = "Material Design Icons for Visual Studio Code"
 changelog = "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/CHANGELOG.md"
 downloadPage = "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/PKief.material-icon-theme-4.20.0.vsix"
 homepage = "https://github.com/PKief/vscode-material-icon-theme/blob/main/README.md"
+
+[redhat-java]
+src.openvsx = "redhat.java"
+fetch.openvsx = "redhat.java"
+
+[redhat-java.passthru]
+name = "java"
+publisher = "redhat"
+marketplaceName = "java"
+marketplacePublisher = "redhat"
+license = "epl20"
+description = "Java Linting, Intellisense, formatting, refactoring, Maven/Gradle support and more..."
+changelog = "https://open-vsx.org/api/redhat/java/1.9.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/redhat/java/1.9.0/file/redhat.java-1.9.0.vsix"
+homepage = "https://github.com/redhat-developer/vscode-java#readme"
