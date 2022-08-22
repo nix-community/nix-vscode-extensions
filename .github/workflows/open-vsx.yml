@@ -1,4 +1,4 @@
-name: Auto update open-vsx extensions
+name: Update OpenVSX Extensions
 
 on:
   push:
@@ -7,15 +7,16 @@ on:
     - cron: "0 */2 * * *"
 
 jobs:
-  update_pkgs:
+  update_extensions:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3.0.2
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        # TODO: Switch to master
+        ref: feat-auto-generate
 
-    - name: Checkout
-      run: git checkout feat-auto-generate
-
-    - name: Install latest nix
+    - name: Install latest Nix
       uses: cachix/install-nix-action@v17
       with:
         extra_nix_config: |
@@ -23,17 +24,19 @@ jobs:
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Install
-      run: nix-env -i deno nvfetcher -f '<nixpkgs>'
+    - name: Run GNU Hello
+      run: nix run "nixpkgs#hello"
 
-    - name: Generate TOML
-      run: deno run --allow-net=open-vsx.org --allow-write=open-vsx-extensions.toml --no-prompt declare-openvsx.ts
+    # - name: Generate TOML
+    #   run: deno run --allow-net=open-vsx.org --allow-write=open-vsx-extensions.toml --no-prompt declare-openvsx.ts
 
-    - name: Run nvfetcher
-      run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
+    # - name: Run nvfetcher
+    #   run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
 
-    - name: Add and commit
-      run: git add generated && git commit -m "[action] Update pkgs"
-
-    - name: Push changes to main
-      run: git pull --rebase --autostash && git push
+    # - name: Commit and push changes
+    #   run: |
+    #     git config user.name github-actions
+    #     git config user.email github-actions@github.com
+    #     git add .
+    #     git commit -m "action: update open-vsx extensions"
+    #     git push
