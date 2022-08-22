@@ -1,20 +1,20 @@
 const apiBaseURL = "https://open-vsx.org/api/"
 
-export const getExtensionsCount = async () => {
+export const getExtensionsCount = async (): Promise<number> => {
 	const response = await fetch(`${apiBaseURL}-/search?size=1`)
 	if (response.status !== 200)
 		throw `getExtensionsCount(): response.status === ${response.status}`
 	return (await response.json()).totalSize
 }
 
-export const getExtensionURLs = async (count) => {
+export const getExtensionURLs = async (count: number): Promise<string[]> => {
 	const response = await fetch(`${apiBaseURL}-/search?includeAllVersions=false&size=${count}`)
 	if (response.status !== 200)
 		throw `getExtensionsList(): response.status === ${response.status}`
-	return (await response.json()).extensions.map(e => e.url)
+	return (await response.json()).extensions.map((e: any) => e.url)
 }
 
-export const getExtensionData = async (url) => {
+export const getExtensionData = async (url: string): Promise<any> => {
 	const response = await fetch(url)
 	if (response.status !== 200)
 		throw `getExtensionData(): response.status === ${response.status}`

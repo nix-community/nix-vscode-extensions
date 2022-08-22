@@ -1,9 +1,9 @@
-export const isValidNixIdentifier = (str) => {
+export const isValidNixIdentifier = (str: string) => {
 	const identifier = /^[A-Za-z_][A-za-z0-9-_]*$/g
 	return identifier.test(str)
 }
 
-export const toValidNixIdentifier = (str) => {
+export const toValidNixIdentifier = (str: string) => {
 	const invalidChars = /[^A-Za-z0-9-_]/g
 	const invalidFirstChar = /^(\d)/g
 	return str.toLowerCase()
@@ -11,7 +11,7 @@ export const toValidNixIdentifier = (str) => {
 		.replaceAll(invalidFirstChar, (match, digit, offset, string) => `_${digit}`)
 }
 
-export const toNixpkgsLicense = (license) => {
+export const toNixpkgsLicense = (license: string) => {
 	const nixpkgsLicenses = [{
 		nixpkgsName: "mit",
 		accepted: [

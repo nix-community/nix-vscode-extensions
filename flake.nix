@@ -10,12 +10,6 @@
 	flake-utils.lib.eachDefaultSystem (system: let
 		pkgs = import nixpkgs { inherit system; };
 
-		dependencies = with pkgs; {
-			build = [ deno ];
-			test = [ ];
-			runtime = [ nvfetcher ];
-		};
-
 		extensions = with builtins; with pkgs; let
 			generated = import ./generated/open-vsx/generated.nix {
 				fetchurl = builtins.fetchurl;
@@ -45,9 +39,7 @@
     			export DENO_DIR="$(pwd)/.deno"
 			'';
 			nativeBuildInputs = with pkgs; [
-				dependencies.build
-				dependencies.test
-				dependencies.runtime
+				deno nvfetcher
 			];
 			buildInputs = [ ];
 		};

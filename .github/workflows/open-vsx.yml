@@ -24,19 +24,16 @@ jobs:
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Run GNU Hello
-      run: nix run "nixpkgs#hello"
-
-    # - name: Generate TOML
-    #   run: deno run --allow-net=open-vsx.org --allow-write=open-vsx-extensions.toml --no-prompt declare-openvsx.ts
+    - name: Run Updater
+      run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch-open-vsx.toml
 
     # - name: Run nvfetcher
     #   run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
 
-    # - name: Commit and push changes
-    #   run: |
-    #     git config user.name github-actions
-    #     git config user.email github-actions@github.com
-    #     git add .
-    #     git commit -m "action: update open-vsx extensions"
-    #     git push
+    - name: Commit and push changes
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add nvfetch-open-vsx.toml
+        git commit -m "action: update open-vsx extensions"
+        git push
