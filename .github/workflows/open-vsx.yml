@@ -27,8 +27,8 @@ jobs:
     - name: Run Updater
       run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch-open-vsx.toml
 
-    # - name: Run nvfetcher
-    #   run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
+    - name: Run nvfetcher
+      run: nvfetcher -o generated/open-vsx/ -c nvfetch-open-vsx.toml -t
 
     - name: Commit and push changes
       run: |
