@@ -1,4 +1,52 @@
 {
+    "PKief-material-icon-theme": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "PKief-material-icon-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/CHANGELOG.md",
+            "description": "Material Design Icons for Visual Studio Code",
+            "downloadPage": "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/PKief.material-icon-theme-4.20.0.vsix",
+            "homepage": "https://github.com/PKief/vscode-material-icon-theme/blob/main/README.md",
+            "license": "mit",
+            "marketplaceName": "material-icon-theme",
+            "marketplacePublisher": "PKief",
+            "name": "material-icon-theme",
+            "publisher": "pkief"
+        },
+        "pinned": false,
+        "src": {
+            "name": "material-icon-theme-4.20.0.zip",
+            "sha256": "sha256-OfFN//lnRPouREucEJKpKfXcyCN/nnZtH5oD23B4YX0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/PKief.material-icon-theme-4.20.0.vsix"
+        },
+        "version": "4.20.0"
+    },
+    "redhat-java": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "redhat-java",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/redhat/java/1.9.0/file/CHANGELOG.md",
+            "description": "Java Linting, Intellisense, formatting, refactoring, Maven/Gradle support and more...",
+            "downloadPage": "https://open-vsx.org/api/redhat/java/1.9.0/file/redhat.java-1.9.0.vsix",
+            "homepage": "https://github.com/redhat-developer/vscode-java#readme",
+            "license": "epl20",
+            "marketplaceName": "java",
+            "marketplacePublisher": "redhat",
+            "name": "java",
+            "publisher": "redhat"
+        },
+        "pinned": false,
+        "src": {
+            "name": "java-1.9.0.zip",
+            "sha256": "sha256-wMI2Db2wx8MR6Jrcx46C3lMruwUaGs7Fpg1K6lGvuiQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/redhat/java/1.9.0/file/redhat.java-1.9.0.vsix"
+        },
+        "version": "1.9.0"
+    },
     "redhat-vscode-yaml": {
         "cargoLocks": null,
         "extract": null,
