@@ -3,8 +3,8 @@ name: Update OpenVSX Extensions
 on:
   push:
   schedule:
-    # Update every 2 hour
-    - cron: "5 * * * *"
+    # Update every day
+    - cron: "0 0 * * *"
 
 jobs:
   update_extensions:
