@@ -28,7 +28,7 @@ jobs:
       run: export DENO_DIR=.deno && mkdir "${DENO_DIR}"
 
     - name: Run Updater
-      run: nix run "nixpkgs#deno" -- run --lock=lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch-open-vsx.toml
+      run: nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch-open-vsx.toml
 
     # - name: Run nvfetcher
     #   run: nvfetcher -c open-vsx-extensions.toml -o generated/open-vsx -t
