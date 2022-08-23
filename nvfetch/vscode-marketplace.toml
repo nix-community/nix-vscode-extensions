@@ -519,16 +519,6 @@ publisher = "techer"
 marketplaceName = "open-in-browser"
 marketplacePublisher = "techer"
 
-[felixfbecker-php-intellisense]
-src.vsmarketplace = "felixfbecker.php-intellisense"
-fetch.vsmarketplace = "felixfbecker.php-intellisense"
-
-[felixfbecker-php-intellisense.passthru]
-name = "php-intellisense"
-publisher = "felixfbecker"
-marketplaceName = "php-intellisense"
-marketplacePublisher = "felixfbecker"
-
 [writenothing-no-code]
 src.vsmarketplace = "writenothing.no-code"
 fetch.vsmarketplace = "writenothing.no-code"
