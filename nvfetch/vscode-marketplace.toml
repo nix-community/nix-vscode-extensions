@@ -14819,16 +14819,6 @@ publisher = "zovorap"
 marketplaceName = "ab-html-formatter"
 marketplacePublisher = "zovorap"
 
-[dushaobindoudou-translation]
-src.vsmarketplace = "dushaobindoudou.translation"
-fetch.vsmarketplace = "dushaobindoudou.translation"
-
-[dushaobindoudou-translation.passthru]
-name = "translation"
-publisher = "dushaobindoudou"
-marketplaceName = "translation"
-marketplacePublisher = "dushaobindoudou"
-
 [andrew-codes-cypress-snippets]
 src.vsmarketplace = "andrew-codes.cypress-snippets"
 fetch.vsmarketplace = "andrew-codes.cypress-snippets"
