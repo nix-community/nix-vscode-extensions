@@ -1,5 +1,5 @@
 const API_BASE_URL = "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/"
-const PAGE_COUNT = 6
+const PAGE_COUNT = 10
 
 export const getExtensionsDataPage = async (pageNumber: number): Promise<any> => {
 	const headers = {
@@ -26,7 +26,9 @@ export const getExtensionsDataPage = async (pageNumber: number): Promise<any> =>
 
 export const getExtensionsData = async () => {
 	const pages = [ ...Array(PAGE_COUNT).keys() ].map(i => i + 1)
-	const data = (await Promise.all(pages.map(pageNumber => getExtensionsDataPage(pageNumber)))).flat()
+	const data = (await Promise.all(pages.map(pageNumber => getExtensionsDataPage(pageNumber))))
+		.flat()
+		.filter(e => e.flags === "validated, public")
 	const count = data.length
 
 	return { count, data }
