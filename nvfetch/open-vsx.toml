@@ -1,0 +1,45 @@
+
+[redhat-vscode-yaml]
+src.openvsx = "redhat.vscode-yaml"
+fetch.openvsx = "redhat.vscode-yaml"
+
+[redhat-vscode-yaml.passthru]
+name = "vscode-yaml"
+publisher = "redhat"
+marketplaceName = "vscode-yaml"
+marketplacePublisher = "redhat"
+license = "mit"
+description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support"
+changelog = "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/redhat.vscode-yaml-1.9.1.vsix"
+homepage = "https://github.com/redhat-developer/vscode-yaml#readme"
+
+[PKief-material-icon-theme]
+src.openvsx = "PKief.material-icon-theme"
+fetch.openvsx = "PKief.material-icon-theme"
+
+[PKief-material-icon-theme.passthru]
+name = "material-icon-theme"
+publisher = "pkief"
+marketplaceName = "material-icon-theme"
+marketplacePublisher = "PKief"
+license = "mit"
+description = "Material Design Icons for Visual Studio Code"
+changelog = "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/PKief/material-icon-theme/4.20.0/file/PKief.material-icon-theme-4.20.0.vsix"
+homepage = "https://github.com/PKief/vscode-material-icon-theme/blob/main/README.md"
+
+[redhat-java]
+src.openvsx = "redhat.java"
+fetch.openvsx = "redhat.java"
+
+[redhat-java.passthru]
+name = "java"
+publisher = "redhat"
+marketplaceName = "java"
+marketplacePublisher = "redhat"
+license = "epl20"
+description = "Java Linting, Intellisense, formatting, refactoring, Maven/Gradle support and more..."
+changelog = "https://open-vsx.org/api/redhat/java/1.9.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/redhat/java/1.9.0/file/redhat.java-1.9.0.vsix"
+homepage = "https://github.com/redhat-developer/vscode-java#readme"
