@@ -41379,16 +41379,6 @@ publisher = "joelwmale"
 marketplaceName = "vscode-codeception"
 marketplacePublisher = "joelwmale"
 
-[formulahendry-azure-iot-toolkit]
-src.vsmarketplace = "formulahendry.azure-iot-toolkit"
-fetch.vsmarketplace = "formulahendry.azure-iot-toolkit"
-
-[formulahendry-azure-iot-toolkit.passthru]
-name = "azure-iot-toolkit"
-publisher = "formulahendry"
-marketplaceName = "azure-iot-toolkit"
-marketplacePublisher = "formulahendry"
-
 [barrettotte-ibmi-languages]
 src.vsmarketplace = "barrettotte.ibmi-languages"
 fetch.vsmarketplace = "barrettotte.ibmi-languages"
