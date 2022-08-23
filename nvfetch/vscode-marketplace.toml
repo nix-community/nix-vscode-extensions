@@ -26259,16 +26259,6 @@ publisher = "databyne"
 marketplaceName = "theme-monokai-hc"
 marketplacePublisher = "DataByne"
 
-[stayfool-vscode-asciidoc]
-src.vsmarketplace = "stayfool.vscode-asciidoc"
-fetch.vsmarketplace = "stayfool.vscode-asciidoc"
-
-[stayfool-vscode-asciidoc.passthru]
-name = "vscode-asciidoc"
-publisher = "stayfool"
-marketplaceName = "vscode-asciidoc"
-marketplacePublisher = "stayfool"
-
 [VSpaceCode-whichkey]
 src.vsmarketplace = "VSpaceCode.whichkey"
 fetch.vsmarketplace = "VSpaceCode.whichkey"
