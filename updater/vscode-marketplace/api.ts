@@ -1,5 +1,5 @@
 const API_BASE_URL = "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/"
-const PAGE_COUNT = 10
+const PAGE_COUNT = 6
 
 export const getExtensionsDataPage = async (pageNumber: number): Promise<any> => {
 	const headers = {
@@ -12,8 +12,8 @@ export const getExtensionsDataPage = async (pageNumber: number): Promise<any> =>
 			criteria: [{ filterType: 8, value: "Microsoft.VisualStudio.Code" }],
 			pageNumber,
 			pageSize: 1000,
-			sortBy: 0,
-			sortOrder: 0
+			sortBy: 4,
+			sortOrder: 2
 		}],
 		assetTypes: [],
 		flags: 0
