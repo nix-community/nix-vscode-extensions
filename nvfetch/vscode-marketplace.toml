@@ -409,16 +409,6 @@ publisher = "cschlosser"
 marketplaceName = "doxdocgen"
 marketplacePublisher = "cschlosser"
 
-[CoenraadS-bracket-pair-colorizer]
-src.vsmarketplace = "CoenraadS.bracket-pair-colorizer"
-fetch.vsmarketplace = "CoenraadS.bracket-pair-colorizer"
-
-[CoenraadS-bracket-pair-colorizer.passthru]
-name = "bracket-pair-colorizer"
-publisher = "coenraads"
-marketplaceName = "bracket-pair-colorizer"
-marketplacePublisher = "CoenraadS"
-
 [ms-vscode-cpptools-extension-pack]
 src.vsmarketplace = "ms-vscode.cpptools-extension-pack"
 fetch.vsmarketplace = "ms-vscode.cpptools-extension-pack"
