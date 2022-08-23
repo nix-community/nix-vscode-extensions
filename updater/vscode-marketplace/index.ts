@@ -1,26 +1,23 @@
 import { log } from "../deps.ts"
 import * as nixUtils from "../utils/nix.ts"
+import * as vscodeMarketplaceAPI from "./api.ts"
 
 export async function getEntries() {
-	log.info("Fetching data from OpenVSX API...")
-	const { count, data } = await openVSXAPI.getExtensionsData()
-	log.info("Fetched data from OpenVSX API.")
+	log.info("Fetching data from VSCode Marketplace API...")
+	const { count, data } = await vscodeMarketplaceAPI.getExtensionsData()
+	log.info("Fetched data from VSCode Marketplace API.")
 	log.info(`${count} extensions found.`)
 
 	log.info("Generating entries...")
 	const entries = data.map(e => ({
-		name: e.name,
-		publisher: e.namespace,
+		name: e.extensionName,
+		publisher: e.publisher.publisherName,
 		passthru: {
-			name: nixUtils.toValidNixIdentifier(e.name),
-			publisher: nixUtils.toValidNixIdentifier(e.namespace),
-			marketplaceName: e.name,
-			marketplacePublisher: e.namespace,
-			license: nixUtils.toNixpkgsLicense(e.license),
-			description: e.description,
-			changelog: e.files.changelog,
-			downloadPage: e.files.download,
-			homepage: e.homepage
+			name: nixUtils.toValidNixIdentifier(e.extensionName),
+			publisher: nixUtils.toValidNixIdentifier(e.publisher.publisherName),
+			marketplaceName: e.extensionName,
+			marketplacePublisher: e.publisher.publisherName,
+			description: e.shortDescription
 		}
 	})).map(e => [`${e.publisher}-${e.name}`, {
 		src: `${e.publisher}.${e.name}`,
