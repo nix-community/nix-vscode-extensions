@@ -1,6 +1,5 @@
 import { log } from "../deps.ts"
 import * as nixUtils from "../utils/nix.ts"
-import * as openVSXAPI from "./api.ts"
 
 export async function getEntries() {
 	log.info("Fetching data from OpenVSX API...")
