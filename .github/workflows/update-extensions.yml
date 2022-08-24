@@ -1,7 +1,6 @@
 name: Update Extensions
 
 on:
-  push:
   # Enable manual trigger
   workflow_dispatch:
   # Trigger every day
@@ -27,8 +26,8 @@ jobs:
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
         nix_path: nixpkgs=channel:nixos-unstable
 
-    # - name: Run Updater on VSCode Marketplace extensions
-    #   run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=marketplace.visualstudio.com --no-prompt updater/index.ts vscode-marketplace nvfetch/vscode-marketplace.toml
+    - name: Run Updater on VSCode Marketplace extensions
+      run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=marketplace.visualstudio.com --no-prompt updater/index.ts vscode-marketplace nvfetch/vscode-marketplace.toml
 
     - name: Run nvfetcher on VSCode Marketplace extensions
       run: nix run "nixpkgs#nvfetcher" -- -o generated/vscode-marketplace/ -c nvfetch/vscode-marketplace.toml -t

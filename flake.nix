@@ -10,12 +10,13 @@
 	flake-utils.lib.eachDefaultSystem (system: let
 		pkgs = import nixpkgs { inherit system; };
 
-		extensions = with builtins; with pkgs; let
-			generated = import ./generated/open-vsx/generated.nix {
-				fetchurl = builtins.fetchurl;
-				fetchgit = builtins.fetchGit;
-				fetchFromGitHub = pkgs.fetchFromGitHub;
+		loadGenerated = set:
+		with builtins; with pkgs; let
+			generated = import ./generated/${set}/generated.nix {
+				inherit fetchurl fetchFromGitHub;
+				fetchgit = fetchGit;
 			};
+
 			groupedByPublisher = (groupBy (e: e.publisher) (attrValues generated));
 			pkgDefinition = e: with e; with vscode-utils; {
 				inherit name;
@@ -33,6 +34,11 @@
 				};
 			};
 		in mapAttrs (_: val: listToAttrs (map pkgDefinition val)) groupedByPublisher;
+
+		extensions = {
+			vscode   = loadGenerated "vscode-marketplace";
+			open-vsx = loadGenerated "open-vsx";
+		};
 	in {
 		devShell = pkgs.mkShell {
 			shellHook = ''
@@ -44,5 +50,8 @@
 			buildInputs = [ ];
 		};
 		packages = extensions;
+		overlays.default = final: prev: {
+			vscode-marketplace = extensions;
+		};	
 	});
 }
