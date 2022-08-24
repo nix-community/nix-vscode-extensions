@@ -33,17 +33,18 @@ jobs:
     - name: Run nvfetcher on VSCode Marketplace extensions
       run: nix run "nixpkgs#nvfetcher" -- -o generated/vscode-marketplace/ -c nvfetch/vscode-marketplace.toml -t
 
-    - name: Run Updater on OpenVSX extensions
-      run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch/open-vsx.toml
+    # - name: Run Updater on OpenVSX extensions
+    #   run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch/open-vsx.toml
 
-    - name: Run nvfetcher on OpenVSX extensions
-      run: nix run "nixpkgs#nvfetcher" -- -o generated/open-vsx/ -c nvfetch/open-vsx.toml -t
+    # - name: Run nvfetcher on OpenVSX extensions
+    #   run: nix run "nixpkgs#nvfetcher" -- -o generated/open-vsx/ -c nvfetch/open-vsx.toml -t
+
+    #git add nvfetch/open-vsx.toml generated/open-vsx
 
     - name: Commit and push changes
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add nvfetch/open-vsx.toml generated/open-vsx
         git add nvfetch/vscode-marketplace.toml generated/vscode-marketplace
         git commit -m "action: update extensions"
         git push
