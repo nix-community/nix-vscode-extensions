@@ -17,7 +17,6 @@ export async function getEntries() {
 			publisher: nixUtils.toValidNixIdentifier(e.publisher.publisherName),
 			marketplaceName: e.extensionName,
 			marketplacePublisher: e.publisher.publisherName,
-			description: e.shortDescription
 		}
 	})).map(e => [`${e.publisher}-${e.name}`, {
 		src: `${e.publisher}.${e.name}`,
