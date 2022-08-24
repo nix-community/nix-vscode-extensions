@@ -9,7 +9,7 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  update_extensions:
+  update_vscode_marketplace_extensions:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -27,11 +27,37 @@ jobs:
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Run Updater on VSCode Marketplace extensions
-      run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=marketplace.visualstudio.com --no-prompt updater/index.ts vscode-marketplace nvfetch/vscode-marketplace.toml
+    # - name: Run Updater on VSCode Marketplace extensions
+    #   run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=marketplace.visualstudio.com --no-prompt updater/index.ts vscode-marketplace nvfetch/vscode-marketplace.toml
 
     - name: Run nvfetcher on VSCode Marketplace extensions
       run: nix run "nixpkgs#nvfetcher" -- -o generated/vscode-marketplace/ -c nvfetch/vscode-marketplace.toml -t
+
+    - name: Commit and push changes
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add nvfetch/vscode-marketplace.toml generated/vscode-marketplace
+        git commit -m "action: update vscode-marketplace extensions"
+        git push
+
+  update_open_vsx_extensions:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        # TODO: Switch to master
+        # FIXME: Fails on no changes
+        ref: feat-auto-generate
+
+    - name: Install latest Nix
+      uses: cachix/install-nix-action@v17
+      with:
+        extra_nix_config: |
+          substituters = https://cache.nixos.org https://nix-community.cachix.org https://fog.cachix.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
+        nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Run Updater on OpenVSX extensions
       run: export DENO_DIR=.deno && nix run "nixpkgs#deno" -- run --lock=updater/lock.json --allow-write --allow-net=open-vsx.org --no-prompt updater/index.ts open-vsx nvfetch/open-vsx.toml
@@ -44,6 +70,5 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add nvfetch/open-vsx.toml generated/open-vsx
-        git add nvfetch/vscode-marketplace.toml generated/vscode-marketplace
-        git commit -m "action: update extensions"
+        git commit -m "action: update open-vsx extensions"
         git push
