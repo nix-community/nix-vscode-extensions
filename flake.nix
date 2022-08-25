@@ -29,7 +29,7 @@
 							name = marketplaceName;
 						};
 						meta = with lib; {
-							inherit changelog description downloadPage homepage;
+							inherit changelog downloadPage homepage;
 							license = licenses.${license};
 						};
 					};

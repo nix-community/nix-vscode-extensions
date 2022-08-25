@@ -18,7 +18,6 @@ export async function getEntries() {
 			marketplaceName: e.name,
 			marketplacePublisher: e.namespace,
 			license: nixUtils.toNixpkgsLicense(e.license),
-			description: e.description,
 			changelog: e.files.changelog,
 			downloadPage: e.files.download,
 			homepage: e.homepage
