@@ -18,22 +18,35 @@
 			};
 
 			groupedByPublisher = (groupBy (e: e.publisher) (attrValues generated));
-			pkgDefinition = e: with e; with vscode-utils; {
-				inherit name;
-				value = buildVscodeMarketplaceExtension {
-					vsix = src;
-					mktplcRef = {
-						inherit version;
-						publisher = marketplacePublisher;
-						name = marketplaceName;
+			pkgDefinition = {
+				open-vsx = e: with e; with vscode-utils; {
+					inherit name;
+					value = buildVscodeMarketplaceExtension {
+						vsix = src;
+						mktplcRef = {
+							inherit version;
+							publisher = marketplacePublisher;
+							name = marketplaceName;
+						};
+						meta = with lib; {
+							inherit changelog description downloadPage homepage;
+							license = licenses.${license};
+						};
 					};
-					meta = with lib; {
-						inherit changelog description downloadPage homepage;
-						license = licenses.${license};
+				};
+				vscode-marketplace = e: with e; with vscode-utils; {
+					inherit name;
+					value = buildVscodeMarketplaceExtension {
+						vsix = src;
+						mktplcRef = {
+							inherit version;
+							publisher = marketplacePublisher;
+							name = marketplaceName;
+						};
 					};
 				};
 			};
-		in mapAttrs (_: val: listToAttrs (map pkgDefinition val)) groupedByPublisher;
+		in mapAttrs (_: val: listToAttrs (map pkgDefinition.${set} val)) groupedByPublisher;
 
 		extensions = {
 			vscode   = loadGenerated "vscode-marketplace";
