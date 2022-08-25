@@ -1,13 +1,31 @@
 # Nix VSCode Marketplace
 
-[Searcing `nixpkgs` yields 206 VSCode extensions at the time of writing this.][nixpkgs-query] However, the VSCode marketplace contains more than 50,000 extensions.
+At the time of writing this,
+[searching `nixpkgs` yields 209 VSCode extensions.][nixpkgs-query]
+However, the VSCode marketplace contains more than 50,000 extensions.
 
-This flake includes the most popular 5,000 VSCode extensions at the time of writing.
+This flake includes all extensions from OpenVSX, and the 10k most downloaded
+extensions from the VSCode Marketplace.
 
-## How this works
+I've setup a GitHub action to update all extensions daily.
 
-I wrote a small program to auto-generate the definitions for the extensions. However, the program needs to download the extension files to compute their `SHA256`. That's why I could not include the full extension set, as it would take ages to download the files for all of them.
+## How To Use
 
-Also, the program now requires me to run it manually. I'm open to help with making it an automatic job that runs in the cloud.
+Add the flake as an input to your flake.
 
-[nixpkgs-query]: https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vscode
+Then, you can directly use the extensions that this package exports. Or you can
+use the overlay.
+
+## Contribution
+
+Improvement on any part of this project is welcome. These are possible areas of
+improvement that I have in mind:
+
+- License information is only included with OpenVSX extensions. This is because
+I could not obtain license information from the official VSCode Marketplace API.
+The official API is not documented at all, so I'm not sure if I can get license
+information out of it or not.
+- The Nix expressions that converts the output of Nvfetcher to package
+definitions is not the most pretty Nix expressions ever.
+- The GitHub action is not great either. I'm sure it can be way better, but I'm
+not particularly good with actions (this is my first one ever).
