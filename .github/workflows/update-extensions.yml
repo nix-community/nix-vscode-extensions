@@ -39,7 +39,6 @@ jobs:
 
   update_open_vsx_extensions:
     runs-on: ubuntu-latest
-    needs: [update_vscode_marketplace_extensions]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
