@@ -1512,8 +1512,8 @@
         "extract": null,
         "name": "CucumberOpen-cucumber-official",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/CucumberOpen/cucumber-official/1.2.10/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/CucumberOpen/cucumber-official/1.2.10/file/CucumberOpen.cucumber-official-1.2.10.vsix",
+            "changelog": "https://open-vsx.org/api/CucumberOpen/cucumber-official/1.2.11/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/CucumberOpen/cucumber-official/1.2.11/file/CucumberOpen.cucumber-official-1.2.11.vsix",
             "homepage": "https://github.com/cucumber/vscode#readme",
             "license": "mit",
             "marketplaceName": "cucumber-official",
@@ -1523,12 +1523,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "cucumber-official-1.2.10.zip",
-            "sha256": "sha256-YRk+ksa0gkcCCz6ESiFPlUcG9KcNW4wGFud7PJ49TVI=",
+            "name": "cucumber-official-1.2.11.zip",
+            "sha256": "sha256-1IcJog+o94FRzpR3JCkyX6d97Cb6JfXW87dGyeiQROg=",
             "type": "url",
-            "url": "https://open-vsx.org/api/CucumberOpen/cucumber-official/1.2.10/file/CucumberOpen.cucumber-official-1.2.10.vsix"
+            "url": "https://open-vsx.org/api/CucumberOpen/cucumber-official/1.2.11/file/CucumberOpen.cucumber-official-1.2.11.vsix"
         },
-        "version": "1.2.10"
+        "version": "1.2.11"
     },
     "DAXaholic-vscode-edifact": {
         "cargoLocks": null,
@@ -4250,8 +4250,8 @@
         "extract": null,
         "name": "LuqueDaniel-languague-renpy",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/LuqueDaniel/languague-renpy/2.0.12/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/LuqueDaniel/languague-renpy/2.0.12/file/LuqueDaniel.languague-renpy-2.0.12.vsix",
+            "changelog": "https://open-vsx.org/api/LuqueDaniel/languague-renpy/2.0.13/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/LuqueDaniel/languague-renpy/2.0.13/file/LuqueDaniel.languague-renpy-2.0.13.vsix",
             "homepage": "https://github.com/LuqueDaniel/vscode-language-renpy",
             "license": "mit",
             "marketplaceName": "languague-renpy",
@@ -4261,12 +4261,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "languague-renpy-2.0.12.zip",
-            "sha256": "sha256-aWbTpKMvJwo4UZVRA7bcp40gEQeI6a23eyCeR1O0mG4=",
+            "name": "languague-renpy-2.0.13.zip",
+            "sha256": "sha256-5z74/RAsvIKGjI6ZTzsRhxe+AsKgfpREiFolR5vVGLg=",
             "type": "url",
-            "url": "https://open-vsx.org/api/LuqueDaniel/languague-renpy/2.0.12/file/LuqueDaniel.languague-renpy-2.0.12.vsix"
+            "url": "https://open-vsx.org/api/LuqueDaniel/languague-renpy/2.0.13/file/LuqueDaniel.languague-renpy-2.0.13.vsix"
         },
-        "version": "2.0.12"
+        "version": "2.0.13"
     },
     "Luxcium-pop-n-lock-theme-vscode": {
         "cargoLocks": null,
@@ -6114,8 +6114,8 @@
         "extract": null,
         "name": "Prisma-prisma-insider",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1359/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1359/file/Prisma.prisma-insider-31.0.1359.vsix",
+            "changelog": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1362/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1362/file/Prisma.prisma-insider-31.0.1362.vsix",
             "homepage": "https://github.com/prisma/language-tools#readme",
             "license": "asl20",
             "marketplaceName": "prisma-insider",
@@ -6125,12 +6125,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "prisma-insider-31.0.1359.zip",
-            "sha256": "sha256-sF8haD8RePkbY+1wqIAUj5UAHRlPf0tQykUxglNRbJU=",
+            "name": "prisma-insider-31.0.1362.zip",
+            "sha256": "sha256-K+XFDHOLo44FP3q6cu8xEOn+emg/Mk5BuSyaK129ggE=",
             "type": "url",
-            "url": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1359/file/Prisma.prisma-insider-31.0.1359.vsix"
+            "url": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1362/file/Prisma.prisma-insider-31.0.1362.vsix"
         },
-        "version": "31.0.1359"
+        "version": "31.0.1362"
     },
     "Prisma-vscode-graphql": {
         "cargoLocks": null,
@@ -8185,8 +8185,8 @@
         "extract": null,
         "name": "YXL-cloudmusic",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/YXL/cloudmusic/9.14.1/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/YXL/cloudmusic/9.14.1/file/YXL.cloudmusic-9.14.1.vsix",
+            "changelog": "https://open-vsx.org/api/YXL/cloudmusic/9.14.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/YXL/cloudmusic/9.14.4/file/YXL.cloudmusic-9.14.4.vsix",
             "homepage": "https://github.com/YXL76/cloudmusic-vscode#readme",
             "license": "mit",
             "marketplaceName": "cloudmusic",
@@ -8196,12 +8196,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "cloudmusic-9.14.1.zip",
-            "sha256": "sha256-pKhmVc6w3OtgMTpNdiTnT81okFukHkQqST79clGmLGE=",
+            "name": "cloudmusic-9.14.4.zip",
+            "sha256": "sha256-EQHgThd8pacSvfezR2d+KBCOFq4CvOvVH9Zsvb+EBwM=",
             "type": "url",
-            "url": "https://open-vsx.org/api/YXL/cloudmusic/9.14.1/file/YXL.cloudmusic-9.14.1.vsix"
+            "url": "https://open-vsx.org/api/YXL/cloudmusic/9.14.4/file/YXL.cloudmusic-9.14.4.vsix"
         },
-        "version": "9.14.1"
+        "version": "9.14.4"
     },
     "YoussefBouzekri-spaceduck": {
         "cargoLocks": null,
@@ -11129,8 +11129,8 @@
         "extract": null,
         "name": "asyncapi-asyncapi-preview",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/asyncapi/asyncapi-preview/0.3.6/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/asyncapi/asyncapi-preview/0.3.6/file/asyncapi.asyncapi-preview-0.3.6.vsix",
+            "changelog": "https://open-vsx.org/api/asyncapi/asyncapi-preview/0.3.7/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/asyncapi/asyncapi-preview/0.3.7/file/asyncapi.asyncapi-preview-0.3.7.vsix",
             "homepage": "https://github.com/asyncapi/vs-asyncapi-preview/blob/master/README.md",
             "license": "asl20",
             "marketplaceName": "asyncapi-preview",
@@ -11140,12 +11140,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "asyncapi-preview-0.3.6.zip",
-            "sha256": "sha256-DmMFnGhTldQLZI8ifIhr7fBwvyoHGvhVAtgpDjBqneU=",
+            "name": "asyncapi-preview-0.3.7.zip",
+            "sha256": "sha256-U0nOHNNDKVTbJg9ZWZN+jkDSMrqXJTfcHWhrVuC7+JI=",
             "type": "url",
-            "url": "https://open-vsx.org/api/asyncapi/asyncapi-preview/0.3.6/file/asyncapi.asyncapi-preview-0.3.6.vsix"
+            "url": "https://open-vsx.org/api/asyncapi/asyncapi-preview/0.3.7/file/asyncapi.asyncapi-preview-0.3.7.vsix"
         },
-        "version": "0.3.6"
+        "version": "0.3.7"
     },
     "atishay-jain-All-Autocomplete": {
         "cargoLocks": null,
@@ -11734,8 +11734,8 @@
         "extract": null,
         "name": "betterthantomorrow-calva",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/betterthantomorrow/calva/2.0.295/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/betterthantomorrow/calva/2.0.295/file/betterthantomorrow.calva-2.0.295.vsix",
+            "changelog": "https://open-vsx.org/api/betterthantomorrow/calva/2.0.297/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/betterthantomorrow/calva/2.0.297/file/betterthantomorrow.calva-2.0.297.vsix",
             "homepage": "https://github.com/BetterThanTomorrow/calva#readme",
             "license": "mit",
             "marketplaceName": "calva",
@@ -11745,12 +11745,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "calva-2.0.295.zip",
-            "sha256": "sha256-dMiuFUr57dyWfH2AOjUmZGmiS1Hc2O/AyFdcFgT1Uzc=",
+            "name": "calva-2.0.297.zip",
+            "sha256": "sha256-0hpslSJBiB6rFV5Ismnt7oNKcVbplkSmc5FzAUj5p5g=",
             "type": "url",
-            "url": "https://open-vsx.org/api/betterthantomorrow/calva/2.0.295/file/betterthantomorrow.calva-2.0.295.vsix"
+            "url": "https://open-vsx.org/api/betterthantomorrow/calva/2.0.297/file/betterthantomorrow.calva-2.0.297.vsix"
         },
-        "version": "2.0.295"
+        "version": "2.0.297"
     },
     "betterthantomorrow-joyride": {
         "cargoLocks": null,
@@ -17605,8 +17605,8 @@
         "extract": null,
         "name": "everscale-solidity-support",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/everscale/solidity-support/1.3.46/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/everscale/solidity-support/1.3.46/file/everscale.solidity-support-1.3.46.vsix",
+            "changelog": "https://open-vsx.org/api/everscale/solidity-support/1.3.51/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/everscale/solidity-support/1.3.51/file/everscale.solidity-support-1.3.51.vsix",
             "homepage": "https://github.com/pizza-777/everscale-solidity-vscode-extension#readme",
             "license": "asl20",
             "marketplaceName": "solidity-support",
@@ -17616,12 +17616,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "solidity-support-1.3.46.zip",
-            "sha256": "sha256-PR04x0iXxJR50Vl0mSFjZVhsOz5C9nzAnS0JA/Y7zT4=",
+            "name": "solidity-support-1.3.51.zip",
+            "sha256": "sha256-MjBQG3A6U9ETOIc/1RzFSMh5tqk9yQkRON+owzh0vDY=",
             "type": "url",
-            "url": "https://open-vsx.org/api/everscale/solidity-support/1.3.46/file/everscale.solidity-support-1.3.46.vsix"
+            "url": "https://open-vsx.org/api/everscale/solidity-support/1.3.51/file/everscale.solidity-support-1.3.51.vsix"
         },
-        "version": "1.3.46"
+        "version": "1.3.51"
     },
     "evgeniypeshkov-syntax-highlighter": {
         "cargoLocks": null,
@@ -26277,8 +26277,8 @@
         "extract": null,
         "name": "marus25-cortex-debug",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/marus25/cortex-debug/1.6.1/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/marus25/cortex-debug/1.6.1/file/marus25.cortex-debug-1.6.1.vsix",
+            "changelog": "https://open-vsx.org/api/marus25/cortex-debug/1.6.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/marus25/cortex-debug/1.6.2/file/marus25.cortex-debug-1.6.2.vsix",
             "homepage": "https://github.com/Marus/cortex-debug#readme",
             "license": "mit",
             "marketplaceName": "cortex-debug",
@@ -26288,12 +26288,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "cortex-debug-1.6.1.zip",
-            "sha256": "sha256-0nIRzad958x3kO0VMm5lRVv4gEvI8grbcHBDTN4dmsA=",
+            "name": "cortex-debug-1.6.2.zip",
+            "sha256": "sha256-uSzokJD3lVgJQ5/P5YAZJS5hnL52snWS45R8x0C6dFs=",
             "type": "url",
-            "url": "https://open-vsx.org/api/marus25/cortex-debug/1.6.1/file/marus25.cortex-debug-1.6.1.vsix"
+            "url": "https://open-vsx.org/api/marus25/cortex-debug/1.6.2/file/marus25.cortex-debug-1.6.2.vsix"
         },
-        "version": "1.6.1"
+        "version": "1.6.2"
     },
     "masonliu-exercism": {
         "cargoLocks": null,
@@ -27700,8 +27700,8 @@
         "extract": null,
         "name": "moocfi-test-my-code",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/moocfi/test-my-code/2.1.4/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/moocfi/test-my-code/2.1.4/file/moocfi.test-my-code-2.1.4.vsix",
+            "changelog": "https://open-vsx.org/api/moocfi/test-my-code/2.1.5/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/moocfi/test-my-code/2.1.5/file/moocfi.test-my-code-2.1.5.vsix",
             "homepage": "https://github.com/rage/tmc-vscode#readme",
             "license": "mit",
             "marketplaceName": "test-my-code",
@@ -27711,12 +27711,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "test-my-code-2.1.4.zip",
-            "sha256": "sha256-nxookZHFZBVfJewK6Tse2IpOL3vohCJmEyevP3558wQ=",
+            "name": "test-my-code-2.1.5.zip",
+            "sha256": "sha256-UNHloab3AEbUZ6XTfL7TlwJbeT+PcjEOFiZOLaRoGrc=",
             "type": "url",
-            "url": "https://open-vsx.org/api/moocfi/test-my-code/2.1.4/file/moocfi.test-my-code-2.1.4.vsix"
+            "url": "https://open-vsx.org/api/moocfi/test-my-code/2.1.5/file/moocfi.test-my-code-2.1.5.vsix"
         },
-        "version": "2.1.4"
+        "version": "2.1.5"
     },
     "moshfeu-compare-folders": {
         "cargoLocks": null,
@@ -29736,8 +29736,8 @@
         "extract": null,
         "name": "mutable-ai-mutable-ai",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.25/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.25/file/mutable-ai.mutable-ai-1.1.25.vsix",
+            "changelog": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.27/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.27/file/mutable-ai.mutable-ai-1.1.27.vsix",
             "homepage": "https://mutable.ai",
             "license": "unfree",
             "marketplaceName": "mutable-ai",
@@ -29747,12 +29747,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "mutable-ai-1.1.25.zip",
-            "sha256": "sha256-ZcDDjv0x3z57evGwrf4CbWfSpWxNuU9rahgV6fJEJdo=",
+            "name": "mutable-ai-1.1.27.zip",
+            "sha256": "sha256-3MMb0Whh7ZigkTeiDKj9AQJdYkNJC2KXpYwXmxKJyaE=",
             "type": "url",
-            "url": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.25/file/mutable-ai.mutable-ai-1.1.25.vsix"
+            "url": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.27/file/mutable-ai.mutable-ai-1.1.27.vsix"
         },
-        "version": "1.1.25"
+        "version": "1.1.27"
     },
     "muuvmuuv-vscode-sundial": {
         "cargoLocks": null,
@@ -30571,8 +30571,8 @@
         "extract": null,
         "name": "nrwl-angular-console",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/nrwl/angular-console/17.20.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/nrwl/angular-console/17.20.0/file/nrwl.angular-console-17.20.0.vsix",
+            "changelog": "https://open-vsx.org/api/nrwl/angular-console/17.21.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/nrwl/angular-console/17.21.0/file/nrwl.angular-console-17.21.0.vsix",
             "homepage": "https://nx.dev/using-nx/console#nx-console-for-vscode",
             "license": "mit",
             "marketplaceName": "angular-console",
@@ -30582,12 +30582,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "angular-console-17.20.0.zip",
-            "sha256": "sha256-tQFNddpwNlj+KlRrh6IeTRr4JwtnXh142GqzavE27Ck=",
+            "name": "angular-console-17.21.0.zip",
+            "sha256": "sha256-vwAvykktm4VTuA8MMB08QDRFbCZqK/mnlkf38/F/YJY=",
             "type": "url",
-            "url": "https://open-vsx.org/api/nrwl/angular-console/17.20.0/file/nrwl.angular-console-17.20.0.vsix"
+            "url": "https://open-vsx.org/api/nrwl/angular-console/17.21.0/file/nrwl.angular-console-17.21.0.vsix"
         },
-        "version": "17.20.0"
+        "version": "17.21.0"
     },
     "nullxception-cherry-theme": {
         "cargoLocks": null,
@@ -32491,8 +32491,8 @@
         "extract": null,
         "name": "pokey-cursorless",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/pokey/cursorless/0.26.418/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/pokey/cursorless/0.26.418/file/pokey.cursorless-0.26.418.vsix",
+            "changelog": "https://open-vsx.org/api/pokey/cursorless/0.26.419/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pokey/cursorless/0.26.419/file/pokey.cursorless-0.26.419.vsix",
             "homepage": "https://www.cursorless.org/",
             "license": "mit",
             "marketplaceName": "cursorless",
@@ -32502,12 +32502,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "cursorless-0.26.418.zip",
-            "sha256": "sha256-uQtuKBoNj5EX5r01fHZfqmX8ECFKiujP6AywryLesTM=",
+            "name": "cursorless-0.26.419.zip",
+            "sha256": "sha256-rRRW61QDXJuegQcqNaEd+6ErTprYBsDy2RbhfU6t0mY=",
             "type": "url",
-            "url": "https://open-vsx.org/api/pokey/cursorless/0.26.418/file/pokey.cursorless-0.26.418.vsix"
+            "url": "https://open-vsx.org/api/pokey/cursorless/0.26.419/file/pokey.cursorless-0.26.419.vsix"
         },
-        "version": "0.26.418"
+        "version": "0.26.419"
     },
     "pokey-parse-tree": {
         "cargoLocks": null,
@@ -34304,8 +34304,8 @@
         "extract": null,
         "name": "redhat-vscode-yaml",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/redhat.vscode-yaml-1.9.1.vsix",
+            "changelog": "https://open-vsx.org/api/redhat/vscode-yaml/1.10.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/redhat/vscode-yaml/1.10.1/file/redhat.vscode-yaml-1.10.1.vsix",
             "homepage": "https://github.com/redhat-developer/vscode-yaml#readme",
             "license": "mit",
             "marketplaceName": "vscode-yaml",
@@ -34315,12 +34315,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "vscode-yaml-1.9.1.zip",
-            "sha256": "sha256-XFg6L+DYhq7cmbnYPkRaZJK5zPTp4yeQR24fCpUGp4I=",
+            "name": "vscode-yaml-1.10.1.zip",
+            "sha256": "sha256-BZHU9FrFqsO09fllMF3+vszrGnPrfQmhVgpcNQhPv/w=",
             "type": "url",
-            "url": "https://open-vsx.org/api/redhat/vscode-yaml/1.9.1/file/redhat.vscode-yaml-1.9.1.vsix"
+            "url": "https://open-vsx.org/api/redhat/vscode-yaml/1.10.1/file/redhat.vscode-yaml-1.10.1.vsix"
         },
-        "version": "1.9.1"
+        "version": "1.10.1"
     },
     "redlin-remove-tabs-on-save": {
         "cargoLocks": null,
@@ -34417,8 +34417,8 @@
         "extract": null,
         "name": "remcohaszing-schemastore",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/remcohaszing/schemastore/1.0.13/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/remcohaszing/schemastore/1.0.13/file/remcohaszing.schemastore-1.0.13.vsix",
+            "changelog": "https://open-vsx.org/api/remcohaszing/schemastore/1.0.14/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/remcohaszing/schemastore/1.0.14/file/remcohaszing.schemastore-1.0.14.vsix",
             "homepage": "https://github.com/remcohaszing/vscode-schemastore#readme",
             "license": "mit",
             "marketplaceName": "schemastore",
@@ -34428,12 +34428,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "schemastore-1.0.13.zip",
-            "sha256": "sha256-T2oFJwZ2n4gouuRype9c9uosDzyK49Ut7rmYfJTzzhQ=",
+            "name": "schemastore-1.0.14.zip",
+            "sha256": "sha256-TjsFyR49GiIVmdtwMAOaZ/4o449oRU7tH6g4EBZFUMg=",
             "type": "url",
-            "url": "https://open-vsx.org/api/remcohaszing/schemastore/1.0.13/file/remcohaszing.schemastore-1.0.13.vsix"
+            "url": "https://open-vsx.org/api/remcohaszing/schemastore/1.0.14/file/remcohaszing.schemastore-1.0.14.vsix"
         },
-        "version": "1.0.13"
+        "version": "1.0.14"
     },
     "revng-llvm-ir": {
         "cargoLocks": null,
@@ -37209,8 +37209,8 @@
         "extract": null,
         "name": "spnda-nml-language",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/spnda/nml-language/1.2.2/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/spnda/nml-language/1.2.2/file/spnda.nml-language-1.2.2.vsix",
+            "changelog": "https://open-vsx.org/api/spnda/nml-language/1.2.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/spnda/nml-language/1.2.3/file/spnda.nml-language-1.2.3.vsix",
             "homepage": "https://github.com/spnda/VSC-NML#readme",
             "license": "gpl2Only",
             "marketplaceName": "nml-language",
@@ -37220,12 +37220,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "nml-language-1.2.2.zip",
-            "sha256": "sha256-5Ec1VfAj2IRQiKDb9Sl19ToieIr6LoD1Wz6A7bHWe/k=",
+            "name": "nml-language-1.2.3.zip",
+            "sha256": "sha256-WvlUw6RuVaDJNQ+QlnF4MdmKAlBHWXqvwR/HuVXAA/Q=",
             "type": "url",
-            "url": "https://open-vsx.org/api/spnda/nml-language/1.2.2/file/spnda.nml-language-1.2.2.vsix"
+            "url": "https://open-vsx.org/api/spnda/nml-language/1.2.3/file/spnda.nml-language-1.2.3.vsix"
         },
-        "version": "1.2.2"
+        "version": "1.2.3"
     },
     "spoorthi-cosmy-wasmy": {
         "cargoLocks": null,
@@ -38417,8 +38417,8 @@
         "extract": null,
         "name": "svelte-svelte-vscode",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/svelte/svelte-vscode/105.21.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/svelte/svelte-vscode/105.21.0/file/svelte.svelte-vscode-105.21.0.vsix",
+            "changelog": "https://open-vsx.org/api/svelte/svelte-vscode/105.22.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/svelte/svelte-vscode/105.22.1/file/svelte.svelte-vscode-105.22.1.vsix",
             "homepage": "https://github.com/sveltejs/language-tools#readme",
             "license": "mit",
             "marketplaceName": "svelte-vscode",
@@ -38428,12 +38428,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "svelte-vscode-105.22.0.zip",
-            "sha256": "sha256-FfKhaI6urz0e6kqNqwSZhwgyGd2ZFv4s6VSP9ONmIcQ=",
+            "name": "svelte-vscode-105.22.1.zip",
+            "sha256": "sha256-ENyrFgSY3kKfjHU5PCjzVZLrf3zFRmUBslhz5tXiwgQ=",
             "type": "url",
-            "url": "https://open-vsx.org/api/svelte/svelte-vscode/105.22.0/file/svelte.svelte-vscode-105.22.0.vsix"
+            "url": "https://open-vsx.org/api/svelte/svelte-vscode/105.22.1/file/svelte.svelte-vscode-105.22.1.vsix"
         },
-        "version": "105.22.0"
+        "version": "105.22.1"
     },
     "svelte-svelte-vscode-nightly": {
         "cargoLocks": null,
@@ -39576,8 +39576,8 @@
         "extract": null,
         "name": "tokiwa-software-fuzion-lang",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/tokiwa-software/fuzion-lang/0.76.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/tokiwa-software/fuzion-lang/0.76.0/file/tokiwa-software.fuzion-lang-0.76.0.vsix",
+            "changelog": "https://open-vsx.org/api/tokiwa-software/fuzion-lang/0.78.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/tokiwa-software/fuzion-lang/0.78.0/file/tokiwa-software.fuzion-lang-0.78.0.vsix",
             "homepage": "https://github.com/tokiwa-software/vscode-fuzion#readme",
             "license": "mit",
             "marketplaceName": "fuzion-lang",
@@ -39587,12 +39587,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "fuzion-lang-0.76.0.zip",
-            "sha256": "sha256-0Lcph5hKX1MbrUOYOvHJ1oYPdaHQyjNbD/q2bWkycvs=",
+            "name": "fuzion-lang-0.78.0.zip",
+            "sha256": "sha256-DnFRJA1GSGzV0Ox5tquXXtIw/KDYX8K9+uqzW1uNoX0=",
             "type": "url",
-            "url": "https://open-vsx.org/api/tokiwa-software/fuzion-lang/0.76.0/file/tokiwa-software.fuzion-lang-0.76.0.vsix"
+            "url": "https://open-vsx.org/api/tokiwa-software/fuzion-lang/0.78.0/file/tokiwa-software.fuzion-lang-0.78.0.vsix"
         },
-        "version": "0.76.0"
+        "version": "0.78.0"
     },
     "tomWritesCode-raspberrycandy": {
         "cargoLocks": null,
@@ -39896,8 +39896,8 @@
         "extract": null,
         "name": "tonwhales-func-vscode",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/tonwhales/func-vscode/1.0.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/tonwhales/func-vscode/1.0.0/file/tonwhales.func-vscode-1.0.0.vsix",
+            "changelog": "https://open-vsx.org/api/tonwhales/func-vscode/1.0.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/tonwhales/func-vscode/1.0.1/file/tonwhales.func-vscode-1.0.1.vsix",
             "homepage": "https://github.com/tonwhales/vscode-func#readme",
             "license": "gpl3Only",
             "marketplaceName": "func-vscode",
@@ -39907,12 +39907,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "func-vscode-1.0.0.zip",
-            "sha256": "sha256-rVG/RreLlatXxeYOxuas2mG9nBXAv+zClM61TbSu9q8=",
+            "name": "func-vscode-1.0.1.zip",
+            "sha256": "sha256-H5CtrCCdla1CDpR+MHFzQYgrqtPK9wpHCet3da4sQ8Q=",
             "type": "url",
-            "url": "https://open-vsx.org/api/tonwhales/func-vscode/1.0.0/file/tonwhales.func-vscode-1.0.0.vsix"
+            "url": "https://open-vsx.org/api/tonwhales/func-vscode/1.0.1/file/tonwhales.func-vscode-1.0.1.vsix"
         },
-        "version": "1.0.0"
+        "version": "1.0.1"
     },
     "tonybaloney-vscode-pets": {
         "cargoLocks": null,
@@ -41686,8 +41686,8 @@
         "extract": null,
         "name": "vscjava-vscode-java-pack",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.0/file/vscjava.vscode-java-pack-0.25.0.vsix",
+            "changelog": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.1/file/vscjava.vscode-java-pack-0.25.1.vsix",
             "homepage": "https://github.com/Microsoft/vscode-java-pack",
             "license": "mit",
             "marketplaceName": "vscode-java-pack",
@@ -41697,12 +41697,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "vscode-java-pack-0.25.0.zip",
-            "sha256": "sha256-jH7lndA+BbrJGkRioHuNpkJgxy9Cd/sy28Y31m88/U0=",
+            "name": "vscode-java-pack-0.25.1.zip",
+            "sha256": "sha256-LotR6aKSBE39cUVXVAbKWUsNAXoV93a6ZUyaKjsMe4A=",
             "type": "url",
-            "url": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.0/file/vscjava.vscode-java-pack-0.25.0.vsix"
+            "url": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.1/file/vscjava.vscode-java-pack-0.25.1.vsix"
         },
-        "version": "0.25.0"
+        "version": "0.25.1"
     },
     "vscjava-vscode-java-test": {
         "cargoLocks": null,
