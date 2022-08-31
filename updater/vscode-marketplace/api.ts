@@ -28,7 +28,7 @@ export const getExtensionsData = async () => {
 	const pages = [ ...Array(PAGE_COUNT).keys() ].map(i => i + 1)
 	const data = (await Promise.all(pages.map(pageNumber => getExtensionsDataPage(pageNumber))))
 		.flat()
-		.filter(e => e.flags === "validated, public")
+		.filter(e => ["validated, public", "validated, public, preview"].includes(e.flags))
 	const count = data.length
 
 	return { count, data }
