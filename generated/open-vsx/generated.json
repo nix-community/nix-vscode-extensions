@@ -456,8 +456,8 @@
         "extract": null,
         "name": "ArmantGoldswain-seesharp-theme",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/ArmantGoldswain/seesharp-theme/0.6.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/ArmantGoldswain/seesharp-theme/0.6.0/file/ArmantGoldswain.seesharp-theme-0.6.0.vsix",
+            "changelog": "https://open-vsx.org/api/ArmantGoldswain/seesharp-theme/1.0.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ArmantGoldswain/seesharp-theme/1.0.3/file/ArmantGoldswain.seesharp-theme-1.0.3.vsix",
             "homepage": "https://github.com/ArmantG/seesharp-theme/blob/main/README.md",
             "license": "asl20",
             "marketplaceName": "seesharp-theme",
@@ -467,12 +467,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "seesharp-theme-0.6.0.zip",
-            "sha256": "sha256-2w/O8oaSkajrDEA9SvGybnQXsQ4fYVvl6VdOnW3Gjo0=",
+            "name": "seesharp-theme-1.0.3.zip",
+            "sha256": "sha256-4whVutXDi0XNnVFkv0Sr1WSu2fRMHXIzyEtKkljUlFo=",
             "type": "url",
-            "url": "https://open-vsx.org/api/ArmantGoldswain/seesharp-theme/0.6.0/file/ArmantGoldswain.seesharp-theme-0.6.0.vsix"
+            "url": "https://open-vsx.org/api/ArmantGoldswain/seesharp-theme/1.0.3/file/ArmantGoldswain.seesharp-theme-1.0.3.vsix"
         },
-        "version": "0.6.0"
+        "version": "1.0.3"
     },
     "ArtisanByteCrafter-poptheme": {
         "cargoLocks": null,
@@ -2348,6 +2348,28 @@
         },
         "version": "1.21.0"
     },
+    "FIUBA-photran-lsp-client-vscode": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "FIUBA-photran-lsp-client-vscode",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/FIUBA/photran-lsp-client-vscode/0.1.0/file/FIUBA.photran-lsp-client-vscode-0.1.0.vsix",
+            "homepage": "https://github.com/tp-profesional-photran/photran-lsp-client-vscode#readme",
+            "license": "mit",
+            "marketplaceName": "photran-lsp-client-vscode",
+            "marketplacePublisher": "FIUBA",
+            "name": "photran-lsp-client-vscode",
+            "publisher": "fiuba"
+        },
+        "pinned": false,
+        "src": {
+            "name": "photran-lsp-client-vscode-0.1.0.zip",
+            "sha256": "sha256-d+LR8EWEYfVxpvKcfIRkLxc7boP3Aels1QUXm3n/aAg=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/FIUBA/photran-lsp-client-vscode/0.1.0/file/FIUBA.photran-lsp-client-vscode-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
     "FelixAngelov-bloc": {
         "cargoLocks": null,
         "extract": null,
@@ -2757,6 +2779,29 @@
             "url": "https://open-vsx.org/api/GitLab/gitlab-workflow/3.50.0/file/GitLab.gitlab-workflow-3.50.0.vsix"
         },
         "version": "3.50.0"
+    },
+    "Google-cros-ide": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "Google-cros-ide",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Google/cros-ide/0.0.14/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Google/cros-ide/0.0.14/file/Google.cros-ide-0.0.14.vsix",
+            "homepage": "",
+            "license": "bsd3",
+            "marketplaceName": "cros-ide",
+            "marketplacePublisher": "Google",
+            "name": "cros-ide",
+            "publisher": "google"
+        },
+        "pinned": false,
+        "src": {
+            "name": "cros-ide-0.0.14.zip",
+            "sha256": "sha256-cxGV4kptrV/5itkUEJnLAM0CZ3O0WbP1sLR6rMa5CDI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Google/cros-ide/0.0.14/file/Google.cros-ide-0.0.14.vsix"
+        },
+        "version": "0.0.14"
     },
     "Grafana-vscode-jsonnet": {
         "cargoLocks": null,
@@ -6206,8 +6251,8 @@
         "extract": null,
         "name": "Prisma-prisma-insider",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1402/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1402/file/Prisma.prisma-insider-31.0.1402.vsix",
+            "changelog": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1405/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1405/file/Prisma.prisma-insider-31.0.1405.vsix",
             "homepage": "https://github.com/prisma/language-tools#readme",
             "license": "asl20",
             "marketplaceName": "prisma-insider",
@@ -6217,12 +6262,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "prisma-insider-31.0.1402.zip",
-            "sha256": "sha256-FcVBxM1UQV+thWaYbXxQ4Um5UJfjHjVurjRgyhYckFo=",
+            "name": "prisma-insider-31.0.1405.zip",
+            "sha256": "sha256-taZT3VEEWOpNvv3eGcq4x7hgQKwpP+RWV9aNkClDpv0=",
             "type": "url",
-            "url": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1402/file/Prisma.prisma-insider-31.0.1402.vsix"
+            "url": "https://open-vsx.org/api/Prisma/prisma-insider/31.0.1405/file/Prisma.prisma-insider-31.0.1405.vsix"
         },
-        "version": "31.0.1402"
+        "version": "31.0.1405"
     },
     "Prisma-vscode-graphql": {
         "cargoLocks": null,
@@ -6975,7 +7020,7 @@
         "extract": null,
         "name": "Slint-slint",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/Slint/slint/0.2.5/file/Slint.slint-0.2.5.vsix",
+            "downloadPage": "https://open-vsx.org/api/Slint/slint/0.3.0/file/Slint.slint-0.3.0.vsix",
             "homepage": "https://github.com/slint-ui/slint#readme",
             "license": "gpl3Only",
             "marketplaceName": "slint",
@@ -6985,20 +7030,20 @@
         },
         "pinned": false,
         "src": {
-            "name": "slint-0.2.5.zip",
-            "sha256": "sha256-C7aseBdVbgTnzaY32GRPm0oS0rNs9rdCATTPjtBnBOY=",
+            "name": "slint-0.3.0.zip",
+            "sha256": "sha256-dVjI9uDaRLT5I+Iyy728GNzu6cHUNwueUTpAN+9dSQU=",
             "type": "url",
-            "url": "https://open-vsx.org/api/Slint/slint/0.2.5/file/Slint.slint-0.2.5.vsix"
+            "url": "https://open-vsx.org/api/Slint/slint/0.3.0/file/Slint.slint-0.3.0.vsix"
         },
-        "version": "0.2.5"
+        "version": "0.3.0"
     },
     "Slint-slint-nightly": {
         "cargoLocks": null,
         "extract": null,
         "name": "Slint-slint-nightly",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/Slint/slint-nightly/2022.9.1216/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/Slint/slint-nightly/2022.9.1216/file/Slint.slint-nightly-2022.9.1216.vsix",
+            "changelog": "https://open-vsx.org/api/Slint/slint-nightly/2022.9.1414/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Slint/slint-nightly/2022.9.1414/file/Slint.slint-nightly-2022.9.1414.vsix",
             "homepage": "https://github.com/slint-ui/slint#readme",
             "license": "gpl3Only",
             "marketplaceName": "slint-nightly",
@@ -7008,12 +7053,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "slint-nightly-2022.9.1216.zip",
-            "sha256": "sha256-0Nggtt+Rs5dqvdP5aeW1hesRzyhfCLwp83x0rrKeTNI=",
+            "name": "slint-nightly-2022.9.1414.zip",
+            "sha256": "sha256-O+iZF4acQKHNffYsQfhR3BD0ZB6A0l3GuTIJrtvWxL4=",
             "type": "url",
-            "url": "https://open-vsx.org/api/Slint/slint-nightly/2022.9.1216/file/Slint.slint-nightly-2022.9.1216.vsix"
+            "url": "https://open-vsx.org/api/Slint/slint-nightly/2022.9.1414/file/Slint.slint-nightly-2022.9.1414.vsix"
         },
-        "version": "2022.9.1216"
+        "version": "2022.9.1414"
     },
     "SlySherZ-comment-box": {
         "cargoLocks": null,
@@ -9561,8 +9606,8 @@
         "extract": null,
         "name": "amazonwebservices-aws-toolkit-vscode",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.49.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.49.0/file/amazonwebservices.aws-toolkit-vscode-1.49.0.vsix",
+            "changelog": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.50.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.50.0/file/amazonwebservices.aws-toolkit-vscode-1.50.0.vsix",
             "homepage": "https://github.com/aws/aws-toolkit-vscode#readme",
             "license": "asl20",
             "marketplaceName": "aws-toolkit-vscode",
@@ -9572,12 +9617,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "aws-toolkit-vscode-1.49.0.zip",
-            "sha256": "sha256-mRatM+YGHzndudhr6aJG0aC4YmjbT79JU/7ngRj34AY=",
+            "name": "aws-toolkit-vscode-1.50.0.zip",
+            "sha256": "sha256-XcLt1IvIWVoURDhfQ4DgSaI5glwybnieqLcy73NrCkI=",
             "type": "url",
-            "url": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.49.0/file/amazonwebservices.aws-toolkit-vscode-1.49.0.vsix"
+            "url": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.50.0/file/amazonwebservices.aws-toolkit-vscode-1.50.0.vsix"
         },
-        "version": "1.49.0"
+        "version": "1.50.0"
     },
     "amiralizadeh9480-laravel-extra-intellisense": {
         "cargoLocks": null,
@@ -11198,7 +11243,9 @@
         "extract": null,
         "name": "assisrMatheus-sidebar-markdown-notes",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.0.4/file/assisrMatheus.sidebar-markdown-notes-1.0.4.vsix",
+            "changelog": "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.1.0/file/assisrMatheus.sidebar-markdown-notes-1.1.0.vsix",
+            "homepage": "",
             "license": "gpl3Plus",
             "marketplaceName": "sidebar-markdown-notes",
             "marketplacePublisher": "assisrMatheus",
@@ -11207,20 +11254,20 @@
         },
         "pinned": false,
         "src": {
-            "name": "sidebar-markdown-notes-1.0.4.zip",
-            "sha256": "sha256-shqLyJWmRNfi441yErSuDM4wei/XD/MCnz/08wqEHH8=",
+            "name": "sidebar-markdown-notes-1.1.0.zip",
+            "sha256": "sha256-3ggGyit9ZSomBSl2Dp44yk/yNqEdluM8knB+Zy0fxgw=",
             "type": "url",
-            "url": "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.0.4/file/assisrMatheus.sidebar-markdown-notes-1.0.4.vsix"
+            "url": "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.1.0/file/assisrMatheus.sidebar-markdown-notes-1.1.0.vsix"
         },
-        "version": "1.0.4"
+        "version": "1.1.0"
     },
     "astro-build-astro-vscode": {
         "cargoLocks": null,
         "extract": null,
         "name": "astro-build-astro-vscode",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/astro-build/astro-vscode/0.24.4/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/astro-build/astro-vscode/0.24.4/file/astro-build.astro-vscode-0.24.4.vsix",
+            "changelog": "https://open-vsx.org/api/astro-build/astro-vscode/0.26.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/astro-build/astro-vscode/0.26.2/file/astro-build.astro-vscode-0.26.2.vsix",
             "homepage": "https://github.com/withastro/language-tools#readme",
             "license": "mit",
             "marketplaceName": "astro-vscode",
@@ -11230,12 +11277,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "astro-vscode-0.24.4.zip",
-            "sha256": "sha256-8srmGaEUoiiFVYiMyYqkJs2jQTClDDJZNgNm0puJZAY=",
+            "name": "astro-vscode-0.26.2.zip",
+            "sha256": "sha256-NL4BSPszdVCx5/ECLnR3GCdr+Fomn1Exi4jfexlxpZQ=",
             "type": "url",
-            "url": "https://open-vsx.org/api/astro-build/astro-vscode/0.24.4/file/astro-build.astro-vscode-0.24.4.vsix"
+            "url": "https://open-vsx.org/api/astro-build/astro-vscode/0.26.2/file/astro-build.astro-vscode-0.26.2.vsix"
         },
-        "version": "0.24.4"
+        "version": "0.26.2"
     },
     "asvetliakov-vscode-neovim": {
         "cargoLocks": null,
@@ -15870,7 +15917,7 @@
         "extract": null,
         "name": "dendron-nightly",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/dendron/nightly/0.111.6/file/dendron.nightly-0.111.6.vsix",
+            "downloadPage": "https://open-vsx.org/api/dendron/nightly/0.112.1/file/dendron.nightly-0.112.1.vsix",
             "homepage": "https://github.com/dendronhq/dendron#readme",
             "license": "agpl3Only",
             "marketplaceName": "nightly",
@@ -15880,12 +15927,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "nightly-0.111.6.zip",
-            "sha256": "sha256-RreN5mX6FN8ZrJBhpt34gDbNXZ+5J4pKyJw/9Cl2+bQ=",
+            "name": "nightly-0.112.1.zip",
+            "sha256": "sha256-EdTmbWikS9nb37AlG4L+RwmSn+5xWKyXe6/YLypUrVk=",
             "type": "url",
-            "url": "https://open-vsx.org/api/dendron/nightly/0.111.6/file/dendron.nightly-0.111.6.vsix"
+            "url": "https://open-vsx.org/api/dendron/nightly/0.112.1/file/dendron.nightly-0.112.1.vsix"
         },
-        "version": "0.111.6"
+        "version": "0.112.1"
     },
     "denoland-vscode-deno": {
         "cargoLocks": null,
@@ -16043,13 +16090,35 @@
         },
         "version": "0.0.80"
     },
+    "devsense-composer-php-vscode": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "devsense-composer-php-vscode",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/devsense/composer-php-vscode/1.15.10535/file/devsense.composer-php-vscode-1.15.10535.vsix",
+            "homepage": "https://www.devsense.com/",
+            "license": "unfree",
+            "marketplaceName": "composer-php-vscode",
+            "marketplacePublisher": "devsense",
+            "name": "composer-php-vscode",
+            "publisher": "devsense"
+        },
+        "pinned": false,
+        "src": {
+            "name": "composer-php-vscode-1.15.10535.zip",
+            "sha256": "sha256-3zzUhcE6nkR0PdAgg67QSyQxoJ5ogLwEZVCa7u2JksU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/devsense/composer-php-vscode/1.15.10535/file/devsense.composer-php-vscode-1.15.10535.vsix"
+        },
+        "version": "1.15.10535"
+    },
     "devsense-phptools-vscode": {
         "cargoLocks": null,
         "extract": null,
         "name": "devsense-phptools-vscode",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/devsense/phptools-vscode/1.12.10053/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/devsense/phptools-vscode/1.12.10053/file/devsense.phptools-vscode-1.12.10053.vsix",
+            "changelog": "https://open-vsx.org/api/devsense/phptools-vscode/1.15.10535/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/devsense/phptools-vscode/1.15.10535/file/devsense.phptools-vscode-1.15.10535.vsix",
             "homepage": "https://www.devsense.com/",
             "license": "unfree",
             "marketplaceName": "phptools-vscode",
@@ -16059,12 +16128,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "phptools-vscode-1.12.10053.zip",
-            "sha256": "sha256-it7jBkNadhFDUJCe0C/iuf4EkgMbf61UlJHjnOPnGno=",
+            "name": "phptools-vscode-1.15.10535.zip",
+            "sha256": "sha256-I22QVHhrJztsA3KqGDKUhYrZPvmjy9eatD1rWcs3HPk=",
             "type": "url",
-            "url": "https://open-vsx.org/api/devsense/phptools-vscode/1.12.10053/file/devsense.phptools-vscode-1.12.10053.vsix"
+            "url": "https://open-vsx.org/api/devsense/phptools-vscode/1.15.10535/file/devsense.phptools-vscode-1.15.10535.vsix"
         },
-        "version": "1.12.10053"
+        "version": "1.15.10535"
     },
     "dez64ru-macos-modern-theme": {
         "cargoLocks": null,
@@ -18626,7 +18695,7 @@
         "extract": null,
         "name": "foretag-development-toolkit",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/foretag/development-toolkit/0.1.5/file/foretag.development-toolkit-0.1.5.vsix",
+            "downloadPage": "https://open-vsx.org/api/foretag/development-toolkit/0.1.6/file/foretag.development-toolkit-0.1.6.vsix",
             "homepage": "https://github.com/ForetagInc/engineering#readme",
             "license": "mpl20",
             "marketplaceName": "development-toolkit",
@@ -18636,19 +18705,19 @@
         },
         "pinned": false,
         "src": {
-            "name": "development-toolkit-0.1.5.zip",
-            "sha256": "sha256-SYSNjEqaI2GFYp7ZDQds1nX8gJxr9Sa1pxhhtvsv4DE=",
+            "name": "development-toolkit-0.1.6.zip",
+            "sha256": "sha256-7icMQXqjyd9jIT1PQD1+KoBkAvVI3ZVYrR3fgO1saWU=",
             "type": "url",
-            "url": "https://open-vsx.org/api/foretag/development-toolkit/0.1.5/file/foretag.development-toolkit-0.1.5.vsix"
+            "url": "https://open-vsx.org/api/foretag/development-toolkit/0.1.6/file/foretag.development-toolkit-0.1.6.vsix"
         },
-        "version": "0.1.5"
+        "version": "0.1.6"
     },
     "foretag-frontend-toolkit": {
         "cargoLocks": null,
         "extract": null,
         "name": "foretag-frontend-toolkit",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/foretag/frontend-toolkit/0.1.5/file/foretag.frontend-toolkit-0.1.5.vsix",
+            "downloadPage": "https://open-vsx.org/api/foretag/frontend-toolkit/0.1.6/file/foretag.frontend-toolkit-0.1.6.vsix",
             "homepage": "https://github.com/ForetagInc/engineering#readme",
             "license": "unfree",
             "marketplaceName": "frontend-toolkit",
@@ -18658,19 +18727,19 @@
         },
         "pinned": false,
         "src": {
-            "name": "frontend-toolkit-0.1.5.zip",
-            "sha256": "sha256-mdTrds/TP1QLsP7lXEvMBablx26yMiJZlwGM6R/c+IY=",
+            "name": "frontend-toolkit-0.1.6.zip",
+            "sha256": "sha256-Beapqdv+N+5FTV13e7D4xVjrOItDpEBDMAhuZsHC0qs=",
             "type": "url",
-            "url": "https://open-vsx.org/api/foretag/frontend-toolkit/0.1.5/file/foretag.frontend-toolkit-0.1.5.vsix"
+            "url": "https://open-vsx.org/api/foretag/frontend-toolkit/0.1.6/file/foretag.frontend-toolkit-0.1.6.vsix"
         },
-        "version": "0.1.5"
+        "version": "0.1.6"
     },
     "foretag-rust-toolkit": {
         "cargoLocks": null,
         "extract": null,
         "name": "foretag-rust-toolkit",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/foretag/rust-toolkit/0.1.5/file/foretag.rust-toolkit-0.1.5.vsix",
+            "downloadPage": "https://open-vsx.org/api/foretag/rust-toolkit/0.1.6/file/foretag.rust-toolkit-0.1.6.vsix",
             "homepage": "https://github.com/ForetagInc/engineering#readme",
             "license": "unfree",
             "marketplaceName": "rust-toolkit",
@@ -18680,12 +18749,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "rust-toolkit-0.1.5.zip",
-            "sha256": "sha256-6/idM0Wfzjb1Rtg1nLyUYTtg1cLO0aWCws5DdYNk7Gc=",
+            "name": "rust-toolkit-0.1.6.zip",
+            "sha256": "sha256-eYCw8JiX3O4fsWqVqzSifDnEyGfo76NP5V1OragFDJM=",
             "type": "url",
-            "url": "https://open-vsx.org/api/foretag/rust-toolkit/0.1.5/file/foretag.rust-toolkit-0.1.5.vsix"
+            "url": "https://open-vsx.org/api/foretag/rust-toolkit/0.1.6/file/foretag.rust-toolkit-0.1.6.vsix"
         },
-        "version": "0.1.5"
+        "version": "0.1.6"
     },
     "formulahendry-auto-close-tag": {
         "cargoLocks": null,
@@ -19415,8 +19484,8 @@
         "extract": null,
         "name": "genuitecllc-codetogether",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/genuitecllc/codetogether/2022.2.1/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/genuitecllc/codetogether/2022.2.1/file/genuitecllc.codetogether-2022.2.1.vsix",
+            "changelog": "https://open-vsx.org/api/genuitecllc/codetogether/2022.2.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/genuitecllc/codetogether/2022.2.2/file/genuitecllc.codetogether-2022.2.2.vsix",
             "homepage": "",
             "license": "unfree",
             "marketplaceName": "codetogether",
@@ -19426,12 +19495,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "codetogether-2022.2.1.zip",
-            "sha256": "sha256-bDJmsXklJGe5ieXAd2Mp63iCBZ2Z0sBXSlb5jPD547w=",
+            "name": "codetogether-2022.2.2.zip",
+            "sha256": "sha256-feGbyQfNNDysa3agVQX2A+qTTpMq5/LV3lk90hP8jAw=",
             "type": "url",
-            "url": "https://open-vsx.org/api/genuitecllc/codetogether/2022.2.1/file/genuitecllc.codetogether-2022.2.1.vsix"
+            "url": "https://open-vsx.org/api/genuitecllc/codetogether/2022.2.2/file/genuitecllc.codetogether-2022.2.2.vsix"
         },
-        "version": "2022.2.1"
+        "version": "2022.2.2"
     },
     "gera2ld-ipfs-editor-vscode": {
         "cargoLocks": null,
@@ -19621,8 +19690,8 @@
         "extract": null,
         "name": "giscafer-leek-fund",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/giscafer/leek-fund/2.8.2/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/giscafer/leek-fund/2.8.2/file/giscafer.leek-fund-2.8.2.vsix",
+            "changelog": "https://open-vsx.org/api/giscafer/leek-fund/2.9.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/giscafer/leek-fund/2.9.0/file/giscafer.leek-fund-2.9.0.vsix",
             "homepage": "https://github.com/LeekHub/leek-fund#readme",
             "license": "bsd3",
             "marketplaceName": "leek-fund",
@@ -19632,12 +19701,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "leek-fund-2.8.2.zip",
-            "sha256": "sha256-JhqerCUHVbqHsvCFbEjdsiX95+OGGEZgM7b7hW2kWRo=",
+            "name": "leek-fund-2.9.0.zip",
+            "sha256": "sha256-cK2nFpbyDDscV3KEaqMSQwCf6uII7WJU3mu6CBLgSP0=",
             "type": "url",
-            "url": "https://open-vsx.org/api/giscafer/leek-fund/2.8.2/file/giscafer.leek-fund-2.8.2.vsix"
+            "url": "https://open-vsx.org/api/giscafer/leek-fund/2.9.0/file/giscafer.leek-fund-2.9.0.vsix"
         },
-        "version": "2.8.2"
+        "version": "2.9.0"
     },
     "gitduck-code-streaming": {
         "cargoLocks": null,
@@ -22751,8 +22820,8 @@
         "extract": null,
         "name": "jbangdev-jbang-vscode",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/jbangdev/jbang-vscode/0.1.2022090911/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/jbangdev/jbang-vscode/0.1.2022090911/file/jbangdev.jbang-vscode-0.1.2022090911.vsix",
+            "changelog": "https://open-vsx.org/api/jbangdev/jbang-vscode/0.1.2022091414/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/jbangdev/jbang-vscode/0.1.2022091414/file/jbangdev.jbang-vscode-0.1.2022091414.vsix",
             "homepage": "https://github.com/jbangdev/jbang-vscode#readme",
             "license": "mit",
             "marketplaceName": "jbang-vscode",
@@ -22762,12 +22831,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "jbang-vscode-0.1.2022090911.zip",
-            "sha256": "sha256-/VVCJJ4itMmoF7AmaMLQoWOiZKaDKrtLXVhDRnTb+Fk=",
+            "name": "jbang-vscode-0.1.2022091414.zip",
+            "sha256": "sha256-50hF6eG0u7FIwtc2VskVO/aapYHigLAqRb+1SkxFQ0g=",
             "type": "url",
-            "url": "https://open-vsx.org/api/jbangdev/jbang-vscode/0.1.2022090911/file/jbangdev.jbang-vscode-0.1.2022090911.vsix"
+            "url": "https://open-vsx.org/api/jbangdev/jbang-vscode/0.1.2022091414/file/jbangdev.jbang-vscode-0.1.2022091414.vsix"
         },
-        "version": "0.1.2022090911"
+        "version": "0.1.2022091414"
     },
     "jbenden-c-cpp-flylint": {
         "cargoLocks": null,
@@ -22978,8 +23047,8 @@
         "extract": null,
         "name": "jebbs-markdown-extended",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/jebbs/markdown-extended/1.1.1/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/jebbs/markdown-extended/1.1.1/file/jebbs.markdown-extended-1.1.1.vsix",
+            "changelog": "https://open-vsx.org/api/jebbs/markdown-extended/1.1.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/jebbs/markdown-extended/1.1.2/file/jebbs.markdown-extended-1.1.2.vsix",
             "homepage": "https://github.com/qjebbs/vscode-markdown-extended/blob/master/README.md",
             "license": "mit",
             "marketplaceName": "markdown-extended",
@@ -22989,12 +23058,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "markdown-extended-1.1.1.zip",
-            "sha256": "sha256-Io+eGyWDHLOnk/uLzPPxeO+js9AZ3srdiFwFZEUsbOo=",
+            "name": "markdown-extended-1.1.2.zip",
+            "sha256": "sha256-wk+o9NOYTzQY4zt2UZlBG4wSnvoFdW9duPv7eGUQNz4=",
             "type": "url",
-            "url": "https://open-vsx.org/api/jebbs/markdown-extended/1.1.1/file/jebbs.markdown-extended-1.1.1.vsix"
+            "url": "https://open-vsx.org/api/jebbs/markdown-extended/1.1.2/file/jebbs.markdown-extended-1.1.2.vsix"
         },
-        "version": "1.1.1"
+        "version": "1.1.2"
     },
     "jebbs-plantuml": {
         "cargoLocks": null,
@@ -23768,8 +23837,8 @@
         "extract": null,
         "name": "jroesch-lean",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/jroesch/lean/0.16.54/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/jroesch/lean/0.16.54/file/jroesch.lean-0.16.54.vsix",
+            "changelog": "https://open-vsx.org/api/jroesch/lean/0.16.55/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/jroesch/lean/0.16.55/file/jroesch.lean-0.16.55.vsix",
             "homepage": "",
             "license": "asl20",
             "marketplaceName": "lean",
@@ -23779,12 +23848,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "lean-0.16.54.zip",
-            "sha256": "sha256-aNAo0Cqgoggz+7EhtExxufZuPkqZU1ktbrv4Yk9oKh0=",
+            "name": "lean-0.16.55.zip",
+            "sha256": "sha256-vJ1BhbRw9HQobOTy/QGmRrNqGOc/jiRA+hdQGvVe5P8=",
             "type": "url",
-            "url": "https://open-vsx.org/api/jroesch/lean/0.16.54/file/jroesch.lean-0.16.54.vsix"
+            "url": "https://open-vsx.org/api/jroesch/lean/0.16.55/file/jroesch.lean-0.16.55.vsix"
         },
-        "version": "0.16.54"
+        "version": "0.16.55"
     },
     "jsDelivr-jsdelivr": {
         "cargoLocks": null,
@@ -25446,7 +25515,7 @@
         "extract": null,
         "name": "launchdarklyofficial-launchdarkly-beta",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/launchdarklyofficial/launchdarkly-beta/2022.9.1663073954/file/launchdarklyofficial.launchdarkly-beta-2022.9.1663073954.vsix",
+            "downloadPage": "https://open-vsx.org/api/launchdarklyofficial/launchdarkly-beta/2022.9.1663186829/file/launchdarklyofficial.launchdarkly-beta-2022.9.1663186829.vsix",
             "homepage": "https://docs.launchdarkly.com/integrations/vscode",
             "license": "unfree",
             "marketplaceName": "launchdarkly-beta",
@@ -25456,12 +25525,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "launchdarkly-beta-2022.9.1663073954.zip",
-            "sha256": "sha256-xUKXLp3RbmHLk34AGmPZC1hsqSPoXnZrNOPkrMZwvfA=",
+            "name": "launchdarkly-beta-2022.9.1663186829.zip",
+            "sha256": "sha256-ag8NuarMTZp8umtrwZzm/RE3/CxrTlYfoLH51zATA0A=",
             "type": "url",
-            "url": "https://open-vsx.org/api/launchdarklyofficial/launchdarkly-beta/2022.9.1663073954/file/launchdarklyofficial.launchdarkly-beta-2022.9.1663073954.vsix"
+            "url": "https://open-vsx.org/api/launchdarklyofficial/launchdarkly-beta/2022.9.1663186829/file/launchdarklyofficial.launchdarkly-beta-2022.9.1663186829.vsix"
         },
-        "version": "2022.9.1663073954"
+        "version": "2022.9.1663186829"
     },
     "leading-works-eml2html": {
         "cargoLocks": null,
@@ -26414,7 +26483,7 @@
         "extract": null,
         "name": "marcinbar-vscode-squirrel",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/marcinbar/vscode-squirrel/0.0.20/file/marcinbar.vscode-squirrel-0.0.20.vsix",
+            "downloadPage": "https://open-vsx.org/api/marcinbar/vscode-squirrel/0.0.21/file/marcinbar.vscode-squirrel-0.0.21.vsix",
             "homepage": "https://bitbucket.org/marcinbar91/vscode-squirrel#readme",
             "license": "mit",
             "marketplaceName": "vscode-squirrel",
@@ -26424,12 +26493,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "vscode-squirrel-0.0.20.zip",
-            "sha256": "sha256-IEm5Cdkoy8catEaVbCFN2IyYtwurskS1oIRvVjN10rk=",
+            "name": "vscode-squirrel-0.0.21.zip",
+            "sha256": "sha256-r18gnNI6oigyI3JWFWd9RdI6/Pu1CrxsMxVru1tERPI=",
             "type": "url",
-            "url": "https://open-vsx.org/api/marcinbar/vscode-squirrel/0.0.20/file/marcinbar.vscode-squirrel-0.0.20.vsix"
+            "url": "https://open-vsx.org/api/marcinbar/vscode-squirrel/0.0.21/file/marcinbar.vscode-squirrel-0.0.21.vsix"
         },
-        "version": "0.0.20"
+        "version": "0.0.21"
     },
     "marcinbar-vscode-squirrel-linter": {
         "cargoLocks": null,
@@ -28651,8 +28720,8 @@
         "extract": null,
         "name": "ms-pyright-pyright",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/ms-pyright/pyright/1.1.270/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/ms-pyright/pyright/1.1.270/file/ms-pyright.pyright-1.1.270.vsix",
+            "changelog": "https://open-vsx.org/api/ms-pyright/pyright/1.1.271/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-pyright/pyright/1.1.271/file/ms-pyright.pyright-1.1.271.vsix",
             "homepage": "https://github.com/Microsoft/pyright#readme",
             "license": "mit",
             "marketplaceName": "pyright",
@@ -28662,12 +28731,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "pyright-1.1.270.zip",
-            "sha256": "sha256-WjilAmu8grTNf5rXsTtKBIsDVkLVcEthMs0eol8j754=",
+            "name": "pyright-1.1.271.zip",
+            "sha256": "sha256-uw1rUDlLjxzaySmAdZ8oZNVw08TlT7Z/acaJi21ms/M=",
             "type": "url",
-            "url": "https://open-vsx.org/api/ms-pyright/pyright/1.1.270/file/ms-pyright.pyright-1.1.270.vsix"
+            "url": "https://open-vsx.org/api/ms-pyright/pyright/1.1.271/file/ms-pyright.pyright-1.1.271.vsix"
         },
-        "version": "1.1.270"
+        "version": "1.1.271"
     },
     "ms-python-anaconda-extension-pack": {
         "cargoLocks": null,
@@ -29209,8 +29278,8 @@
         "extract": null,
         "name": "ms-vscode-live-server",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/ms-vscode/live-server/0.4.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/ms-vscode/live-server/0.4.0/file/ms-vscode.live-server-0.4.0.vsix",
+            "changelog": "https://open-vsx.org/api/ms-vscode/live-server/0.4.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-vscode/live-server/0.4.1/file/ms-vscode.live-server-0.4.1.vsix",
             "homepage": "https://github.com/microsoft/vscode-livepreview#readme",
             "license": "mit",
             "marketplaceName": "live-server",
@@ -29220,12 +29289,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "live-server-0.4.0.zip",
-            "sha256": "sha256-TKPf/sGgusXpxYN+jXitY7TeBdEqsk7kj7Qm9AOgIy8=",
+            "name": "live-server-0.4.1.zip",
+            "sha256": "sha256-0Gnz9k8/w+4RQnHFPJXriCz34Rg04dgwTp7A+x9GU0w=",
             "type": "url",
-            "url": "https://open-vsx.org/api/ms-vscode/live-server/0.4.0/file/ms-vscode.live-server-0.4.0.vsix"
+            "url": "https://open-vsx.org/api/ms-vscode/live-server/0.4.1/file/ms-vscode.live-server-0.4.1.vsix"
         },
-        "version": "0.4.0"
+        "version": "0.4.1"
     },
     "ms-vscode-makefile-tools": {
         "cargoLocks": null,
@@ -30144,8 +30213,8 @@
         "extract": null,
         "name": "mutable-ai-mutable-ai",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.29/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.29/file/mutable-ai.mutable-ai-1.1.29.vsix",
+            "changelog": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.30/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.30/file/mutable-ai.mutable-ai-1.1.30.vsix",
             "homepage": "https://mutable.ai",
             "license": "unfree",
             "marketplaceName": "mutable-ai",
@@ -30155,12 +30224,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "mutable-ai-1.1.29.zip",
-            "sha256": "sha256-wgM22LzWTrsxIbZp49bARr2TRMsYOZa4Nw53MWh5Wys=",
+            "name": "mutable-ai-1.1.30.zip",
+            "sha256": "sha256-HH6zbo5Ua+GnWUIq0Ie8aMPzyWGEBMcE/8/5WiO372w=",
             "type": "url",
-            "url": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.29/file/mutable-ai.mutable-ai-1.1.29.vsix"
+            "url": "https://open-vsx.org/api/mutable-ai/mutable-ai/1.1.30/file/mutable-ai.mutable-ai-1.1.30.vsix"
         },
-        "version": "1.1.29"
+        "version": "1.1.30"
     },
     "muuvmuuv-vscode-sundial": {
         "cargoLocks": null,
@@ -30685,8 +30754,8 @@
         "extract": null,
         "name": "nickmillerdev-pytest-fixtures",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/nickmillerdev/pytest-fixtures/0.2.4/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/nickmillerdev/pytest-fixtures/0.2.4/file/nickmillerdev.pytest-fixtures-0.2.4.vsix",
+            "changelog": "https://open-vsx.org/api/nickmillerdev/pytest-fixtures/0.2.5/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/nickmillerdev/pytest-fixtures/0.2.5/file/nickmillerdev.pytest-fixtures-0.2.5.vsix",
             "homepage": "https://github.com/nickjmiller/pytest-fixtures#readme",
             "license": "mit",
             "marketplaceName": "pytest-fixtures",
@@ -30696,12 +30765,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "pytest-fixtures-0.2.4.zip",
-            "sha256": "sha256-Nf93H1/NsHdCWmdPc0S+imud+mdmE3PLinOln6FyGZM=",
+            "name": "pytest-fixtures-0.2.5.zip",
+            "sha256": "sha256-qyxukecTxbh26KWVOubjiQNs2oDohzRRgevB67Ik3b8=",
             "type": "url",
-            "url": "https://open-vsx.org/api/nickmillerdev/pytest-fixtures/0.2.4/file/nickmillerdev.pytest-fixtures-0.2.4.vsix"
+            "url": "https://open-vsx.org/api/nickmillerdev/pytest-fixtures/0.2.5/file/nickmillerdev.pytest-fixtures-0.2.5.vsix"
         },
-        "version": "0.2.4"
+        "version": "0.2.5"
     },
     "nico-castell-linux-desktop-file": {
         "cargoLocks": null,
@@ -32945,8 +33014,8 @@
         "extract": null,
         "name": "pokey-cursorless",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/pokey/cursorless/0.26.435/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/pokey/cursorless/0.26.435/file/pokey.cursorless-0.26.435.vsix",
+            "changelog": "https://open-vsx.org/api/pokey/cursorless/0.26.436/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pokey/cursorless/0.26.436/file/pokey.cursorless-0.26.436.vsix",
             "homepage": "https://www.cursorless.org/",
             "license": "mit",
             "marketplaceName": "cursorless",
@@ -32956,20 +33025,20 @@
         },
         "pinned": false,
         "src": {
-            "name": "cursorless-0.26.435.zip",
-            "sha256": "sha256-LvFdtWaA32urHZ24o5ep92xpb0ae+fQIMDre5qP7mbo=",
+            "name": "cursorless-0.26.436.zip",
+            "sha256": "sha256-6XCwy9NvdJj5P08n8pWtZAfhIhAr3uecxliklSEXAPc=",
             "type": "url",
-            "url": "https://open-vsx.org/api/pokey/cursorless/0.26.435/file/pokey.cursorless-0.26.435.vsix"
+            "url": "https://open-vsx.org/api/pokey/cursorless/0.26.436/file/pokey.cursorless-0.26.436.vsix"
         },
-        "version": "0.26.435"
+        "version": "0.26.436"
     },
     "pokey-parse-tree": {
         "cargoLocks": null,
         "extract": null,
         "name": "pokey-parse-tree",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/pokey/parse-tree/0.21.1/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/pokey/parse-tree/0.21.1/file/pokey.parse-tree-0.21.1.vsix",
+            "changelog": "https://open-vsx.org/api/pokey/parse-tree/0.21.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pokey/parse-tree/0.21.2/file/pokey.parse-tree-0.21.2.vsix",
             "homepage": "",
             "license": "mit",
             "marketplaceName": "parse-tree",
@@ -32979,12 +33048,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "parse-tree-0.21.1.zip",
-            "sha256": "sha256-KU0jKnO4UCyrq4m1ZMq0gjUUFfFo1jyxSpnk/1fyz+o=",
+            "name": "parse-tree-0.21.2.zip",
+            "sha256": "sha256-qv8bcYDiOXS3rsccAxQsMS3A7MV9BC0lM+Yj83MF/5k=",
             "type": "url",
-            "url": "https://open-vsx.org/api/pokey/parse-tree/0.21.1/file/pokey.parse-tree-0.21.1.vsix"
+            "url": "https://open-vsx.org/api/pokey/parse-tree/0.21.2/file/pokey.parse-tree-0.21.2.vsix"
         },
-        "version": "0.21.1"
+        "version": "0.21.2"
     },
     "pokey-talon": {
         "cargoLocks": null,
@@ -34939,7 +35008,7 @@
         "extract": null,
         "name": "rgherdt-scheme-lsp",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/rgherdt/scheme-lsp/0.3.3/file/rgherdt.scheme-lsp-0.3.3.vsix",
+            "downloadPage": "https://open-vsx.org/api/rgherdt/scheme-lsp/0.3.6/file/rgherdt.scheme-lsp-0.3.6.vsix",
             "homepage": "",
             "license": "gpl3Only",
             "marketplaceName": "scheme-lsp",
@@ -34949,12 +35018,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "scheme-lsp-0.3.3.zip",
-            "sha256": "sha256-aIJqrzlFIn9Z5nUBsupVP3OXOa0RmvhjhntYGxad9F4=",
+            "name": "scheme-lsp-0.3.6.zip",
+            "sha256": "sha256-N39mok6/VINF+72M5yVfueoecvs3MQBQRjKXU9B2rmc=",
             "type": "url",
-            "url": "https://open-vsx.org/api/rgherdt/scheme-lsp/0.3.3/file/rgherdt.scheme-lsp-0.3.3.vsix"
+            "url": "https://open-vsx.org/api/rgherdt/scheme-lsp/0.3.6/file/rgherdt.scheme-lsp-0.3.6.vsix"
         },
-        "version": "0.3.3"
+        "version": "0.3.6"
     },
     "ria-elastic": {
         "cargoLocks": null,
@@ -35163,7 +35232,7 @@
         "extract": null,
         "name": "robocorp-robocorp-code",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/robocorp/robocorp-code/0.36.0/file/robocorp.robocorp-code-0.36.0.vsix",
+            "downloadPage": "https://open-vsx.org/api/robocorp/robocorp-code/0.37.0/file/robocorp.robocorp-code-0.37.0.vsix",
             "homepage": "https://github.com/robocorp/robotframework-lsp/blob/master/robocorp-code/README.md",
             "license": "unfree",
             "marketplaceName": "robocorp-code",
@@ -35173,20 +35242,20 @@
         },
         "pinned": false,
         "src": {
-            "name": "robocorp-code-0.36.0.zip",
-            "sha256": "sha256-ErMtv2SEuIW/ZhzxO+gYyf+AjUW6Zji4zfQ48rccSj0=",
+            "name": "robocorp-code-0.37.0.zip",
+            "sha256": "sha256-5TcjGHScjqgzcGYQyc0opdkKUH2oGuCEQfliEMYo/Tg=",
             "type": "url",
-            "url": "https://open-vsx.org/api/robocorp/robocorp-code/0.36.0/file/robocorp.robocorp-code-0.36.0.vsix"
+            "url": "https://open-vsx.org/api/robocorp/robocorp-code/0.37.0/file/robocorp.robocorp-code-0.37.0.vsix"
         },
-        "version": "0.36.0"
+        "version": "0.37.0"
     },
     "robocorp-robotframework-lsp": {
         "cargoLocks": null,
         "extract": null,
         "name": "robocorp-robotframework-lsp",
         "passthru": {
-            "downloadPage": "https://open-vsx.org/api/robocorp/robotframework-lsp/1.1.0/file/robocorp.robotframework-lsp-1.1.0.vsix",
-            "homepage": "https://github.com/robocorp/robotframework-lsp/blob/robotframework-lsp-1.1.0/robotframework-ls/README.md",
+            "downloadPage": "https://open-vsx.org/api/robocorp/robotframework-lsp/1.1.3/file/robocorp.robotframework-lsp-1.1.3.vsix",
+            "homepage": "https://github.com/robocorp/robotframework-lsp/blob/robotframework-lsp-1.1.3/robotframework-ls/README.md",
             "license": "asl20",
             "marketplaceName": "robotframework-lsp",
             "marketplacePublisher": "robocorp",
@@ -35195,12 +35264,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "robotframework-lsp-1.1.0.zip",
-            "sha256": "sha256-DNHfZfO4N2Z658W2X4AY8RQ4WUYhlphvSwxLi7vWqhE=",
+            "name": "robotframework-lsp-1.1.3.zip",
+            "sha256": "sha256-Gih6g5v1pC2cqytjm2fVb/Nand6TTtwfA4nu7ifZNGA=",
             "type": "url",
-            "url": "https://open-vsx.org/api/robocorp/robotframework-lsp/1.1.0/file/robocorp.robotframework-lsp-1.1.0.vsix"
+            "url": "https://open-vsx.org/api/robocorp/robotframework-lsp/1.1.3/file/robocorp.robotframework-lsp-1.1.3.vsix"
         },
-        "version": "1.1.0"
+        "version": "1.1.3"
     },
     "robole-file-bunny": {
         "cargoLocks": null,
@@ -35495,6 +35564,29 @@
             "url": "https://open-vsx.org/api/rokoroku/vscode-theme-darcula/1.2.3/file/rokoroku.vscode-theme-darcula-1.2.3.vsix"
         },
         "version": "1.2.3"
+    },
+    "root16-bamboo-pa-vscode": {
+        "cargoLocks": null,
+        "extract": null,
+        "name": "root16-bamboo-pa-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/root16/bamboo-pa-vscode/0.2.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/root16/bamboo-pa-vscode/0.2.2/file/root16.bamboo-pa-vscode-0.2.2.vsix",
+            "homepage": "https://github.com/Root16/bamboo#readme",
+            "license": "mit",
+            "marketplaceName": "bamboo-pa-vscode",
+            "marketplacePublisher": "root16",
+            "name": "bamboo-pa-vscode",
+            "publisher": "root16"
+        },
+        "pinned": false,
+        "src": {
+            "name": "bamboo-pa-vscode-0.2.2.zip",
+            "sha256": "sha256-BKEbUyps2usp1DQdOvdjDlIuZ0r+c5PkgRv/zY7SdRY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/root16/bamboo-pa-vscode/0.2.2/file/root16.bamboo-pa-vscode-0.2.2.vsix"
+        },
+        "version": "0.2.2"
     },
     "rozbo-papercolor-vscode": {
         "cargoLocks": null,
@@ -41346,8 +41438,8 @@
         "extract": null,
         "name": "usernamehw-vscode-join-lines",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/usernamehw/vscode-join-lines/0.2.0/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/usernamehw/vscode-join-lines/0.2.0/file/usernamehw.vscode-join-lines-0.2.0.vsix",
+            "changelog": "https://open-vsx.org/api/usernamehw/vscode-join-lines/0.3.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/usernamehw/vscode-join-lines/0.3.0/file/usernamehw.vscode-join-lines-0.3.0.vsix",
             "homepage": "",
             "license": "mit",
             "marketplaceName": "vscode-join-lines",
@@ -41357,12 +41449,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "vscode-join-lines-0.2.0.zip",
-            "sha256": "sha256-RXZtJ9qXWeNJSL1EbxDB+fAKItzOZd7qj8Fu/dkmJ8w=",
+            "name": "vscode-join-lines-0.3.0.zip",
+            "sha256": "sha256-Qxdcab1xaczW+NXS6yjVLeW6D2ran/hLZMA0E38GgoM=",
             "type": "url",
-            "url": "https://open-vsx.org/api/usernamehw/vscode-join-lines/0.2.0/file/usernamehw.vscode-join-lines-0.2.0.vsix"
+            "url": "https://open-vsx.org/api/usernamehw/vscode-join-lines/0.3.0/file/usernamehw.vscode-join-lines-0.3.0.vsix"
         },
-        "version": "0.2.0"
+        "version": "0.3.0"
     },
     "vadimcn-vscode-lldb": {
         "cargoLocks": null,
@@ -46347,8 +46439,8 @@
         "extract": null,
         "name": "zardoy-ts-essential-plugins",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.16/file/CHANGELOG.MD",
-            "downloadPage": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.16/file/zardoy.ts-essential-plugins-0.0.16.vsix",
+            "changelog": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.18/file/CHANGELOG.MD",
+            "downloadPage": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.18/file/zardoy.ts-essential-plugins-0.0.18.vsix",
             "homepage": "https://github.com/zardoy/typescript-vscode-plugins#readme",
             "license": "mit",
             "marketplaceName": "ts-essential-plugins",
@@ -46358,12 +46450,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "ts-essential-plugins-0.0.16.zip",
-            "sha256": "sha256-uWYOhas/YIjALe+hYsb2++MoEkZgz/3IX1DKiTq5cZg=",
+            "name": "ts-essential-plugins-0.0.18.zip",
+            "sha256": "sha256-WCVxE45y2W7QGs6a4hrx4eRxFIl8e2FLvDf7wEV9SZM=",
             "type": "url",
-            "url": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.16/file/zardoy.ts-essential-plugins-0.0.16.vsix"
+            "url": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.18/file/zardoy.ts-essential-plugins-0.0.18.vsix"
         },
-        "version": "0.0.16"
+        "version": "0.0.18"
     },
     "zardoy-typescript-server-logger": {
         "cargoLocks": null,
@@ -46439,8 +46531,8 @@
         "extract": null,
         "name": "zardoy-zardoy-experiments",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.89/file/CHANGELOG.MD",
-            "downloadPage": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.89/file/zardoy.zardoy-experiments-0.0.89.vsix",
+            "changelog": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.92/file/CHANGELOG.MD",
+            "downloadPage": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.92/file/zardoy.zardoy-experiments-0.0.92.vsix",
             "homepage": "https://github.com/zardoy/vscode-experiments#readme",
             "license": "mit",
             "marketplaceName": "zardoy-experiments",
@@ -46450,12 +46542,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "zardoy-experiments-0.0.89.zip",
-            "sha256": "sha256-R9zvBTKoxCWhNtml7oLTwH33SHkhtoaQA8nysO1t9SU=",
+            "name": "zardoy-experiments-0.0.92.zip",
+            "sha256": "sha256-Q+Yfj/Wits/D0Lxy2eK8lo2WzwigPxVRE7OGI3GaFUw=",
             "type": "url",
-            "url": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.89/file/zardoy.zardoy-experiments-0.0.89.vsix"
+            "url": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.92/file/zardoy.zardoy-experiments-0.0.92.vsix"
         },
-        "version": "0.0.89"
+        "version": "0.0.92"
     },
     "zardoy-zardoy-internals": {
         "cargoLocks": null,
@@ -46643,8 +46735,8 @@
         "extract": null,
         "name": "zhouhangao-ihub-preview-cloud",
         "passthru": {
-            "changelog": "https://open-vsx.org/api/zhouhangao/ihub-preview-cloud/0.0.3/file/CHANGELOG.md",
-            "downloadPage": "https://open-vsx.org/api/zhouhangao/ihub-preview-cloud/0.0.3/file/zhouhangao.ihub-preview-cloud-0.0.3.vsix",
+            "changelog": "https://open-vsx.org/api/zhouhangao/ihub-preview-cloud/0.0.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/zhouhangao/ihub-preview-cloud/0.0.4/file/zhouhangao.ihub-preview-cloud-0.0.4.vsix",
             "homepage": "",
             "license": "mit",
             "marketplaceName": "ihub-preview-cloud",
@@ -46654,12 +46746,12 @@
         },
         "pinned": false,
         "src": {
-            "name": "ihub-preview-cloud-0.0.3.zip",
-            "sha256": "sha256-8S6QsarMBT0y65v21x6XCvbzJf7Q9BpMtPMvyAEnoRw=",
+            "name": "ihub-preview-cloud-0.0.4.zip",
+            "sha256": "sha256-u7GoTbyLU5e8lIJm1duIWBX9Z4RXzfGethBKS0tSPCk=",
             "type": "url",
-            "url": "https://open-vsx.org/api/zhouhangao/ihub-preview-cloud/0.0.3/file/zhouhangao.ihub-preview-cloud-0.0.3.vsix"
+            "url": "https://open-vsx.org/api/zhouhangao/ihub-preview-cloud/0.0.4/file/zhouhangao.ihub-preview-cloud-0.0.4.vsix"
         },
-        "version": "0.0.3"
+        "version": "0.0.4"
     },
     "zhuangtongfa-material-theme": {
         "cargoLocks": null,
