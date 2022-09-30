@@ -1,0 +1,77 @@
+name: Nvfetch
+on:
+  workflow_call:
+    inputs:
+      TARGET:
+        required: true
+        type: string
+      MARKETPLACE:
+        required: true
+        type: string
+      FIRST_BLOCK:
+        required: true
+        type: string
+      BLOCK_LIMIT:
+        required: true
+        type: string
+      BLOCK_SIZE:
+        required: true
+        type: string
+      ACTION_ID:
+        required: true
+        type: string
+      
+
+env:
+  nixpkgs: nixpkgs=https://github.com/NixOS/nixpkgs/archive/cd87aef066e4bdbb1139845500072bd252d37c5e.tar.gz
+  extra_nix_config: |
+    substituters = https://cache.nixos.org https://nix-community.cachix.org https://fog.cachix.org
+    trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
+
+  run_updater: export DENO_DIR=.deno && nix run nixpkgs#deno -- run --allow-write --allow-net={0} --no-prompt updater/index.ts {1} nvfetch/{2}.toml
+  
+  git_config: |
+    git config user.name github-actions
+    git config user.email github-actions@github.com
+    git config pull.rebase true
+
+  commit_and_push: |
+    git add .
+    git commit --allow-empty -m "action: run nvfetcher on {0}"
+    export ACTION_ID=${{ inputs.ACTION_ID }}
+    export TARGET=${{ inputs.TARGET }}
+    bash scripts/wait.sh
+    git pull
+    git push
+
+jobs:
+
+  nvfetch:
+    name: block ${{ inputs.FIRST_BLOCK }}, ${{ inputs.MARKETPLACE }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install latest Nix
+        uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: ${{ env.extra_nix_config }}
+          nix_path: ${{ env.nixpkgs }}
+      - name: Pull
+        run: |
+          ${{ env.git_config }}
+          git pull
+      - name: Run nvfetcher ${{ inputs.ACTION_ID }} on ${{ inputs.MARKETPLACE }}
+        env:
+          TARGET: ${{ inputs.TARGET }}
+          FIRST_BLOCK: ${{ inputs.FIRST_BLOCK }}
+          BLOCK_LIMIT: ${{ inputs.BLOCK_LIMIT }}
+          BLOCK_SIZE: ${{ inputs.BLOCK_SIZE }}
+          ACTION_ID: ${{ inputs.ACTION_ID }}
+          THREADS: 0
+          OUT_BLOCKS_DIR: ./
+        run: |
+          nix run .#scripts.nvfetch
+
+      - name: Commit and push changes
+        run: ${{ format(env.commit_and_push, inputs.MARKETPLACE) }}

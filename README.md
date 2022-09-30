@@ -1,22 +1,31 @@
 # Nix VSCode Marketplace
 
-At the time of writing this,
-[searching `nixpkgs` yields 209 VSCode extensions.][nixpkgs-query]
-However, the VSCode marketplace contains more than 50,000 extensions.
+At the time of writing this, searching `nixpkgs` yields 233 VS Code extensions
+However, the VS Code marketplace contains more than 40,000 extensions.
 
-This flake includes all extensions from OpenVSX, and the 10k most downloaded
-extensions from the VSCode Marketplace.
+This flake includes the majority of available extensions from [Open VSX](https://open-vsx.org/) and [VSCode Marketplace](https://marketplace.visualstudio.com/vscode).
 
-I've setup a GitHub action to update all extensions daily.
+A GitHub action updates the extensions daily.
 
 ## How To Use
 
-Add the flake as an input to your flake.
-
-Then, you can directly use the extensions that this package exports. Or you can
-use the overlay.
+Try a [template](https://github.com/br4ch1st0chr0n3/flakes#vscodium)
 
 ## Contribution
+
+1. Select `TARGET` in `flake.nix`
+
+1. Export variables
+
+```console
+nix develop
+```
+
+1. Run scripts in this environment
+
+```console
+nix run .#scripts.generateConfigs
+```
 
 Improvement on any part of this project is welcome. These are possible areas of
 improvement that I have in mind:

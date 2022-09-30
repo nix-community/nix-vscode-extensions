@@ -5,21 +5,36 @@ import { getEntries as getVSCodeMarketplaceEntries } from "./vscode-marketplace/
 const mode = Deno.args[0]
 const outFile = Deno.args[1]
 
-const perMode = {
-	["open-vsx"]: {
+class PerModeConfig {
+	getEntries: any
+	tomlandFix: any
+}
+
+class PerMode {
+	"open-vsx": PerModeConfig
+	"vscode-marketplace": PerModeConfig
+}
+
+const perMode: PerMode =  {
+	"open-vsx": {
 		getEntries: getOpenVSXEntries,
 		tomlandFix: "openvsx"
 	},
-	["vscode-marketplace"]: {
+	"vscode-marketplace": {
 		getEntries: getVSCodeMarketplaceEntries,
 		tomlandFix: "vsmarketplace"
 	}
 }
 
-if (!perMode.hasOwnProperty(mode))
-	throw "Invalid mode."
+const getPerMode_ = (mode: string): PerModeConfig => {
+	if (mode == "open-vsx") return perMode["open-vsx"]
+	else if (mode == "vscode-marketplace") return perMode["vscode-marketplace"]
+	else throw "Invalid mode."
+}
 
-const entries = await perMode[mode].getEntries()
+const perMode_ = getPerMode_(mode)
+
+const entries = await perMode_.getEntries()
 
 const extensions = Object.fromEntries(entries)
 
@@ -27,8 +42,8 @@ log.info("Generating TOML...")
 const tomlandFixSrc = /^src = /gm
 const tomlandFixFetch = /^fetch = /gm
 const toml = toTOML(extensions)
-	.replaceAll(tomlandFixSrc, `src.${perMode[mode].tomlandFix} = `)
-	.replaceAll(tomlandFixFetch, `fetch.${perMode[mode].tomlandFix} = `)
+	.replaceAll(tomlandFixSrc, `src.${perMode_.tomlandFix} = `)
+	.replaceAll(tomlandFixFetch, `fetch.${perMode_.tomlandFix} = `)
 log.info("Generated TOML.")
 log.info("Applied tomland fixes.")
 

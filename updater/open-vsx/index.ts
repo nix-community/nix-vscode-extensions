@@ -9,7 +9,7 @@ export async function getEntries() {
 	log.info(`${count} extensions found.`)
 
 	log.info("Generating entries...")
-	const entries = data.map(e => ({
+	const entries = data.filter(x => x !== null).map(e => ({
 		name: e.name,
 		publisher: e.namespace,
 		passthru: {

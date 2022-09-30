@@ -1,0 +1,132 @@
+{
+  "include": [
+    {
+      "ACTION_ID": 1,
+      "FIRST_BLOCK": 1,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 2,
+      "FIRST_BLOCK": 21,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 3,
+      "FIRST_BLOCK": 41,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 4,
+      "FIRST_BLOCK": 61,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 5,
+      "FIRST_BLOCK": 81,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 6,
+      "FIRST_BLOCK": 101,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 7,
+      "FIRST_BLOCK": 121,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 8,
+      "FIRST_BLOCK": 141,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 9,
+      "FIRST_BLOCK": 161,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 10,
+      "FIRST_BLOCK": 181,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 11,
+      "FIRST_BLOCK": 201,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 12,
+      "FIRST_BLOCK": 221,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 13,
+      "FIRST_BLOCK": 241,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 14,
+      "FIRST_BLOCK": 261,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 15,
+      "FIRST_BLOCK": 281,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    },
+    {
+      "ACTION_ID": 16,
+      "FIRST_BLOCK": 301,
+      "MARKETPLACE": "Open VSX",
+      "TARGET": "open-vsx",
+      "BLOCK_SIZE": 10,
+      "BLOCK_LIMIT": 20
+    }
+  ]
+}

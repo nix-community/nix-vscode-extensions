@@ -1,5 +1,5 @@
 const API_BASE_URL = "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery/"
-const PAGE_COUNT = 10
+const PAGE_COUNT = 54
 
 export const getExtensionsDataPage = async (pageNumber: number): Promise<any> => {
 	const headers = {
