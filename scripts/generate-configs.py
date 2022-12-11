@@ -45,6 +45,30 @@ my_parser.add_argument(
     default=25
 )
 
+my_parser.add_argument(
+    "--max-attempts",
+    metavar="INT",
+    type=int,
+    help="Number of attempts to run a step",
+    default=3
+)
+
+my_parser.add_argument(
+    "--retry-wait-minutes",
+    metavar="INT",
+    type=int,
+    help="Timeout before step retry",
+    default=60
+)
+
+my_parser.add_argument(
+    "--timeout-minutes",
+    metavar="INT",
+    type=int,
+    help="Timeout before cancelling a command",
+    default=300
+)
+
 args = my_parser.parse_args()
 
 APPROX_EXTENSIONS = args.approx_extensions
@@ -53,6 +77,9 @@ MARKETPLACE = args.marketplace
 BLOCK_SIZE = args.block_size
 BLOCK_LIMIT = args.block_limit
 APPROX_BLOCKS = int((APPROX_EXTENSIONS + (BLOCK_SIZE * BLOCK_LIMIT)) / (BLOCK_SIZE * BLOCK_LIMIT))
+MAX_ATTEMPTS = args.max_attempts
+TIMEOUT_MINUTES = args.timeout_minutes
+RETRY_WAIT_SECONDS = args.retry_wait_minutes * 60
 
 include = [
     {
@@ -62,6 +89,9 @@ include = [
         "TARGET": TARGET,
         "BLOCK_SIZE": BLOCK_SIZE,
         "BLOCK_LIMIT": BLOCK_LIMIT,
+        "MAX_ATTEMPTS": MAX_ATTEMPTS,
+        "TIMEOUT_MINUTES": TIMEOUT_MINUTES,
+        "RETRY_WAIT_SECONDS": RETRY_WAIT_SECONDS,
     }
     for i in range(APPROX_BLOCKS)
 ]

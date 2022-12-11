@@ -2,7 +2,7 @@
   description = "VSCode and OpenVSX Extensions Collection For Nix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/dbc68fa4bb132d990945d39801b0d7f2ba15b08f";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -87,7 +87,10 @@
                   --approx-extensions "''${APPROX_EXTENSIONS:-10000}" \
                   --block-limit "''${BLOCK_LIMIT:-1}" \
                   --block-size "''${BLOCK_SIZE:-1}" \
-                  --marketplace "''${NAME:-"VSCode Marketplace"}"
+                  --marketplace "''${NAME:-"VSCode Marketplace"}" \
+                  --max-attempts "''${MAX_ATTEMPTS:-3}" \
+                  --retry-wait-minutes "''${RETRY_WAIT_MINUTES:-10}" \
+                  --timeout-minutes "''${TIMEOUT_MINUTES:-10}"
               '';
               runtimeInputs = [ pkgs.poetry ];
             };
@@ -103,7 +106,14 @@
             };
           };
 
-        
+        # test
+        codium =
+          let inherit (pkgs) vscode-with-extensions vscodium;
+          in
+          (vscode-with-extensions.override {
+            vscode = vscodium;
+            vscodeExtensions = builtins.attrValues { inherit (extensions.vscode.golang) go; };
+          });
       in
       {
         devShell = pkgs.mkShell {
@@ -115,20 +125,26 @@
             export ACTION_ID=1
             export OUT_DIR=tmp/out
 
-            export TARGET=vscode-marketplace
-            # export TARGET=open-vsx
+            # export TARGET=vscode-marketplace
+            export TARGET=open-vsx
             if [[ $TARGET = vscode-marketplace ]]; then
               export NAME="VSCode Marketplace"
               export BLOCK_SIZE=10
               export BLOCK_LIMIT=200
               export APPROX_EXTENSIONS=45000
               export ALLOW_NET=marketplace.visualstudio.com
+              export MAX_ATTEMPTS=6
+              export RETRY_WAIT_MINUTES=61
+              export TIMEOUT_MINUTES=360
             else
               export NAME="Open VSX"
               export BLOCK_SIZE=10
               export BLOCK_LIMIT=20
               export APPROX_EXTENSIONS=3000
               export ALLOW_NET=open-vsx.org
+              export MAX_ATTEMPTS=6
+              export RETRY_WAIT_MINUTES=61
+              export TIMEOUT_MINUTES=360
             fi
           '';
           nativeBuildInputs = with pkgs; [
@@ -136,7 +152,7 @@
             nvfetcher
             poetry
           ];
-          buildInputs = [ ];
+          buildInputs = [ codium ];
         };
         packages = extensions // { inherit scripts; };
         overlays.default = final: prev: {

@@ -94,10 +94,16 @@ jobs:
           nix_path: ${{ env.nixpkgs }}
 
       - name: Run Updater on ${{ matrix.MARKETPLACE }} extensions
-        run: |
-          export ALLOW_NET=${{ matrix.ALLOW_NET }}
-          export TARGET=${{ matrix.TARGET }}
-          nix run .#scripts.updateExtensions
+        env: 
+          ALLOW_NET: ${{ matrix.ALLOW_NET }}
+          TARGET: ${{ matrix.TARGET }}
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 50
+          retry_wait_seconds: 300
+          max_attempts: 6
+          command: nix run .#scripts.updateExtensions
+          
 
       - name: Commit and push changes
         run: ${{ format(env.commit_and_push, matrix.TARGET, matrix.TARGET) }}
@@ -117,6 +123,9 @@ jobs:
       BLOCK_LIMIT: ${{ matrix.BLOCK_LIMIT }}
       BLOCK_SIZE: ${{ matrix.BLOCK_SIZE }}
       MARKETPLACE: ${{ matrix.MARKETPLACE }}
+      TIMEOUT_MINUTES: ${{ matrix.TIMEOUT_MINUTES }}
+      MAX_ATTEMPTS: ${{ matrix.MAX_ATTEMPTS }}
+      RETRY_WAIT_SECONDS: ${{ matrix.RETRY_WAIT_SECONDS }}
 
   combine-open-vsx:
     name: combine ${{ matrix.MARKETPLACE }}
@@ -144,6 +153,9 @@ jobs:
       BLOCK_LIMIT: ${{ matrix.BLOCK_LIMIT }}
       BLOCK_SIZE: ${{ matrix.BLOCK_SIZE }}
       MARKETPLACE: ${{ matrix.MARKETPLACE }}
+      TIMEOUT_MINUTES: ${{ matrix.TIMEOUT_MINUTES }}
+      MAX_ATTEMPTS: ${{ matrix.MAX_ATTEMPTS }}
+      RETRY_WAIT_SECONDS: ${{ matrix.RETRY_WAIT_SECONDS }}
 
   combine-vscode-marketplace:
     name: combine ${{ matrix.MARKETPLACE }}

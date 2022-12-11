@@ -20,6 +20,15 @@ on:
       ACTION_ID:
         required: true
         type: string
+      TIMEOUT_MINUTES:
+        required: true
+        type: number
+      MAX_ATTEMPTS:
+        required: true
+        type: number
+      RETRY_WAIT_SECONDS:
+        required: true
+        type: number
       
 
 env:
@@ -70,8 +79,12 @@ jobs:
           ACTION_ID: ${{ inputs.ACTION_ID }}
           THREADS: 0
           OUT_BLOCKS_DIR: ./
-        run: |
-          nix run .#scripts.nvfetch
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: ${{ inputs.TIMEOUT_MINUTES }}
+          retry_wait_seconds: ${{ inputs.RETRY_WAIT_SECONDS }}
+          max_attempts: ${{ inputs.MAX_ATTEMPTS }}
+          command: nix run .#scripts.nvfetch
 
       - name: Commit and push changes
         run: ${{ format(env.commit_and_push, inputs.MARKETPLACE) }}

@@ -6,7 +6,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 2,
@@ -14,7 +17,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 3,
@@ -22,7 +28,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 4,
@@ -30,7 +39,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 5,
@@ -38,7 +50,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 6,
@@ -46,7 +61,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 7,
@@ -54,7 +72,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 8,
@@ -62,7 +83,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 9,
@@ -70,7 +94,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 10,
@@ -78,7 +105,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 11,
@@ -86,7 +116,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 12,
@@ -94,7 +127,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 13,
@@ -102,7 +138,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 14,
@@ -110,7 +149,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 15,
@@ -118,7 +160,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     },
     {
       "ACTION_ID": 16,
@@ -126,7 +171,10 @@
       "MARKETPLACE": "Open VSX",
       "TARGET": "open-vsx",
       "BLOCK_SIZE": 10,
-      "BLOCK_LIMIT": 20
+      "BLOCK_LIMIT": 20,
+      "MAX_ATTEMPTS": 6,
+      "TIMEOUT_MINUTES": 360,
+      "RETRY_WAIT_SECONDS": 3660
     }
   ]
 }
