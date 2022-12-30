@@ -26,8 +26,13 @@
             inherit (extensions) nix misc markdown github;
           };
         };
-        writeSettings = writeSettingsJSON {inherit (settingsNix) nix-ide markdown-all-in-one git gitlens todo-tree;};
-        tools = [codium writeSettings];
+        writeSettings = writeSettingsJSON {
+          inherit (settingsNix)
+            nix-ide markdown-all-in-one git gitlens todo-tree
+            markdown-language-features
+            ;
+        };
+        tools = [ codium writeSettings ];
       in
       {
         devShells.default = devshell.mkShell

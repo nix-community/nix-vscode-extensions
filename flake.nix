@@ -6,8 +6,8 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, nixpkgs, flake-utils }: flake-utils.lib.eachDefaultSystem
+    (system:
       let
         pkgs = import nixpkgs { inherit system; };
 
@@ -112,7 +112,10 @@
           in
           (vscode-with-extensions.override {
             vscode = vscodium;
-            vscodeExtensions = builtins.attrValues { inherit (extensions.vscode.golang) go; };
+            vscodeExtensions = builtins.attrValues {
+              inherit (extensions.vscode.golang) go;
+              inherit (extensions.vscode.vlanguage) vscode-vlang;
+            };
           });
       in
       {
@@ -146,17 +149,27 @@
               export RETRY_WAIT_MINUTES=61
               export TIMEOUT_MINUTES=360
             fi
+
+            codium --list-extensions
           '';
-          nativeBuildInputs = with pkgs; [
-            deno
-            nvfetcher
-            poetry
+          buildInputs = [
+            pkgs.deno
+            pkgs.nvfetcher
+            pkgs.poetry
+            codium
           ];
-          buildInputs = [ codium ];
         };
         packages = extensions // { inherit scripts; };
         overlays.default = final: prev: {
           vscode-marketplace = extensions;
         };
-      });
+      }
+    ) // {
+    templates = {
+      vscodium-with-extensions = {
+        path = ./templates;
+        description = "VSCodium with extensions";
+      };
+    };
+  };
 }
