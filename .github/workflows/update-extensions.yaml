@@ -99,8 +99,8 @@ jobs:
           TARGET: ${{ matrix.TARGET }}
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 50
-          retry_wait_seconds: 300
+          timeout_minutes: 360
+          retry_wait_seconds: 3660
           max_attempts: 6
           command: nix run .#scripts.updateExtensions
           
