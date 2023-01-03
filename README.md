@@ -24,7 +24,7 @@ nix develop
 
    ```console
    nix develop nix-dev/
-   write-settings.json
+   write-settings-json
    codium .
    ```
 
