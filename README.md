@@ -9,10 +9,10 @@ A GitHub action updates the extensions daily.
 
 ## How To Use
 
-Try a [template](https://github.com/deemp/flakes#codium-generic):
+Try a template:
 
 ```console
-nix flake new vscodium-project -t github:deemp/nix-vscode-extensions#vscodium-with-extensions
+nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions#vscodium-with-extensions
 cd vscodium-project
 git init && git add .
 nix develop
