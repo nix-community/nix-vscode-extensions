@@ -7,7 +7,36 @@ This flake provides the Nix expressions for the majority of available extensions
 
 A GitHub action updates the extensions daily.
 
-## How To Use
+## Usage
+
+### With flakes
+
+Add the following to your `flake.nix` (see [Flakes](https://nixos.wiki/wiki/Flakes)).
+
+```nix
+inputs.nix-vscode-extensions = {
+  url = "github:nix-community/nix-vscode-extensions";
+};
+```
+
+Now, you can access the extensions from `VS Code Marketplace` and `Open VSX Registry`.
+
+- `nix-vscode-extensions.packages.${system}.vscode.golang.go`
+- `nix-vscode-extensions.packages.${system}.open-vsx.golang.go`
+
+### Without flakes
+
+This repo provides a `default.nix`, so you can use [niv](https://github.com/nmattia/niv) or `fetchGit` with an appropriate `rev`.
+
+```nix
+(import (builtins.fetchGit {
+  url = "https://github.com/nix-community/nix-vscode-extensions";
+  ref = "refs/heads/master";
+  rev = "e5b6acfc794790e2c258853c34731c98a90d823d";
+})).packages.x86_64-linux.vscode.golang.go
+```
+
+## Template
 
 Try a template:
 
@@ -17,6 +46,12 @@ cd vscodium-project
 git init && git add .
 nix develop
 ```
+
+This will print the extensions available in `VSCodium`. Run `codium .` to start `VSCodium`.
+
+## Troubleshooting
+
+If `VSCodium` doesn't pick the extensions, try rebooting your computer and try again.
 
 ## Contribute
 
