@@ -19,10 +19,16 @@ inputs.nix-vscode-extensions = {
 };
 ```
 
-Now, you can access the extensions from `VS Code Marketplace` and `Open VSX Registry`.
+Now, you can access the extensions from `VS Code Marketplace` and `Open VSX Registry`. Explore them in `nix repl`:
 
-- `nix-vscode-extensions.packages.${system}.vscode.golang.go`
-- `nix-vscode-extensions.packages.${system}.open-vsx.golang.go`
+```sh
+$ nix repl
+nix-repl> :lf .
+Added 10 variables.
+
+nix-repl> inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode.golang.go
+«derivation /nix/store/ldx15dnxwd1sa3gb2lvs1rl4v0f5cq11-vscode-extension-golang-Go-0.37.1.drv»
+```
 
 ### Without flakes
 
@@ -32,16 +38,16 @@ This repo provides a `default.nix`, so you can use [niv](https://github.com/nmat
 (import (builtins.fetchGit {
   url = "https://github.com/nix-community/nix-vscode-extensions";
   ref = "refs/heads/master";
-  rev = "e5b6acfc794790e2c258853c34731c98a90d823d";
-})).packages.x86_64-linux.vscode.golang.go
+  rev = "ed701255dd9d4ae1aa12ab7f82d05bd3a85580b5";
+})).extensions.x86_64-linux.vscode.golang.go
 ```
 
 ## Template
 
-Try a template:
+This template shows how you can get a `VSCodium` with a couple of extensions. Try it:
 
 ```console
-nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions#vscodium-with-extensions
+nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
 cd vscodium-project
 git init && git add .
 nix develop
