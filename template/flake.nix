@@ -17,7 +17,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        extensions = nix-vscode-extensions.packages.${system};
+        extensions = nix-vscode-extensions.extensions.${system};
         codium =
           let
             inherit (pkgs) vscode-with-extensions vscodium;
