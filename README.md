@@ -1,11 +1,10 @@
 # Nix VSCode Marketplace
 
-At the time of writing this, searching `nixpkgs` yields around **200** VS Code extensions.
-However, the VS Code marketplace contains more than **40,000** extensions!
+At the time of writing this, searching `nixpkgs` yields around **200** `VS Code` extensions. However, the `VS Code Marketplace` contains more than **40,000** extensions!
 
-This flake provides the Nix expressions for the majority of available extensions from [Open VSX](https://open-vsx.org/) and [VSCode Marketplace](https://marketplace.visualstudio.com/vscode).
+This flake provides the Nix expressions for the majority of available extensions from [Open VSX](https://open-vsx.org/) and [VSCode Marketplace](https://marketplace.visualstudio.com/vscode). A `GitHub Action` updates the extensions daily.
 
-A GitHub action updates the extensions daily.
+That said, you can now use a different set of extensions for `VS Code` (or `VSCodium`) in each of your projects. Moreover, you can share your flakes so that other people don't need to install these extensions manually!
 
 ## Usage
 
@@ -19,7 +18,7 @@ inputs.nix-vscode-extensions = {
 };
 ```
 
-Now, you can access the extensions from `VS Code Marketplace` and `Open VSX Registry`. Explore them in `nix repl`:
+Now, you can explore the extensions in `nix repl`:
 
 ```sh
 $ nix repl
@@ -28,7 +27,12 @@ Added 10 variables.
 
 nix-repl> inputs.nix-vscode-extensions.extensions.x86_64-linux.vscode.golang.go
 «derivation /nix/store/ldx15dnxwd1sa3gb2lvs1rl4v0f5cq11-vscode-extension-golang-Go-0.37.1.drv»
+
+nix-repl> inputs.nix-vscode-extensions.extensions.x86_64-linux.open-vsx.golang.go
+«derivation /nix/store/sq3bm44dl8k1g1mm2daqix3ayjn289j2-vscode-extension-golang-Go-0.37.1.drv»
 ```
+
+The [template](./template/flake.nix) demonstrates how to use the extensions with `VSCodium`.
 
 ### Without flakes
 
