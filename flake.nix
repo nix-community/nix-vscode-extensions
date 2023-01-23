@@ -1,5 +1,9 @@
 {
-  description = "VS Code and Open VSX Extensions Collection For Nix";
+  description = "
+    `VS Code` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
+    See the attributes `extensions.\${system}.vscode` and `extensions.\${system}.open-vsx` for other extensions.
+    Learn more in the flake [repo](https://github.com/nix-community/nix-vscode-extensions).
+  ";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/dbc68fa4bb132d990945d39801b0d7f2ba15b08f";
@@ -111,7 +115,7 @@
           };
 
         # test
-        codium =
+        vscodium-with-extensions =
           let inherit (pkgs) vscode-with-extensions vscodium;
           in
           (vscode-with-extensions.override {
@@ -154,24 +158,26 @@
               export TIMEOUT_MINUTES=360
             fi
 
+            printf "\nVSCodium with extensions:\n"
             codium --list-extensions
           '';
           buildInputs = [
             pkgs.deno
             pkgs.nvfetcher
             pkgs.poetry
-            codium
+            vscodium-with-extensions
           ];
         };
-        packages = extensions // { inherit scripts; };
+        packages = { inherit scripts vscodium-with-extensions; };
+        inherit extensions;
         overlays.default = final: prev: {
-          vscode-marketplace = extensions;
+          vscode-extensions = extensions;
         };
       }
     ) // {
     templates = {
-      vscodium-with-extensions = {
-        path = ./templates;
+      default = {
+        path = ./template;
         description = "VSCodium with extensions";
       };
     };
