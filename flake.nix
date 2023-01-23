@@ -1,5 +1,5 @@
 {
-  description = "VSCode and OpenVSX Extensions Collection For Nix";
+  description = "VS Code and Open VSX Extensions Collection For Nix";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/dbc68fa4bb132d990945d39801b0d7f2ba15b08f";
