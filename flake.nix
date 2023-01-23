@@ -1,7 +1,7 @@
 {
   description = "
     `VS Code` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
-    See the attributes `extensions.\${system}.vscode` and `extensions.\${system}.open-vsx` for other extensions.
+    Use the attributes `extensions.\${system}.vscode` and `extensions.\${system}.open-vsx` to get all extensions.
     Learn more in the flake [repo](https://github.com/nix-community/nix-vscode-extensions).
   ";
 
@@ -127,7 +127,7 @@
           });
       in
       {
-        devShell = pkgs.mkShell {
+        devShells.default = pkgs.mkShell {
           shellHook = ''
             # nvfetch
             export DENO_DIR="$(pwd)/.deno"
@@ -168,11 +168,10 @@
             vscodium-with-extensions
           ];
         };
-        packages = { inherit scripts vscodium-with-extensions; };
+        packages = {
+          inherit vscodium-with-extensions;
+        } // scripts;
         inherit extensions;
-        overlays.default = final: prev: {
-          vscode-extensions = extensions;
-        };
       }
     ) // {
     templates = {
