@@ -65,7 +65,7 @@ If `VSCodium` doesn't pick the extensions, try rebooting your computer and try a
 
 ## Contribute
 
-1. (Optional) Start `VSCodium` with necessary extensions
+1. (Optionally) Start `VSCodium` with necessary extensions
 
    ```console
    nix develop nix-dev/
@@ -73,18 +73,18 @@ If `VSCodium` doesn't pick the extensions, try rebooting your computer and try a
    codium .
    ```
 
-1. Select `TARGET` in `flake.nix`, e.g., `open-vsx`. Comment out another target like so: `# export TARGET=vscode-marketplace`.
+1. Select `TARGET` in `nix-dev/flake.nix`, e.g., `open-vsx`. Comment out another target like so: `# export TARGET=vscode-marketplace`.
 
 1. Export variables
 
     ```console
-    nix develop
+    nix develop nix-dev/
     ```
 
 1. Run scripts in this environment
 
     ```console
-    nix run .#scripts.generateConfigs
+    nix run nix-dev/#generateConfigs
     ```
 
 Improvement on any part of this project is welcome. These are possible areas of
