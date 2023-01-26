@@ -84,7 +84,7 @@ jobs:
           timeout_minutes: ${{ inputs.TIMEOUT_MINUTES }}
           retry_wait_seconds: ${{ inputs.RETRY_WAIT_SECONDS }}
           max_attempts: ${{ inputs.MAX_ATTEMPTS }}
-          command: nix run .#scripts.nvfetch
+          command: nix run nix-dev/#nvfetch
 
       - name: Commit and push changes
         run: ${{ format(env.commit_and_push, inputs.MARKETPLACE) }}
