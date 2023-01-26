@@ -1,4 +1,4 @@
-# Nix VSCode Marketplace
+# Nix VSCode Extensions
 
 At the time of writing this, searching `nixpkgs` yields around **200** `VS Code` extensions. However, the `VS Code Marketplace` contains more than **40,000** extensions!
 
