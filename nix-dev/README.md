@@ -2,19 +2,17 @@
 
 ## Prerequisites
 
-See [Prerequisites](https://github.com/deemp/flakes#prerequisites)
+- [Prerequisites](https://github.com/deemp/flakes#prerequisites)
+- [codium](https://github.com/deemp/flakes/blob/main/codium#readme) flake.
 
 ## Description
 
-This flake is based on the [codium](https://github.com/deemp/flakes/blob/main/codium#readme) flake.
-
-This flake demonstrates how to enable specific extensions and make the `hello` executable available on `PATH` in `VSCodium`.
+This flake provides the dev tools for the project.
 
 ## Devshell
 
 ```console
 nix develop
+write-settings-json
 codium .
 ```
-
-In VSCodium's terminal, run `hello`
