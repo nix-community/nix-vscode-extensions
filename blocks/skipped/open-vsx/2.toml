@@ -1,0 +1,280 @@
+
+[streetsidesoftware-code-spell-checker-serbian]
+src.openvsx = "streetsidesoftware.code-spell-checker-serbian"
+fetch.openvsx = "streetsidesoftware.code-spell-checker-serbian"
+
+[streetsidesoftware-code-spell-checker-serbian.passthru]
+name = "code-spell-checker-serbian"
+publisher = "streetsidesoftware"
+marketplaceName = "code-spell-checker-serbian"
+marketplacePublisher = "streetsidesoftware"
+license = "gpl3Plus"
+changelog = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-serbian/1.0.2/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-serbian/1.0.2/file/streetsidesoftware.code-spell-checker-serbian-1.0.2.vsix"
+homepage = "https://github.com/streetsidesoftware/vscode-cspell-dict-extensions#readme"
+
+[HackMD-vscode-hackmd]
+src.openvsx = "HackMD.vscode-hackmd"
+fetch.openvsx = "HackMD.vscode-hackmd"
+
+[HackMD-vscode-hackmd.passthru]
+name = "vscode-hackmd"
+publisher = "hackmd"
+marketplaceName = "vscode-hackmd"
+marketplacePublisher = "HackMD"
+license = "mit"
+changelog = "https://open-vsx.org/api/HackMD/vscode-hackmd/2.0.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/HackMD/vscode-hackmd/2.0.0/file/HackMD.vscode-hackmd-2.0.0.vsix"
+homepage = "https://github.com/hackmdio/vscode-hackmd/blob/master/README.md"
+
+[actboy168-lua-debug]
+src.openvsx = "actboy168.lua-debug"
+fetch.openvsx = "actboy168.lua-debug"
+
+[actboy168-lua-debug.passthru]
+name = "lua-debug"
+publisher = "actboy168"
+marketplaceName = "lua-debug"
+marketplacePublisher = "actboy168"
+license = "mit"
+downloadPage = "https://open-vsx.org/api/actboy168/lua-debug/win32-x64/1.61.0/file/actboy168.lua-debug-1.61.0@win32-x64.vsix"
+homepage = "https://github.com/actboy168/lua-debug#readme"
+
+[sugatoray-vscode-remotework-extension-pack]
+src.openvsx = "sugatoray.vscode-remotework-extension-pack"
+fetch.openvsx = "sugatoray.vscode-remotework-extension-pack"
+
+[sugatoray-vscode-remotework-extension-pack.passthru]
+name = "vscode-remotework-extension-pack"
+publisher = "sugatoray"
+marketplaceName = "vscode-remotework-extension-pack"
+marketplacePublisher = "sugatoray"
+license = "mit"
+changelog = "https://open-vsx.org/api/sugatoray/vscode-remotework-extension-pack/1.1.3/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/sugatoray/vscode-remotework-extension-pack/1.1.3/file/sugatoray.vscode-remotework-extension-pack-1.1.3.vsix"
+homepage = "https://github.com/sugatoray/vscode-remotework-extension-pack#readme"
+
+[streetsidesoftware-hunspell]
+src.openvsx = "streetsidesoftware.hunspell"
+fetch.openvsx = "streetsidesoftware.hunspell"
+
+[streetsidesoftware-hunspell.passthru]
+name = "hunspell"
+publisher = "streetsidesoftware"
+marketplaceName = "hunspell"
+marketplacePublisher = "streetsidesoftware"
+license = "mit"
+changelog = "https://open-vsx.org/api/streetsidesoftware/hunspell/1.0.2/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/streetsidesoftware/hunspell/1.0.2/file/streetsidesoftware.hunspell-1.0.2.vsix"
+homepage = "https://github.com/streetsidesoftware/vscode-cspell-dict-extensions#readme"
+
+[StoilDobreff-php-resolver]
+src.openvsx = "StoilDobreff.php-resolver"
+fetch.openvsx = "StoilDobreff.php-resolver"
+
+[StoilDobreff-php-resolver.passthru]
+name = "php-resolver"
+publisher = "stoildobreff"
+marketplaceName = "php-resolver"
+marketplacePublisher = "StoilDobreff"
+license = "mit"
+changelog = "https://open-vsx.org/api/StoilDobreff/php-resolver/2.1.2/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/StoilDobreff/php-resolver/2.1.2/file/StoilDobreff.php-resolver-2.1.2.vsix"
+homepage = "https://github.com/sdobreff/vscode-php-resolver#readme"
+
+[jbenden-c-cpp-flylint]
+src.openvsx = "jbenden.c-cpp-flylint"
+fetch.openvsx = "jbenden.c-cpp-flylint"
+
+[jbenden-c-cpp-flylint.passthru]
+name = "c-cpp-flylint"
+publisher = "jbenden"
+marketplaceName = "c-cpp-flylint"
+marketplacePublisher = "jbenden"
+license = "mit"
+changelog = "https://open-vsx.org/api/jbenden/c-cpp-flylint/1.13.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/jbenden/c-cpp-flylint/1.13.0/file/jbenden.c-cpp-flylint-1.13.0.vsix"
+homepage = "https://github.com/jbenden/vscode-c-cpp-flylint/blob/main/README.md"
+
+[SonarSource-sonarlint-vscode]
+src.openvsx = "SonarSource.sonarlint-vscode"
+fetch.openvsx = "SonarSource.sonarlint-vscode"
+
+[SonarSource-sonarlint-vscode.passthru]
+name = "sonarlint-vscode"
+publisher = "sonarsource"
+marketplaceName = "sonarlint-vscode"
+marketplacePublisher = "SonarSource"
+license = "lgpl3Only"
+changelog = "https://open-vsx.org/api/SonarSource/sonarlint-vscode/3.13.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/SonarSource/sonarlint-vscode/3.13.0/file/SonarSource.sonarlint-vscode-3.13.0.vsix"
+homepage = "http://www.sonarlint.org"
+
+[Leathong-openscad-language-support]
+src.openvsx = "Leathong.openscad-language-support"
+fetch.openvsx = "Leathong.openscad-language-support"
+
+[Leathong-openscad-language-support.passthru]
+name = "openscad-language-support"
+publisher = "leathong"
+marketplaceName = "openscad-language-support"
+marketplacePublisher = "Leathong"
+license = "gpl3Only"
+changelog = "https://open-vsx.org/api/Leathong/openscad-language-support/1.2.4/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/Leathong/openscad-language-support/1.2.4/file/Leathong.openscad-language-support-1.2.4.vsix"
+homepage = "https://github.com/Leathong/openscad-support-vscode"
+
+[digma-digma]
+src.openvsx = "digma.digma"
+fetch.openvsx = "digma.digma"
+
+[digma-digma.passthru]
+name = "digma"
+publisher = "digma"
+marketplaceName = "digma"
+marketplacePublisher = "digma"
+license = "mit"
+changelog = "https://open-vsx.org/api/digma/digma/0.5.47/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/digma/digma/0.5.47/file/digma.digma-0.5.47.vsix"
+homepage = "https://github.com/digma-ai/digma-vscode-plugin"
+
+
+[yandeu-five-server]
+src.openvsx = "yandeu.five-server"
+fetch.openvsx = "yandeu.five-server"
+
+[yandeu-five-server.passthru]
+name = "five-server"
+publisher = "yandeu"
+marketplaceName = "five-server"
+marketplacePublisher = "yandeu"
+license = "unfree"
+changelog = "https://open-vsx.org/api/yandeu/five-server/0.1.11/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/yandeu/five-server/0.1.11/file/yandeu.five-server-0.1.11.vsix"
+homepage = "https://github.com/yandeu/five-server-vscode#readme"
+
+[rome-rome]
+src.openvsx = "rome.rome"
+fetch.openvsx = "rome.rome"
+
+[rome-rome.passthru]
+name = "rome"
+publisher = "rome"
+marketplaceName = "rome"
+marketplacePublisher = "rome"
+license = "mit"
+downloadPage = "https://open-vsx.org/api/rome/rome/win32-x64/0.21.20221217/file/rome.rome-0.21.20221217@win32-x64.vsix"
+homepage = "https://github.com/rome/tools#readme"
+
+[franneck94-c-cpp-runner]
+src.openvsx = "franneck94.c-cpp-runner"
+fetch.openvsx = "franneck94.c-cpp-runner"
+
+[franneck94-c-cpp-runner.passthru]
+name = "c-cpp-runner"
+publisher = "franneck94"
+marketplaceName = "c-cpp-runner"
+marketplacePublisher = "franneck94"
+license = "mit"
+changelog = "https://open-vsx.org/api/franneck94/c-cpp-runner/4.3.1/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/franneck94/c-cpp-runner/4.3.1/file/franneck94.c-cpp-runner-4.3.1.vsix"
+homepage = "https://github.com/franneck94/vscode-c-cpp-runner/README.md"
+
+[omBratteng-nftables]
+src.openvsx = "omBratteng.nftables"
+fetch.openvsx = "omBratteng.nftables"
+
+[omBratteng-nftables.passthru]
+name = "nftables"
+publisher = "ombratteng"
+marketplaceName = "nftables"
+marketplacePublisher = "omBratteng"
+license = "unfree"
+changelog = "https://open-vsx.org/api/omBratteng/nftables/0.6.1/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/omBratteng/nftables/0.6.1/file/omBratteng.nftables-0.6.1.vsix"
+homepage = "https://github.com/omBratteng/vscode-nftables#readme"
+
+[millerdev-pyxt]
+src.openvsx = "millerdev.pyxt"
+fetch.openvsx = "millerdev.pyxt"
+
+[millerdev-pyxt.passthru]
+name = "pyxt"
+publisher = "millerdev"
+marketplaceName = "pyxt"
+marketplacePublisher = "millerdev"
+license = "unfree"
+changelog = "https://open-vsx.org/api/millerdev/pyxt/0.3.9/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/millerdev/pyxt/0.3.9/file/millerdev.pyxt-0.3.9.vsix"
+homepage = "https://github.com/millerdev/pyxt"
+
+[cyrilletuzi-angular-schematics]
+src.openvsx = "cyrilletuzi.angular-schematics"
+fetch.openvsx = "cyrilletuzi.angular-schematics"
+
+[cyrilletuzi-angular-schematics.passthru]
+name = "angular-schematics"
+publisher = "cyrilletuzi"
+marketplaceName = "angular-schematics"
+marketplacePublisher = "cyrilletuzi"
+license = "mit"
+changelog = "https://open-vsx.org/api/cyrilletuzi/angular-schematics/5.2.9/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/cyrilletuzi/angular-schematics/5.2.9/file/cyrilletuzi.angular-schematics-5.2.9.vsix"
+homepage = "https://github.com/cyrilletuzi/vscode-angular-schematics/"
+
+[Boa-boalang]
+src.openvsx = "Boa.boalang"
+fetch.openvsx = "Boa.boalang"
+
+[Boa-boalang.passthru]
+name = "boalang"
+publisher = "boa"
+marketplaceName = "boalang"
+marketplacePublisher = "Boa"
+license = "asl20"
+changelog = "https://open-vsx.org/api/Boa/boalang/0.2.9/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/Boa/boalang/0.2.9/file/Boa.boalang-0.2.9.vsix"
+homepage = "https://boa.cs.iastate.edu/"
+
+[zobo-php-intellisense]
+src.openvsx = "zobo.php-intellisense"
+fetch.openvsx = "zobo.php-intellisense"
+
+[zobo-php-intellisense.passthru]
+name = "php-intellisense"
+publisher = "zobo"
+marketplaceName = "php-intellisense"
+marketplacePublisher = "zobo"
+license = "mit"
+changelog = "https://open-vsx.org/api/zobo/php-intellisense/1.0.13/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/zobo/php-intellisense/1.0.13/file/zobo.php-intellisense-1.0.13.vsix"
+homepage = "https://github.com/zobo/vscode-php-intellisense#readme"
+
+[contextmapper-context-mapper-vscode-extension]
+src.openvsx = "contextmapper.context-mapper-vscode-extension"
+fetch.openvsx = "contextmapper.context-mapper-vscode-extension"
+
+[contextmapper-context-mapper-vscode-extension.passthru]
+name = "context-mapper-vscode-extension"
+publisher = "contextmapper"
+marketplaceName = "context-mapper-vscode-extension"
+marketplacePublisher = "contextmapper"
+license = "asl20"
+changelog = "https://open-vsx.org/api/contextmapper/context-mapper-vscode-extension/6.7.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/contextmapper/context-mapper-vscode-extension/6.7.0/file/contextmapper.context-mapper-vscode-extension-6.7.0.vsix"
+homepage = "https://github.com/ContextMapper/vscode-extension#readme"
+
+[redhat-vscode-quarkus]
+src.openvsx = "redhat.vscode-quarkus"
+fetch.openvsx = "redhat.vscode-quarkus"
+
+[redhat-vscode-quarkus.passthru]
+name = "vscode-quarkus"
+publisher = "redhat"
+marketplaceName = "vscode-quarkus"
+marketplacePublisher = "redhat"
+license = "asl20"
+changelog = "https://open-vsx.org/api/redhat/vscode-quarkus/1.12.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/redhat/vscode-quarkus/1.12.0/file/redhat.vscode-quarkus-1.12.0.vsix"
+homepage = "https://github.com/redhat-developer/vscode-quarkus#readme"
+

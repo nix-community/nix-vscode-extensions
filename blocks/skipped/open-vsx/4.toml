@@ -1,0 +1,140 @@
+
+[filiptronicek-vscode-platform-specific-sample]
+src.openvsx = "filiptronicek.vscode-platform-specific-sample"
+fetch.openvsx = "filiptronicek.vscode-platform-specific-sample"
+
+[filiptronicek-vscode-platform-specific-sample.passthru]
+name = "vscode-platform-specific-sample"
+publisher = "filiptronicek"
+marketplaceName = "vscode-platform-specific-sample"
+marketplacePublisher = "filiptronicek"
+license = "mit"
+downloadPage = "https://open-vsx.org/api/filiptronicek/vscode-platform-specific-sample/linux-x64/1.18.0/file/filiptronicek.vscode-platform-specific-sample-1.18.0@linux-x64.vsix"
+homepage = "https://github.com/microsoft/vscode-platform-specific-sample#readme"
+
+[chouzz-vscode-innosetup]
+src.openvsx = "chouzz.vscode-innosetup"
+fetch.openvsx = "chouzz.vscode-innosetup"
+
+[chouzz-vscode-innosetup.passthru]
+name = "vscode-innosetup"
+publisher = "chouzz"
+marketplaceName = "vscode-innosetup"
+marketplacePublisher = "chouzz"
+license = "mit"
+changelog = "https://open-vsx.org/api/chouzz/vscode-innosetup/1.9.1/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/chouzz/vscode-innosetup/1.9.1/file/chouzz.vscode-innosetup-1.9.1.vsix"
+homepage = "https://github.com/chouzz/vscode-innosetup#readme"
+
+[assisrMatheus-sidebar-markdown-notes]
+src.openvsx = "assisrMatheus.sidebar-markdown-notes"
+fetch.openvsx = "assisrMatheus.sidebar-markdown-notes"
+
+[assisrMatheus-sidebar-markdown-notes.passthru]
+name = "sidebar-markdown-notes"
+publisher = "assisrmatheus"
+marketplaceName = "sidebar-markdown-notes"
+marketplacePublisher = "assisrMatheus"
+license = "gpl3Plus"
+changelog = "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.1.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/assisrMatheus/sidebar-markdown-notes/1.1.0/file/assisrMatheus.sidebar-markdown-notes-1.1.0.vsix"
+homepage = ""
+
+[hugo-vrijswijk-vscode-lit-xml]
+src.openvsx = "hugo-vrijswijk.vscode-lit-xml"
+fetch.openvsx = "hugo-vrijswijk.vscode-lit-xml"
+
+[hugo-vrijswijk-vscode-lit-xml.passthru]
+name = "vscode-lit-xml"
+publisher = "hugo-vrijswijk"
+marketplaceName = "vscode-lit-xml"
+marketplacePublisher = "hugo-vrijswijk"
+license = "asl20"
+changelog = "https://open-vsx.org/api/hugo-vrijswijk/vscode-lit-xml/0.5.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/hugo-vrijswijk/vscode-lit-xml/0.5.0/file/hugo-vrijswijk.vscode-lit-xml-0.5.0.vsix"
+homepage = "https://github.com/nicojs/lit-xml#readme"
+
+[usernamehw-indent-one-space]
+src.openvsx = "usernamehw.indent-one-space"
+fetch.openvsx = "usernamehw.indent-one-space"
+
+[usernamehw-indent-one-space.passthru]
+name = "indent-one-space"
+publisher = "usernamehw"
+marketplaceName = "indent-one-space"
+marketplacePublisher = "usernamehw"
+license = "mit"
+changelog = "https://open-vsx.org/api/usernamehw/indent-one-space/0.3.0/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/usernamehw/indent-one-space/0.3.0/file/usernamehw.indent-one-space-0.3.0.vsix"
+homepage = ""
+
+[cloudstudio-coding]
+src.openvsx = "cloudstudio.coding"
+fetch.openvsx = "cloudstudio.coding"
+
+[cloudstudio-coding.passthru]
+name = "coding"
+publisher = "cloudstudio"
+marketplaceName = "coding"
+marketplacePublisher = "cloudstudio"
+license = "mit"
+changelog = "https://open-vsx.org/api/cloudstudio/coding/0.0.8/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/cloudstudio/coding/0.0.8/file/cloudstudio.coding-0.0.8.vsix"
+homepage = ""
+
+[zokugun-zokugun-theme]
+src.openvsx = "zokugun.zokugun-theme"
+fetch.openvsx = "zokugun.zokugun-theme"
+
+[zokugun-zokugun-theme.passthru]
+name = "zokugun-theme"
+publisher = "zokugun"
+marketplaceName = "zokugun-theme"
+marketplacePublisher = "zokugun"
+license = "mit"
+changelog = "https://open-vsx.org/api/zokugun/zokugun-theme/0.6.2/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/zokugun/zokugun-theme/0.6.2/file/zokugun.zokugun-theme-0.6.2.vsix"
+homepage = "https://github.com/zokugun/theme-zokugun-vscode"
+
+[golf1052-base16-generator]
+src.openvsx = "golf1052.base16-generator"
+fetch.openvsx = "golf1052.base16-generator"
+
+[golf1052-base16-generator.passthru]
+name = "base16-generator"
+publisher = "golf1052"
+marketplaceName = "base16-generator"
+marketplacePublisher = "golf1052"
+license = "unfree"
+changelog = "https://open-vsx.org/api/golf1052/base16-generator/1.19.1/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/golf1052/base16-generator/1.19.1/file/golf1052.base16-generator-1.19.1.vsix"
+homepage = "https://github.com/golf1052/base16-generator"
+
+[mintlify-document]
+src.openvsx = "mintlify.document"
+fetch.openvsx = "mintlify.document"
+
+[mintlify-document.passthru]
+name = "document"
+publisher = "mintlify"
+marketplaceName = "document"
+marketplacePublisher = "mintlify"
+license = "unfree"
+changelog = "https://open-vsx.org/api/mintlify/document/2.2.1/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/mintlify/document/2.2.1/file/mintlify.document-2.2.1.vsix"
+homepage = ""
+
+[learn-pack-learnpack-vscode]
+src.openvsx = "learn-pack.learnpack-vscode"
+fetch.openvsx = "learn-pack.learnpack-vscode"
+
+[learn-pack-learnpack-vscode.passthru]
+name = "learnpack-vscode"
+publisher = "learn-pack"
+marketplaceName = "learnpack-vscode"
+marketplacePublisher = "learn-pack"
+license = "mit"
+changelog = "https://open-vsx.org/api/learn-pack/learnpack-vscode/1.0.14/file/CHANGELOG.md"
+downloadPage = "https://open-vsx.org/api/learn-pack/learnpack-vscode/1.0.14/file/learn-pack.learnpack-vscode-1.0.14.vsix"
+homepage = "https://github.com/learnpack/vscode#readme"
+

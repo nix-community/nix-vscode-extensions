@@ -1,0 +1,4706 @@
+{"mempty" : {}
+,
+    "gamunu-vscode-yarn": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "gamunu-vscode-yarn",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/gamunu/vscode-yarn/2.0.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/gamunu/vscode-yarn/2.0.0/file/gamunu.vscode-yarn-2.0.0.vsix",
+            "homepage": "https://github.com/gamunu/vscode-yarn/blob/master/README.md",
+            "license": "mit",
+            "marketplaceName": "vscode-yarn",
+            "marketplacePublisher": "gamunu",
+            "name": "vscode-yarn",
+            "publisher": "gamunu"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-yarn-2.0.0.zip",
+            "sha256": "sha256-0SoKZVhsn/x5x17v1JFLjpuKQA4HahL59a9X5IWqhoE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/gamunu/vscode-yarn/2.0.0/file/gamunu.vscode-yarn-2.0.0.vsix"
+        },
+        "version": "2.0.0"
+    },
+    "golang-Go": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "golang-Go",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/golang/Go/0.37.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/golang/Go/0.37.1/file/golang.go-0.37.1.vsix",
+            "homepage": "https://github.com/golang/vscode-go#readme",
+            "license": "mit",
+            "marketplaceName": "Go",
+            "marketplacePublisher": "golang",
+            "name": "go",
+            "publisher": "golang"
+        },
+        "pinned": false,
+        "src": {
+            "name": "Go-0.37.1.zip",
+            "sha256": "sha256-ZgotxF76LQl/eL0E0wnJjnSWRsRMxMxafPAUSaxTl6o=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/golang/Go/0.37.1/file/golang.Go-0.37.1.vsix"
+        },
+        "version": "0.37.1"
+    },
+    "ms-toolsai-jupyter": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-toolsai-jupyter",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-toolsai/jupyter/2022.10.110/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-toolsai/jupyter/2022.10.110/file/ms-toolsai.jupyter-2022.10.110.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-jupyter",
+            "license": "mit",
+            "marketplaceName": "jupyter",
+            "marketplacePublisher": "ms-toolsai",
+            "name": "jupyter",
+            "publisher": "ms-toolsai"
+        },
+        "pinned": false,
+        "src": {
+            "name": "jupyter-2022.10.110.zip",
+            "sha256": "sha256-hXnsmcoX3+39lRfU1tCK7on6PkuMlyd1CFL43TEIouU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-toolsai/jupyter/2022.10.110/file/ms-toolsai.jupyter-2022.10.110.vsix"
+        },
+        "version": "2022.10.110"
+    },
+    "pinage404-general-improvement-extension-pack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "pinage404-general-improvement-extension-pack",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/pinage404/general-improvement-extension-pack/1.3.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pinage404/general-improvement-extension-pack/1.3.0/file/pinage404.general-improvement-extension-pack-1.3.0.vsix",
+            "homepage": "https://gitlab.com/pinage404/pinage404-vscode-extension-packs/-/tree/main/packages/missing-features",
+            "license": "mit",
+            "marketplaceName": "general-improvement-extension-pack",
+            "marketplacePublisher": "pinage404",
+            "name": "general-improvement-extension-pack",
+            "publisher": "pinage404"
+        },
+        "pinned": false,
+        "src": {
+            "name": "general-improvement-extension-pack-1.3.0.zip",
+            "sha256": "sha256-J+U790HJ7kEB0/XicC4vJTF7fvI5SA+Je68w5islV9I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/pinage404/general-improvement-extension-pack/1.3.0/file/pinage404.general-improvement-extension-pack-1.3.0.vsix"
+        },
+        "version": "1.3.0"
+    },
+    "pinage404-markdown-extension-pack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "pinage404-markdown-extension-pack",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/pinage404/markdown-extension-pack/0.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pinage404/markdown-extension-pack/0.1.0/file/pinage404.markdown-extension-pack-0.1.0.vsix",
+            "homepage": "https://gitlab.com/pinage404/pinage404-vscode-extension-packs/-/tree/main/packages/markdown",
+            "license": "mit",
+            "marketplaceName": "markdown-extension-pack",
+            "marketplacePublisher": "pinage404",
+            "name": "markdown-extension-pack",
+            "publisher": "pinage404"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdown-extension-pack-0.1.0.zip",
+            "sha256": "sha256-LWZldpjXL8nHSYLgW2OGwFtIotbtyI9jKx4XHXLm1AQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/pinage404/markdown-extension-pack/0.1.0/file/pinage404.markdown-extension-pack-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
+    "redwan-hossain-auto-rename-tag-clone": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "redwan-hossain-auto-rename-tag-clone",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/redwan-hossain/auto-rename-tag-clone/0.1.8/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/redwan-hossain/auto-rename-tag-clone/0.1.8/file/redwan-hossain.auto-rename-tag-clone-0.1.8.vsix",
+            "license": "mit",
+            "marketplaceName": "auto-rename-tag-clone",
+            "marketplacePublisher": "redwan-hossain",
+            "name": "auto-rename-tag-clone",
+            "publisher": "redwan-hossain"
+        },
+        "pinned": false,
+        "src": {
+            "name": "auto-rename-tag-clone-0.1.8.zip",
+            "sha256": "sha256-ugNIU4s6UcS55PNCK11PKIffIayEY7FxfPlbKfUlbgo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/redwan-hossain/auto-rename-tag-clone/0.1.8/file/redwan-hossain.auto-rename-tag-clone-0.1.8.vsix"
+        },
+        "version": "0.1.8"
+    },
+    "vscjava-vscode-maven": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscjava-vscode-maven",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/vscjava/vscode-maven/0.40.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/vscjava/vscode-maven/0.40.4/file/vscjava.vscode-maven-0.40.4.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-maven/",
+            "license": "mit",
+            "marketplaceName": "vscode-maven",
+            "marketplacePublisher": "vscjava",
+            "name": "vscode-maven",
+            "publisher": "vscjava"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-maven-0.40.4.zip",
+            "sha256": "sha256-2kKoonjJA7nvxNgDLq68R56oCcDv7cShMR2zjn4H3mE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscjava/vscode-maven/0.40.4/file/vscjava.vscode-maven-0.40.4.vsix"
+        },
+        "version": "0.40.4"
+    },
+    "vscode-cpp": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-cpp",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/cpp/1.66.2/file/vscode.cpp-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "cpp",
+            "marketplacePublisher": "vscode",
+            "name": "cpp",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "cpp-1.66.2.zip",
+            "sha256": "sha256-uhjxMtMkcTeQg0Il08Z7jyRb4UeXwIBEzD/UhucXS40=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/cpp/1.66.2/file/vscode.cpp-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-yaml": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-yaml",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/yaml/1.66.2/file/vscode.yaml-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "yaml",
+            "marketplacePublisher": "vscode",
+            "name": "yaml",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "yaml-1.66.2.zip",
+            "sha256": "sha256-nQBcKHYPT9Kzxpn5fQCoPcuykhSHdHsp89cRAol5ni8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/yaml/1.66.2/file/vscode.yaml-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "wmanth-jar-viewer": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "wmanth-jar-viewer",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/wmanth/jar-viewer/1.1.0/file/wmanth.jar-viewer-1.1.0.vsix",
+            "license": "mit",
+            "marketplaceName": "jar-viewer",
+            "marketplacePublisher": "wmanth",
+            "name": "jar-viewer",
+            "publisher": "wmanth"
+        },
+        "pinned": false,
+        "src": {
+            "name": "jar-viewer-1.1.0.zip",
+            "sha256": "sha256-+Bz5Y3cxbY6knhEdBGo2FvTg1zsu9+q6FgvPX3fCMHE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/wmanth/jar-viewer/1.1.0/file/wmanth.jar-viewer-1.1.0.vsix"
+        },
+        "version": "1.1.0"
+    }
+,
+    "TakumiI-markdowntable": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "TakumiI-markdowntable",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/TakumiI/markdowntable/0.7.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/TakumiI/markdowntable/0.7.0/file/TakumiI.markdowntable-0.7.0.vsix",
+            "license": "asl20",
+            "marketplaceName": "markdowntable",
+            "marketplacePublisher": "TakumiI",
+            "name": "markdowntable",
+            "publisher": "takumii"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdowntable-0.7.0.zip",
+            "sha256": "sha256-CGCHunLs0sLwUYvoalyNz3+7mwaANeIhapF32nuQRaQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/TakumiI/markdowntable/0.7.0/file/TakumiI.markdowntable-0.7.0.vsix"
+        },
+        "version": "0.7.0"
+    },
+    "TshakaEricLekholoane-hy": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "TshakaEricLekholoane-hy",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/TshakaEricLekholoane/hy/0.0.17/file/TshakaEricLekholoane.hy-0.0.17.vsix",
+            "license": "mit",
+            "marketplaceName": "hy",
+            "marketplacePublisher": "TshakaEricLekholoane",
+            "name": "hy",
+            "publisher": "tshakaericlekholoane"
+        },
+        "pinned": false,
+        "src": {
+            "name": "hy-0.0.17.zip",
+            "sha256": "sha256-JLX3CaJFiZuDdsvdDlgMyQVP7Ar5BWDJPyQQmDd0/Oo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/TshakaEricLekholoane/hy/0.0.17/file/TshakaEricLekholoane.hy-0.0.17.vsix"
+        },
+        "version": "0.0.17"
+    },
+    "bmewburn-vscode-intelephense-client": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "bmewburn-vscode-intelephense-client",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/bmewburn/vscode-intelephense-client/1.9.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/bmewburn/vscode-intelephense-client/1.9.4/file/bmewburn.vscode-intelephense-client-1.9.4.vsix",
+            "homepage": "https://intelephense.com",
+            "license": "mit",
+            "marketplaceName": "vscode-intelephense-client",
+            "marketplacePublisher": "bmewburn",
+            "name": "vscode-intelephense-client",
+            "publisher": "bmewburn"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-intelephense-client-1.9.4.zip",
+            "sha256": "sha256-dnHsQ9jD8Qgk6QjRLbA5T8OETxI0ztd9k0ewDvc6lHk=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/bmewburn/vscode-intelephense-client/1.9.4/file/bmewburn.vscode-intelephense-client-1.9.4.vsix"
+        },
+        "version": "1.9.4"
+    },
+    "formulahendry-code-runner": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "formulahendry-code-runner",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/formulahendry/code-runner/0.12.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/formulahendry/code-runner/0.12.0/file/formulahendry.code-runner-0.12.0.vsix",
+            "homepage": "https://github.com/formulahendry/vscode-code-runner/blob/master/README.md",
+            "license": "mit",
+            "marketplaceName": "code-runner",
+            "marketplacePublisher": "formulahendry",
+            "name": "code-runner",
+            "publisher": "formulahendry"
+        },
+        "pinned": false,
+        "src": {
+            "name": "code-runner-0.12.0.zip",
+            "sha256": "sha256-ZkPqRNbjthpSI0Xje9DIAE8jrwZGOIf1Rfvy4LHWkKw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/formulahendry/code-runner/0.12.0/file/formulahendry.code-runner-0.12.0.vsix"
+        },
+        "version": "0.12.0"
+    },
+    "idleberg-svg-icons": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "idleberg-svg-icons",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/idleberg/svg-icons/0.9.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/idleberg/svg-icons/0.9.0/file/idleberg.svg-icons-0.9.0.vsix",
+            "homepage": "https://github.com/idleberg/vscode-svg-icons#readme",
+            "license": "mit",
+            "marketplaceName": "svg-icons",
+            "marketplacePublisher": "idleberg",
+            "name": "svg-icons",
+            "publisher": "idleberg"
+        },
+        "pinned": false,
+        "src": {
+            "name": "svg-icons-0.9.0.zip",
+            "sha256": "sha256-SV7ALPRo/lRkANJW5NIQEUuG9mpm+PTNDdzon2Qdhj0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/idleberg/svg-icons/0.9.0/file/idleberg.svg-icons-0.9.0.vsix"
+        },
+        "version": "0.9.0"
+    },
+    "leandro-rodrigues-fluent-ui-vscode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "leandro-rodrigues-fluent-ui-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/leandro-rodrigues/fluent-ui-vscode/0.3.12/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/leandro-rodrigues/fluent-ui-vscode/0.3.12/file/leandro-rodrigues.fluent-ui-vscode-0.3.12.vsix",
+            "license": "mit",
+            "marketplaceName": "fluent-ui-vscode",
+            "marketplacePublisher": "leandro-rodrigues",
+            "name": "fluent-ui-vscode",
+            "publisher": "leandro-rodrigues"
+        },
+        "pinned": false,
+        "src": {
+            "name": "fluent-ui-vscode-0.3.12.zip",
+            "sha256": "sha256-vJI+3nVJ9RR8u2aKlWDIH1PxASXyYJ7iDSCl3wCk5qU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/leandro-rodrigues/fluent-ui-vscode/0.3.12/file/leandro-rodrigues.fluent-ui-vscode-0.3.12.vsix"
+        },
+        "version": "0.3.12"
+    },
+    "ms-azuretools-vscode-docker": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-azuretools-vscode-docker",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-azuretools/vscode-docker/1.23.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-azuretools/vscode-docker/1.23.3/file/ms-azuretools.vscode-docker-1.23.3.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-docker/blob/main/README.md",
+            "license": "mit",
+            "marketplaceName": "vscode-docker",
+            "marketplacePublisher": "ms-azuretools",
+            "name": "vscode-docker",
+            "publisher": "ms-azuretools"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-docker-1.23.3.zip",
+            "sha256": "sha256-0qflugzWA1pV0PVWGTzOjdxM/0G8hTLOozoXCAdQnRY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-azuretools/vscode-docker/1.23.3/file/ms-azuretools.vscode-docker-1.23.3.vsix"
+        },
+        "version": "1.23.3"
+    },
+    "vscode-css": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-css",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/css/1.66.2/file/vscode.css-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "css",
+            "marketplacePublisher": "vscode",
+            "name": "css",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "css-1.66.2.zip",
+            "sha256": "sha256-zrp9VDo9MZCVhq77uRzV9jvrtqGTO8kIZx9nUnfVmBI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/css/1.66.2/file/vscode.css-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-html-language-features": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-html-language-features",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/html-language-features/1.66.2/file/vscode.html-language-features-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "html-language-features",
+            "marketplacePublisher": "vscode",
+            "name": "html-language-features",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "html-language-features-1.66.2.zip",
+            "sha256": "sha256-utKJ7THqa1ankQ6C1yavNArfGSs711To8hiW+P2eb9c=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/html-language-features/1.66.2/file/vscode.html-language-features-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-markdown": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-markdown",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/markdown/1.66.2/file/vscode.markdown-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "markdown",
+            "marketplacePublisher": "vscode",
+            "name": "markdown",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdown-1.66.2.zip",
+            "sha256": "sha256-Bnxfb33TwYg5bvkblWUX3lYtz5V6pE8woHgrzg7NZxE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/markdown/1.66.2/file/vscode.markdown-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "James-Yu-latex-workshop": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "James-Yu-latex-workshop",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/James-Yu/latex-workshop/9.5.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/James-Yu/latex-workshop/9.5.0/file/James-Yu.latex-workshop-9.5.0.vsix",
+            "homepage": "https://github.com/James-Yu/LaTeX-Workshop",
+            "license": "mit",
+            "marketplaceName": "latex-workshop",
+            "marketplacePublisher": "James-Yu",
+            "name": "latex-workshop",
+            "publisher": "james-yu"
+        },
+        "pinned": false,
+        "src": {
+            "name": "latex-workshop-9.5.0.zip",
+            "sha256": "sha256-6DnnDiuGK1wKIOgzdEY0TiVGD4uz1qlU0FYpydm55aU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/James-Yu/latex-workshop/9.5.0/file/James-Yu.latex-workshop-9.5.0.vsix"
+        },
+        "version": "9.5.0"
+    },
+    "fsimonov-awesome-backend-pack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "fsimonov-awesome-backend-pack",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/fsimonov/awesome-backend-pack/0.0.5/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/fsimonov/awesome-backend-pack/0.0.5/file/fsimonov.awesome-backend-pack-0.0.5.vsix",
+            "license": "mit",
+            "marketplaceName": "awesome-backend-pack",
+            "marketplacePublisher": "fsimonov",
+            "name": "awesome-backend-pack",
+            "publisher": "fsimonov"
+        },
+        "pinned": false,
+        "src": {
+            "name": "awesome-backend-pack-0.0.5.zip",
+            "sha256": "sha256-Q+toWdgW2+wcEbIiCVUQ8QyKF7IgyjYQVBB9i1aAXfQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/fsimonov/awesome-backend-pack/0.0.5/file/fsimonov.awesome-backend-pack-0.0.5.vsix"
+        },
+        "version": "0.0.5"
+    },
+    "vscode-bat": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-bat",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/bat/1.66.2/file/vscode.bat-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "bat",
+            "marketplacePublisher": "vscode",
+            "name": "bat",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "bat-1.66.2.zip",
+            "sha256": "sha256-dcMDahyLs4/CVV6JFbG57yd3rTuqKY8eCAsrRLkX5Qs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/bat/1.66.2/file/vscode.bat-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-configuration-editing": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-configuration-editing",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/configuration-editing/1.66.2/file/vscode.configuration-editing-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "configuration-editing",
+            "marketplacePublisher": "vscode",
+            "name": "configuration-editing",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "configuration-editing-1.66.2.zip",
+            "sha256": "sha256-g5IXQdjWU1BvurM5W5qFOprjjz36DIwdjfCvpDnkl3M=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/configuration-editing/1.66.2/file/vscode.configuration-editing-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-docker": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-docker",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/docker/1.66.2/file/vscode.docker-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "docker",
+            "marketplacePublisher": "vscode",
+            "name": "docker",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "docker-1.66.2.zip",
+            "sha256": "sha256-VRDAuY5UpIoMNVqcRz2APu7vyDYexqt8mWLaajdfDeA=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/docker/1.66.2/file/vscode.docker-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-html": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-html",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/html/1.66.2/file/vscode.html-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "html",
+            "marketplacePublisher": "vscode",
+            "name": "html",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "html-1.66.2.zip",
+            "sha256": "sha256-MX0ZGImXQWird1TQUg5MSc79ZNo4iwpj4GcgJ5TtQ3U=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/html/1.66.2/file/vscode.html-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-java": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-java",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/java/1.66.2/file/vscode.java-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "java",
+            "marketplacePublisher": "vscode",
+            "name": "java",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "java-1.66.2.zip",
+            "sha256": "sha256-iIH/xFtxt2dr5XOL6AvexWfrkYQTf4aHdbQGMJu5BkY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/java/1.66.2/file/vscode.java-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-javascript": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-javascript",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/javascript/1.66.2/file/vscode.javascript-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "javascript",
+            "marketplacePublisher": "vscode",
+            "name": "javascript",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "javascript-1.66.2.zip",
+            "sha256": "sha256-wQ5ZFQS8GWd7hs7ymRoSFrVwguM3xeThkgA0boA8uWU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/javascript/1.66.2/file/vscode.javascript-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-log": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-log",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/log/1.66.2/file/vscode.log-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "log",
+            "marketplacePublisher": "vscode",
+            "name": "log",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "log-1.66.2.zip",
+            "sha256": "sha256-YzqYRs1SHpGyIqWm9qx98Ab0lxplLumhPtwOG1f8b0g=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/log/1.66.2/file/vscode.log-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-shellscript": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-shellscript",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/shellscript/1.66.2/file/vscode.shellscript-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "shellscript",
+            "marketplacePublisher": "vscode",
+            "name": "shellscript",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "shellscript-1.66.2.zip",
+            "sha256": "sha256-WDrPBUE3nPMD4JAinMIFrQ2PlTsuFjHPNtTrXnt/Tn8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/shellscript/1.66.2/file/vscode.shellscript-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "vscode-clojure": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-clojure",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/clojure/1.66.2/file/vscode.clojure-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "clojure",
+            "marketplacePublisher": "vscode",
+            "name": "clojure",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "clojure-1.66.2.zip",
+            "sha256": "sha256-2vyokcQy+KN3dfOBLJkzaxe2dw2v3++iZAjwLbOjJ0s=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/clojure/1.66.2/file/vscode.clojure-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-coffeescript": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-coffeescript",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/coffeescript/1.66.2/file/vscode.coffeescript-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "coffeescript",
+            "marketplacePublisher": "vscode",
+            "name": "coffeescript",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "coffeescript-1.66.2.zip",
+            "sha256": "sha256-aO1caP3gYrbVt4V81Nw0v3fnVebFn6+3WZXNFLgB4DU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/coffeescript/1.66.2/file/vscode.coffeescript-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-debug-auto-launch": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-debug-auto-launch",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/debug-auto-launch/1.66.2/file/vscode.debug-auto-launch-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "debug-auto-launch",
+            "marketplacePublisher": "vscode",
+            "name": "debug-auto-launch",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "debug-auto-launch-1.66.2.zip",
+            "sha256": "sha256-OBRXHQd5h6mPH7/2U1eYNuVRG4Td4gp2cSwaZQ20y98=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/debug-auto-launch/1.66.2/file/vscode.debug-auto-launch-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-emmet": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-emmet",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/emmet/1.66.2/file/vscode.emmet-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "emmet",
+            "marketplacePublisher": "vscode",
+            "name": "emmet",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "emmet-1.66.2.zip",
+            "sha256": "sha256-Drrfmh1FMS9LtFKsj2yfjdrl1mP7EaMzlEpOm24gMBg=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/emmet/1.66.2/file/vscode.emmet-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-go": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-go",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/go/1.66.2/file/vscode.go-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "go",
+            "marketplacePublisher": "vscode",
+            "name": "go",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "go-1.66.2.zip",
+            "sha256": "sha256-/c/pAcGAcPdmnTz4egA0wreL3sL/ExPLGz07wfVBulo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/go/1.66.2/file/vscode.go-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-handlebars": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-handlebars",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/handlebars/1.66.2/file/vscode.handlebars-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "handlebars",
+            "marketplacePublisher": "vscode",
+            "name": "handlebars",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "handlebars-1.66.2.zip",
+            "sha256": "sha256-3uKcPURMXwAUPu6HeRDe7arHNiX9j9pu41A/r4Eb/DI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/handlebars/1.66.2/file/vscode.handlebars-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-less": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-less",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/less/1.66.2/file/vscode.less-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "less",
+            "marketplacePublisher": "vscode",
+            "name": "less",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "less-1.66.2.zip",
+            "sha256": "sha256-4tAUIUViCpID+SmxJvjQHniC+/Q5ov7PemXtEjJbsrQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/less/1.66.2/file/vscode.less-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-make": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-make",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/make/1.66.2/file/vscode.make-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "make",
+            "marketplacePublisher": "vscode",
+            "name": "make",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "make-1.66.2.zip",
+            "sha256": "sha256-gXT9+w0aygyX2k0cHfn7xI8nPdcIUrawASo6eJYdzDE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/make/1.66.2/file/vscode.make-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-python": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-python",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/python/1.66.2/file/vscode.python-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "python",
+            "marketplacePublisher": "vscode",
+            "name": "python",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "python-1.66.2.zip",
+            "sha256": "sha256-dDgw8fCCViqRDe+aafgr9xsTwE/6aJZatQfvYrO6QMU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/python/1.66.2/file/vscode.python-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-xml": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-xml",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/xml/1.66.2/file/vscode.xml-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "xml",
+            "marketplacePublisher": "vscode",
+            "name": "xml",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "xml-1.66.2.zip",
+            "sha256": "sha256-9zPNLmJX+RzMovWXxbJAysSSqEWo/fXoQoAQ3IlzzqE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/xml/1.66.2/file/vscode.xml-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "hbenl-vscode-test-explorer": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "hbenl-vscode-test-explorer",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/hbenl/vscode-test-explorer/2.21.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/hbenl/vscode-test-explorer/2.21.1/file/hbenl.vscode-test-explorer-2.21.1.vsix",
+            "homepage": "https://github.com/hbenl/vscode-test-explorer",
+            "license": "mit",
+            "marketplaceName": "vscode-test-explorer",
+            "marketplacePublisher": "hbenl",
+            "name": "vscode-test-explorer",
+            "publisher": "hbenl"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-test-explorer-2.21.1.zip",
+            "sha256": "sha256-vR/IaTV8RcEsrey63somtg8Xi3jWVEXvsYqc/uXaC4Y=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/hbenl/vscode-test-explorer/2.21.1/file/hbenl.vscode-test-explorer-2.21.1.vsix"
+        },
+        "version": "2.21.1"
+    },
+    "vscode-csharp": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-csharp",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/csharp/1.66.2/file/vscode.csharp-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "csharp",
+            "marketplacePublisher": "vscode",
+            "name": "csharp",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "csharp-1.66.2.zip",
+            "sha256": "sha256-tdYAN7Iel9S5oPM9AoLPRCBc36Y0uB0/iGR/4iauZ6c=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/csharp/1.66.2/file/vscode.csharp-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-fsharp": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-fsharp",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/fsharp/1.66.2/file/vscode.fsharp-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "fsharp",
+            "marketplacePublisher": "vscode",
+            "name": "fsharp",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "fsharp-1.66.2.zip",
+            "sha256": "sha256-ohKa2qr07Cg0Pe7JyHa0l4XfozUtW86HrypLyxrJEVk=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/fsharp/1.66.2/file/vscode.fsharp-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-groovy": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-groovy",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/groovy/1.66.2/file/vscode.groovy-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "groovy",
+            "marketplacePublisher": "vscode",
+            "name": "groovy",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "groovy-1.66.2.zip",
+            "sha256": "sha256-vtvMHE5vDlSubpMmfOsWUwUWZZmJSXtVDxXlMYMOmj4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/groovy/1.66.2/file/vscode.groovy-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-grunt": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-grunt",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/grunt/1.66.2/file/vscode.grunt-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "grunt",
+            "marketplacePublisher": "vscode",
+            "name": "grunt",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "grunt-1.66.2.zip",
+            "sha256": "sha256-RebBAdcbwHERfm6Y+tx4vf24DS8pMC+y4sQ1soJt0ls=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/grunt/1.66.2/file/vscode.grunt-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-gulp": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-gulp",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/gulp/1.66.2/file/vscode.gulp-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "gulp",
+            "marketplacePublisher": "vscode",
+            "name": "gulp",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "gulp-1.66.2.zip",
+            "sha256": "sha256-+Rit60GuhUTsPZ03zAKeqEIveQ/ai5TmY7deP8sBqH0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/gulp/1.66.2/file/vscode.gulp-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-hlsl": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-hlsl",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/hlsl/1.66.2/file/vscode.hlsl-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "hlsl",
+            "marketplacePublisher": "vscode",
+            "name": "hlsl",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "hlsl-1.66.2.zip",
+            "sha256": "sha256-FdEeTpCnAtT7ss+A4BiyH94yWctSAEaPASOaugw72iM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/hlsl/1.66.2/file/vscode.hlsl-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-ini": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-ini",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/ini/1.66.2/file/vscode.ini-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "ini",
+            "marketplacePublisher": "vscode",
+            "name": "ini",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "ini-1.66.2.zip",
+            "sha256": "sha256-vOLdWa4iDO4FJr047fhzaKwwTIBt8j9I+Dr6PjBJzA8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/ini/1.66.2/file/vscode.ini-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-jake": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-jake",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/jake/1.66.2/file/vscode.jake-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "jake",
+            "marketplacePublisher": "vscode",
+            "name": "jake",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "jake-1.66.2.zip",
+            "sha256": "sha256-yhaqrHrPSSy7WFUHjLuytvuEGy+qiIc8KkmEvHFfHEs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/jake/1.66.2/file/vscode.jake-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-lua": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-lua",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/lua/1.66.2/file/vscode.lua-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "lua",
+            "marketplacePublisher": "vscode",
+            "name": "lua",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "lua-1.66.2.zip",
+            "sha256": "sha256-M4U+bVaeZ+M/ipLgO+42/TsWyndt4lXtcZRP1IQ7AwM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/lua/1.66.2/file/vscode.lua-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "ms-toolsai-jupyter-renderers": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-toolsai-jupyter-renderers",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-toolsai/jupyter-renderers/1.0.12/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-toolsai/jupyter-renderers/1.0.12/file/ms-toolsai.jupyter-renderers-1.0.12.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-notebook-renderers",
+            "license": "mit",
+            "marketplaceName": "jupyter-renderers",
+            "marketplacePublisher": "ms-toolsai",
+            "name": "jupyter-renderers",
+            "publisher": "ms-toolsai"
+        },
+        "pinned": false,
+        "src": {
+            "name": "jupyter-renderers-1.0.12.zip",
+            "sha256": "sha256-KSrP5jyoo5WcvQ13YndYJzf153qBGewV0/7NdpyiWPM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-toolsai/jupyter-renderers/1.0.12/file/ms-toolsai.jupyter-renderers-1.0.12.vsix"
+        },
+        "version": "1.0.12"
+    },
+    "ms-vscode-js-debug": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-vscode-js-debug",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/ms-vscode/js-debug/1.75.0/file/ms-vscode.js-debug-1.75.0.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-pwa#readme",
+            "license": "mit",
+            "marketplaceName": "js-debug",
+            "marketplacePublisher": "ms-vscode",
+            "name": "js-debug",
+            "publisher": "ms-vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "js-debug-1.75.0.zip",
+            "sha256": "sha256-75Pc8Zs5LmtfXKw+a66gdVPbJicI/LhEMpYBLASFFAI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-vscode/js-debug/1.75.0/file/ms-vscode.js-debug-1.75.0.vsix"
+        },
+        "version": "1.75.0"
+    },
+    "thingalon-pony-ssh": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "thingalon-pony-ssh",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/thingalon/pony-ssh/0.5.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/thingalon/pony-ssh/0.5.0/file/thingalon.pony-ssh-0.5.0.vsix",
+            "homepage": "https://github.com/thingalon/pony-ssh/blob/master/README.md",
+            "license": "mit",
+            "marketplaceName": "pony-ssh",
+            "marketplacePublisher": "thingalon",
+            "name": "pony-ssh",
+            "publisher": "thingalon"
+        },
+        "pinned": false,
+        "src": {
+            "name": "pony-ssh-0.5.0.zip",
+            "sha256": "sha256-H1czhct4Nw7WxFJXK/8KONUtqjJz7w1nbOQfZ12X+8g=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/thingalon/pony-ssh/0.5.0/file/thingalon.pony-ssh-0.5.0.vsix"
+        },
+        "version": "0.5.0"
+    },
+    "vscode-css-language-features": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-css-language-features",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/css-language-features/1.66.2/file/vscode.css-language-features-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "css-language-features",
+            "marketplacePublisher": "vscode",
+            "name": "css-language-features",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "css-language-features-1.66.2.zip",
+            "sha256": "sha256-h+B+qcvJ6VlYWNpex6gOdjf/P8SHvV26s2W9MEXUjwo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/css-language-features/1.66.2/file/vscode.css-language-features-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-merge-conflict": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-merge-conflict",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/merge-conflict/1.66.2/file/vscode.merge-conflict-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "merge-conflict",
+            "marketplacePublisher": "vscode",
+            "name": "merge-conflict",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "merge-conflict-1.66.2.zip",
+            "sha256": "sha256-4nL82v3gZN+e8lcF2qlXzgGsmOb9knwb5UD46ixmNQo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/merge-conflict/1.66.2/file/vscode.merge-conflict-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-monokai": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-monokai",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-monokai/1.66.2/file/vscode.theme-monokai-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-monokai",
+            "marketplacePublisher": "vscode",
+            "name": "theme-monokai",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-monokai-1.66.2.zip",
+            "sha256": "sha256-/g8yrRx54UUG8jgKkF+DGVt/Upi0LCs5tCg+TPeYJp8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-monokai/1.66.2/file/vscode.theme-monokai-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-quietlight": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-quietlight",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-quietlight/1.66.2/file/vscode.theme-quietlight-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-quietlight",
+            "marketplacePublisher": "vscode",
+            "name": "theme-quietlight",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-quietlight-1.66.2.zip",
+            "sha256": "sha256-kOATtXD3iGVcf/KAANgxG9q0PBqS2My7pB743FuD5ok=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-quietlight/1.66.2/file/vscode.theme-quietlight-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-typescript": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-typescript",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/typescript/1.66.2/file/vscode.typescript-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "typescript",
+            "marketplacePublisher": "vscode",
+            "name": "typescript",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "typescript-1.66.2.zip",
+            "sha256": "sha256-5tSpjLgRb/XoEQyhbz0mqH3+hPGWpdSBLAUsX9t3yog=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/typescript/1.66.2/file/vscode.typescript-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-typescript-language-features": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-typescript-language-features",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/typescript-language-features/1.66.2/file/vscode.typescript-language-features-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "typescript-language-features",
+            "marketplacePublisher": "vscode",
+            "name": "typescript-language-features",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "typescript-language-features-1.66.2.zip",
+            "sha256": "sha256-My97irG6PiqiyEOvk9uZNdpAdZrTlI2IrTTSnF0qYGY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/typescript-language-features/1.66.2/file/vscode.typescript-language-features-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "zhuangtongfa-material-theme": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "zhuangtongfa-material-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/zhuangtongfa/material-theme/3.15.7/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/zhuangtongfa/material-theme/3.15.7/file/zhuangtongfa.material-theme-3.15.7.vsix",
+            "homepage": "https://binaryify.github.io/OneDark-Pro/",
+            "license": "mit",
+            "marketplaceName": "material-theme",
+            "marketplacePublisher": "zhuangtongfa",
+            "name": "material-theme",
+            "publisher": "zhuangtongfa"
+        },
+        "pinned": false,
+        "src": {
+            "name": "material-theme-3.15.7.zip",
+            "sha256": "sha256-pn/kkUSbrdZiYy9hULi7sl30Y8W3qij508Oi7etnvEo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/zhuangtongfa/material-theme/3.15.7/file/zhuangtongfa.material-theme-3.15.7.vsix"
+        },
+        "version": "3.15.7"
+    }
+,
+    "dlasagno-wal-theme": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "dlasagno-wal-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/dlasagno/wal-theme/1.1.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/dlasagno/wal-theme/1.1.2/file/dlasagno.wal-theme-1.1.2.vsix",
+            "homepage": "https://github.com/dlasagno/vscode-wal-theme#readme",
+            "license": "mit",
+            "marketplaceName": "wal-theme",
+            "marketplacePublisher": "dlasagno",
+            "name": "wal-theme",
+            "publisher": "dlasagno"
+        },
+        "pinned": false,
+        "src": {
+            "name": "wal-theme-1.1.2.zip",
+            "sha256": "sha256-IvF3WBPwmxNdOmJ58Y14tA4T5CjTkxS/V/NCig2fUqc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/dlasagno/wal-theme/1.1.2/file/dlasagno.wal-theme-1.1.2.vsix"
+        },
+        "version": "1.1.2"
+    },
+    "vscode-sql": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-sql",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/sql/1.66.2/file/vscode.sql-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "sql",
+            "marketplacePublisher": "vscode",
+            "name": "sql",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "sql-1.66.2.zip",
+            "sha256": "sha256-ngt3mpurdOm7mwEbwDhZC/adr4QKPpt9exInmT0uyjc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/sql/1.66.2/file/vscode.sql-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-abyss": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-abyss",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-abyss/1.66.2/file/vscode.theme-abyss-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-abyss",
+            "marketplacePublisher": "vscode",
+            "name": "theme-abyss",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-abyss-1.66.2.zip",
+            "sha256": "sha256-RsOcuNq1chmelVEQ+IBl1boeahLZdFQQane8/eoDgig=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-abyss/1.66.2/file/vscode.theme-abyss-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-defaults": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-defaults",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-defaults/1.66.2/file/vscode.theme-defaults-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-defaults",
+            "marketplacePublisher": "vscode",
+            "name": "theme-defaults",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-defaults-1.66.2.zip",
+            "sha256": "sha256-JZ6HdGSCX0+JowNlTyw2WSxfMYJAMuMsvX8M2pWDxc8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-defaults/1.66.2/file/vscode.theme-defaults-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-kimbie-dark": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-kimbie-dark",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-kimbie-dark/1.66.2/file/vscode.theme-kimbie-dark-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-kimbie-dark",
+            "marketplacePublisher": "vscode",
+            "name": "theme-kimbie-dark",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-kimbie-dark-1.66.2.zip",
+            "sha256": "sha256-HD4g/Oq5TyRZtrPDIcNn4+COaCG6c+GADEO+43xrUjA=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-kimbie-dark/1.66.2/file/vscode.theme-kimbie-dark-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-monokai-dimmed": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-monokai-dimmed",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-monokai-dimmed/1.66.2/file/vscode.theme-monokai-dimmed-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-monokai-dimmed",
+            "marketplacePublisher": "vscode",
+            "name": "theme-monokai-dimmed",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-monokai-dimmed-1.66.2.zip",
+            "sha256": "sha256-GIwNQOMY7i3uCjiOD/5LlhII8fMM+dwiWV/aVvjNwG4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-monokai-dimmed/1.66.2/file/vscode.theme-monokai-dimmed-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-red": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-red",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-red/1.66.2/file/vscode.theme-red-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-red",
+            "marketplacePublisher": "vscode",
+            "name": "theme-red",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-red-1.66.2.zip",
+            "sha256": "sha256-fY2EZ3F3B2iNdo2py7c5Y9DSO0/I8uyANNbduEMqLdc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-red/1.66.2/file/vscode.theme-red-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-solarized-dark": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-solarized-dark",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-solarized-dark/1.66.2/file/vscode.theme-solarized-dark-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-solarized-dark",
+            "marketplacePublisher": "vscode",
+            "name": "theme-solarized-dark",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-solarized-dark-1.66.2.zip",
+            "sha256": "sha256-R2efuzzsaefQpoKmcu+uws/AEgHrLuWI9gvMoVzWDrY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-solarized-dark/1.66.2/file/vscode.theme-solarized-dark-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-theme-tomorrow-night-blue": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-tomorrow-night-blue",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-tomorrow-night-blue/1.66.2/file/vscode.theme-tomorrow-night-blue-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-tomorrow-night-blue",
+            "marketplacePublisher": "vscode",
+            "name": "theme-tomorrow-night-blue",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-tomorrow-night-blue-1.66.2.zip",
+            "sha256": "sha256-hRmwCb+8JEwlL3pZc3ihCmMCc7qAT78BzRrhhDOF7jw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-tomorrow-night-blue/1.66.2/file/vscode.theme-tomorrow-night-blue-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-vscode-theme-seti": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-vscode-theme-seti",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/vscode-theme-seti/1.66.2/file/vscode.vscode-theme-seti-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "vscode-theme-seti",
+            "marketplacePublisher": "vscode",
+            "name": "vscode-theme-seti",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-theme-seti-1.66.2.zip",
+            "sha256": "sha256-uDxZdStF3XcnXwdJFSgbiCUHzvH5jby+fYZAhitWcOc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/vscode-theme-seti/1.66.2/file/vscode.vscode-theme-seti-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "vscode-markdown-language-features": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-markdown-language-features",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/markdown-language-features/1.66.2/file/vscode.markdown-language-features-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "markdown-language-features",
+            "marketplacePublisher": "vscode",
+            "name": "markdown-language-features",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdown-language-features-1.66.2.zip",
+            "sha256": "sha256-8e+dyg3xGTOaG3GF+FLMg35cME+doMMJq1+Pyt7hduQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/markdown-language-features/1.66.2/file/vscode.markdown-language-features-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-objective-c": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-objective-c",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/objective-c/1.66.2/file/vscode.objective-c-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "objective-c",
+            "marketplacePublisher": "vscode",
+            "name": "objective-c",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "objective-c-1.66.2.zip",
+            "sha256": "sha256-YEBoWZ4rsQlGflCNddo1fnx0FBd95dBLKaBhvBh+gew=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/objective-c/1.66.2/file/vscode.objective-c-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-perl": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-perl",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/perl/1.66.2/file/vscode.perl-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "perl",
+            "marketplacePublisher": "vscode",
+            "name": "perl",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "perl-1.66.2.zip",
+            "sha256": "sha256-VAXRiGrNaR5Jb58WZVht1R8R7mltYm+LzRYgI7d8AsE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/perl/1.66.2/file/vscode.perl-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-powershell": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-powershell",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/powershell/1.66.2/file/vscode.powershell-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "powershell",
+            "marketplacePublisher": "vscode",
+            "name": "powershell",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "powershell-1.66.2.zip",
+            "sha256": "sha256-NIPu1KDlUPmUgRKxHRIAVlnicSUH27YeVhMp6Y95uLM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/powershell/1.66.2/file/vscode.powershell-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-pug": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-pug",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/pug/1.66.2/file/vscode.pug-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "pug",
+            "marketplacePublisher": "vscode",
+            "name": "pug",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "pug-1.66.2.zip",
+            "sha256": "sha256-TSOsBDAx9lsUcMXMpiFUEb7TzO5V3PuhCC83huC36B8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/pug/1.66.2/file/vscode.pug-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-r": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-r",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/r/1.66.2/file/vscode.r-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "r",
+            "marketplacePublisher": "vscode",
+            "name": "r",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "r-1.66.2.zip",
+            "sha256": "sha256-xzw6Qn6+K4LWffupw3Ow6LJNY4ZlYkgGTU4ZTiD98yY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/r/1.66.2/file/vscode.r-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-ruby": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-ruby",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/ruby/1.66.2/file/vscode.ruby-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "ruby",
+            "marketplacePublisher": "vscode",
+            "name": "ruby",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "ruby-1.66.2.zip",
+            "sha256": "sha256-IjHS8IxmuSi7DTBFdc7xmmbbOICMhPfY8RmD2NunltM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/ruby/1.66.2/file/vscode.ruby-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-rust": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-rust",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/rust/1.66.2/file/vscode.rust-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "rust",
+            "marketplacePublisher": "vscode",
+            "name": "rust",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "rust-1.66.2.zip",
+            "sha256": "sha256-Sd/L0PgA6Z9B3N1HcKdT9SmifGKnz9TttymDZbb5vis=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/rust/1.66.2/file/vscode.rust-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-scss": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-scss",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/scss/1.66.2/file/vscode.scss-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "scss",
+            "marketplacePublisher": "vscode",
+            "name": "scss",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "scss-1.66.2.zip",
+            "sha256": "sha256-QdWx65X53/5thURFERq8XF6+QVWa1mMs5VV/kQzDO7A=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/scss/1.66.2/file/vscode.scss-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-vb": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-vb",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/vb/1.66.2/file/vscode.vb-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "vb",
+            "marketplacePublisher": "vscode",
+            "name": "vb",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vb-1.66.2.zip",
+            "sha256": "sha256-llv4fmzcsa3BjDvys0y0OtlrmFmQblvHk2JThX5j1x4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/vb/1.66.2/file/vscode.vb-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "GitHub-github-vscode-theme": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "GitHub-github-vscode-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/GitHub/github-vscode-theme/6.3.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/GitHub/github-vscode-theme/6.3.3/file/GitHub.github-vscode-theme-6.3.3.vsix",
+            "homepage": "https://github.com/primer/github-vscode-theme#readme",
+            "license": "mit",
+            "marketplaceName": "github-vscode-theme",
+            "marketplacePublisher": "GitHub",
+            "name": "github-vscode-theme",
+            "publisher": "github"
+        },
+        "pinned": false,
+        "src": {
+            "name": "github-vscode-theme-6.3.3.zip",
+            "sha256": "sha256-1AZj2rGsUedGX1YCVTYQaA9VO0s4Ek+7qnrBtZImnLY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/GitHub/github-vscode-theme/6.3.3/file/GitHub.github-vscode-theme-6.3.3.vsix"
+        },
+        "version": "6.3.3"
+    },
+    "TheaFlowers-qalc": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "TheaFlowers-qalc",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/TheaFlowers/qalc/2021.8.30/file/TheaFlowers.qalc-2021.8.30.vsix",
+            "homepage": "https://github.com/theacodes/vscode-qalc/blob/main/README.md",
+            "license": "mit",
+            "marketplaceName": "qalc",
+            "marketplacePublisher": "TheaFlowers",
+            "name": "qalc",
+            "publisher": "theaflowers"
+        },
+        "pinned": false,
+        "src": {
+            "name": "qalc-2021.8.30.zip",
+            "sha256": "sha256-gvuAzsy6dM9QfUpUpOiC6Qqj5f07k+YWQdv7JJ6mBXg=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/TheaFlowers/qalc/2021.8.30/file/TheaFlowers.qalc-2021.8.30.vsix"
+        },
+        "version": "2021.8.30"
+    },
+    "asvetliakov-vscode-neovim": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "asvetliakov-vscode-neovim",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/asvetliakov/vscode-neovim/0.0.96/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/asvetliakov/vscode-neovim/0.0.96/file/asvetliakov.vscode-neovim-0.0.96.vsix",
+            "homepage": "https://github.com/asvetliakov/vscode-neovim#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-neovim",
+            "marketplacePublisher": "asvetliakov",
+            "name": "vscode-neovim",
+            "publisher": "asvetliakov"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-neovim-0.0.96.zip",
+            "sha256": "sha256-0wvfsSpggW/mbxSjkmA+mE+8i8xK0ha6fLr+iXDxiMM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/asvetliakov/vscode-neovim/0.0.96/file/asvetliakov.vscode-neovim-0.0.96.vsix"
+        },
+        "version": "0.0.96"
+    },
+    "bierner-markdown-mermaid": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "bierner-markdown-mermaid",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/bierner/markdown-mermaid/1.17.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/bierner/markdown-mermaid/1.17.4/file/bierner.markdown-mermaid-1.17.4.vsix",
+            "homepage": "https://github.com/mjbvz/vscode-markdown-mermaid#readme",
+            "license": "mit",
+            "marketplaceName": "markdown-mermaid",
+            "marketplacePublisher": "bierner",
+            "name": "markdown-mermaid",
+            "publisher": "bierner"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdown-mermaid-1.17.4.zip",
+            "sha256": "sha256-pFHyxG6intL9lYQYvlyoalNm/38P4f13fxX6VwOcZTQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/bierner/markdown-mermaid/1.17.4/file/bierner.markdown-mermaid-1.17.4.vsix"
+        },
+        "version": "1.17.4"
+    },
+    "bradlc-vscode-tailwindcss": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "bradlc-vscode-tailwindcss",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/bradlc/vscode-tailwindcss/0.9.6/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/bradlc/vscode-tailwindcss/0.9.6/file/bradlc.vscode-tailwindcss-0.9.6.vsix",
+            "homepage": "https://github.com/tailwindlabs/tailwindcss-intellisense",
+            "license": "mit",
+            "marketplaceName": "vscode-tailwindcss",
+            "marketplacePublisher": "bradlc",
+            "name": "vscode-tailwindcss",
+            "publisher": "bradlc"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-tailwindcss-0.9.6.zip",
+            "sha256": "sha256-5+QK/wasz3zZDK9+gNrT9XypzK/Pgf17FACcabmixN0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/bradlc/vscode-tailwindcss/0.9.6/file/bradlc.vscode-tailwindcss-0.9.6.vsix"
+        },
+        "version": "0.9.6"
+    },
+    "tumido-cron-explained": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "tumido-cron-explained",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/tumido/cron-explained/1.3.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/tumido/cron-explained/1.3.1/file/tumido.cron-explained-1.3.1.vsix",
+            "homepage": "https://github.com/tumido/cron-explained",
+            "license": "gpl3Plus",
+            "marketplaceName": "cron-explained",
+            "marketplacePublisher": "tumido",
+            "name": "cron-explained",
+            "publisher": "tumido"
+        },
+        "pinned": false,
+        "src": {
+            "name": "cron-explained-1.3.1.zip",
+            "sha256": "sha256-uvYifeVgLFt3Kwc3eEQHCq5Nd7VGb2RrtDMGyEeWyLs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/tumido/cron-explained/1.3.1/file/tumido.cron-explained-1.3.1.vsix"
+        },
+        "version": "1.3.1"
+    },
+    "vscode-razor": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-razor",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/razor/1.66.2/file/vscode.razor-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "razor",
+            "marketplacePublisher": "vscode",
+            "name": "razor",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "razor-1.66.2.zip",
+            "sha256": "sha256-M5ayXFP1tpXDrlTZnCPGXpLCvkNeaKuUhvNFNcekafw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/razor/1.66.2/file/vscode.razor-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-shaderlab": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-shaderlab",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/shaderlab/1.66.2/file/vscode.shaderlab-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "shaderlab",
+            "marketplacePublisher": "vscode",
+            "name": "shaderlab",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "shaderlab-1.66.2.zip",
+            "sha256": "sha256-UR9MZN52MQXpIwiVMexUS/V+D6vh7CsMX18uId+EMR4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/shaderlab/1.66.2/file/vscode.shaderlab-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-swift": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-swift",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/swift/1.66.2/file/vscode.swift-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "swift",
+            "marketplacePublisher": "vscode",
+            "name": "swift",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "swift-1.66.2.zip",
+            "sha256": "sha256-fRxA+iKtOiFC5yUFHi+X1cmpVs/FYSjlRYhlfExc8tw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/swift/1.66.2/file/vscode.swift-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "xlab-template-library-plugin": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "xlab-template-library-plugin",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/xlab/template-library-plugin/0.0.6/file/xlab.template-library-plugin-0.0.6.vsix",
+            "license": "asl20",
+            "marketplaceName": "template-library-plugin",
+            "marketplacePublisher": "xlab",
+            "name": "template-library-plugin",
+            "publisher": "xlab"
+        },
+        "pinned": false,
+        "src": {
+            "name": "template-library-plugin-0.0.6.zip",
+            "sha256": "sha256-FwXnAYIjFUtctuKH1jknulWwln3X23yt+jitUKyTSK8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/xlab/template-library-plugin/0.0.6/file/xlab.template-library-plugin-0.0.6.vsix"
+        },
+        "version": "0.0.6"
+    }
+,
+    "GenieBuilder-geniebuilder-insider": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "GenieBuilder-geniebuilder-insider",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/GenieBuilder/geniebuilder-insider/0.3.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/GenieBuilder/geniebuilder-insider/0.3.1/file/GenieBuilder.geniebuilder-insider-0.3.1.vsix",
+            "homepage": "https://github.com/Stipple-app/genie-builder#readme",
+            "license": "unfree",
+            "marketplaceName": "geniebuilder-insider",
+            "marketplacePublisher": "GenieBuilder",
+            "name": "geniebuilder-insider",
+            "publisher": "geniebuilder"
+        },
+        "pinned": false,
+        "src": {
+            "name": "geniebuilder-insider-0.3.1.zip",
+            "sha256": "sha256-4zc53NS6muct2d1HMUFdM8EKNNveb+wozpsqfMS/yxY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/GenieBuilder/geniebuilder-insider/0.3.1/file/GenieBuilder.geniebuilder-insider-0.3.1.vsix"
+        },
+        "version": "0.3.1"
+    },
+    "Mikhail-Arkhipov-r": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Mikhail-Arkhipov-r",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Mikhail-Arkhipov/r/0.0.26/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Mikhail-Arkhipov/r/0.0.26/file/Mikhail-Arkhipov.r-0.0.26.vsix",
+            "homepage": "https://github.com/MikhailArkhipov/vscode-r",
+            "license": "mit",
+            "marketplaceName": "r",
+            "marketplacePublisher": "Mikhail-Arkhipov",
+            "name": "r",
+            "publisher": "mikhail-arkhipov"
+        },
+        "pinned": false,
+        "src": {
+            "name": "r-0.0.26.zip",
+            "sha256": "sha256-Ffx5gKQkmbQcmlDwYAqXOHoO11bUvSpU8Bdym+4lEpo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Mikhail-Arkhipov/r/0.0.26/file/Mikhail-Arkhipov.r-0.0.26.vsix"
+        },
+        "version": "0.0.26"
+    },
+    "ardisaurus-gitflow-actions-sidebar": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ardisaurus-gitflow-actions-sidebar",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ardisaurus/gitflow-actions-sidebar/0.5.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ardisaurus/gitflow-actions-sidebar/0.5.0/file/ardisaurus.gitflow-actions-sidebar-0.5.0.vsix",
+            "homepage": "https://github.com/ardisaurus/vscode-gitflow",
+            "license": "mit",
+            "marketplaceName": "gitflow-actions-sidebar",
+            "marketplacePublisher": "ardisaurus",
+            "name": "gitflow-actions-sidebar",
+            "publisher": "ardisaurus"
+        },
+        "pinned": false,
+        "src": {
+            "name": "gitflow-actions-sidebar-0.5.0.zip",
+            "sha256": "sha256-jpuYU0u7D2mPIWDQbkdDU68I1/sIYhbsXqbcZ56ts0s=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ardisaurus/gitflow-actions-sidebar/0.5.0/file/ardisaurus.gitflow-actions-sidebar-0.5.0.vsix"
+        },
+        "version": "0.5.0"
+    },
+    "dlahmad-dracula-for-rust-theme": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "dlahmad-dracula-for-rust-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/dlahmad/dracula-for-rust-theme/0.0.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/dlahmad/dracula-for-rust-theme/0.0.4/file/dlahmad.dracula-for-rust-theme-0.0.4.vsix",
+            "license": "mit",
+            "marketplaceName": "dracula-for-rust-theme",
+            "marketplacePublisher": "dlahmad",
+            "name": "dracula-for-rust-theme",
+            "publisher": "dlahmad"
+        },
+        "pinned": false,
+        "src": {
+            "name": "dracula-for-rust-theme-0.0.4.zip",
+            "sha256": "sha256-2zbk8PFIsAAkjUn3XPSGY11foiDyNJeYAvSOGQ/WD7c=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/dlahmad/dracula-for-rust-theme/0.0.4/file/dlahmad.dracula-for-rust-theme-0.0.4.vsix"
+        },
+        "version": "0.0.4"
+    },
+    "eventyret-bootstrap-4-cdn-snippet": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "eventyret-bootstrap-4-cdn-snippet",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/eventyret/bootstrap-4-cdn-snippet/1.13.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/eventyret/bootstrap-4-cdn-snippet/1.13.0/file/eventyret.bootstrap-4-cdn-snippet-1.13.0.vsix",
+            "homepage": "https://github.com/Eventyret/vscode-bcdn/blob/master/README.md",
+            "license": "gpl3Only",
+            "marketplaceName": "bootstrap-4-cdn-snippet",
+            "marketplacePublisher": "eventyret",
+            "name": "bootstrap-4-cdn-snippet",
+            "publisher": "eventyret"
+        },
+        "pinned": false,
+        "src": {
+            "name": "bootstrap-4-cdn-snippet-1.13.0.zip",
+            "sha256": "sha256-s76wechR69jXOAb1YmTuhGif9VTNv5cbKlzyWzMlr9g=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/eventyret/bootstrap-4-cdn-snippet/1.13.0/file/eventyret.bootstrap-4-cdn-snippet-1.13.0.vsix"
+        },
+        "version": "1.13.0"
+    },
+    "matt-rudge-auto-open-preview-panel": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "matt-rudge-auto-open-preview-panel",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/matt-rudge/auto-open-preview-panel/0.0.6/file/matt-rudge.auto-open-preview-panel-0.0.6.vsix",
+            "license": "mit",
+            "marketplaceName": "auto-open-preview-panel",
+            "marketplacePublisher": "matt-rudge",
+            "name": "auto-open-preview-panel",
+            "publisher": "matt-rudge"
+        },
+        "pinned": false,
+        "src": {
+            "name": "auto-open-preview-panel-0.0.6.zip",
+            "sha256": "sha256-Jwxfp7Qs0234j5ciPM1SfUPzuoFNbfOPCXGfeolC58U=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/matt-rudge/auto-open-preview-panel/0.0.6/file/matt-rudge.auto-open-preview-panel-0.0.6.vsix"
+        },
+        "version": "0.0.6"
+    },
+    "pouya-comment": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "pouya-comment",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/pouya/comment/7.0.5/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pouya/comment/7.0.5/file/pouya.comment-7.0.5.vsix",
+            "license": "unfree",
+            "marketplaceName": "comment",
+            "marketplacePublisher": "pouya",
+            "name": "comment",
+            "publisher": "pouya"
+        },
+        "pinned": false,
+        "src": {
+            "name": "comment-7.0.5.zip",
+            "sha256": "sha256-+RYYYhdaW0x+Oa2qsX/nNZ8aRoUxiCPC9914q5jgbg0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/pouya/comment/7.0.5/file/pouya.comment-7.0.5.vsix"
+        },
+        "version": "7.0.5"
+    },
+    "pouya-procolors": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "pouya-procolors",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/pouya/procolors/25.0.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pouya/procolors/25.0.1/file/pouya.procolors-25.0.1.vsix",
+            "homepage": "https://kary.us",
+            "license": "gpl3Only",
+            "marketplaceName": "procolors",
+            "marketplacePublisher": "pouya",
+            "name": "procolors",
+            "publisher": "pouya"
+        },
+        "pinned": false,
+        "src": {
+            "name": "procolors-25.0.1.zip",
+            "sha256": "sha256-WwophEDLVb8j0xA5RFy+XBXUkU6KTAce2B9FUgJnrwE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/pouya/procolors/25.0.1/file/pouya.procolors-25.0.1.vsix"
+        },
+        "version": "25.0.1"
+    },
+    "vscode-theme-solarized-light": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-theme-solarized-light",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/theme-solarized-light/1.66.2/file/vscode.theme-solarized-light-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "theme-solarized-light",
+            "marketplacePublisher": "vscode",
+            "name": "theme-solarized-light",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "theme-solarized-light-1.66.2.zip",
+            "sha256": "sha256-0d/vPIJKxPub1GOhzvm/St9y3g0OFT97AUg1HqhUzc4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/theme-solarized-light/1.66.2/file/vscode.theme-solarized-light-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "yurihs-sublime-vscode-theme": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "yurihs-sublime-vscode-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/yurihs/sublime-vscode-theme/1.5.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/yurihs/sublime-vscode-theme/1.5.0/file/yurihs.sublime-vscode-theme-1.5.0.vsix",
+            "license": "mit",
+            "marketplaceName": "sublime-vscode-theme",
+            "marketplacePublisher": "yurihs",
+            "name": "sublime-vscode-theme",
+            "publisher": "yurihs"
+        },
+        "pinned": false,
+        "src": {
+            "name": "sublime-vscode-theme-1.5.0.zip",
+            "sha256": "sha256-3ACZC916bmznT/qEoP1DWha/s5aeH7ysfhGASQsw2z0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/yurihs/sublime-vscode-theme/1.5.0/file/yurihs.sublime-vscode-theme-1.5.0.vsix"
+        },
+        "version": "1.5.0"
+    }
+,
+    "Angular-ng-template": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Angular-ng-template",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Angular/ng-template/15.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Angular/ng-template/15.1.0/file/Angular.ng-template-15.1.0.vsix",
+            "homepage": "https://github.com/angular/vscode-ng-language-service#readme",
+            "license": "mit",
+            "marketplaceName": "ng-template",
+            "marketplacePublisher": "Angular",
+            "name": "ng-template",
+            "publisher": "angular"
+        },
+        "pinned": false,
+        "src": {
+            "name": "ng-template-15.1.0.zip",
+            "sha256": "sha256-fqcAqfBf4V1aEaz5KrdkXaebd5uvSvqXMIkx7I/m89M=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Angular/ng-template/15.1.0/file/Angular.ng-template-15.1.0.vsix"
+        },
+        "version": "15.1.0"
+    },
+    "eclipse-theia-builtin-extension-pack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "eclipse-theia-builtin-extension-pack",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.66.2/file/eclipse-theia.builtin-extension-pack-1.66.2.vsix",
+            "homepage": "",
+            "license": "epl20",
+            "marketplaceName": "builtin-extension-pack",
+            "marketplacePublisher": "eclipse-theia",
+            "name": "builtin-extension-pack",
+            "publisher": "eclipse-theia"
+        },
+        "pinned": false,
+        "src": {
+            "name": "builtin-extension-pack-1.66.2.zip",
+            "sha256": "sha256-PnDeQ+mzBzcTHaS/YLMqZXFmTRXGvVd5AsSen0IcMhA=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.66.2/file/eclipse-theia.builtin-extension-pack-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "mads-hartmann-bash-ide-vscode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "mads-hartmann-bash-ide-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/mads-hartmann/bash-ide-vscode/1.31.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mads-hartmann/bash-ide-vscode/1.31.0/file/mads-hartmann.bash-ide-vscode-1.31.0.vsix",
+            "homepage": "https://github.com/bash-lsp/bash-language-server#readme",
+            "license": "mit",
+            "marketplaceName": "bash-ide-vscode",
+            "marketplacePublisher": "mads-hartmann",
+            "name": "bash-ide-vscode",
+            "publisher": "mads-hartmann"
+        },
+        "pinned": false,
+        "src": {
+            "name": "bash-ide-vscode-1.31.0.zip",
+            "sha256": "sha256-lwmrQ+jjJkjXk7lyL940pfUxLcSEEHPLhMJezYdcpgM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/mads-hartmann/bash-ide-vscode/1.31.0/file/mads-hartmann.bash-ide-vscode-1.31.0.vsix"
+        },
+        "version": "1.31.0"
+    },
+    "ms-vscode-cmake-tools": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-vscode-cmake-tools",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-vscode/cmake-tools/1.13.42/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-vscode/cmake-tools/1.13.42/file/ms-vscode.cmake-tools-1.13.42.vsix",
+            "homepage": "https://github.com/microsoft/vscode-cmake-tools",
+            "license": "mit",
+            "marketplaceName": "cmake-tools",
+            "marketplacePublisher": "ms-vscode",
+            "name": "cmake-tools",
+            "publisher": "ms-vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "cmake-tools-1.13.42.zip",
+            "sha256": "sha256-085VAzKQo3yzE7OKnAFWQAMhT3O0Zi/Wsu/m3wb8VCU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-vscode/cmake-tools/1.13.42/file/ms-vscode.cmake-tools-1.13.42.vsix"
+        },
+        "version": "1.13.42"
+    },
+    "shd101wyy-markdown-preview-enhanced": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "shd101wyy-markdown-preview-enhanced",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/shd101wyy/markdown-preview-enhanced/0.6.7/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/shd101wyy/markdown-preview-enhanced/0.6.7/file/shd101wyy.markdown-preview-enhanced-0.6.7.vsix",
+            "homepage": "https://github.com/shd101wyy/vscode-markdown-preview-enhanced#readme",
+            "license": "ncsa",
+            "marketplaceName": "markdown-preview-enhanced",
+            "marketplacePublisher": "shd101wyy",
+            "name": "markdown-preview-enhanced",
+            "publisher": "shd101wyy"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdown-preview-enhanced-0.6.7.zip",
+            "sha256": "sha256-xZsN4NEYwTYkBsQulELpKdU2r8CMKc/4NTjM7vjLXYY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/shd101wyy/markdown-preview-enhanced/0.6.7/file/shd101wyy.markdown-preview-enhanced-0.6.7.vsix"
+        },
+        "version": "0.6.7"
+    },
+    "vscode-git": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-git",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/git/1.66.2/file/vscode.git-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "git",
+            "marketplacePublisher": "vscode",
+            "name": "git",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "git-1.66.2.zip",
+            "sha256": "sha256-y1z7FUPnNryQ6ZDf7kX/RE3eQ+nhdlxjO9dumLa808M=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/git/1.66.2/file/vscode.git-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-image-preview": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-image-preview",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/image-preview/1.66.2/file/vscode.image-preview-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "image-preview",
+            "marketplacePublisher": "vscode",
+            "name": "image-preview",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "image-preview-1.66.2.zip",
+            "sha256": "sha256-T8dQjaENZ2JsuaSYYa+KHFRZkEotMLGUqeHdOuGDQ8k=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/image-preview/1.66.2/file/vscode.image-preview-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-php": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-php",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/php/1.66.2/file/vscode.php-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "php",
+            "marketplacePublisher": "vscode",
+            "name": "php",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "php-1.66.2.zip",
+            "sha256": "sha256-3bd956r5O5axc/OLHi9qkombOKBQlhAfZRK+RO5r2ss=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/php/1.66.2/file/vscode.php-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-php-language-features": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-php-language-features",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/php-language-features/1.66.2/file/vscode.php-language-features-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "php-language-features",
+            "marketplacePublisher": "vscode",
+            "name": "php-language-features",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "php-language-features-1.66.2.zip",
+            "sha256": "sha256-dbcGk2825QNUYkpqcdh6KZhZDP4y18omXrVqjQis+oI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/php-language-features/1.66.2/file/vscode.php-language-features-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-search-result": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-search-result",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/search-result/1.66.2/file/vscode.search-result-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "search-result",
+            "marketplacePublisher": "vscode",
+            "name": "search-result",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "search-result-1.66.2.zip",
+            "sha256": "sha256-Ll0edoVg/gvDYK4gBV8722xzJB8bB6SyjSmWDxCvnis=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/search-result/1.66.2/file/vscode.search-result-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "OlegKunitsyn-gnucobol-debug": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "OlegKunitsyn-gnucobol-debug",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/OlegKunitsyn/gnucobol-debug/2.31.37/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/OlegKunitsyn/gnucobol-debug/2.31.37/file/OlegKunitsyn.gnucobol-debug-2.31.37.vsix",
+            "license": "gpl3Only",
+            "marketplaceName": "gnucobol-debug",
+            "marketplacePublisher": "OlegKunitsyn",
+            "name": "gnucobol-debug",
+            "publisher": "olegkunitsyn"
+        },
+        "pinned": false,
+        "src": {
+            "name": "gnucobol-debug-2.31.37.zip",
+            "sha256": "sha256-M4c0X0D3JRU2PtGdVgbx8fIkGGeIKNgQGTOQA9fyU2c=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/OlegKunitsyn/gnucobol-debug/2.31.37/file/OlegKunitsyn.gnucobol-debug-2.31.37.vsix"
+        },
+        "version": "2.31.37"
+    },
+    "dancermak-vscode-rke-cluster-config": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "dancermak-vscode-rke-cluster-config",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/dancermak/vscode-rke-cluster-config/0.0.6/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/dancermak/vscode-rke-cluster-config/0.0.6/file/dancermak.vscode-rke-cluster-config-0.0.6.vsix",
+            "license": "mit",
+            "marketplaceName": "vscode-rke-cluster-config",
+            "marketplacePublisher": "dancermak",
+            "name": "vscode-rke-cluster-config",
+            "publisher": "dancermak"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-rke-cluster-config-0.0.6.zip",
+            "sha256": "sha256-Ednr+9/vWKE4wyAw5vUCKmD5ymPdVzy/DoTxYm1kh8I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/dancermak/vscode-rke-cluster-config/0.0.6/file/dancermak.vscode-rke-cluster-config-0.0.6.vsix"
+        },
+        "version": "0.0.6"
+    },
+    "mrorz-language-gettext": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "mrorz-language-gettext",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/mrorz/language-gettext/0.2.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mrorz/language-gettext/0.2.0/file/mrorz.language-gettext-0.2.0.vsix",
+            "license": "mit",
+            "marketplaceName": "language-gettext",
+            "marketplacePublisher": "mrorz",
+            "name": "language-gettext",
+            "publisher": "mrorz"
+        },
+        "pinned": false,
+        "src": {
+            "name": "language-gettext-0.2.0.zip",
+            "sha256": "sha256-sBrrYE0/HzqTgLQHeVGQawXTZOV56yBp6yBl+pmfm9I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/mrorz/language-gettext/0.2.0/file/mrorz.language-gettext-0.2.0.vsix"
+        },
+        "version": "0.2.0"
+    },
+    "ms-pyright-pyright": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-pyright-pyright",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-pyright/pyright/1.1.291/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-pyright/pyright/1.1.291/file/ms-pyright.pyright-1.1.291.vsix",
+            "homepage": "https://github.com/Microsoft/pyright#readme",
+            "license": "mit",
+            "marketplaceName": "pyright",
+            "marketplacePublisher": "ms-pyright",
+            "name": "pyright",
+            "publisher": "ms-pyright"
+        },
+        "pinned": false,
+        "src": {
+            "name": "pyright-1.1.291.zip",
+            "sha256": "sha256-t9FWqNi/PCJaE/5x/GyPFgYQ7cOReUTwrblYQ1H7D0E=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-pyright/pyright/1.1.291/file/ms-pyright.pyright-1.1.291.vsix"
+        },
+        "version": "1.1.291"
+    },
+    "pouya-idf": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "pouya-idf",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/pouya/idf/3.0.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pouya/idf/3.0.0/file/pouya.idf-3.0.0.vsix",
+            "license": "gpl3Only",
+            "marketplaceName": "idf",
+            "marketplacePublisher": "pouya",
+            "name": "idf",
+            "publisher": "pouya"
+        },
+        "pinned": false,
+        "src": {
+            "name": "idf-3.0.0.zip",
+            "sha256": "sha256-bdNOvkLyDygq3lSE5PppMl5GJjvfE2H0zVu+EinLYBw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/pouya/idf/3.0.0/file/pouya.idf-3.0.0.vsix"
+        },
+        "version": "3.0.0"
+    },
+    "samuelcolvin-jinjahtml": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "samuelcolvin-jinjahtml",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/samuelcolvin/jinjahtml/0.20.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/samuelcolvin/jinjahtml/0.20.0/file/samuelcolvin.jinjahtml-0.20.0.vsix",
+            "homepage": "https://github.com/samuelcolvin/jinjahtml-vscode#readme",
+            "license": "mit",
+            "marketplaceName": "jinjahtml",
+            "marketplacePublisher": "samuelcolvin",
+            "name": "jinjahtml",
+            "publisher": "samuelcolvin"
+        },
+        "pinned": false,
+        "src": {
+            "name": "jinjahtml-0.20.0.zip",
+            "sha256": "sha256-I/kVa+AG4ZbG5PbQK4e+JtoiyTDWZO09kLm/6P2fOmA=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/samuelcolvin/jinjahtml/0.20.0/file/samuelcolvin.jinjahtml-0.20.0.vsix"
+        },
+        "version": "0.20.0"
+    },
+    "vscjava-vscode-java-debug": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscjava-vscode-java-debug",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/vscjava/vscode-java-debug/0.47.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/vscjava/vscode-java-debug/0.47.0/file/vscjava.vscode-java-debug-0.47.0.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-java-debug/blob/master/README.md",
+            "license": "unfree",
+            "marketplaceName": "vscode-java-debug",
+            "marketplacePublisher": "vscjava",
+            "name": "vscode-java-debug",
+            "publisher": "vscjava"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-java-debug-0.47.0.zip",
+            "sha256": "sha256-WGZFtCVQWxD1W+MXLtff/5cTeoR7/yCb4tFKFzxBTRA=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscjava/vscode-java-debug/0.47.0/file/vscjava.vscode-java-debug-0.47.0.vsix"
+        },
+        "version": "0.47.0"
+    },
+    "vscode-debug-server-ready": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-debug-server-ready",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/debug-server-ready/1.66.2/file/vscode.debug-server-ready-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "debug-server-ready",
+            "marketplacePublisher": "vscode",
+            "name": "debug-server-ready",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "debug-server-ready-1.66.2.zip",
+            "sha256": "sha256-Bv2pGaHGfFiy2w8+0BrWy/9dItA+mYigEfxG3Dv0rsA=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/debug-server-ready/1.66.2/file/vscode.debug-server-ready-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-github": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-github",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/github/1.66.2/file/vscode.github-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "github",
+            "marketplacePublisher": "vscode",
+            "name": "github",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "github-1.66.2.zip",
+            "sha256": "sha256-XCXHu6upOdLyEV9qMrXXTcUos3EpiAWQYhYLhnW/k2M=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/github/1.66.2/file/vscode.github-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-github-authentication": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-github-authentication",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/github-authentication/1.66.2/file/vscode.github-authentication-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "github-authentication",
+            "marketplacePublisher": "vscode",
+            "name": "github-authentication",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "github-authentication-1.66.2.zip",
+            "sha256": "sha256-i2KY3GhZJBH98zZ5vTOIqq+yZx/0i+amLNGFxAJG1gk=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/github-authentication/1.66.2/file/vscode.github-authentication-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "Revaturepro-non-prod-revature-labs-non-prod": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Revaturepro-non-prod-revature-labs-non-prod",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Revaturepro-non-prod/revature-labs-non-prod/0.0.19/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Revaturepro-non-prod/revature-labs-non-prod/0.0.19/file/Revaturepro-non-prod.revature-labs-non-prod-0.0.19.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "revature-labs-non-prod",
+            "marketplacePublisher": "Revaturepro-non-prod",
+            "name": "revature-labs-non-prod",
+            "publisher": "revaturepro-non-prod"
+        },
+        "pinned": false,
+        "src": {
+            "name": "revature-labs-non-prod-0.0.19.zip",
+            "sha256": "sha256-g/keUo0Gf8+2LVXNY2WYSrexuxJe3MzFY8vd2h4CNdw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Revaturepro-non-prod/revature-labs-non-prod/0.0.19/file/Revaturepro-non-prod.revature-labs-non-prod-0.0.19.vsix"
+        },
+        "version": "0.0.19"
+    },
+    "Vue-volar": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Vue-volar",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Vue/volar/1.0.24/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Vue/volar/1.0.24/file/Vue.volar-1.0.24.vsix",
+            "homepage": "https://github.com/johnsoncodehk/volar#readme",
+            "license": "mit",
+            "marketplaceName": "volar",
+            "marketplacePublisher": "Vue",
+            "name": "volar",
+            "publisher": "vue"
+        },
+        "pinned": false,
+        "src": {
+            "name": "volar-1.0.24.zip",
+            "sha256": "sha256-LMwoIi0k82EXxhwMMSR4cbLGGHxQ25hjuAlqBvbTdPY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Vue/volar/1.0.24/file/Vue.volar-1.0.24.vsix"
+        },
+        "version": "1.0.24"
+    },
+    "manuth-eslint-language-service": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "manuth-eslint-language-service",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/manuth/eslint-language-service/1.1.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/manuth/eslint-language-service/1.1.3/file/manuth.eslint-language-service-1.1.3.vsix",
+            "homepage": "https://github.com/manuth/VSCodeESLintLanguageService#readme",
+            "license": "mit",
+            "marketplaceName": "eslint-language-service",
+            "marketplacePublisher": "manuth",
+            "name": "eslint-language-service",
+            "publisher": "manuth"
+        },
+        "pinned": false,
+        "src": {
+            "name": "eslint-language-service-1.1.3.zip",
+            "sha256": "sha256-CdI8/ot8tpdyPhOj+FG+eNbJ1sZzK5pZq97Xyu4z1fc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/manuth/eslint-language-service/1.1.3/file/manuth.eslint-language-service-1.1.3.vsix"
+        },
+        "version": "1.1.3"
+    },
+    "narumincho-definy": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "narumincho-definy",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/narumincho/definy/0.0.8/file/narumincho.definy-0.0.8.vsix",
+            "homepage": "https://github.com/narumincho/definy",
+            "license": "mit",
+            "marketplaceName": "definy",
+            "marketplacePublisher": "narumincho",
+            "name": "definy",
+            "publisher": "narumincho"
+        },
+        "pinned": false,
+        "src": {
+            "name": "definy-0.0.8.zip",
+            "sha256": "sha256-h98BtZ+PIa1XTl5TwxbNhAdpr4hQmAU8e78buRmQEb4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/narumincho/definy/0.0.8/file/narumincho.definy-0.0.8.vsix"
+        },
+        "version": "0.0.8"
+    },
+    "nrwl-angular-console": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "nrwl-angular-console",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/nrwl/angular-console/17.29.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/nrwl/angular-console/17.29.0/file/nrwl.angular-console-17.29.0.vsix",
+            "homepage": "https://nx.dev/using-nx/console#nx-console-for-vscode",
+            "license": "mit",
+            "marketplaceName": "angular-console",
+            "marketplacePublisher": "nrwl",
+            "name": "angular-console",
+            "publisher": "nrwl"
+        },
+        "pinned": false,
+        "src": {
+            "name": "angular-console-17.29.0.zip",
+            "sha256": "sha256-J3eQ8Z91ggLz9IrtcwB43JFqq06uuw6+F8BnfyM31Hg=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/nrwl/angular-console/17.29.0/file/nrwl.angular-console-17.29.0.vsix"
+        },
+        "version": "17.29.0"
+    },
+    "sensmetry-sysml-2ls": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "sensmetry-sysml-2ls",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/sensmetry/sysml-2ls/0.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/sensmetry/sysml-2ls/0.1.0/file/Sensmetry.sysml-2ls-0.1.0.vsix",
+            "homepage": "https://gitlab.com/sensmetry/public/sysml-2ls#readme",
+            "license": "unfree",
+            "marketplaceName": "sysml-2ls",
+            "marketplacePublisher": "sensmetry",
+            "name": "sysml-2ls",
+            "publisher": "sensmetry"
+        },
+        "pinned": false,
+        "src": {
+            "name": "sysml-2ls-0.1.0.zip",
+            "sha256": "sha256-eDTtGsRgEozaV5WtgLBnXcjTPeg5B/sDM4ao1zxtlUs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/sensmetry/sysml-2ls/0.1.0/file/sensmetry.sysml-2ls-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
+    "trybick-terminal-zoom": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "trybick-terminal-zoom",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/trybick/terminal-zoom/1.7.2/file/trybick.terminal-zoom-1.7.2.vsix",
+            "homepage": "https://github.com/trybick/vscode-terminal-zoom",
+            "license": "mit",
+            "marketplaceName": "terminal-zoom",
+            "marketplacePublisher": "trybick",
+            "name": "terminal-zoom",
+            "publisher": "trybick"
+        },
+        "pinned": false,
+        "src": {
+            "name": "terminal-zoom-1.7.2.zip",
+            "sha256": "sha256-dOmF5u0YxbNj3pL8xQJnVDVEx2IuGmFHU65EdO4nooo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/trybick/terminal-zoom/1.7.2/file/trybick.terminal-zoom-1.7.2.vsix"
+        },
+        "version": "1.7.2"
+    },
+    "vscode-extension-editing": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-extension-editing",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/extension-editing/1.66.2/file/vscode.extension-editing-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "extension-editing",
+            "marketplacePublisher": "vscode",
+            "name": "extension-editing",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "extension-editing-1.66.2.zip",
+            "sha256": "sha256-HpyQXkmWhvF2wzF6rM3Bd21LQdD4DN/kVcKSPDoK1H8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/extension-editing/1.66.2/file/vscode.extension-editing-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-git-base": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-git-base",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/git-base/1.66.2/file/vscode.git-base-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "git-base",
+            "marketplacePublisher": "vscode",
+            "name": "git-base",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "git-base-1.66.2.zip",
+            "sha256": "sha256-KsEWACYCdwOiyo+5mw+bmC/OqtcREPyfq6qAXCaUFX8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/git-base/1.66.2/file/vscode.git-base-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-julia": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-julia",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/julia/1.66.2/file/vscode.julia-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "julia",
+            "marketplacePublisher": "vscode",
+            "name": "julia",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "julia-1.66.2.zip",
+            "sha256": "sha256-raULeAtL8cVujjZMHYUBcQmfjY4UMMv8coZclSCcW7A=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/julia/1.66.2/file/vscode.julia-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    }
+,
+    "ms-playwright-playwright": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-playwright-playwright",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/ms-playwright/playwright/1.0.6/file/ms-playwright.playwright-1.0.6.vsix",
+            "homepage": "https://github.com/microsoft/playwright-vscode#readme",
+            "license": "asl20",
+            "marketplaceName": "playwright",
+            "marketplacePublisher": "ms-playwright",
+            "name": "playwright",
+            "publisher": "ms-playwright"
+        },
+        "pinned": false,
+        "src": {
+            "name": "playwright-1.0.6.zip",
+            "sha256": "sha256-rsxrRZVuw94s/fX62LnMH/v2YWSw4deqZEBqU+TiKkQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-playwright/playwright/1.0.6/file/ms-playwright.playwright-1.0.6.vsix"
+        },
+        "version": "1.0.6"
+    },
+    "vscode-builtin-notebook-renderers": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-builtin-notebook-renderers",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/builtin-notebook-renderers/1.66.2/file/vscode.builtin-notebook-renderers-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "builtin-notebook-renderers",
+            "marketplacePublisher": "vscode",
+            "name": "builtin-notebook-renderers",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "builtin-notebook-renderers-1.66.2.zip",
+            "sha256": "sha256-n9UjLKf4DIJ0TCZBBNPI+QMxFrLPczqvXB248ygvzZM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/builtin-notebook-renderers/1.66.2/file/vscode.builtin-notebook-renderers-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-dart": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-dart",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/dart/1.66.2/file/vscode.dart-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "dart",
+            "marketplacePublisher": "vscode",
+            "name": "dart",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "dart-1.66.2.zip",
+            "sha256": "sha256-cBB1sdbAolZqjyj8COVjiNzTUEFjQN5kZw0DIJvFcNo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/dart/1.66.2/file/vscode.dart-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-diff": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-diff",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/diff/1.66.2/file/vscode.diff-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "diff",
+            "marketplacePublisher": "vscode",
+            "name": "diff",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "diff-1.66.2.zip",
+            "sha256": "sha256-JClh1SOqCm9OEfqMN3YFOi8IyGJkQZvVh+ayIWeEnhI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/diff/1.66.2/file/vscode.diff-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-ipynb": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-ipynb",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/ipynb/1.66.2/file/vscode.ipynb-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "ipynb",
+            "marketplacePublisher": "vscode",
+            "name": "ipynb",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "ipynb-1.66.2.zip",
+            "sha256": "sha256-MCKpBIYJDa8SIxl6Izx8bMlr4GH0Sq+jCKWwm+sEuz8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/ipynb/1.66.2/file/vscode.ipynb-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-latex": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-latex",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/latex/1.66.2/file/vscode.latex-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "latex",
+            "marketplacePublisher": "vscode",
+            "name": "latex",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "latex-1.66.2.zip",
+            "sha256": "sha256-1FCU93wguyZyi5WF3jkI0DisErDBjkev3Yvp8Ll4kMk=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/latex/1.66.2/file/vscode.latex-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-markdown-math": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-markdown-math",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/markdown-math/1.66.2/file/vscode.markdown-math-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "markdown-math",
+            "marketplacePublisher": "vscode",
+            "name": "markdown-math",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markdown-math-1.66.2.zip",
+            "sha256": "sha256-eL4Fz4u2gKrayhGWktt6i3XoyyWO++GtFl2mJ25N878=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/markdown-math/1.66.2/file/vscode.markdown-math-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-restructuredtext": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-restructuredtext",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/restructuredtext/1.66.2/file/vscode.restructuredtext-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "restructuredtext",
+            "marketplacePublisher": "vscode",
+            "name": "restructuredtext",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "restructuredtext-1.66.2.zip",
+            "sha256": "sha256-TrKHn85sqJngnIirBdXgawSR0gz3gpUTI3EUmmK0/vc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/restructuredtext/1.66.2/file/vscode.restructuredtext-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "vscode-simple-browser": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscode-simple-browser",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/vscode/simple-browser/1.66.2/file/vscode.simple-browser-1.66.2.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "simple-browser",
+            "marketplacePublisher": "vscode",
+            "name": "simple-browser",
+            "publisher": "vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "simple-browser-1.66.2.zip",
+            "sha256": "sha256-HjjDb/VnVdRwISC+qw+FRHbRQF+hDUcgNaDau4Sj60U=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscode/simple-browser/1.66.2/file/vscode.simple-browser-1.66.2.vsix"
+        },
+        "version": "1.66.2"
+    },
+    "zardoy-ts-essential-plugins": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "zardoy-ts-essential-plugins",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.44/file/CHANGELOG.MD",
+            "downloadPage": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.44/file/zardoy.ts-essential-plugins-0.0.44.vsix",
+            "homepage": "https://github.com/zardoy/typescript-vscode-plugins#readme",
+            "license": "mit",
+            "marketplaceName": "ts-essential-plugins",
+            "marketplacePublisher": "zardoy",
+            "name": "ts-essential-plugins",
+            "publisher": "zardoy"
+        },
+        "pinned": false,
+        "src": {
+            "name": "ts-essential-plugins-0.0.44.zip",
+            "sha256": "sha256-Gym2QJtp+IZjEcAX9sna8zZUXoDk/FuaU7v9AeF4gfc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.44/file/zardoy.ts-essential-plugins-0.0.44.vsix"
+        },
+        "version": "0.0.44"
+    }
+,
+    "Antyos-vscode-mlog": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Antyos-vscode-mlog",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Antyos/vscode-mlog/0.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Antyos/vscode-mlog/0.1.0/file/Antyos.vscode-mlog-0.1.0.vsix",
+            "homepage": "https://github.com/Antyos/vscode-mlog/blob/main/README.md",
+            "license": "gpl3Only",
+            "marketplaceName": "vscode-mlog",
+            "marketplacePublisher": "Antyos",
+            "name": "vscode-mlog",
+            "publisher": "antyos"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-mlog-0.1.0.zip",
+            "sha256": "sha256-l6WdppTpTQqW0IIg/3zicuCdUeQC26IsAFzL9ypXQ9U=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Antyos/vscode-mlog/0.1.0/file/Antyos.vscode-mlog-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
+    "Heliax-juvix-mode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Heliax-juvix-mode",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/Heliax/juvix-mode/0.1.22/file/Heliax.juvix-mode-0.1.22.vsix",
+            "homepage": "https://github.com/anoma/vscode-juvix#readme",
+            "license": "gpl3Only",
+            "marketplaceName": "juvix-mode",
+            "marketplacePublisher": "Heliax",
+            "name": "juvix-mode",
+            "publisher": "heliax"
+        },
+        "pinned": false,
+        "src": {
+            "name": "juvix-mode-0.1.22.zip",
+            "sha256": "sha256-ViP0BxNXr3PV50/Pg5zHwDE4rEadYJG0IHivOza4qMo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Heliax/juvix-mode/0.1.22/file/Heliax.juvix-mode-0.1.22.vsix"
+        },
+        "version": "0.1.22"
+    },
+    "Pivotal-vscode-boot-dev-pack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Pivotal-vscode-boot-dev-pack",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/Pivotal/vscode-boot-dev-pack/0.1.0/file/Pivotal.vscode-boot-dev-pack-0.1.0.vsix",
+            "homepage": "https://github.com/spring-projects/sts4",
+            "license": "epl10",
+            "marketplaceName": "vscode-boot-dev-pack",
+            "marketplacePublisher": "Pivotal",
+            "name": "vscode-boot-dev-pack",
+            "publisher": "pivotal"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-boot-dev-pack-0.1.0.zip",
+            "sha256": "sha256-09mDxdeltQU+ePLTmNTJ6CiyFDcsevKbYTuEiC3kTtE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Pivotal/vscode-boot-dev-pack/0.1.0/file/Pivotal.vscode-boot-dev-pack-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
+    "denoland-vscode-deno": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "denoland-vscode-deno",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/denoland/vscode-deno/3.16.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/denoland/vscode-deno/3.16.0/file/denoland.vscode-deno-3.16.0.vsix",
+            "homepage": "https://github.com/denoland/vscode_deno#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-deno",
+            "marketplacePublisher": "denoland",
+            "name": "vscode-deno",
+            "publisher": "denoland"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-deno-3.16.0.zip",
+            "sha256": "sha256-tV9rs49wXiXzMg+6wdfGwE/fGHjl2dcxnQ12A8Q8DQM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/denoland/vscode-deno/3.16.0/file/denoland.vscode-deno-3.16.0.vsix"
+        },
+        "version": "3.16.0"
+    },
+    "dfinity-foundation-vscode-motoko": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "dfinity-foundation-vscode-motoko",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/dfinity-foundation/vscode-motoko/0.8.0/file/dfinity-foundation.vscode-motoko-0.8.0.vsix",
+            "homepage": "https://github.com/dfinity/vscode-motoko#readme",
+            "license": "asl20",
+            "marketplaceName": "vscode-motoko",
+            "marketplacePublisher": "dfinity-foundation",
+            "name": "vscode-motoko",
+            "publisher": "dfinity-foundation"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-motoko-0.8.0.zip",
+            "sha256": "sha256-smOIrv/lJ5abGEauWGhcQRM2M8C16acsZIdZcTChKWs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/dfinity-foundation/vscode-motoko/0.8.0/file/dfinity-foundation.vscode-motoko-0.8.0.vsix"
+        },
+        "version": "0.8.0"
+    },
+    "firsttris-vscode-jest-runner": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "firsttris-vscode-jest-runner",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/firsttris/vscode-jest-runner/0.4.60/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/firsttris/vscode-jest-runner/0.4.60/file/firsttris.vscode-jest-runner-0.4.60.vsix",
+            "homepage": "https://github.com/firsttris/vscode-jest-runner#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-jest-runner",
+            "marketplacePublisher": "firsttris",
+            "name": "vscode-jest-runner",
+            "publisher": "firsttris"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-jest-runner-0.4.60.zip",
+            "sha256": "sha256-Qy4Mxmmf3bXI4XHzGwxsQosVmjTra/NfmJudRk1W8qE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/firsttris/vscode-jest-runner/0.4.60/file/firsttris.vscode-jest-runner-0.4.60.vsix"
+        },
+        "version": "0.4.60"
+    },
+    "jsomsanith-kh-explorer": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "jsomsanith-kh-explorer",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/jsomsanith/kh-explorer/0.0.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/jsomsanith/kh-explorer/0.0.1/file/jsomsanith.kh-explorer-0.0.1.vsix",
+            "homepage": "https://github.com/jsomsanith/vscode-komodo-plugin#readme",
+            "license": "unfree",
+            "marketplaceName": "kh-explorer",
+            "marketplacePublisher": "jsomsanith",
+            "name": "kh-explorer",
+            "publisher": "jsomsanith"
+        },
+        "pinned": false,
+        "src": {
+            "name": "kh-explorer-0.0.1.zip",
+            "sha256": "sha256-ZwLMxIRid6jgWeHHtMgCA1R0FlWT8T2MlkQVeq9kYg4=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/jsomsanith/kh-explorer/0.0.1/file/jsomsanith.kh-explorer-0.0.1.vsix"
+        },
+        "version": "0.0.1"
+    },
+    "lefd-sweetdracula-monokai": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "lefd-sweetdracula-monokai",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/lefd/sweetdracula-monokai/1.1.6/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/lefd/sweetdracula-monokai/1.1.6/file/lefd.sweetdracula-monokai-1.1.6.vsix",
+            "homepage": "https://github.com/LEFD/sweetdracula-monokai#readme",
+            "license": "mit",
+            "marketplaceName": "sweetdracula-monokai",
+            "marketplacePublisher": "lefd",
+            "name": "sweetdracula-monokai",
+            "publisher": "lefd"
+        },
+        "pinned": false,
+        "src": {
+            "name": "sweetdracula-monokai-1.1.6.zip",
+            "sha256": "sha256-ooigRXfVgBXNw7mOmNdFZn+OOVQtaEc/XFPlXx/rK5A=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/lefd/sweetdracula-monokai/1.1.6/file/lefd.sweetdracula-monokai-1.1.6.vsix"
+        },
+        "version": "1.1.6"
+    },
+    "pflannery-vscode-versionlens": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "pflannery-vscode-versionlens",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/pflannery/vscode-versionlens/1.0.14/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/pflannery/vscode-versionlens/1.0.14/file/pflannery.vscode-versionlens-1.0.14.vsix",
+            "homepage": "https://gitlab.com/versionlens/vscode-versionlens#readme",
+            "license": "isc",
+            "marketplaceName": "vscode-versionlens",
+            "marketplacePublisher": "pflannery",
+            "name": "vscode-versionlens",
+            "publisher": "pflannery"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-versionlens-1.0.14.zip",
+            "sha256": "sha256-WRrsNKyzbnWQUqU+wKSXkG1iRGN+YOyFfIH8ZzJnce0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/pflannery/vscode-versionlens/1.0.14/file/pflannery.vscode-versionlens-1.0.14.vsix"
+        },
+        "version": "1.0.14"
+    },
+    "zardoy-zardoy-experiments": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "zardoy-zardoy-experiments",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.115/file/CHANGELOG.MD",
+            "downloadPage": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.115/file/zardoy.zardoy-experiments-0.0.115.vsix",
+            "homepage": "https://github.com/zardoy/vscode-experiments#readme",
+            "license": "mit",
+            "marketplaceName": "zardoy-experiments",
+            "marketplacePublisher": "zardoy",
+            "name": "zardoy-experiments",
+            "publisher": "zardoy"
+        },
+        "pinned": false,
+        "src": {
+            "name": "zardoy-experiments-0.0.115.zip",
+            "sha256": "sha256-VrQFiEd5fJMCYGf8inhhZKFhdW2ba1lM/zsi2e2XSAM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/zardoy/zardoy-experiments/0.0.115/file/zardoy.zardoy-experiments-0.0.115.vsix"
+        },
+        "version": "0.0.115"
+    }
+,
+    "Moosecasa-vscode-acutest-test-adapter": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Moosecasa-vscode-acutest-test-adapter",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/Moosecasa/vscode-acutest-test-adapter/0.0.6/file/Moosecasa.vscode-acutest-test-adapter-0.0.6.vsix",
+            "homepage": "https://github.com/moosecasa/vscode-acutest-test-adapter",
+            "license": "mit",
+            "marketplaceName": "vscode-acutest-test-adapter",
+            "marketplacePublisher": "Moosecasa",
+            "name": "vscode-acutest-test-adapter",
+            "publisher": "moosecasa"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-acutest-test-adapter-0.0.6.zip",
+            "sha256": "sha256-IqsrJu0HNXR2HkNcLT/i+mdrkUMt+BLbP5mWpmfsOr8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Moosecasa/vscode-acutest-test-adapter/0.0.6/file/Moosecasa.vscode-acutest-test-adapter-0.0.6.vsix"
+        },
+        "version": "0.0.6"
+    },
+    "Revaturepro-non-prod-gitpod-tracker-plugin": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Revaturepro-non-prod-gitpod-tracker-plugin",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Revaturepro-non-prod/gitpod-tracker-plugin/0.0.8/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Revaturepro-non-prod/gitpod-tracker-plugin/0.0.8/file/Revaturepro-non-prod.gitpod-tracker-plugin-0.0.8.vsix",
+            "homepage": "",
+            "license": "mit",
+            "marketplaceName": "gitpod-tracker-plugin",
+            "marketplacePublisher": "Revaturepro-non-prod",
+            "name": "gitpod-tracker-plugin",
+            "publisher": "revaturepro-non-prod"
+        },
+        "pinned": false,
+        "src": {
+            "name": "gitpod-tracker-plugin-0.0.8.zip",
+            "sha256": "sha256-318wUmnvBrH0EMsoxUKQ87kuW/xs+DcIOreXI9OrgU0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Revaturepro-non-prod/gitpod-tracker-plugin/0.0.8/file/Revaturepro-non-prod.gitpod-tracker-plugin-0.0.8.vsix"
+        },
+        "version": "0.0.8"
+    },
+    "garlicbreadcleric-markane": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "garlicbreadcleric-markane",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/garlicbreadcleric/markane/0.0.2/file/garlicbreadcleric.markane-0.0.2.vsix",
+            "homepage": "https://github.com/garlicbreadcleric/vscode-markane#readme",
+            "license": "mit",
+            "marketplaceName": "markane",
+            "marketplacePublisher": "garlicbreadcleric",
+            "name": "markane",
+            "publisher": "garlicbreadcleric"
+        },
+        "pinned": false,
+        "src": {
+            "name": "markane-0.0.2.zip",
+            "sha256": "sha256-fQk1fr+NRwABGgNdxtbtM2Qcpi1G2gyfO1dBvLHx5XM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/garlicbreadcleric/markane/0.0.2/file/garlicbreadcleric.markane-0.0.2.vsix"
+        },
+        "version": "0.0.2"
+    },
+    "jnoortheen-xonsh": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "jnoortheen-xonsh",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/jnoortheen/xonsh/0.2.4/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/jnoortheen/xonsh/0.2.4/file/jnoortheen.xonsh-0.2.4.vsix",
+            "homepage": "https://github.com/jnoortheen/xonsh-vscode-ext",
+            "license": "mit",
+            "marketplaceName": "xonsh",
+            "marketplacePublisher": "jnoortheen",
+            "name": "xonsh",
+            "publisher": "jnoortheen"
+        },
+        "pinned": false,
+        "src": {
+            "name": "xonsh-0.2.4.zip",
+            "sha256": "sha256-hC9owN/9gS0Y61RyKDS+mGsyXMj4mUuj2eAiYzm9XiM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/jnoortheen/xonsh/0.2.4/file/jnoortheen.xonsh-0.2.4.vsix"
+        },
+        "version": "0.2.4"
+    },
+    "ms-vscode-atom-keybindings": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-vscode-atom-keybindings",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-vscode/atom-keybindings/3.3.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-vscode/atom-keybindings/3.3.0/file/ms-vscode.atom-keybindings-3.3.0.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-atom-keybindings#readme",
+            "license": "mit",
+            "marketplaceName": "atom-keybindings",
+            "marketplacePublisher": "ms-vscode",
+            "name": "atom-keybindings",
+            "publisher": "ms-vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "atom-keybindings-3.3.0.zip",
+            "sha256": "sha256-aIIO8OWclmFxCFjQDbRI2lTYqG4jNquLIl8u74iM3Go=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-vscode/atom-keybindings/3.3.0/file/ms-vscode.atom-keybindings-3.3.0.vsix"
+        },
+        "version": "3.3.0"
+    },
+    "ms-vscode-azure-account": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-vscode-azure-account",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-vscode/azure-account/0.11.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-vscode/azure-account/0.11.3/file/ms-vscode.azure-account-0.11.3.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-azure-account/blob/main/README.md",
+            "license": "mit",
+            "marketplaceName": "azure-account",
+            "marketplacePublisher": "ms-vscode",
+            "name": "azure-account",
+            "publisher": "ms-vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "azure-account-0.11.3.zip",
+            "sha256": "sha256-HCOeY1iG7+IhEV+EfGPCKo5Ce7Igls27RI/5XSNjvdo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-vscode/azure-account/0.11.3/file/ms-vscode.azure-account-0.11.3.vsix"
+        },
+        "version": "0.11.3"
+    },
+    "ms-vscode-powershell": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ms-vscode-powershell",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ms-vscode/powershell/2023.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ms-vscode/powershell/2023.1.0/file/ms-vscode.powershell-2023.1.0.vsix",
+            "homepage": "https://github.com/PowerShell/vscode-powershell/blob/main/README.md",
+            "license": "mit",
+            "marketplaceName": "powershell",
+            "marketplacePublisher": "ms-vscode",
+            "name": "powershell",
+            "publisher": "ms-vscode"
+        },
+        "pinned": false,
+        "src": {
+            "name": "powershell-2023.1.0.zip",
+            "sha256": "sha256-OiVb88BGvzsPTzKU1rGLGSMQSwKV4zI9FthOmutz34U=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ms-vscode/powershell/2023.1.0/file/ms-vscode.powershell-2023.1.0.vsix"
+        },
+        "version": "2023.1.0"
+    },
+    "serverless-devs-fc-webide-plugin": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "serverless-devs-fc-webide-plugin",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/serverless-devs/fc-webide-plugin/0.0.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/serverless-devs/fc-webide-plugin/0.0.3/file/serverless-devs.fc-webide-plugin-0.0.3.vsix",
+            "homepage": "https://github.com/devsapp/fc-webide-plugin#readme",
+            "license": "gpl3Plus",
+            "marketplaceName": "fc-webide-plugin",
+            "marketplacePublisher": "serverless-devs",
+            "name": "fc-webide-plugin",
+            "publisher": "serverless-devs"
+        },
+        "pinned": false,
+        "src": {
+            "name": "fc-webide-plugin-0.0.3.zip",
+            "sha256": "sha256-wzKIxYZu+Zud9Q8l8MjmIJUylk2hW27QYM/2h3MNTJE=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/serverless-devs/fc-webide-plugin/0.0.3/file/serverless-devs.fc-webide-plugin-0.0.3.vsix"
+        },
+        "version": "0.0.3"
+    },
+    "starkind1997-test-vscode-envd": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "starkind1997-test-vscode-envd",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/starkind1997/test-vscode-envd/0.0.6/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/starkind1997/test-vscode-envd/0.0.6/file/starkind1997.test-vscode-envd-0.0.6.vsix",
+            "homepage": "https://github.com/tensorchord/vscode-envd#readme",
+            "license": "asl20",
+            "marketplaceName": "test-vscode-envd",
+            "marketplacePublisher": "starkind1997",
+            "name": "test-vscode-envd",
+            "publisher": "starkind1997"
+        },
+        "pinned": false,
+        "src": {
+            "name": "test-vscode-envd-0.0.6.zip",
+            "sha256": "sha256-nFsoPLIuGfwg9Zk+OKumxdfiK8LDafxMVz6kL49nXDM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/starkind1997/test-vscode-envd/0.0.6/file/starkind1997.test-vscode-envd-0.0.6.vsix"
+        },
+        "version": "0.0.6"
+    },
+    "usernamehw-prism": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "usernamehw-prism",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/usernamehw/prism/1.0.8/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/usernamehw/prism/1.0.8/file/usernamehw.prism-1.0.8.vsix",
+            "license": "mit",
+            "marketplaceName": "prism",
+            "marketplacePublisher": "usernamehw",
+            "name": "prism",
+            "publisher": "usernamehw"
+        },
+        "pinned": false,
+        "src": {
+            "name": "prism-1.0.8.zip",
+            "sha256": "sha256-a0rk/VhTAvyT+Xum4MWgejkccfHvmpRw1cyBu0wWmTU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/usernamehw/prism/1.0.8/file/usernamehw.prism-1.0.8.vsix"
+        },
+        "version": "1.0.8"
+    }
+,
+    "amazonwebservices-aws-toolkit-vscode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "amazonwebservices-aws-toolkit-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.61.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.61.0/file/amazonwebservices.aws-toolkit-vscode-1.61.0.vsix",
+            "homepage": "https://github.com/aws/aws-toolkit-vscode#readme",
+            "license": "asl20",
+            "marketplaceName": "aws-toolkit-vscode",
+            "marketplacePublisher": "amazonwebservices",
+            "name": "aws-toolkit-vscode",
+            "publisher": "amazonwebservices"
+        },
+        "pinned": false,
+        "src": {
+            "name": "aws-toolkit-vscode-1.61.0.zip",
+            "sha256": "sha256-RXZIY2mK0+spr9ve6fTgD8eITBylEp5L/c3JlaCrAgw=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/amazonwebservices/aws-toolkit-vscode/1.61.0/file/amazonwebservices.aws-toolkit-vscode-1.61.0.vsix"
+        },
+        "version": "1.61.0"
+    },
+    "aswinkumar863-smarty-template-support": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "aswinkumar863-smarty-template-support",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/aswinkumar863/smarty-template-support/2.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/aswinkumar863/smarty-template-support/2.1.0/file/aswinkumar863.smarty-template-support-2.1.0.vsix",
+            "homepage": "https://github.com/aswinkumar863/smarty-vscode-support#readme",
+            "license": "mit",
+            "marketplaceName": "smarty-template-support",
+            "marketplacePublisher": "aswinkumar863",
+            "name": "smarty-template-support",
+            "publisher": "aswinkumar863"
+        },
+        "pinned": false,
+        "src": {
+            "name": "smarty-template-support-2.1.0.zip",
+            "sha256": "sha256-Su4H7MXjc/QSObOcnjondqlHR2yiSsAkR/C2MAJsjYM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/aswinkumar863/smarty-template-support/2.1.0/file/aswinkumar863.smarty-template-support-2.1.0.vsix"
+        },
+        "version": "2.1.0"
+    },
+    "bierner-color-info": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "bierner-color-info",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/bierner/color-info/0.7.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/bierner/color-info/0.7.2/file/bierner.color-info-0.7.2.vsix",
+            "homepage": "https://github.com/mattbierner/vscode-color-info#readme",
+            "license": "mit",
+            "marketplaceName": "color-info",
+            "marketplacePublisher": "bierner",
+            "name": "color-info",
+            "publisher": "bierner"
+        },
+        "pinned": false,
+        "src": {
+            "name": "color-info-0.7.2.zip",
+            "sha256": "sha256-pj95fv0Cuex9Z5PQntv9A6K+sxYfvblXjnj9WbwL4A0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/bierner/color-info/0.7.2/file/bierner.color-info-0.7.2.vsix"
+        },
+        "version": "0.7.2"
+    },
+    "dendron-dendron-paste-image": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "dendron-dendron-paste-image",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/dendron/dendron-paste-image/1.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/dendron/dendron-paste-image/1.1.0/file/dendron.dendron-paste-image-1.1.0.vsix",
+            "homepage": "https://github.com/mushanshitiancai/vscode-paste-image/blob/master/README.md",
+            "license": "mit",
+            "marketplaceName": "dendron-paste-image",
+            "marketplacePublisher": "dendron",
+            "name": "dendron-paste-image",
+            "publisher": "dendron"
+        },
+        "pinned": false,
+        "src": {
+            "name": "dendron-paste-image-1.1.0.zip",
+            "sha256": "sha256-8b2mDU5hh0kw0wWoS7zfBLg24dJfdcWLBXupJ7pI8c8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/dendron/dendron-paste-image/1.1.0/file/dendron.dendron-paste-image-1.1.0.vsix"
+        },
+        "version": "1.1.0"
+    },
+    "dramforever-vscode-ghc-simple": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "dramforever-vscode-ghc-simple",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/dramforever/vscode-ghc-simple/0.2.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/dramforever/vscode-ghc-simple/0.2.3/file/dramforever.vscode-ghc-simple-0.2.3.vsix",
+            "homepage": "",
+            "license": "isc",
+            "marketplaceName": "vscode-ghc-simple",
+            "marketplacePublisher": "dramforever",
+            "name": "vscode-ghc-simple",
+            "publisher": "dramforever"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-ghc-simple-0.2.3.zip",
+            "sha256": "sha256-dxp7Av3WuUOjJPXNeHTbHQclqwe8epUquvWx3Tq5p90=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/dramforever/vscode-ghc-simple/0.2.3/file/dramforever.vscode-ghc-simple-0.2.3.vsix"
+        },
+        "version": "0.2.3"
+    },
+    "maziac-asm-code-lens": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "maziac-asm-code-lens",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/maziac/asm-code-lens/2.4.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/maziac/asm-code-lens/2.4.0/file/maziac.asm-code-lens-2.4.0.vsix",
+            "homepage": "https://github.com/maziac/asm-code-lens#readme",
+            "license": "mit",
+            "marketplaceName": "asm-code-lens",
+            "marketplacePublisher": "maziac",
+            "name": "asm-code-lens",
+            "publisher": "maziac"
+        },
+        "pinned": false,
+        "src": {
+            "name": "asm-code-lens-2.4.0.zip",
+            "sha256": "sha256-yrkH52xsjdw3Pyd6HU87LutoWsWeVVZipxLT/FWuii8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/maziac/asm-code-lens/2.4.0/file/maziac.asm-code-lens-2.4.0.vsix"
+        },
+        "version": "2.4.0"
+    },
+    "mongodb-mongodb-vscode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "mongodb-mongodb-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/mongodb/mongodb-vscode/0.10.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mongodb/mongodb-vscode/0.10.0/file/mongodb.mongodb-vscode-0.10.0.vsix",
+            "homepage": "https://github.com/mongodb-js/vscode",
+            "license": "asl20",
+            "marketplaceName": "mongodb-vscode",
+            "marketplacePublisher": "mongodb",
+            "name": "mongodb-vscode",
+            "publisher": "mongodb"
+        },
+        "pinned": false,
+        "src": {
+            "name": "mongodb-vscode-0.10.0.zip",
+            "sha256": "sha256-37gttJDJ46Yl6L8c7Ke965AFHdoHAtAtH/smUdcLJRY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/mongodb/mongodb-vscode/0.10.0/file/mongodb.mongodb-vscode-0.10.0.vsix"
+        },
+        "version": "0.10.0"
+    },
+    "vscjava-vscode-spring-initializr": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscjava-vscode-spring-initializr",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/vscjava/vscode-spring-initializr/0.11.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/vscjava/vscode-spring-initializr/0.11.2/file/vscjava.vscode-spring-initializr-0.11.2.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-spring-initializr",
+            "license": "mit",
+            "marketplaceName": "vscode-spring-initializr",
+            "marketplacePublisher": "vscjava",
+            "name": "vscode-spring-initializr",
+            "publisher": "vscjava"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-spring-initializr-0.11.2.zip",
+            "sha256": "sha256-T8ZSfOFsebiMHq6/hqbmI9T7wI4cP66iovd1nUO8gCs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscjava/vscode-spring-initializr/0.11.2/file/vscjava.vscode-spring-initializr-0.11.2.vsix"
+        },
+        "version": "0.11.2"
+    },
+    "xoronic-pestfile": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "xoronic-pestfile",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/xoronic/pestfile/0.4.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/xoronic/pestfile/0.4.0/file/xoronic.pestfile-0.4.0.vsix",
+            "homepage": "https://github.com/Stef-Gijsberts/pest-Syntax-Highlighting-for-vscode#readme",
+            "license": "mit",
+            "marketplaceName": "pestfile",
+            "marketplacePublisher": "xoronic",
+            "name": "pestfile",
+            "publisher": "xoronic"
+        },
+        "pinned": false,
+        "src": {
+            "name": "pestfile-0.4.0.zip",
+            "sha256": "sha256-m4ap8QBV38RlLUqvolicPuc3hTjjN91gtLj6uFFjifg=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/xoronic/pestfile/0.4.0/file/xoronic.pestfile-0.4.0.vsix"
+        },
+        "version": "0.4.0"
+    },
+    "zardoy-npm-rapid-ready": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "zardoy-npm-rapid-ready",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/zardoy/npm-rapid-ready/0.2.16/file/CHANGELOG.MD",
+            "downloadPage": "https://open-vsx.org/api/zardoy/npm-rapid-ready/0.2.16/file/zardoy.npm-rapid-ready-0.2.16.vsix",
+            "homepage": "https://github.com/zardoy/npm-the-fastest#readme",
+            "license": "mit",
+            "marketplaceName": "npm-rapid-ready",
+            "marketplacePublisher": "zardoy",
+            "name": "npm-rapid-ready",
+            "publisher": "zardoy"
+        },
+        "pinned": false,
+        "src": {
+            "name": "npm-rapid-ready-0.2.16.zip",
+            "sha256": "sha256-pmJZRCxWZP/F4b//oM7vC/2P4GuVOc547Lv9AGsMWwI=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/zardoy/npm-rapid-ready/0.2.16/file/zardoy.npm-rapid-ready-0.2.16.vsix"
+        },
+        "version": "0.2.16"
+    }
+,
+    "CocaineJohnsson-nihil": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "CocaineJohnsson-nihil",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/CocaineJohnsson/nihil/1.0.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/CocaineJohnsson/nihil/1.0.2/file/CocaineJohnsson.nihil-1.0.2.vsix",
+            "license": "mit",
+            "marketplaceName": "nihil",
+            "marketplacePublisher": "CocaineJohnsson",
+            "name": "nihil",
+            "publisher": "cocainejohnsson"
+        },
+        "pinned": false,
+        "src": {
+            "name": "nihil-1.0.2.zip",
+            "sha256": "sha256-CyzsWUYFX2IUfEfO5HOkAXUtHETqAMh6bAYYb3Q97hs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/CocaineJohnsson/nihil/1.0.2/file/CocaineJohnsson.nihil-1.0.2.vsix"
+        },
+        "version": "1.0.2"
+    },
+    "JacobPfeifer-pfeifer-x12": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "JacobPfeifer-pfeifer-x12",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/JacobPfeifer/pfeifer-x12/0.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/JacobPfeifer/pfeifer-x12/0.1.0/file/JacobPfeifer.pfeifer-x12-0.1.0.vsix",
+            "homepage": "https://github.com/pfeiferj/vscode-x12#readme",
+            "license": "mit",
+            "marketplaceName": "pfeifer-x12",
+            "marketplacePublisher": "JacobPfeifer",
+            "name": "pfeifer-x12",
+            "publisher": "jacobpfeifer"
+        },
+        "pinned": false,
+        "src": {
+            "name": "pfeifer-x12-0.1.0.zip",
+            "sha256": "sha256-kr/8f8qyjcqfnf+v/2WiZbDiEKt3wt76eVcDVjTbY6M=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/JacobPfeifer/pfeifer-x12/0.1.0/file/JacobPfeifer.pfeifer-x12-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
+    "Nightrains-robloxlsp": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Nightrains-robloxlsp",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/Nightrains/robloxlsp/1.6.7/file/Nightrains.robloxlsp-1.6.7.vsix",
+            "homepage": "https://github.com/NightrainsRbx/RobloxLsp#readme",
+            "license": "mit",
+            "marketplaceName": "robloxlsp",
+            "marketplacePublisher": "Nightrains",
+            "name": "robloxlsp",
+            "publisher": "nightrains"
+        },
+        "pinned": false,
+        "src": {
+            "name": "robloxlsp-1.6.7.zip",
+            "sha256": "sha256-m3nMbDwj6TQttpamGRjTjjE1ZgaSijLcXM4vxfgHQ/I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Nightrains/robloxlsp/1.6.7/file/Nightrains.robloxlsp-1.6.7.vsix"
+        },
+        "version": "1.6.7"
+    },
+    "ZachManson-status-messenger": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ZachManson-status-messenger",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/ZachManson/status-messenger/1.0.4/file/ZachManson.status-messenger-1.0.4.vsix",
+            "homepage": "https://github.com/pavo-etc/status-messenger#readme",
+            "license": "mit",
+            "marketplaceName": "status-messenger",
+            "marketplacePublisher": "ZachManson",
+            "name": "status-messenger",
+            "publisher": "zachmanson"
+        },
+        "pinned": false,
+        "src": {
+            "name": "status-messenger-1.0.4.zip",
+            "sha256": "sha256-Wl8IE5AeQeEYxbS8eV0abT66kFdLCHmQUN+pPgWFeYc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ZachManson/status-messenger/1.0.4/file/ZachManson.status-messenger-1.0.4.vsix"
+        },
+        "version": "1.0.4"
+    },
+    "bml-lang-bml-vscode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "bml-lang-bml-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/bml-lang/bml-vscode/0.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/bml-lang/bml-vscode/0.1.0/file/bml-lang.bml-vscode-0.1.0.vsix",
+            "homepage": "",
+            "license": "bsd3",
+            "marketplaceName": "bml-vscode",
+            "marketplacePublisher": "bml-lang",
+            "name": "bml-vscode",
+            "publisher": "bml-lang"
+        },
+        "pinned": false,
+        "src": {
+            "name": "bml-vscode-0.1.0.zip",
+            "sha256": "sha256-9d6o6m2/VyXHXnKSt0iWcXARTiGI7KYXJ0lzWT5EFlc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/bml-lang/bml-vscode/0.1.0/file/bml-lang.bml-vscode-0.1.0.vsix"
+        },
+        "version": "0.1.0"
+    },
+    "cutetee-qml": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "cutetee-qml",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/cutetee/qml/1.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/cutetee/qml/1.1.0/file/cutetee.qml-1.1.0.vsix",
+            "homepage": "https://cutetee.it",
+            "license": "unfree",
+            "marketplaceName": "qml",
+            "marketplacePublisher": "cutetee",
+            "name": "qml",
+            "publisher": "cutetee"
+        },
+        "pinned": false,
+        "src": {
+            "name": "qml-1.1.0.zip",
+            "sha256": "sha256-BuABITcFeJE5Zp991e2WbuAxCob0gAIiMOero6IYf+E=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/cutetee/qml/1.1.0/file/cutetee.qml-1.1.0.vsix"
+        },
+        "version": "1.1.0"
+    },
+    "idleberg-nsis-plugins": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "idleberg-nsis-plugins",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/idleberg/nsis-plugins/1.3.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/idleberg/nsis-plugins/1.3.1/file/idleberg.nsis-plugins-1.3.1.vsix",
+            "homepage": "https://github.com/idleberg/vscode-nsis-plugins#readme",
+            "license": "mit",
+            "marketplaceName": "nsis-plugins",
+            "marketplacePublisher": "idleberg",
+            "name": "nsis-plugins",
+            "publisher": "idleberg"
+        },
+        "pinned": false,
+        "src": {
+            "name": "nsis-plugins-1.3.1.zip",
+            "sha256": "sha256-9KIGuUzITxmhiKVUW7LOz+wVWRLApuDLYPwm1K7TkZQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/idleberg/nsis-plugins/1.3.1/file/idleberg.nsis-plugins-1.3.1.vsix"
+        },
+        "version": "1.3.1"
+    },
+    "mateocerquetella-xcode-12-theme": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "mateocerquetella-xcode-12-theme",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/mateocerquetella/xcode-12-theme/4.1.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mateocerquetella/xcode-12-theme/4.1.0/file/mateocerquetella.xcode-12-theme-4.1.0.vsix",
+            "homepage": "https://github.com/MateoCerquetella/xcode-theme#readme",
+            "license": "mit",
+            "marketplaceName": "xcode-12-theme",
+            "marketplacePublisher": "mateocerquetella",
+            "name": "xcode-12-theme",
+            "publisher": "mateocerquetella"
+        },
+        "pinned": false,
+        "src": {
+            "name": "xcode-12-theme-4.1.0.zip",
+            "sha256": "sha256-aBIAL6p4TNS/sQKY3AYucct1pp7h+jzf71Kdi6WTG8A=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/mateocerquetella/xcode-12-theme/4.1.0/file/mateocerquetella.xcode-12-theme-4.1.0.vsix"
+        },
+        "version": "4.1.0"
+    },
+    "vscjava-vscode-java-pack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "vscjava-vscode-java-pack",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.7/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.7/file/vscjava.vscode-java-pack-0.25.7.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-java-pack",
+            "license": "mit",
+            "marketplaceName": "vscode-java-pack",
+            "marketplacePublisher": "vscjava",
+            "name": "vscode-java-pack",
+            "publisher": "vscjava"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-java-pack-0.25.7.zip",
+            "sha256": "sha256-VOdBe3U4lIfdp8BjmGNE1L61aKqxaoK48ALS+3gwWYo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/vscjava/vscode-java-pack/0.25.7/file/vscjava.vscode-java-pack-0.25.7.vsix"
+        },
+        "version": "0.25.7"
+    },
+    "zardoy-extra-commands": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "zardoy-extra-commands",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/zardoy/extra-commands/0.0.22/file/CHANGELOG.MD",
+            "downloadPage": "https://open-vsx.org/api/zardoy/extra-commands/0.0.22/file/zardoy.extra-commands-0.0.22.vsix",
+            "homepage": "https://github.com/zardoy/extra-commands#readme",
+            "license": "mit",
+            "marketplaceName": "extra-commands",
+            "marketplacePublisher": "zardoy",
+            "name": "extra-commands",
+            "publisher": "zardoy"
+        },
+        "pinned": false,
+        "src": {
+            "name": "extra-commands-0.0.22.zip",
+            "sha256": "sha256-PTeL/KEOtD5D3EgW0lZpeLtDqd5ToZE21Q3H2k3EHoM=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/zardoy/extra-commands/0.0.22/file/zardoy.extra-commands-0.0.22.vsix"
+        },
+        "version": "0.0.22"
+    }
+,
+    "ExodiusStudios-comment-anchors": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "ExodiusStudios-comment-anchors",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/ExodiusStudios/comment-anchors/1.9.6/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/ExodiusStudios/comment-anchors/1.9.6/file/ExodiusStudios.comment-anchors-1.9.6.vsix",
+            "homepage": "https://github.com/ExodiusStudios/vscode-comment-anchors/blob/master/README.md",
+            "license": "mit",
+            "marketplaceName": "comment-anchors",
+            "marketplacePublisher": "ExodiusStudios",
+            "name": "comment-anchors",
+            "publisher": "exodiusstudios"
+        },
+        "pinned": false,
+        "src": {
+            "name": "comment-anchors-1.9.6.zip",
+            "sha256": "sha256-p7WdUiw5NADHUEbdp0paH3h1NXtqXsS3zKqbwIok1ZQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/ExodiusStudios/comment-anchors/1.9.6/file/ExodiusStudios.comment-anchors-1.9.6.vsix"
+        },
+        "version": "1.9.6"
+    },
+    "MS-CEINTL-vscode-language-pack-zh-hant": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "MS-CEINTL-vscode-language-pack-zh-hant",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-zh-hant/1.75.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-zh-hant/1.75.0/file/MS-CEINTL.vscode-language-pack-zh-hant-1.75.0.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-loc#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-language-pack-zh-hant",
+            "marketplacePublisher": "MS-CEINTL",
+            "name": "vscode-language-pack-zh-hant",
+            "publisher": "ms-ceintl"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-language-pack-zh-hant-1.75.0.zip",
+            "sha256": "sha256-LPGyal3Zkn272PDmg9TIIC4MHHCTJYUQDz1hIi8mpMs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-zh-hant/1.75.0/file/MS-CEINTL.vscode-language-pack-zh-hant-1.75.0.vsix"
+        },
+        "version": "1.75.0"
+    },
+    "TheAIGang-code-fixer": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "TheAIGang-code-fixer",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/TheAIGang/code-fixer/0.0.7/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/TheAIGang/code-fixer/0.0.7/file/TheAIGang.code-fixer-0.0.7.vsix",
+            "homepage": "https://gitlab.com/the-ai-gang/code-fixer#readme",
+            "license": "mit",
+            "marketplaceName": "code-fixer",
+            "marketplacePublisher": "TheAIGang",
+            "name": "code-fixer",
+            "publisher": "theaigang"
+        },
+        "pinned": false,
+        "src": {
+            "name": "code-fixer-0.0.7.zip",
+            "sha256": "sha256-QUM6TAcIVRaV/MpotJ5QEkHc1viQjit06rp8L7g5PTQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/TheAIGang/code-fixer/0.0.7/file/TheAIGang.code-fixer-0.0.7.vsix"
+        },
+        "version": "0.0.7"
+    },
+    "garlicbreadcleric-pandoc-markdown-syntax": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "garlicbreadcleric-pandoc-markdown-syntax",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/garlicbreadcleric/pandoc-markdown-syntax/0.0.2/file/garlicbreadcleric.pandoc-markdown-syntax-0.0.2.vsix",
+            "homepage": "https://github.com/garlicbreadcleric/vscode-pandoc-markdown#readme",
+            "license": "mit",
+            "marketplaceName": "pandoc-markdown-syntax",
+            "marketplacePublisher": "garlicbreadcleric",
+            "name": "pandoc-markdown-syntax",
+            "publisher": "garlicbreadcleric"
+        },
+        "pinned": false,
+        "src": {
+            "name": "pandoc-markdown-syntax-0.0.2.zip",
+            "sha256": "sha256-ViTZ9l3Ey0RciIF3L1w9oLU+BYn2adffPRfQIVQa44I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/garlicbreadcleric/pandoc-markdown-syntax/0.0.2/file/garlicbreadcleric.pandoc-markdown-syntax-0.0.2.vsix"
+        },
+        "version": "0.0.2"
+    },
+    "jorol-perl-completions": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "jorol-perl-completions",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/jorol/perl-completions/0.0.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/jorol/perl-completions/0.0.2/file/jorol.perl-completions-0.0.2.vsix",
+            "homepage": "https://github.com/jorol/perl-completions#readme",
+            "license": "unfree",
+            "marketplaceName": "perl-completions",
+            "marketplacePublisher": "jorol",
+            "name": "perl-completions",
+            "publisher": "jorol"
+        },
+        "pinned": false,
+        "src": {
+            "name": "perl-completions-0.0.2.zip",
+            "sha256": "sha256-3xQCJQ+r8aRVXlGSXvMw4t7o/tIdr5JNBYfY0d8k+9I=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/jorol/perl-completions/0.0.2/file/jorol.perl-completions-0.0.2.vsix"
+        },
+        "version": "0.0.2"
+    },
+    "k--kato-intellij-idea-keybindings": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "k--kato-intellij-idea-keybindings",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/k--kato/intellij-idea-keybindings/1.5.5/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/k--kato/intellij-idea-keybindings/1.5.5/file/k--kato.intellij-idea-keybindings-1.5.5.vsix",
+            "homepage": "https://github.com/kasecato/vscode-intellij-idea-keybindings#readme",
+            "license": "mit",
+            "marketplaceName": "intellij-idea-keybindings",
+            "marketplacePublisher": "k--kato",
+            "name": "intellij-idea-keybindings",
+            "publisher": "k--kato"
+        },
+        "pinned": false,
+        "src": {
+            "name": "intellij-idea-keybindings-1.5.5.zip",
+            "sha256": "sha256-Iac30Oi8U5VAQ7pQZyC7VtU68yk5fgdk07+nuUdeBig=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/k--kato/intellij-idea-keybindings/1.5.5/file/k--kato.intellij-idea-keybindings-1.5.5.vsix"
+        },
+        "version": "1.5.5"
+    },
+    "kashish-quick-type": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "kashish-quick-type",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/kashish/quick-type/0.1.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/kashish/quick-type/0.1.2/file/kashish.quick-type-0.1.2.vsix",
+            "homepage": "https://github.com/kashishpt/quick-type#readme",
+            "license": "mit",
+            "marketplaceName": "quick-type",
+            "marketplacePublisher": "kashish",
+            "name": "quick-type",
+            "publisher": "kashish"
+        },
+        "pinned": false,
+        "src": {
+            "name": "quick-type-0.1.2.zip",
+            "sha256": "sha256-glmeWbWYmd/1sKMqNPGvslU4BWhsQf2cfXyQe2PO4PQ=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/kashish/quick-type/0.1.2/file/kashish.quick-type-0.1.2.vsix"
+        },
+        "version": "0.1.2"
+    },
+    "matepek-vscode-catch2-test-adapter": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "matepek-vscode-catch2-test-adapter",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/matepek/vscode-catch2-test-adapter/4.3.10/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/matepek/vscode-catch2-test-adapter/4.3.10/file/matepek.vscode-catch2-test-adapter-4.3.10.vsix",
+            "homepage": "https://github.com/matepek/vscode-catch2-test-adapter",
+            "license": "mit",
+            "marketplaceName": "vscode-catch2-test-adapter",
+            "marketplacePublisher": "matepek",
+            "name": "vscode-catch2-test-adapter",
+            "publisher": "matepek"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-catch2-test-adapter-4.3.10.zip",
+            "sha256": "sha256-ZyiWArgZ7HIvctOcC6MdgQwzVtnkY4Y/bcMqXdoel5o=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/matepek/vscode-catch2-test-adapter/4.3.10/file/matepek.vscode-catch2-test-adapter-4.3.10.vsix"
+        },
+        "version": "4.3.10"
+    },
+    "msjsdiag-vscode-react-native": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "msjsdiag-vscode-react-native",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/msjsdiag/vscode-react-native/1.10.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/msjsdiag/vscode-react-native/1.10.1/file/msjsdiag.vscode-react-native-1.10.1.vsix",
+            "homepage": "https://github.com/microsoft/vscode-react-native#readme",
+            "license": "unfree",
+            "marketplaceName": "vscode-react-native",
+            "marketplacePublisher": "msjsdiag",
+            "name": "vscode-react-native",
+            "publisher": "msjsdiag"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-react-native-1.10.1.zip",
+            "sha256": "sha256-cYi1vmZmHqaraOE6pwIP2gN44PziYDcnyTH+7nyZ1Gs=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/msjsdiag/vscode-react-native/1.10.1/file/msjsdiag.vscode-react-native-1.10.1.vsix"
+        },
+        "version": "1.10.1"
+    },
+    "noufalpp-spaceblack": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "noufalpp-spaceblack",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/noufalpp/spaceblack/1.4.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/noufalpp/spaceblack/1.4.0/file/noufalpp.spaceblack-1.4.0.vsix",
+            "homepage": "https://github.com/ppnoufal/VS-Code-Themes#readme",
+            "license": "mit",
+            "marketplaceName": "spaceblack",
+            "marketplacePublisher": "noufalpp",
+            "name": "spaceblack",
+            "publisher": "noufalpp"
+        },
+        "pinned": false,
+        "src": {
+            "name": "spaceblack-1.4.0.zip",
+            "sha256": "sha256-SZ+QNxkjTSKIT9pp1ir29pOxJCniuKBfrhWu0m7XKiU=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/noufalpp/spaceblack/1.4.0/file/noufalpp.spaceblack-1.4.0.vsix"
+        },
+        "version": "1.4.0"
+    }
+,
+    "BojanStrkovski-bole": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "BojanStrkovski-bole",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/BojanStrkovski/bole/0.0.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/BojanStrkovski/bole/0.0.1/file/BojanStrkovski.bole-0.0.1.vsix",
+            "homepage": "https://github.com/bojanstrkovski-21/boledark_theme#readme",
+            "license": "mit",
+            "marketplaceName": "bole",
+            "marketplacePublisher": "BojanStrkovski",
+            "name": "bole",
+            "publisher": "bojanstrkovski"
+        },
+        "pinned": false,
+        "src": {
+            "name": "bole-0.0.1.zip",
+            "sha256": "sha256-36wzT1NHQZgJvqkkuFvi8ocx9GBaLd9iacl6uQuBpfY=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/BojanStrkovski/bole/0.0.1/file/BojanStrkovski.bole-0.0.1.vsix"
+        },
+        "version": "0.0.1"
+    },
+    "MS-CEINTL-vscode-language-pack-ru": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "MS-CEINTL-vscode-language-pack-ru",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.75.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.75.0/file/MS-CEINTL.vscode-language-pack-ru-1.75.0.vsix",
+            "homepage": "https://github.com/Microsoft/vscode-loc#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-language-pack-ru",
+            "marketplacePublisher": "MS-CEINTL",
+            "name": "vscode-language-pack-ru",
+            "publisher": "ms-ceintl"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-language-pack-ru-1.75.0.zip",
+            "sha256": "sha256-J04MyD6mcx3wu7xjjOIJk9KUtaHDvd+e+KEjNV57Uc8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.75.0/file/MS-CEINTL.vscode-language-pack-ru-1.75.0.vsix"
+        },
+        "version": "1.75.0"
+    },
+    "Matronator-haxeui": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Matronator-haxeui",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Matronator/haxeui/0.0.3/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Matronator/haxeui/0.0.3/file/Matronator.haxeui-0.0.3.vsix",
+            "homepage": "https://github.com/matronator/haxeui-vscode",
+            "license": "mit",
+            "marketplaceName": "haxeui",
+            "marketplacePublisher": "Matronator",
+            "name": "haxeui",
+            "publisher": "matronator"
+        },
+        "pinned": false,
+        "src": {
+            "name": "haxeui-0.0.3.zip",
+            "sha256": "sha256-AMUWrRGw6UVwXoxIA1H+31ibwm6SgJEob3FElNSIF8c=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Matronator/haxeui/0.0.3/file/Matronator.haxeui-0.0.3.vsix"
+        },
+        "version": "0.0.3"
+    },
+    "Stephen-Hamilton-C-black-plus-material": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "Stephen-Hamilton-C-black-plus-material",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/Stephen-Hamilton-C/black-plus-material/1.0.2/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/Stephen-Hamilton-C/black-plus-material/1.0.2/file/Stephen-Hamilton-C.black-plus-material-1.0.2.vsix",
+            "homepage": "https://github.com/Stephen-Hamilton-C/black-plus-material",
+            "license": "mit",
+            "marketplaceName": "black-plus-material",
+            "marketplacePublisher": "Stephen-Hamilton-C",
+            "name": "black-plus-material",
+            "publisher": "stephen-hamilton-c"
+        },
+        "pinned": false,
+        "src": {
+            "name": "black-plus-material-1.0.2.zip",
+            "sha256": "sha256-oZEvHsZ3PpPPNEJulIgtSAVh+hOQmtQgV2gV5vbkqlg=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/Stephen-Hamilton-C/black-plus-material/1.0.2/file/Stephen-Hamilton-C.black-plus-material-1.0.2.vsix"
+        },
+        "version": "1.0.2"
+    },
+    "brendanfh-onyx": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "brendanfh-onyx",
+        "passthru": {
+            "downloadPage": "https://open-vsx.org/api/brendanfh/onyx/0.1.2/file/brendanfh.onyx-0.1.2.vsix",
+            "homepage": "https://github.com/onyx-lang/onyx#readme",
+            "license": "bsd2",
+            "marketplaceName": "onyx",
+            "marketplacePublisher": "brendanfh",
+            "name": "onyx",
+            "publisher": "brendanfh"
+        },
+        "pinned": false,
+        "src": {
+            "name": "onyx-0.1.2.zip",
+            "sha256": "sha256-5Ks2ZnE0ssmKM4zY2bwfpp2WHR6GTioQMTLn12NorZ0=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/brendanfh/onyx/0.1.2/file/brendanfh.onyx-0.1.2.vsix"
+        },
+        "version": "0.1.2"
+    },
+    "emmanuelbeziat-vscode-great-icons": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "emmanuelbeziat-vscode-great-icons",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/emmanuelbeziat/vscode-great-icons/2.1.90/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/emmanuelbeziat/vscode-great-icons/2.1.90/file/emmanuelbeziat.vscode-great-icons-2.1.90.vsix",
+            "homepage": "https://github.com/EmmanuelBeziat/vscode-great-icons#readme",
+            "license": "mit",
+            "marketplaceName": "vscode-great-icons",
+            "marketplacePublisher": "emmanuelbeziat",
+            "name": "vscode-great-icons",
+            "publisher": "emmanuelbeziat"
+        },
+        "pinned": false,
+        "src": {
+            "name": "vscode-great-icons-2.1.90.zip",
+            "sha256": "sha256-EIuG8NGjpFRm7CCJWNaJS6Bhfcs3/HlBp6qi/QruRFo=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/emmanuelbeziat/vscode-great-icons/2.1.90/file/emmanuelbeziat.vscode-great-icons-2.1.90.vsix"
+        },
+        "version": "2.1.90"
+    },
+    "everscale-solidity-support": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "everscale-solidity-support",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/everscale/solidity-support/1.3.69/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/everscale/solidity-support/1.3.69/file/everscale.solidity-support-1.3.69.vsix",
+            "homepage": "https://github.com/pizza-777/everscale-solidity-vscode-extension#readme",
+            "license": "asl20",
+            "marketplaceName": "solidity-support",
+            "marketplacePublisher": "everscale",
+            "name": "solidity-support",
+            "publisher": "everscale"
+        },
+        "pinned": false,
+        "src": {
+            "name": "solidity-support-1.3.69.zip",
+            "sha256": "sha256-3sJlGo2xOC9vD4cnD/8JymmXlayoZD/Z4KYQQsm+Z8M=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/everscale/solidity-support/1.3.69/file/everscale.solidity-support-1.3.69.vsix"
+        },
+        "version": "1.3.69"
+    },
+    "k--kato-docomment": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "k--kato-docomment",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/k--kato/docomment/0.1.32/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/k--kato/docomment/0.1.32/file/k--kato.docomment-0.1.32.vsix",
+            "homepage": "https://github.com/kasecato/vscode-docomment#readme",
+            "license": "mit",
+            "marketplaceName": "docomment",
+            "marketplacePublisher": "k--kato",
+            "name": "docomment",
+            "publisher": "k--kato"
+        },
+        "pinned": false,
+        "src": {
+            "name": "docomment-0.1.32.zip",
+            "sha256": "sha256-N8YJPPImOZMBEZvaDekuFeTWO5fAvzdOM3KAvcTIzDc=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/k--kato/docomment/0.1.32/file/k--kato.docomment-0.1.32.vsix"
+        },
+        "version": "0.1.32"
+    },
+    "mint-lang-mint": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "mint-lang-mint",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/mint-lang/mint/0.6.0/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/mint-lang/mint/0.6.0/file/mint-lang.mint-0.6.0.vsix",
+            "homepage": "https://github.com/MathiusD/mint-vscode#readme",
+            "license": "mit",
+            "marketplaceName": "mint",
+            "marketplacePublisher": "mint-lang",
+            "name": "mint",
+            "publisher": "mint-lang"
+        },
+        "pinned": false,
+        "src": {
+            "name": "mint-0.6.0.zip",
+            "sha256": "sha256-x+M3yRMp8D7+TASfukB8sdR6wJxGhRiDDS08oLQVBv8=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/mint-lang/mint/0.6.0/file/mint-lang.mint-0.6.0.vsix"
+        },
+        "version": "0.6.0"
+    },
+    "tonwhales-func-vscode": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "tonwhales-func-vscode",
+        "passthru": {
+            "changelog": "https://open-vsx.org/api/tonwhales/func-vscode/1.1.1/file/CHANGELOG.md",
+            "downloadPage": "https://open-vsx.org/api/tonwhales/func-vscode/1.1.1/file/tonwhales.func-vscode-1.1.1.vsix",
+            "homepage": "https://github.com/tonwhales/vscode-func#readme",
+            "license": "gpl3Only",
+            "marketplaceName": "func-vscode",
+            "marketplacePublisher": "tonwhales",
+            "name": "func-vscode",
+            "publisher": "tonwhales"
+        },
+        "pinned": false,
+        "src": {
+            "name": "func-vscode-1.1.1.zip",
+            "sha256": "sha256-NPxMuAo6GQWlKH5Jire9IGRHiZtY4pvAn1hj7XmPhPk=",
+            "type": "url",
+            "url": "https://open-vsx.org/api/tonwhales/func-vscode/1.1.1/file/tonwhales.func-vscode-1.1.1.vsix"
+        },
+        "version": "1.1.1"
+    }
+}
