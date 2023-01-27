@@ -3,7 +3,7 @@
     {
       "TARGET": "vscode-marketplace",
       "MARKETPLACE": "VSCode Marketplace",
-      "NUMBER_JOBS": 23
+      "NUMBER_JOBS": 20
     }
   ]
 }
