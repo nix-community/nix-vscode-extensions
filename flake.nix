@@ -63,7 +63,7 @@
           open-vsx = loadGenerated "open-vsx";
         };
 
-        vscodium-with-extensions =
+        vscodiumWithExtensions =
           let
             inherit (pkgs) vscode-with-extensions vscodium;
             vscodium_ =
@@ -75,19 +75,21 @@
                 };
               });
           in
-          pkgs.lib.attrsets.recursiveUpdate vscodium_ {
-            meta.longDescription = ''
-              This is a sample `VSCodium` (= `VS Code` without proprietary stuff) with a couple of extensions.
+          vscodium_ // {
+            meta = (builtins.removeAttrs vscodium_.meta [ "description" ]) // {
+              longDescription = ''
+                This is a sample `VSCodium` (= `VS Code` without proprietary stuff) with a couple of extensions.
               
-              The [repo](https://github.com/nix-community/nix-vscode-extensions) provides
-              `VS Code` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
-              The extensions are usually updated daily.
-            '';
+                The [repo](https://github.com/nix-community/nix-vscode-extensions) provides
+                `VS Code` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
+                The extensions are usually updated daily.
+              '';
+            };
           };
       in
       {
         packages = {
-          inherit vscodium-with-extensions;
+          inherit vscodiumWithExtensions;
         };
         inherit extensions;
       }
