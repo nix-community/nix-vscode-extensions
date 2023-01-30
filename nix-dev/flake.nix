@@ -8,7 +8,6 @@
     vscode-extensions.follows = "vscode-extensions_/vscode-extensions";
     my-devshell.url = "github:deemp/flakes?dir=devshell";
     drv-tools.url = "github:deemp/flakes?dir=drv-tools";
-    drv-tools.url = "github:deemp/flakes?dir=drv-tools";
   };
   outputs =
     { self
@@ -17,7 +16,6 @@
     , vscode-extensions
     , my-devshell
     , nixpkgs
-    , drv-tools
     , drv-tools
     , ...
     }: flake-utils.lib.eachDefaultSystem
@@ -84,10 +82,6 @@
       in
       {
         packages = scripts;
-        devShells.default = devshell.mkShell {
-          packages = tools;
-          commands = mkCommands "ide" tools;
-        };
         devShells.default = devshell.mkShell {
           packages = tools;
           commands = mkCommands "ide" tools;
