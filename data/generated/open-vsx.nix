@@ -20674,11 +20674,11 @@
   "spgoding-datapack-language-server" = {
     name = "datapack-language-server";
     publisher = "spgoding";
-    version = "3.4.4";
+    version = "3.4.5";
     src = fetchurl {
-      url = "https://open-vsx.org/api/spgoding/datapack-language-server/3.4.4/file/spgoding.datapack-language-server-3.4.4.vsix";
-      name = "datapack-language-server-3.4.4.zip";
-      sha256 = "sha256-S2TCdu6Plv/qDDdAx6FTEyDzbTPk1tTR7ppaC6v3Iuo=";
+      url = "https://open-vsx.org/api/spgoding/datapack-language-server/3.4.5/file/spgoding.datapack-language-server-3.4.5.vsix";
+      name = "datapack-language-server-3.4.5.zip";
+      sha256 = "sha256-qAQgTFiNmQflpehUYskJUuzIZfau2CIlzFKTOtjiP+c=";
     };
   };
 

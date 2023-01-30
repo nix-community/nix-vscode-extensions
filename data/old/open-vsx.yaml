@@ -11272,12 +11272,12 @@
   sha256: sha256-wTOEIsT9wGdHfdtIYTJ9PoCAFqk3/xztg3tuulEHwMg=
   url: https://open-vsx.org/api/southclaws/vscode-pawn/1.0.0/file/southclaws.vscode-pawn-1.0.0.vsix
   version: 1.0.0
-- lastUpdated: 2023-01-30T06:01:23.550704Z
+- lastUpdated: 2023-01-30T22:34:48.571064Z
   name: datapack-language-server
   publisher: spgoding
-  sha256: sha256-S2TCdu6Plv/qDDdAx6FTEyDzbTPk1tTR7ppaC6v3Iuo=
-  url: https://open-vsx.org/api/spgoding/datapack-language-server/3.4.4/file/spgoding.datapack-language-server-3.4.4.vsix
-  version: 3.4.4
+  sha256: sha256-qAQgTFiNmQflpehUYskJUuzIZfau2CIlzFKTOtjiP+c=
+  url: https://open-vsx.org/api/spgoding/datapack-language-server/3.4.5/file/spgoding.datapack-language-server-3.4.5.vsix
+  version: 3.4.5
 - lastUpdated: 2021-12-12T03:03:59.870017Z
   name: classicube-script
   publisher: spiralp
