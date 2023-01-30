@@ -69,7 +69,7 @@
                 ${concatMapStringsNewline
                   (x: with (env x); ''
                     export DENO_DIR="${DENO_DIR}"
-                    nix run nixpkgs#deno -- run \
+                    ${pkgs.deno}/bin/deno run \
                       --allow-write \
                       --allow-net="${ALLOW_NET}" \
                       --no-prompt \
