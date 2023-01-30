@@ -76,7 +76,7 @@
               });
           in
           pkgs.lib.attrsets.recursiveUpdate vscodium_ {
-            meta.description = ''
+            meta.longDescription = ''
               This is a sample `VSCodium` (= `VS Code` without proprietary stuff) with a couple of extensions.
               
               The [repo](https://github.com/nix-community/nix-vscode-extensions) provides
