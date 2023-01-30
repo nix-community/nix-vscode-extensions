@@ -1,0 +1,83 @@
+name:                nix-managed
+version:             0.1.0.0
+github:              "value/nix-managed"
+license:             BSD3
+author:              "value"
+maintainer:          "value"
+copyright:           "value"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            value
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/value/nix-managed#readme>
+
+default-extensions:
+- ImportQualifiedPost
+
+dependencies:
+- base >= 4.7 && < 5
+- http-client
+- http-conduit
+- aeson
+- yaml
+- bytestring
+- string-interpolate
+- lens-aeson
+- lens
+- text
+- pretty-simple
+- time
+- unordered-containers
+- async
+- turtle
+- http-types
+- async-pool
+- co-log-concurrent
+- co-log
+- stm
+- stm-chans
+- hashable
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  nix-managed:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - nix-managed
+
+tests:
+  nix-managed-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - nix-managed

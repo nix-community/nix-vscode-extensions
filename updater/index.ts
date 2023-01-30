@@ -1,4 +1,4 @@
-import { log, toTOML } from "./deps.ts"
+import { log, toTOML, toYAML } from "./deps.ts"
 import { getEntries as getOpenVSXEntries } from "./open-vsx/index.ts"
 import { getEntries as getVSCodeMarketplaceEntries } from "./vscode-marketplace/index.ts"
 
@@ -7,7 +7,6 @@ const outFile = Deno.args[1]
 
 class PerModeConfig {
 	getEntries: any
-	tomlandFix: any
 }
 
 class PerMode {
@@ -15,14 +14,12 @@ class PerMode {
 	"vscode-marketplace": PerModeConfig
 }
 
-const perMode: PerMode =  {
+const perMode: PerMode = {
 	"open-vsx": {
 		getEntries: getOpenVSXEntries,
-		tomlandFix: "openvsx"
 	},
 	"vscode-marketplace": {
 		getEntries: getVSCodeMarketplaceEntries,
-		tomlandFix: "vsmarketplace"
 	}
 }
 
@@ -36,17 +33,13 @@ const perMode_ = getPerMode_(mode)
 
 const entries = await perMode_.getEntries()
 
-const extensions = Object.fromEntries(entries)
+const extensions = entries
 
-log.info("Generating TOML...")
-const tomlandFixSrc = /^src = /gm
-const tomlandFixFetch = /^fetch = /gm
-const toml = toTOML(extensions)
-	.replaceAll(tomlandFixSrc, `src.${perMode_.tomlandFix} = `)
-	.replaceAll(tomlandFixFetch, `fetch.${perMode_.tomlandFix} = `)
-log.info("Generated TOML.")
-log.info("Applied tomland fixes.")
+log.info("Generating YAML...")
+const yaml = toYAML(extensions)
+log.info("Generated YAML.")
 
 log.info(`Writing to ${outFile}...`)
-await Deno.writeTextFile(outFile, toml)
+await Deno.mkdir("data/new", { recursive: true })
+await Deno.writeTextFile(outFile, yaml)
 log.info(`Wrote to ${outFile}.`)

@@ -14,75 +14,9 @@ env:
     substituters = https://cache.nixos.org https://nix-community.cachix.org https://fog.cachix.org
     trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= fog.cachix.org-1:FAxiA6qMLoXEUdEq+HaT24g1MjnxdfygrbrLDBp6U/s=
 
-  run_updater: |
-    mkdir -p nvfetch
-    export DENO_DIR=.deno && nix run nixpkgs#deno -- run --allow-write --allow-net={0} --no-prompt updater/index.ts {1} nvfetch/{2}.toml
-
-  nvfetch_workflow: ./.github/workflows/nvfetch.yaml
-  commit_and_push: |
-    git config user.name github-actions
-    git config user.email github-actions@github.com
-    git config pull.rebase true
-    git add nvfetch
-    git commit --allow-empty -m "action: update {1} extensions"
-    git pull
-    git push
-  
-  clean_repo: |
-    git config user.name github-actions
-    git config user.email github-actions@github.com
-    git config pull.rebase true
-    git pull
-    git reset --soft HEAD~2
-    rm -rf nvfetch
-    rm -rf blocks
-    rm -rf generated/*/generated.json
-    git add .
-    git commit --allow-empty -m "action: update extensions"
-    git push -f
-
-
-# https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
-# https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs#example-defining-outputs-for-a-job
-
 jobs:
-  read-configs:
-    runs-on: ubuntu-latest
-    outputs:
-      update-extensions: ${{ steps.update-extensions.outputs.update-extensions }}
-      nvfetch-vscode-marketplace: ${{ steps.nvfetch-vscode-marketplace.outputs.nvfetch-vscode-marketplace }}
-      combine-vscode-marketplace: ${{ steps.combine-vscode-marketplace.outputs.combine-vscode-marketplace }}
-      nvfetch-open-vsx: ${{ steps.nvfetch-open-vsx.outputs.nvfetch-open-vsx }}
-      combine-open-vsx: ${{ steps.combine-open-vsx.outputs.combine-open-vsx }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Update extensions
-        id: update-extensions
-        run: echo "update-extensions=$(jq -c . < .github/workflows/configs/update-extensions.json)" >> $GITHUB_OUTPUT
-
-      - name: nvfetch VSCode
-        id: nvfetch-vscode-marketplace
-        run: echo "nvfetch-vscode-marketplace=$(jq -c . < .github/workflows/configs/vscode-marketplace/nvfetch.json)" >> $GITHUB_OUTPUT
-
-      - name: Combine VSCode Marketplace
-        id: combine-vscode-marketplace
-        run: echo "combine-vscode-marketplace=$(jq -c . < .github/workflows/configs/vscode-marketplace/combine.json)" >> $GITHUB_OUTPUT
-
-      - name: nvfetch Open VSX
-        id: nvfetch-open-vsx
-        run: echo "nvfetch-open-vsx=$(jq -c . < .github/workflows/configs/open-vsx/nvfetch.json)" >> $GITHUB_OUTPUT
-
-      - name: Combine Open VSX
-        id: combine-open-vsx
-        run: echo "combine-open-vsx=$(jq -c . < .github/workflows/configs/open-vsx/combine.json)" >> $GITHUB_OUTPUT
-
   update-extensions:
-    needs: read-configs
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJSON(needs.read-configs.outputs.update-extensions) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -93,90 +27,18 @@ jobs:
           extra_nix_config: ${{ env.extra_nix_config }}
           nix_path: ${{ env.nixpkgs }}
 
-      - name: Run Updater on ${{ matrix.MARKETPLACE }} extensions
-        env: 
-          ALLOW_NET: ${{ matrix.ALLOW_NET }}
-          TARGET: ${{ matrix.TARGET }}
+      - name: Run updater
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 360
           retry_wait_seconds: 3660
           max_attempts: 6
           command: nix run nix-dev/#updateExtensions
-          
 
       - name: Commit and push changes
-        run: ${{ format(env.commit_and_push, matrix.TARGET, matrix.TARGET) }}
-
-  nvfetch-open-vsx:
-    # needs: [read-configs, combine-vscode-marketplace]
-    needs: [read-configs, update-extensions]
-    name: ${{ matrix.MARKETPLACE }}
-    strategy:
-      matrix: ${{ fromJSON(needs.read-configs.outputs.nvfetch-open-vsx) }}
-      fail-fast: false
-    uses: ./.github/workflows/nvfetch.yaml
-    with:
-      TARGET: ${{ matrix.TARGET }}
-      ACTION_ID: ${{ matrix.ACTION_ID }}
-      FIRST_BLOCK: ${{ matrix.FIRST_BLOCK }}
-      BLOCK_LIMIT: ${{ matrix.BLOCK_LIMIT }}
-      BLOCK_SIZE: ${{ matrix.BLOCK_SIZE }}
-      MARKETPLACE: ${{ matrix.MARKETPLACE }}
-      TIMEOUT_MINUTES: ${{ matrix.TIMEOUT_MINUTES }}
-      MAX_ATTEMPTS: ${{ matrix.MAX_ATTEMPTS }}
-      RETRY_WAIT_SECONDS: ${{ matrix.RETRY_WAIT_SECONDS }}
-
-  combine-open-vsx:
-    name: combine ${{ matrix.MARKETPLACE }}
-    needs: [nvfetch-open-vsx, read-configs]
-    strategy:
-      matrix: ${{ fromJSON(needs.read-configs.outputs.combine-open-vsx) }}
-    uses: ./.github/workflows/combine.yaml
-    with:
-      TARGET: ${{ matrix.TARGET }}
-      # includes update-extensions as it also pushes a commit
-      NUMBER_JOBS: ${{ matrix.NUMBER_JOBS }}
-
-  nvfetch-vscode-marketplace:
-    # needs: [read-configs, update-extensions]
-    needs: [read-configs, combine-open-vsx]
-    name: ${{ matrix.MARKETPLACE }}
-    strategy:
-      matrix: ${{ fromJSON(needs.read-configs.outputs.nvfetch-vscode-marketplace) }}
-      fail-fast: false
-    uses: ./.github/workflows/nvfetch.yaml
-    with:
-      TARGET: ${{ matrix.TARGET }}
-      ACTION_ID: ${{ matrix.ACTION_ID }}
-      FIRST_BLOCK: ${{ matrix.FIRST_BLOCK }}
-      BLOCK_LIMIT: ${{ matrix.BLOCK_LIMIT }}
-      BLOCK_SIZE: ${{ matrix.BLOCK_SIZE }}
-      MARKETPLACE: ${{ matrix.MARKETPLACE }}
-      TIMEOUT_MINUTES: ${{ matrix.TIMEOUT_MINUTES }}
-      MAX_ATTEMPTS: ${{ matrix.MAX_ATTEMPTS }}
-      RETRY_WAIT_SECONDS: ${{ matrix.RETRY_WAIT_SECONDS }}
-
-  combine-vscode-marketplace:
-    name: combine ${{ matrix.MARKETPLACE }}
-    needs: [nvfetch-vscode-marketplace, read-configs]
-    strategy:
-      matrix: ${{ fromJSON(needs.read-configs.outputs.combine-vscode-marketplace) }}
-    uses: ./.github/workflows/combine.yaml
-    with:
-      TARGET: ${{ matrix.TARGET }}
-      # includes update-extensions as it also pushes a commit
-      NUMBER_JOBS: ${{ matrix.NUMBER_JOBS }}
-
-  clean:
-    needs: [combine-vscode-marketplace, combine-open-vsx]
-    name: clean repo
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 3
-      - name: Clean repo
-        run: ${{ env.clean_repo }}
-      
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit --allow-empty -m "action: update {1} extensions"
+          git push

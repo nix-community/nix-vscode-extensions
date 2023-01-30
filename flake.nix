@@ -21,7 +21,7 @@
 
         loadGenerated = set:
           with builtins; with pkgs; let
-            generated = import ./generated/${set}/generated.nix {
+            generated = import ./data/generated/${set}.nix {
               inherit fetchurl fetchFromGitHub;
               fetchgit = fetchGit;
             };
@@ -34,8 +34,8 @@
                   vsix = src;
                   mktplcRef = {
                     inherit version;
-                    publisher = marketplacePublisher;
-                    name = marketplaceName;
+                    publisher = publisher;
+                    name = name;
                   };
                   meta = with lib; {
                     inherit changelog downloadPage homepage;
@@ -49,8 +49,8 @@
                   vsix = src;
                   mktplcRef = {
                     inherit version;
-                    publisher = marketplacePublisher;
-                    name = marketplaceName;
+                    publisher = publisher;
+                    name = name;
                   };
                 };
               };
@@ -86,21 +86,17 @@
           };
       in
       {
-        devShells.default = pkgs.mkShell {
-          shellHook = ''
-            printf "\nVSCodium with extensions:\n"
-            codium --list-extensions
-          '';
-          buildInputs = [
-            vscodium-with-extensions
-          ];
-        };
         packages = {
           inherit vscodium-with-extensions;
         };
         inherit extensions;
       }
     ) // {
+    overlays.default = final: prev: {
+      extensions = self.extensions.${prev.system};
+    };
+  }
+  // {
     templates = {
       default = {
         path = ./template;

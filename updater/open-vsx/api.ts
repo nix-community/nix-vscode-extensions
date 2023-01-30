@@ -1,43 +1,48 @@
 // import { Maybe, Just, Nothing } from 'purify-ts/Maybe'
+import { selectVal } from "../utils/const.ts"
 
 const API_BASE_URL = "https://open-vsx.org/api/"
 
+const retryAfter = 1 * 1000
+const retryN = 5
+
+async function responseRetry(url: string, errorMsg: String): Promise<Response> {
+	var response = await fetch(url)
+	for (var i = 0; i < retryN && response.status != 200; i++) {
+		const resp = await fetch(url)
+		if (resp.status == 200) {
+			response = resp
+			break
+		} else if (i == retryN - 1) {
+			throw `${errorMsg} ${resp.status}`
+		}
+		console.log(`${errorMsg} ${resp.status}`)
+		console.log("Retrying")
+		await new Promise(f => setTimeout(f, retryAfter));
+	}
+	return response
+}
+
 export const getExtensionsCount = async (): Promise<number> => {
-	const response = await fetch(`${API_BASE_URL}-/search?size=1`)
-	if (response.status !== 200)
-		throw `getExtensionsCount(): response.status === ${response.status}`
+	const response = await responseRetry(
+		`${API_BASE_URL}-/search?size=1`,
+		"Couldn't get the extension count. Response status:"
+	)
 	return (await response.json()).totalSize
 }
 
+// TODO include for different platforms
 // universal: https://open-vsx.org/api/zjffun/snippetsmanager?size=1
-export const getExtensionURLs = async (count: number): Promise<string[]> => {
-	const response = await fetch(`${API_BASE_URL}-/search?includeAllVersions=false&size=${count}&target=universal`)
-	if (response.status !== 200) {
-		throw `getExtensionsList(): response.status === ${response.status}`
-	}
-	return (await response.json()).extensions.map((e: any) => e.url)
-}
-
-export const getExtensionData = async (url: string): Promise<any> => {
-	const response = await fetch(url)
-	if (response.status !== 200) {
-		console.log(`getExtensionData(${url}): response.status === ${response.status}`)
-		return null
-	}
-	return await response.json()
-}
 
 export const getExtensionsData = async () => {
-	const count = await getExtensionsCount()
-	const urls = await getExtensionURLs(count)
-
-	let urls_ = new Array<Promise<any>>(urls.length)
-	for (let i = 0; i < urls.length; i++) {
-		urls_[i] = getExtensionData(urls[i])
-		await new Promise(f => setTimeout(f, 40));
-	}
+	const count = selectVal(10, await getExtensionsCount())
+	const response = await responseRetry(
+		`${API_BASE_URL}-/search?includeAllVersions=false&size=${count}&targetPlatform=universal`,
+		`Could not get the extensions data. Response status:`
+	)
+	const data = (await response.json()).extensions
 
 	return {
-		count, data: await Promise.all(urls_.filter(x => x !== null))
+		count, data
 	}
 }

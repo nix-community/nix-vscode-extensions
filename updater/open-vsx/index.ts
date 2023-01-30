@@ -9,24 +9,20 @@ export async function getEntries() {
 	log.info(`${count} extensions found.`)
 
 	log.info("Generating entries...")
-	const entries = data.filter(x => x !== null).map(e => ({
-		name: e.name,
-		publisher: e.namespace,
-		passthru: {
+	const entries = data
+		.filter(x => x !== null)
+		.map(e => ({
 			name: nixUtils.toValidNixIdentifier(e.name),
 			publisher: nixUtils.toValidNixIdentifier(e.namespace),
-			marketplaceName: e.name,
-			marketplacePublisher: e.namespace,
-			license: nixUtils.toNixpkgsLicense(e.license),
-			changelog: e.files.changelog,
-			downloadPage: e.files.download,
-			homepage: e.homepage
-		}
-	})).map(e => [`${e.publisher}-${e.name}`, {
-		src: `${e.publisher}.${e.name}`,
-		fetch: `${e.publisher}.${e.name}`,
-		passthru: e.passthru
-	}])
+			lastUpdated: e.timestamp
+		}))
+		.sort((e1, e2) => {
+			if (`${e1.name}-${e1.publisher}` < `${e2.name}-${e2.publisher}`) {
+				return -1
+			} else {
+				return 1
+			}
+		})
 	log.info("Generated entries.")
 
 	return entries
