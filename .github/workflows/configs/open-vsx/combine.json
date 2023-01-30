@@ -1,9 +1,0 @@
-{
-  "include": [
-    {
-      "TARGET": "open-vsx",
-      "MARKETPLACE": "Open VSX",
-      "NUMBER_JOBS": 16
-    }
-  ]
-}

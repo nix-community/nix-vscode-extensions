@@ -46,6 +46,11 @@ This repo provides a `default.nix`, so you can use [niv](https://github.com/nmat
 })).extensions.x86_64-linux.vscode.golang.go
 ```
 
+### Note
+
+- Extension names and publishers are lowercased
+- If an extension's name or publisher start not with a letter, you may access them by quoting the attribute names like vscode."2strangeextension"."3strangepublisher"
+
 ## Template
 
 This template shows how you can get a `VSCodium` with a couple of extensions. Try it:

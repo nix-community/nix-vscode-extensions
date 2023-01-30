@@ -7,22 +7,21 @@ export async function getEntries() {
 	const { count, data } = await vscodeMarketplaceAPI.getExtensionsData()
 	log.info("Fetched data from VSCode Marketplace API.")
 	log.info(`${count} extensions found.`)
-
 	log.info("Generating entries...")
-	const entries = data.map(e => ({
-		name: e.extensionName,
-		publisher: e.publisher.publisherName,
-		passthru: {
+	const entries = data
+		.filter(x => x !== null)
+		.map(e => ({
 			name: nixUtils.toValidNixIdentifier(e.extensionName),
 			publisher: nixUtils.toValidNixIdentifier(e.publisher.publisherName),
-			marketplaceName: e.extensionName,
-			marketplacePublisher: e.publisher.publisherName,
-		}
-	})).map(e => [`${e.publisher}-${e.name}`, {
-		src: `${e.publisher}.${e.name}`,
-		fetch: `${e.publisher}.${e.name}`,
-		passthru: e.passthru
-	}])
+			lastUpdated: e.lastUpdated
+		})).sort((e1, e2) => {
+			if (`${e1.name}-${e1.publisher}` < `${e2.name}-${e2.publisher}`) {
+				return -1
+			} else {
+				return 1
+			}
+		})
+
 	log.info("Generated entries.")
 
 	return entries

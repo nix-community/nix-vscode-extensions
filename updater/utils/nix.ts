@@ -3,12 +3,12 @@ export const isValidNixIdentifier = (str: string) => {
 	return identifier.test(str)
 }
 
-export const toValidNixIdentifier = (str: string) => {
+export const toValidNixIdentifier = (str: any) => {
 	const invalidChars = /[^A-Za-z0-9-_]/g
-	const invalidFirstChar = /^(\d)/g
-	return str.toLowerCase()
+	const invalidFirstChar = /^\d+$/g
+	return str.toString().toLowerCase()
 		.replaceAll(invalidChars, "")
-		.replaceAll(invalidFirstChar, (match, digit, offset, string) => `_${digit}`)
+		.replaceAll(invalidFirstChar, (match, digit, offset, string) => `_${match}`)
 }
 
 export const toNixpkgsLicense = (license: string) => {

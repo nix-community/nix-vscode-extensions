@@ -1,0 +1,46 @@
+jobs:
+  nixCI:
+    name: Nix CI
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}\nsubstituters = https://cache.nixos.org/ https://cache.iog.io https://nix-community.cachix.org https://deemp.cachix.org \ntrusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= haskell-language-server.cachix.org-1:juFfHrwkOxqIOZShtC4YC1uT1bBcq2RSvC7OMKx0Nz8= deemp.cachix.org-1:9shDxyR2ANqEPQEEYDL/xIOnoPwxHot21L5fiZnFL18=\n"
+          install_url: https://releases.nixos.org/nix/nix-2.11.1/install
+      - if: matrix.os == 'ubuntu-20.04'
+        name: Config git for github-actions
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - if: matrix.os == 'ubuntu-20.04'
+        name: Update flake locks
+        run: |
+          git pull --rebase --autostash
+          nix run .#updateLocks
+          git commit -a -m "action: Update flake locks" && git push || echo ""
+      - name: Log in to Cachix
+        uses: cachix/cachix-action@v12
+        with:
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          name: ${{ secrets.CACHIX_CACHE }}
+      - env:
+          CACHIX_CACHE: ${{ secrets.CACHIX_CACHE }}
+        name: Push flakes to Cachix
+        run: nix run .#pushToCachix
+    strategy:
+      matrix:
+        os:
+          - macos-11
+          - macos-12
+          - ubuntu-20.04
+          - ubuntu-22.04
+name: Nix CI
+"on":
+  pull_request: {}
+  push: {}
+  schedule:
+    - cron: 0 0 * * *
+  workflow_dispatch: {}
