@@ -17583,11 +17583,11 @@
   "prisma-prisma-insider" = {
     name = "prisma-insider";
     publisher = "prisma";
-    version = "31.0.1881";
+    version = "31.0.1882";
     src = fetchurl {
-      url = "https://open-vsx.org/api/prisma/prisma-insider/31.0.1881/file/prisma.prisma-insider-31.0.1881.vsix";
-      name = "prisma-insider-31.0.1881.zip";
-      sha256 = "sha256-B3rELoOvYhyG9zw0VKZwOKWb6yJ1wdaCTq98SxiiVA0=";
+      url = "https://open-vsx.org/api/prisma/prisma-insider/31.0.1882/file/prisma.prisma-insider-31.0.1882.vsix";
+      name = "prisma-insider-31.0.1882.zip";
+      sha256 = "sha256-sSTsEPBte2XveeZHfNFS/hU/ydztRcTlGRJRPlZv9O4=";
     };
   };
 

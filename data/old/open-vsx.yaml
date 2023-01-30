@@ -9586,12 +9586,12 @@
   sha256: sha256-m0xR0JfIiGL6NCFBFQcKEaBgjLNIHgY+qE8f/k65J90=
   url: https://open-vsx.org/api/prisma/prisma/4.9.0/file/prisma.prisma-4.9.0.vsix
   version: 4.9.0
-- lastUpdated: 2023-01-30T19:30:51.564801Z
+- lastUpdated: 2023-01-30T20:12:22.89811Z
   name: prisma-insider
   publisher: prisma
-  sha256: sha256-B3rELoOvYhyG9zw0VKZwOKWb6yJ1wdaCTq98SxiiVA0=
-  url: https://open-vsx.org/api/prisma/prisma-insider/31.0.1881/file/prisma.prisma-insider-31.0.1881.vsix
-  version: 31.0.1881
+  sha256: sha256-sSTsEPBte2XveeZHfNFS/hU/ydztRcTlGRJRPlZv9O4=
+  url: https://open-vsx.org/api/prisma/prisma-insider/31.0.1882/file/prisma.prisma-insider-31.0.1882.vsix
+  version: 31.0.1882
 - lastUpdated: 2020-09-20T18:15:15.890408Z
   name: vscode-graphql
   publisher: prisma
