@@ -2249,11 +2249,11 @@
   "bgforge-bgforge-mls" = {
     name = "bgforge-mls";
     publisher = "bgforge";
-    version = "2.0.2";
+    version = "2.0.3";
     src = fetchurl {
-      url = "https://open-vsx.org/api/bgforge/bgforge-mls/2.0.2/file/bgforge.bgforge-mls-2.0.2.vsix";
-      name = "bgforge-mls-2.0.2.zip";
-      sha256 = "sha256-yTX0fgM1oo8G4p1eplOQo/JRnk1QO90OB+E/z5x5C80=";
+      url = "https://open-vsx.org/api/bgforge/bgforge-mls/2.0.3/file/bgforge.bgforge-mls-2.0.3.vsix";
+      name = "bgforge-mls-2.0.3.zip";
+      sha256 = "sha256-uAIq7jAOSTlDsmB8NiX75H1kaOcc7Gqikf8QGW/+YDQ=";
     };
   };
 
@@ -16417,11 +16417,11 @@
   "oscarlevin-pretext-tools" = {
     name = "pretext-tools";
     publisher = "oscarlevin";
-    version = "0.8.1";
+    version = "0.9.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/oscarlevin/pretext-tools/0.8.1/file/oscarlevin.pretext-tools-0.8.1.vsix";
-      name = "pretext-tools-0.8.1.zip";
-      sha256 = "sha256-hlIc4jKK1+hTlFVqehyrvBOGXc9yzWdSjTqJYj44Odk=";
+      url = "https://open-vsx.org/api/oscarlevin/pretext-tools/0.9.0/file/oscarlevin.pretext-tools-0.9.0.vsix";
+      name = "pretext-tools-0.9.0.zip";
+      sha256 = "sha256-wqd2rKP4YvCoZC0Pq6PohGY8SsfwsPWsgqGEx05lSkE=";
     };
   };
 

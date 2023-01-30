@@ -1222,12 +1222,12 @@
   sha256: sha256-ox6iLYlwGfJ3ILoVMlCMZBOn41CPFk9FBu6B+xBYqXI=
   url: https://open-vsx.org/api/bfrangi/vscode-nightingale-theme/1.0.0/file/bfrangi.vscode-nightingale-theme-1.0.0.vsix
   version: 1.0.0
-- lastUpdated: 2023-01-28T09:17:06.944043Z
+- lastUpdated: 2023-01-30T21:11:33.988567Z
   name: bgforge-mls
   publisher: bgforge
-  sha256: sha256-yTX0fgM1oo8G4p1eplOQo/JRnk1QO90OB+E/z5x5C80=
-  url: https://open-vsx.org/api/bgforge/bgforge-mls/2.0.2/file/bgforge.bgforge-mls-2.0.2.vsix
-  version: 2.0.2
+  sha256: sha256-uAIq7jAOSTlDsmB8NiX75H1kaOcc7Gqikf8QGW/+YDQ=
+  url: https://open-vsx.org/api/bgforge/bgforge-mls/2.0.3/file/bgforge.bgforge-mls-2.0.3.vsix
+  version: 2.0.3
 - lastUpdated: 2022-04-11T07:01:01.19633Z
   name: ai-js
   publisher: biao1010
@@ -5614,7 +5614,7 @@
   sha256: sha256-ddehU7YeHv62QjZiTk0HV9wHgz8mVDuyMpH/w89bh6s=
   url: https://open-vsx.org/api/jeandeaual/scheme/0.2.0/file/jeandeaual.scheme-0.2.0.vsix
   version: 0.2.0
-- lastUpdated: 2023-01-11T05:00:13.392663Z
+- lastUpdated: 2023-01-30T20:59:24.1565Z
   name: open-remote-ssh
   publisher: jeanp413
   sha256: sha256-iSWBxfck0RCccRMDL68YXurwBlZ0U/nfl9TobI4vQ98=
@@ -8950,12 +8950,12 @@
   sha256: sha256-wVc3mkShOHzRgQper7h/lYJr8CicsW8neDiv138LdM4=
   url: https://open-vsx.org/api/ortus-solutions/vscode-commandbox/1.1.0/file/ortus-solutions.vscode-commandbox-1.1.0.vsix
   version: 1.1.0
-- lastUpdated: 2023-01-02T23:31:01.762462Z
+- lastUpdated: 2023-01-30T21:00:46.674619Z
   name: pretext-tools
   publisher: oscarlevin
-  sha256: sha256-hlIc4jKK1+hTlFVqehyrvBOGXc9yzWdSjTqJYj44Odk=
-  url: https://open-vsx.org/api/oscarlevin/pretext-tools/0.8.1/file/oscarlevin.pretext-tools-0.8.1.vsix
-  version: 0.8.1
+  sha256: sha256-wqd2rKP4YvCoZC0Pq6PohGY8SsfwsPWsgqGEx05lSkE=
+  url: https://open-vsx.org/api/oscarlevin/pretext-tools/0.9.0/file/oscarlevin.pretext-tools-0.9.0.vsix
+  version: 0.9.0
 - lastUpdated: 2023-01-20T16:50:25.499384Z
   name: oso
   publisher: osohq
