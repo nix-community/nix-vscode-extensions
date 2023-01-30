@@ -59,7 +59,7 @@
           mapAttrs (_: val: listToAttrs (map pkgDefinition.${set} val)) groupedByPublisher;
 
         extensions = {
-          vscode = loadGenerated "vscode-marketplace";
+          vscode-marketplace = loadGenerated "vscode-marketplace";
           open-vsx = loadGenerated "open-vsx";
         };
 
@@ -70,8 +70,8 @@
               (vscode-with-extensions.override {
                 vscode = vscodium;
                 vscodeExtensions = builtins.attrValues {
-                  inherit (extensions.vscode.golang) go;
-                  inherit (extensions.vscode.vlanguage) vscode-vlang;
+                  inherit (extensions.vscode-marketplace.golang) go;
+                  inherit (extensions.vscode-marketplace.vlanguage) vscode-vlang;
                 };
               });
           in
@@ -95,7 +95,7 @@
       }
     ) // {
     overlays.default = final: prev: {
-      extensions = self.extensions.${prev.system};
+      vscode-extensions = self.extensions.${prev.system};
     };
   }
   // {
