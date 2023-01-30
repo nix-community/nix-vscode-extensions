@@ -31,7 +31,7 @@ jobs:
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 360
-          retry_wait_seconds: 3660
+          retry_wait_seconds: 300
           max_attempts: 6
           command: nix run nix-dev/#updateExtensions
 
