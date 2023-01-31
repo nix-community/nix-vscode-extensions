@@ -15482,11 +15482,11 @@
   "nanikamado-cotton-language-server" = {
     name = "cotton-language-server";
     publisher = "nanikamado";
-    version = "0.0.1";
+    version = "0.1.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/nanikamado/cotton-language-server/0.0.1/file/nanikamado.cotton-language-server-0.0.1.vsix";
-      name = "cotton-language-server-0.0.1.zip";
-      sha256 = "sha256-r6EprhRaokDKvYrO7mfERtM/MAFRYTGfYpHOGy3sw5U=";
+      url = "https://open-vsx.org/api/nanikamado/cotton-language-server/0.1.1/file/nanikamado.cotton-language-server-0.1.1.vsix";
+      name = "cotton-language-server-0.1.1.zip";
+      sha256 = "sha256-Micyn4gq8OovKOAQP6WlFJAxNiCwnDUoF/WoMPVpdKY=";
     };
   };
 
@@ -18188,11 +18188,11 @@
   "redhat-java" = {
     name = "java";
     publisher = "redhat";
-    version = "1.15.2023012603";
+    version = "1.15.2023013103";
     src = fetchurl {
-      url = "https://open-vsx.org/api/redhat/java/1.15.2023012603/file/redhat.java-1.15.2023012603.vsix";
-      name = "java-1.15.2023012603.zip";
-      sha256 = "sha256-MJriHfomVLwFeQbaL+TBJEH3COxwTwyPaEL5LQnW7Ds=";
+      url = "https://open-vsx.org/api/redhat/java/1.15.2023013103/file/redhat.java-1.15.2023013103.vsix";
+      name = "java-1.15.2023013103.zip";
+      sha256 = "sha256-vDFyl/z/7cbpHDN8OpORV5zLpMoKTycPE9tqxIIDtfY=";
     };
   };
 
@@ -19541,11 +19541,11 @@
   "sasjs-sasjs-for-vscode" = {
     name = "sasjs-for-vscode";
     publisher = "sasjs";
-    version = "1.28.0";
+    version = "1.28.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/sasjs/sasjs-for-vscode/1.28.0/file/sasjs.sasjs-for-vscode-1.28.0.vsix";
-      name = "sasjs-for-vscode-1.28.0.zip";
-      sha256 = "sha256-8XHFOYUsJAczD0SgMzftRpObg2PitQs/JCQHx34BYwU=";
+      url = "https://open-vsx.org/api/sasjs/sasjs-for-vscode/1.28.1/file/sasjs.sasjs-for-vscode-1.28.1.vsix";
+      name = "sasjs-for-vscode-1.28.1.zip";
+      sha256 = "sha256-xVQpLRQNSD04B5Xpz2dQuz5z5y8tyKg2E0zdEHrMsCw=";
     };
   };
 
@@ -20608,11 +20608,11 @@
   "sonarsource-sonarlint-vscode" = {
     name = "sonarlint-vscode";
     publisher = "sonarsource";
-    version = "3.13.0";
+    version = "3.14.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/sonarsource/sonarlint-vscode/3.13.0/file/sonarsource.sonarlint-vscode-3.13.0.vsix";
-      name = "sonarlint-vscode-3.13.0.zip";
-      sha256 = "sha256-rBDsasvcOR6ZkpSBGtCVq5frOEYBAwzgZK4U/McJJqY=";
+      url = "https://open-vsx.org/api/sonarsource/sonarlint-vscode/3.14.0/file/sonarsource.sonarlint-vscode-3.14.0.vsix";
+      name = "sonarlint-vscode-3.14.0.zip";
+      sha256 = "sha256-tpW3kIaJQOwxaRWsAug2bYqCaPKDUtCKs80vE8Wlqys=";
     };
   };
 
@@ -21950,11 +21950,11 @@
   "tensorchord-vscode-envd" = {
     name = "vscode-envd";
     publisher = "tensorchord";
-    version = "0.0.4";
+    version = "0.0.5";
     src = fetchurl {
-      url = "https://open-vsx.org/api/tensorchord/vscode-envd/0.0.4/file/tensorchord.vscode-envd-0.0.4.vsix";
-      name = "vscode-envd-0.0.4.zip";
-      sha256 = "sha256-Ldds90CLSadVkFiETsmM59y9yojzugRUzYMcMI0RNJc=";
+      url = "https://open-vsx.org/api/tensorchord/vscode-envd/0.0.5/file/tensorchord.vscode-envd-0.0.5.vsix";
+      name = "vscode-envd-0.0.5.zip";
+      sha256 = "sha256-DCbRlnqGbSqdMFo+H9+JXrztX8Ef5U7P578CtTe44Sw=";
     };
   };
 
@@ -26119,11 +26119,11 @@
   "zardoy-ts-essential-plugins" = {
     name = "ts-essential-plugins";
     publisher = "zardoy";
-    version = "0.0.44";
+    version = "0.0.45";
     src = fetchurl {
-      url = "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.44/file/zardoy.ts-essential-plugins-0.0.44.vsix";
-      name = "ts-essential-plugins-0.0.44.zip";
-      sha256 = "sha256-Gym2QJtp+IZjEcAX9sna8zZUXoDk/FuaU7v9AeF4gfc=";
+      url = "https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.45/file/zardoy.ts-essential-plugins-0.0.45.vsix";
+      name = "ts-essential-plugins-0.0.45.zip";
+      sha256 = "sha256-IY+UvTQFdIWvHbPnCalLP1ReeOtNZuc11Vdpf90GP7E=";
     };
   };
 

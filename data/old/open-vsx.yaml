@@ -8440,12 +8440,12 @@
   sha256: sha256-W9WWBpdS+8OV8Wb+yX0Nys/1fk57NAdiah7nAcZsQhg=
   url: https://open-vsx.org/api/nanaian/vscode-star-rod/1.6.4/file/nanaian.vscode-star-rod-1.6.4.vsix
   version: 1.6.4
-- lastUpdated: 2022-12-10T05:58:00.546031Z
+- lastUpdated: 2023-01-31T09:41:35.796186Z
   name: cotton-language-server
   publisher: nanikamado
-  sha256: sha256-r6EprhRaokDKvYrO7mfERtM/MAFRYTGfYpHOGy3sw5U=
-  url: https://open-vsx.org/api/nanikamado/cotton-language-server/0.0.1/file/nanikamado.cotton-language-server-0.0.1.vsix
-  version: 0.0.1
+  sha256: sha256-Micyn4gq8OovKOAQP6WlFJAxNiCwnDUoF/WoMPVpdKY=
+  url: https://open-vsx.org/api/nanikamado/cotton-language-server/0.1.1/file/nanikamado.cotton-language-server-0.1.1.vsix
+  version: 0.1.1
 - lastUpdated: 2022-12-25T13:08:46.616955Z
   name: sample-project
   publisher: naotoono
@@ -9916,12 +9916,12 @@
   sha256: sha256-UdRjk+sAAvfQLzNYkiGNbZLKAX+lnzWDAb4MnLNdGUk=
   url: https://open-vsx.org/api/redhat/fabric8-analytics/0.3.6/file/redhat.fabric8-analytics-0.3.6.vsix
   version: 0.3.6
-- lastUpdated: 2023-01-26T08:16:12.961801Z
+- lastUpdated: 2023-01-31T08:20:19.842126Z
   name: java
   publisher: redhat
-  sha256: sha256-MJriHfomVLwFeQbaL+TBJEH3COxwTwyPaEL5LQnW7Ds=
-  url: https://open-vsx.org/api/redhat/java/1.15.2023012603/file/redhat.java-1.15.2023012603.vsix
-  version: 1.15.2023012603
+  sha256: sha256-vDFyl/z/7cbpHDN8OpORV5zLpMoKTycPE9tqxIIDtfY=
+  url: https://open-vsx.org/api/redhat/java/1.15.2023013103/file/redhat.java-1.15.2023013103.vsix
+  version: 1.15.2023013103
 - lastUpdated: 2022-11-14T21:31:47.342506Z
   name: mta-vscode-extension
   publisher: redhat
@@ -10654,12 +10654,12 @@
   sha256: sha256-JloMfHB6B4jNJjsmk3Jg3VuvZthwRgKjtlwV9V7O/y4=
   url: https://open-vsx.org/api/sarrus/sourcepawn-vscode/5.0.1/file/sarrus.sourcepawn-vscode-5.0.1.vsix
   version: 5.0.1
-- lastUpdated: 2023-01-13T14:48:42.415345Z
+- lastUpdated: 2023-01-31T09:42:29.077203Z
   name: sasjs-for-vscode
   publisher: sasjs
-  sha256: sha256-8XHFOYUsJAczD0SgMzftRpObg2PitQs/JCQHx34BYwU=
-  url: https://open-vsx.org/api/sasjs/sasjs-for-vscode/1.28.0/file/sasjs.sasjs-for-vscode-1.28.0.vsix
-  version: 1.28.0
+  sha256: sha256-xVQpLRQNSD04B5Xpz2dQuz5z5y8tyKg2E0zdEHrMsCw=
+  url: https://open-vsx.org/api/sasjs/sasjs-for-vscode/1.28.1/file/sasjs.sasjs-for-vscode-1.28.1.vsix
+  version: 1.28.1
 - lastUpdated: 2021-07-11T05:06:22.762359Z
   name: yet-another-discord-presence
   publisher: satoqz
@@ -11236,12 +11236,12 @@
   sha256: sha256-MwEMzSpmr/NeCxcnjCCFd0WEXCQwz3aHEs3+2bIOv/w=
   url: https://open-vsx.org/api/somebody1234/hoverlens/1.0.1/file/somebody1234.hoverlens-1.0.1.vsix
   version: 1.0.1
-- lastUpdated: 2022-12-20T11:47:47.886607Z
+- lastUpdated: 2023-01-31T09:19:54.27703Z
   name: sonarlint-vscode
   publisher: sonarsource
-  sha256: sha256-rBDsasvcOR6ZkpSBGtCVq5frOEYBAwzgZK4U/McJJqY=
-  url: https://open-vsx.org/api/sonarsource/sonarlint-vscode/3.13.0/file/sonarsource.sonarlint-vscode-3.13.0.vsix
-  version: 3.13.0
+  sha256: sha256-tpW3kIaJQOwxaRWsAug2bYqCaPKDUtCKs80vE8Wlqys=
+  url: https://open-vsx.org/api/sonarsource/sonarlint-vscode/3.14.0/file/sonarsource.sonarlint-vscode-3.14.0.vsix
+  version: 3.14.0
 - lastUpdated: 2022-08-19T07:04:24.847317Z
   name: vscode-iq-plugin
   publisher: sonatypecommunity
@@ -11968,12 +11968,12 @@
   sha256: sha256-fHrnVb/odnvkFCFD1ummakVtxAZQdasaVjnHPouSMEA=
   url: https://open-vsx.org/api/tenninebt/vscode-koverage/0.0.13/file/tenninebt.vscode-koverage-0.0.13.vsix
   version: 0.0.13
-- lastUpdated: 2022-06-21T05:23:24.021624Z
+- lastUpdated: 2023-01-31T08:11:25.888182Z
   name: vscode-envd
   publisher: tensorchord
-  sha256: sha256-Ldds90CLSadVkFiETsmM59y9yojzugRUzYMcMI0RNJc=
-  url: https://open-vsx.org/api/tensorchord/vscode-envd/0.0.4/file/tensorchord.vscode-envd-0.0.4.vsix
-  version: 0.0.4
+  sha256: sha256-DCbRlnqGbSqdMFo+H9+JXrztX8Ef5U7P578CtTe44Sw=
+  url: https://open-vsx.org/api/tensorchord/vscode-envd/0.0.5/file/tensorchord.vscode-envd-0.0.5.vsix
+  version: 0.0.5
 - lastUpdated: 2021-10-11T10:09:27.715824Z
   name: teroshdl
   publisher: teros-technology
@@ -14242,12 +14242,12 @@
   sha256: sha256-ykyt2J2vmH5CJ9XopBSUBQ5yotXRPlFn7rC25+pSCco=
   url: https://open-vsx.org/api/zardoy/terminal-code-runner/0.1.1/file/zardoy.terminal-code-runner-0.1.1.vsix
   version: 0.1.1
-- lastUpdated: 2023-01-24T21:32:27.928858Z
+- lastUpdated: 2023-01-31T08:51:28.37974Z
   name: ts-essential-plugins
   publisher: zardoy
-  sha256: sha256-Gym2QJtp+IZjEcAX9sna8zZUXoDk/FuaU7v9AeF4gfc=
-  url: https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.44/file/zardoy.ts-essential-plugins-0.0.44.vsix
-  version: 0.0.44
+  sha256: sha256-IY+UvTQFdIWvHbPnCalLP1ReeOtNZuc11Vdpf90GP7E=
+  url: https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.45/file/zardoy.ts-essential-plugins-0.0.45.vsix
+  version: 0.0.45
 - lastUpdated: 2022-05-05T00:59:20.976169Z
   name: typescript-server-logger
   publisher: zardoy
