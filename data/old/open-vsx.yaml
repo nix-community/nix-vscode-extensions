@@ -4600,12 +4600,12 @@
   sha256: sha256-hNLQCNGc5CLKgfzJhKyuuBZNKzMKMqimGDrjFHlEbow=
   url: https://open-vsx.org/api/guancecloud/platypus-vscode/0.0.4/file/guancecloud.platypus-vscode-0.0.4.vsix
   version: 0.0.4
-- lastUpdated: 2022-06-29T16:27:16.956757Z
+- lastUpdated: 2023-01-30T22:27:37.614322Z
   name: mayukaithemevsc
   publisher: gulajavaministudio
-  sha256: sha256-oPPDCj0W4Gwxdm++LHRtgGg7YhFjiwCwdTmDqE+7na0=
-  url: https://open-vsx.org/api/gulajavaministudio/mayukaithemevsc/3.2.3/file/gulajavaministudio.mayukaithemevsc-3.2.3.vsix
-  version: 3.2.3
+  sha256: sha256-V2hAxIVu2YWonwcIG+9n300b88jzPOnKYUFt1okSX4w=
+  url: https://open-vsx.org/api/gulajavaministudio/mayukaithemevsc/3.2.4/file/gulajavaministudio.mayukaithemevsc-3.2.4.vsix
+  version: 3.2.4
 - lastUpdated: 2022-09-23T05:05:52.852509Z
   name: google-drive-vscode
   publisher: gustavoasc
@@ -5404,12 +5404,12 @@
   sha256: sha256-xKEK4icuc+6Q5Uj1rf1t9flWCOIApxiXOry/RvkPKGw=
   url: https://open-vsx.org/api/itemis/xtext-vscode-example/0.0.30/file/itemis.xtext-vscode-example-0.0.30.vsix
   version: 0.0.30
-- lastUpdated: 2023-01-25T20:39:00.54487Z
+- lastUpdated: 2023-01-30T23:00:51.93922Z
   name: dvc
   publisher: iterative
-  sha256: sha256-AgfdWpp6ePB6lo3I1b9KpvwMvNwyLuw2BOUHcVRYleY=
-  url: https://open-vsx.org/api/iterative/dvc/0.5.39/file/iterative.dvc-0.5.39.vsix
-  version: 0.5.39
+  sha256: sha256-Nk/QADRY/PJgJ/8Y+F0SN9eXkBVPMbc2AAhjdLpPIjk=
+  url: https://open-vsx.org/api/iterative/dvc/0.5.40/file/iterative.dvc-0.5.40.vsix
+  version: 0.5.40
 - lastUpdated: 2021-02-16T03:39:02.187325Z
   name: owlet
   publisher: itsjonq
@@ -9472,12 +9472,12 @@
   sha256: sha256-r9OvUaqov52ktj+XQAH/NeVPF8LZYGdFnR5CayNTbbI=
   url: https://open-vsx.org/api/polymeilex/wgsl/0.1.14/file/polymeilex.wgsl-0.1.14.vsix
   version: 0.1.14
-- lastUpdated: 2022-11-08T17:03:52.059145Z
+- lastUpdated: 2023-01-30T23:04:51.15668Z
   name: excalidraw-editor
   publisher: pomdtr
-  sha256: sha256-a3WECVmyz1fTAnK1SApsNlLKNVq/BPC0t3fArN2P/60=
-  url: https://open-vsx.org/api/pomdtr/excalidraw-editor/3.3.4/file/pomdtr.excalidraw-editor-3.3.4.vsix
-  version: 3.3.4
+  sha256: sha256-spfouIxYK1A7g3zrRRqw5Id3lLjZjgi+hXm0VxOgZu8=
+  url: https://open-vsx.org/api/pomdtr/excalidraw-editor/3.4.0/file/pomdtr.excalidraw-editor-3.4.0.vsix
+  version: 3.4.0
 - lastUpdated: 2023-01-22T09:48:57.69851Z
   name: laraphense
   publisher: porifa
@@ -10114,12 +10114,12 @@
   sha256: sha256-/gLvhw0XcUb6Jch/LZ4k7xpSS9wdYWVf5u7uvOHS+i8=
   url: https://open-vsx.org/api/redwan-hossain/skillavid-pure-black/5.0.0/file/redwan-hossain.skillavid-pure-black-5.0.0.vsix
   version: 5.0.0
-- lastUpdated: 2023-01-27T00:21:46.108358Z
+- lastUpdated: 2023-01-31T00:22:11.859328Z
   name: schemastore
   publisher: remcohaszing
-  sha256: sha256-EK3DCb0TdWRhDv8gwS91+QmDvNWylBiMKqlbFDOUhck=
-  url: https://open-vsx.org/api/remcohaszing/schemastore/1.0.50/file/remcohaszing.schemastore-1.0.50.vsix
-  version: 1.0.50
+  sha256: sha256-tVU+WeSsxuu4JysGm6rmppRMEiJm4o1AYYch6MggwKY=
+  url: https://open-vsx.org/api/remcohaszing/schemastore/1.0.51/file/remcohaszing.schemastore-1.0.51.vsix
+  version: 1.0.51
 - lastUpdated: 2021-07-05T06:10:39.36172Z
   name: shellman
   publisher: remisa

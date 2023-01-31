@@ -8442,11 +8442,11 @@
   "gulajavaministudio-mayukaithemevsc" = {
     name = "mayukaithemevsc";
     publisher = "gulajavaministudio";
-    version = "3.2.3";
+    version = "3.2.4";
     src = fetchurl {
-      url = "https://open-vsx.org/api/gulajavaministudio/mayukaithemevsc/3.2.3/file/gulajavaministudio.mayukaithemevsc-3.2.3.vsix";
-      name = "mayukaithemevsc-3.2.3.zip";
-      sha256 = "sha256-oPPDCj0W4Gwxdm++LHRtgGg7YhFjiwCwdTmDqE+7na0=";
+      url = "https://open-vsx.org/api/gulajavaministudio/mayukaithemevsc/3.2.4/file/gulajavaministudio.mayukaithemevsc-3.2.4.vsix";
+      name = "mayukaithemevsc-3.2.4.zip";
+      sha256 = "sha256-V2hAxIVu2YWonwcIG+9n300b88jzPOnKYUFt1okSX4w=";
     };
   };
 
@@ -9916,11 +9916,11 @@
   "iterative-dvc" = {
     name = "dvc";
     publisher = "iterative";
-    version = "0.5.39";
+    version = "0.5.40";
     src = fetchurl {
-      url = "https://open-vsx.org/api/iterative/dvc/0.5.39/file/iterative.dvc-0.5.39.vsix";
-      name = "dvc-0.5.39.zip";
-      sha256 = "sha256-AgfdWpp6ePB6lo3I1b9KpvwMvNwyLuw2BOUHcVRYleY=";
+      url = "https://open-vsx.org/api/iterative/dvc/0.5.40/file/iterative.dvc-0.5.40.vsix";
+      name = "dvc-0.5.40.zip";
+      sha256 = "sha256-Nk/QADRY/PJgJ/8Y+F0SN9eXkBVPMbc2AAhjdLpPIjk=";
     };
   };
 
@@ -17374,11 +17374,11 @@
   "pomdtr-excalidraw-editor" = {
     name = "excalidraw-editor";
     publisher = "pomdtr";
-    version = "3.3.4";
+    version = "3.4.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/pomdtr/excalidraw-editor/3.3.4/file/pomdtr.excalidraw-editor-3.3.4.vsix";
-      name = "excalidraw-editor-3.3.4.zip";
-      sha256 = "sha256-a3WECVmyz1fTAnK1SApsNlLKNVq/BPC0t3fArN2P/60=";
+      url = "https://open-vsx.org/api/pomdtr/excalidraw-editor/3.4.0/file/pomdtr.excalidraw-editor-3.4.0.vsix";
+      name = "excalidraw-editor-3.4.0.zip";
+      sha256 = "sha256-spfouIxYK1A7g3zrRRqw5Id3lLjZjgi+hXm0VxOgZu8=";
     };
   };
 
@@ -18551,11 +18551,11 @@
   "remcohaszing-schemastore" = {
     name = "schemastore";
     publisher = "remcohaszing";
-    version = "1.0.50";
+    version = "1.0.51";
     src = fetchurl {
-      url = "https://open-vsx.org/api/remcohaszing/schemastore/1.0.50/file/remcohaszing.schemastore-1.0.50.vsix";
-      name = "schemastore-1.0.50.zip";
-      sha256 = "sha256-EK3DCb0TdWRhDv8gwS91+QmDvNWylBiMKqlbFDOUhck=";
+      url = "https://open-vsx.org/api/remcohaszing/schemastore/1.0.51/file/remcohaszing.schemastore-1.0.51.vsix";
+      name = "schemastore-1.0.51.zip";
+      sha256 = "sha256-tVU+WeSsxuu4JysGm6rmppRMEiJm4o1AYYch6MggwKY=";
     };
   };
 
