@@ -775,11 +775,11 @@
   "alygin-vscode-tlaplus-nightly" = {
     name = "vscode-tlaplus-nightly";
     publisher = "alygin";
-    version = "2023.1.2906";
+    version = "2023.1.3106";
     src = fetchurl {
-      url = "https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.1.2906/file/alygin.vscode-tlaplus-nightly-2023.1.2906.vsix";
-      name = "vscode-tlaplus-nightly-2023.1.2906.zip";
-      sha256 = "sha256-R5YaNM/gT/qtbKnn7BqW2MpJPkxoWgIUgyNU7AEROO0=";
+      url = "https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.1.3106/file/alygin.vscode-tlaplus-nightly-2023.1.3106.vsix";
+      name = "vscode-tlaplus-nightly-2023.1.3106.zip";
+      sha256 = "sha256-Gi3+i45j/BYIXW7MVXYP1NhzPaErQL1scdKT6IM9814=";
     };
   };
 
@@ -3668,11 +3668,11 @@
   "cloudstudio-custom-template" = {
     name = "custom-template";
     publisher = "cloudstudio";
-    version = "0.0.14";
+    version = "0.0.15";
     src = fetchurl {
-      url = "https://open-vsx.org/api/cloudstudio/custom-template/0.0.14/file/cloudstudio.custom-template-0.0.14.vsix";
-      name = "custom-template-0.0.14.zip";
-      sha256 = "sha256-7vcjZm7KhmvLQeTEej9Iu53FAiB/nK2ims+WGtR+N00=";
+      url = "https://open-vsx.org/api/cloudstudio/custom-template/0.0.15/file/cloudstudio.custom-template-0.0.15.vsix";
+      name = "custom-template-0.0.15.zip";
+      sha256 = "sha256-iGoLROZU+eeskm/k+0/Qv/OVvUgCNgMCEkkYHQ6KxBw=";
     };
   };
 
@@ -8640,11 +8640,11 @@
   "halcyontechltd-vscode-rpgle" = {
     name = "vscode-rpgle";
     publisher = "halcyontechltd";
-    version = "0.17.3";
+    version = "0.17.5";
     src = fetchurl {
-      url = "https://open-vsx.org/api/halcyontechltd/vscode-rpgle/0.17.3/file/halcyontechltd.vscode-rpgle-0.17.3.vsix";
-      name = "vscode-rpgle-0.17.3.zip";
-      sha256 = "sha256-gwxakJHTVOte2UqvWV+ZbT4r9jnr/Seyz1xJRTYOyrs=";
+      url = "https://open-vsx.org/api/halcyontechltd/vscode-rpgle/0.17.5/file/halcyontechltd.vscode-rpgle-0.17.5.vsix";
+      name = "vscode-rpgle-0.17.5.zip";
+      sha256 = "sha256-c3ny6OpnV7thYAy/HWP9ymXfQsA+aS6u7xegkoSrZjg=";
     };
   };
 
@@ -14789,11 +14789,11 @@
   "ms-vscode-js-debug" = {
     name = "js-debug";
     publisher = "ms-vscode";
-    version = "1.75.0";
+    version = "1.75.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/ms-vscode/js-debug/1.75.0/file/ms-vscode.js-debug-1.75.0.vsix";
-      name = "js-debug-1.75.0.zip";
-      sha256 = "sha256-75Pc8Zs5LmtfXKw+a66gdVPbJicI/LhEMpYBLASFFAI=";
+      url = "https://open-vsx.org/api/ms-vscode/js-debug/1.75.1/file/ms-vscode.js-debug-1.75.1.vsix";
+      name = "js-debug-1.75.1.zip";
+      sha256 = "sha256-P/l4KKl6+8PDEtBPOFVaU0ewiUWq7oguvn11bLKlz1E=";
     };
   };
 
@@ -20432,11 +20432,11 @@
   "slint-slint-nightly" = {
     name = "slint-nightly";
     publisher = "slint";
-    version = "2023.1.2909";
+    version = "2023.1.3013";
     src = fetchurl {
-      url = "https://open-vsx.org/api/slint/slint-nightly/2023.1.2909/file/slint.slint-nightly-2023.1.2909.vsix";
-      name = "slint-nightly-2023.1.2909.zip";
-      sha256 = "sha256-hjBWmGOlKw2t7R1M9TNCVVw76Wp9SD+Tu7zS6X+/2Vg=";
+      url = "https://open-vsx.org/api/slint/slint-nightly/2023.1.3013/file/slint.slint-nightly-2023.1.3013.vsix";
+      name = "slint-nightly-2023.1.3013.zip";
+      sha256 = "sha256-2Mz4Jut35XG2SSn1SdoIbJtFmys7b7qafeKD39MVpNA=";
     };
   };
 

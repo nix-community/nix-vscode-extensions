@@ -418,12 +418,12 @@
   sha256: sha256-hM7f4RJ5PqzpHpowcHGTGg5TDQ1y/oep1uFvVfHe/MU=
   url: https://open-vsx.org/api/alygin/vscode-tlaplus/1.5.4/file/alygin.vscode-tlaplus-1.5.4.vsix
   version: 1.5.4
-- lastUpdated: 2023-01-29T06:06:59.913134Z
+- lastUpdated: 2023-01-31T06:07:32.885904Z
   name: vscode-tlaplus-nightly
   publisher: alygin
-  sha256: sha256-R5YaNM/gT/qtbKnn7BqW2MpJPkxoWgIUgyNU7AEROO0=
-  url: https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.1.2906/file/alygin.vscode-tlaplus-nightly-2023.1.2906.vsix
-  version: 2023.1.2906
+  sha256: sha256-Gi3+i45j/BYIXW7MVXYP1NhzPaErQL1scdKT6IM9814=
+  url: https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.1.3106/file/alygin.vscode-tlaplus-nightly-2023.1.3106.vsix
+  version: 2023.1.3106
 - lastUpdated: 2023-01-13T03:27:08.514432Z
   name: aws-toolkit-vscode
   publisher: amazonwebservices
@@ -1996,12 +1996,12 @@
   sha256: sha256-SOpdvRgCeIvOiqqtmHukzqeibQnyb9tHq6TvOvts+3s=
   url: https://open-vsx.org/api/cloudstudio/common/0.0.22/file/cloudstudio.common-0.0.22.vsix
   version: 0.0.22
-- lastUpdated: 2022-12-20T06:57:54.080169Z
+- lastUpdated: 2023-01-31T03:41:45.604095Z
   name: custom-template
   publisher: cloudstudio
-  sha256: sha256-7vcjZm7KhmvLQeTEej9Iu53FAiB/nK2ims+WGtR+N00=
-  url: https://open-vsx.org/api/cloudstudio/custom-template/0.0.14/file/cloudstudio.custom-template-0.0.14.vsix
-  version: 0.0.14
+  sha256: sha256-iGoLROZU+eeskm/k+0/Qv/OVvUgCNgMCEkkYHQ6KxBw=
+  url: https://open-vsx.org/api/cloudstudio/custom-template/0.0.15/file/cloudstudio.custom-template-0.0.15.vsix
+  version: 0.0.15
 - lastUpdated: 2023-01-05T06:53:37.528462Z
   name: deploykit
   publisher: cloudstudio
@@ -4708,12 +4708,12 @@
   sha256: sha256-ivw6UyTv7lSIiPlOiNQU5HvaM3CSRyh3XSF7b9l8l5U=
   url: https://open-vsx.org/api/halcyontechltd/vscode-ibmi-walkthroughs/0.2.4/file/halcyontechltd.vscode-ibmi-walkthroughs-0.2.4.vsix
   version: 0.2.4
-- lastUpdated: 2023-01-27T20:39:25.626305Z
+- lastUpdated: 2023-01-31T01:21:56.164346Z
   name: vscode-rpgle
   publisher: halcyontechltd
-  sha256: sha256-gwxakJHTVOte2UqvWV+ZbT4r9jnr/Seyz1xJRTYOyrs=
-  url: https://open-vsx.org/api/halcyontechltd/vscode-rpgle/0.17.3/file/halcyontechltd.vscode-rpgle-0.17.3.vsix
-  version: 0.17.3
+  sha256: sha256-c3ny6OpnV7thYAy/HWP9ymXfQsA+aS6u7xegkoSrZjg=
+  url: https://open-vsx.org/api/halcyontechltd/vscode-rpgle/0.17.5/file/halcyontechltd.vscode-rpgle-0.17.5.vsix
+  version: 0.17.5
 - lastUpdated: 2023-01-11T03:33:36.613573Z
   name: draw
   publisher: hall
@@ -8062,12 +8062,12 @@
   sha256: sha256-h9c3oCYonYMaAAhA8+qDpJWX5PzlsT5+FNtZJ8xgZX4=
   url: https://open-vsx.org/api/ms-vscode/hexeditor/1.9.9/file/ms-vscode.hexeditor-1.9.9.vsix
   version: 1.9.9
-- lastUpdated: 2023-01-24T03:51:10.291739Z
+- lastUpdated: 2023-01-31T04:00:58.542023Z
   name: js-debug
   publisher: ms-vscode
-  sha256: sha256-75Pc8Zs5LmtfXKw+a66gdVPbJicI/LhEMpYBLASFFAI=
-  url: https://open-vsx.org/api/ms-vscode/js-debug/1.75.0/file/ms-vscode.js-debug-1.75.0.vsix
-  version: 1.75.0
+  sha256: sha256-P/l4KKl6+8PDEtBPOFVaU0ewiUWq7oguvn11bLKlz1E=
+  url: https://open-vsx.org/api/ms-vscode/js-debug/1.75.1/file/ms-vscode.js-debug-1.75.1.vsix
+  version: 1.75.1
 - lastUpdated: 2022-05-03T03:59:45.286756Z
   name: js-debug-companion
   publisher: ms-vscode
@@ -11140,12 +11140,12 @@
   sha256: sha256-mBGZRxvhwib3HCAf/1d//O9NlrGRHEP3HmjktfXrCpc=
   url: https://open-vsx.org/api/slint/slint/0.3.4/file/slint.slint-0.3.4.vsix
   version: 0.3.4
-- lastUpdated: 2023-01-30T04:23:01.889886Z
+- lastUpdated: 2023-01-31T04:33:46.098048Z
   name: slint-nightly
   publisher: slint
-  sha256: sha256-hjBWmGOlKw2t7R1M9TNCVVw76Wp9SD+Tu7zS6X+/2Vg=
-  url: https://open-vsx.org/api/slint/slint-nightly/2023.1.2909/file/slint.slint-nightly-2023.1.2909.vsix
-  version: 2023.1.2909
+  sha256: sha256-2Mz4Jut35XG2SSn1SdoIbJtFmys7b7qafeKD39MVpNA=
+  url: https://open-vsx.org/api/slint/slint-nightly/2023.1.3013/file/slint.slint-nightly-2023.1.3013.vsix
+  version: 2023.1.3013
 - lastUpdated: 2021-10-16T09:31:50.644215Z
   name: comment-box
   publisher: slysherz
