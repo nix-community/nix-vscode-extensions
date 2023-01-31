@@ -11,6 +11,7 @@ That said, you can now use a different set of extensions for `VS Code` (or `VSCo
 - Extension names and publishers are lowercased
 - If an extension's publisher or name aren't valid nix identifiers, you may access them by quoting the attribute names like `vscode-marketplace."4"."2"`
 - You may search the repo to find out at what commit a given extension was available
+- We have a permission from MS to use a crawler on their API in this case (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Please, don't abuse this flake!
 
 ## Template
 
