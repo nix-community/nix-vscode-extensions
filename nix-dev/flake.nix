@@ -40,8 +40,6 @@
             ;
         };
         tools = [
-          codium
-          writeSettings
           pkgs.deno
         ];
 
@@ -81,7 +79,9 @@
           };
       in
       {
-        packages = scripts;
+        packages = {
+          inherit scripts codium writeSettings;
+        };
         devShells.default = devshell.mkShell {
           packages = tools;
           commands = mkCommands "ide" tools;

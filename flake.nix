@@ -1,7 +1,6 @@
 {
   description = "
     `VS Code Marketplace` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
-    Use the attributes `extensions.\${system}.vscode` and `extensions.\${system}.open-vsx` to get all extensions.
     Learn more in the flake [repo](https://github.com/nix-community/nix-vscode-extensions).
   ";
 
@@ -82,7 +81,6 @@
               
                 The [repo](https://github.com/nix-community/nix-vscode-extensions) provides
                 `VS Code Marketplace` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
-                The extensions are usually updated daily.
               '';
             };
           };
