@@ -80,11 +80,22 @@
       in
       {
         packages = {
-          inherit scripts codium writeSettings;
-        };
+          inherit codium writeSettings;
+        } // scripts;
         devShells.default = devshell.mkShell {
           packages = tools;
-          commands = mkCommands "ide" tools;
+          commands = (mkCommands "tools" tools) ++ [
+            {
+              category = "ide";
+              name = "nix run nix-dev/#writeSettings";
+              help = writeSettings.meta.description;
+            }
+            {
+              category = "ide";
+              name = "nix run nix-dev/#codium .";
+              help = codium.meta.description;
+            }
+          ];
         };
       });
 
