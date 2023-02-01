@@ -2878,12 +2878,12 @@
   sha256: sha256-y6oPPoO52mzKVLkGaRN99FfOpVGbEdqvWfj+Y4FjyQc=
   url: https://open-vsx.org/api/devberto/theme-newton-next/3.0.4/file/devberto.theme-newton-next-3.0.4.vsix
   version: 3.0.4
-- lastUpdated: 2023-01-19T12:07:53.481673Z
+- lastUpdated: 2023-01-31T14:58:04.311355Z
   name: cloudfix-linter
   publisher: devfactory
-  sha256: sha256-aDWDQ1c/05NG7H9RWh5wItYyASxMB5kHcnm2POutfqk=
-  url: https://open-vsx.org/api/devfactory/cloudfix-linter/0.0.11/file/devfactory.cloudfix-linter-0.0.11.vsix
-  version: 0.0.11
+  sha256: sha256-EDPTwdfhn5s9nQ+jB1MmfHtdwgZ9yRSrmznTHCPTOU8=
+  url: https://open-vsx.org/api/devfactory/cloudfix-linter/0.0.12/file/devfactory.cloudfix-linter-0.0.12.vsix
+  version: 0.0.12
 - lastUpdated: 2022-08-17T07:42:24.445977Z
   name: multispace
   publisher: devfactory
@@ -2896,18 +2896,18 @@
   sha256: sha256-4P/5hpJaBVuzh9VmfxJBF8mpINlmRo6dtemIaySS/3c=
   url: https://open-vsx.org/api/devmikeua/mikrotik-routeros-script/2022.9.2/file/devmikeua.mikrotik-routeros-script-2022.9.2.vsix
   version: 2022.9.2
-- lastUpdated: 2023-01-29T13:59:21.109283Z
+- lastUpdated: 2023-02-01T00:26:56.683142Z
   name: composer-php-vscode
   publisher: devsense
-  sha256: sha256-DdqbU2oYGkdyuVzAJapiFaRUHeYTx1O7J5/uTGA2ctI=
-  url: https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12304/file/devsense.composer-php-vscode-1.29.12304.vsix
-  version: 1.29.12304
-- lastUpdated: 2023-01-29T14:00:45.465393Z
+  sha256: sha256-s4kdRVE3e9gsfgM1gC9wmrLDicHiaCtH29i9fqaLPew=
+  url: https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12353/file/devsense.composer-php-vscode-1.29.12353.vsix
+  version: 1.29.12353
+- lastUpdated: 2023-02-01T00:28:16.469709Z
   name: profiler-php-vscode
   publisher: devsense
-  sha256: sha256-p/OtC0hLRLdI0oo4tbURPL5sWMhyiYBjlGp7irbe+8s=
-  url: https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12304/file/devsense.profiler-php-vscode-1.29.12304.vsix
-  version: 1.29.12304
+  sha256: sha256-Pe5J+RNX9bZGyLEQpZ0xqg5ly+XMWGSxpMbL5jLqVgo=
+  url: https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12353/file/devsense.profiler-php-vscode-1.29.12353.vsix
+  version: 1.29.12353
 - lastUpdated: 2022-06-23T12:26:01.697016Z
   name: macos-modern-theme
   publisher: dez64ru
@@ -4828,12 +4828,12 @@
   sha256: sha256-CQombBJyUaRetUowdCrNzuLE7hnLewF6qyB6Gtuk3rM=
   url: https://open-vsx.org/api/hediet/vscode-drawio-insiders-build/1.6.606/file/hediet.vscode-drawio-insiders-build-1.6.606.vsix
   version: 1.6.606
-- lastUpdated: 2023-01-30T13:38:37.321349Z
+- lastUpdated: 2023-01-31T11:18:55.85096Z
   name: juvix-mode
   publisher: heliax
-  sha256: sha256-5NmgGF1Bu6s10A2fwoMu1aCfgXF7VpTLZfPmiirdGco=
-  url: https://open-vsx.org/api/heliax/juvix-mode/0.1.24/file/heliax.juvix-mode-0.1.24.vsix
-  version: 0.1.24
+  sha256: sha256-UIOlJmqoi8hdykCsen1jxLwDGfYbkidkAdGChVOpk/8=
+  url: https://open-vsx.org/api/heliax/juvix-mode/0.1.25/file/heliax.juvix-mode-0.1.25.vsix
+  version: 0.1.25
 - lastUpdated: 2021-11-04T11:59:29.803365Z
   name: hl2
   publisher: hepia-cores
@@ -9586,12 +9586,12 @@
   sha256: sha256-m0xR0JfIiGL6NCFBFQcKEaBgjLNIHgY+qE8f/k65J90=
   url: https://open-vsx.org/api/prisma/prisma/4.9.0/file/prisma.prisma-4.9.0.vsix
   version: 4.9.0
-- lastUpdated: 2023-01-30T20:12:22.89811Z
+- lastUpdated: 2023-01-31T19:25:57.059654Z
   name: prisma-insider
   publisher: prisma
-  sha256: sha256-sSTsEPBte2XveeZHfNFS/hU/ydztRcTlGRJRPlZv9O4=
-  url: https://open-vsx.org/api/prisma/prisma-insider/31.0.1882/file/prisma.prisma-insider-31.0.1882.vsix
-  version: 31.0.1882
+  sha256: sha256-XFl0le09QwlLgRFcQ2mIQadCDruGhvt3flpJCp2ZdTk=
+  url: https://open-vsx.org/api/prisma/prisma-insider/31.0.1889/file/prisma.prisma-insider-31.0.1889.vsix
+  version: 31.0.1889
 - lastUpdated: 2020-09-20T18:15:15.890408Z
   name: vscode-graphql
   publisher: prisma
@@ -9730,7 +9730,7 @@
   sha256: sha256-LNSwqz9u3M5A8LBpeYbDHxtZMdnJbhfTP/RJtIZRtGs=
   url: https://open-vsx.org/api/qufiwefefwoyn/inline-sql-syntax/2.10.3/file/qufiwefefwoyn.inline-sql-syntax-2.10.3.vsix
   version: 2.10.3
-- lastUpdated: 2022-10-15T02:18:47.944947Z
+- lastUpdated: 2023-02-01T01:02:03.924811Z
   name: quick-lint-js
   publisher: quick-lint
   sha256: sha256-pOWxq73XA5rOoSkX30hTqpEf+y/1o367Ryt3QIWWasE=
@@ -10390,12 +10390,12 @@
   sha256: sha256-nMlMxWfAZkGKI4G0kDTS3fYoRb2GXflcJm43u8TQTpo=
   url: https://open-vsx.org/api/rokoroku/vscode-theme-darcula/1.2.3/file/rokoroku.vscode-theme-darcula-1.2.3.vsix
   version: 1.2.3
-- lastUpdated: 2023-01-24T16:57:29.766971Z
+- lastUpdated: 2023-01-31T19:49:33.115481Z
   name: brightscript
   publisher: rokucommunity
-  sha256: sha256-kkInX3nY1wgb1Oyzt9aMu4LmfE/JvuOhgDiCfP58Xy0=
-  url: https://open-vsx.org/api/rokucommunity/brightscript/2.38.7/file/rokucommunity.brightscript-2.38.7.vsix
-  version: 2.38.7
+  sha256: sha256-+LS0Ibg01t/R/4S3XEGIxejvDBaywSHQt/sOvEnfuCQ=
+  url: https://open-vsx.org/api/rokucommunity/brightscript/2.38.8/file/rokucommunity.brightscript-2.38.8.vsix
+  version: 2.38.8
 - lastUpdated: 2022-09-07T07:47:30.943587Z
   name: csstools-design-tokens
   publisher: romainmenke
@@ -10648,12 +10648,12 @@
   sha256: sha256-N/jgVyQM9TU40g9Yrxcpl1ZKD2eVRDUbQs8uN4D3cpw=
   url: https://open-vsx.org/api/sap-partner-eng/sap-bas-extras/0.0.33/file/sap-partner-eng.sap-bas-extras-0.0.33.vsix
   version: 0.0.33
-- lastUpdated: 2023-01-30T17:48:53.061858Z
+- lastUpdated: 2023-01-31T17:46:10.646088Z
   name: sourcepawn-vscode
   publisher: sarrus
-  sha256: sha256-JloMfHB6B4jNJjsmk3Jg3VuvZthwRgKjtlwV9V7O/y4=
-  url: https://open-vsx.org/api/sarrus/sourcepawn-vscode/5.0.1/file/sarrus.sourcepawn-vscode-5.0.1.vsix
-  version: 5.0.1
+  sha256: sha256-wQAwuo+Ck29VDtd9DlGXZL3RPh4rx0JPjXZALG7mk5w=
+  url: https://open-vsx.org/api/sarrus/sourcepawn-vscode/5.0.2/file/sarrus.sourcepawn-vscode-5.0.2.vsix
+  version: 5.0.2
 - lastUpdated: 2023-01-31T09:42:29.077203Z
   name: sasjs-for-vscode
   publisher: sasjs
@@ -10738,12 +10738,12 @@
   sha256: sha256-PPiWkhNzKZpDnCRU/tCMq+YA0WvxPNcANqZJ4gSgJew=
   url: https://open-vsx.org/api/seatonjiang/gitmoji-vscode/1.2.2/file/seatonjiang.gitmoji-vscode-1.2.2.vsix
   version: 1.2.2
-- lastUpdated: 2023-01-17T14:53:08.020049Z
+- lastUpdated: 2023-01-31T18:05:42.761965Z
   name: iam-legend
   publisher: sebastianbille
-  sha256: sha256-sGL0dTr0ygWkDOEVdVaBk3mmeSGtBWxfKlGayDhF/3E=
-  url: https://open-vsx.org/api/sebastianbille/iam-legend/1.1.18/file/sebastianbille.iam-legend-1.1.18.vsix
-  version: 1.1.18
+  sha256: sha256-dPdN+wKmzMpBFh2Z1QBptTXDvIu/8uCXCcmO/n7HvVw=
+  url: https://open-vsx.org/api/sebastianbille/iam-legend/1.1.20/file/sebastianbille.iam-legend-1.1.20.vsix
+  version: 1.1.20
 - lastUpdated: 2021-12-08T13:25:04.103763Z
   name: test
   publisher: seneka
@@ -11140,12 +11140,12 @@
   sha256: sha256-mBGZRxvhwib3HCAf/1d//O9NlrGRHEP3HmjktfXrCpc=
   url: https://open-vsx.org/api/slint/slint/0.3.4/file/slint.slint-0.3.4.vsix
   version: 0.3.4
-- lastUpdated: 2023-01-31T04:33:46.098048Z
+- lastUpdated: 2023-01-31T15:16:23.660342Z
   name: slint-nightly
   publisher: slint
-  sha256: sha256-2Mz4Jut35XG2SSn1SdoIbJtFmys7b7qafeKD39MVpNA=
-  url: https://open-vsx.org/api/slint/slint-nightly/2023.1.3013/file/slint.slint-nightly-2023.1.3013.vsix
-  version: 2023.1.3013
+  sha256: sha256-xbHyYnkSOquqWOdBIOfr56QUrh9vGWSKvffr5fZ/52I=
+  url: https://open-vsx.org/api/slint/slint-nightly/2023.1.3115/file/slint.slint-nightly-2023.1.3115.vsix
+  version: 2023.1.3115
 - lastUpdated: 2021-10-16T09:31:50.644215Z
   name: comment-box
   publisher: slysherz
@@ -11206,12 +11206,12 @@
   sha256: sha256-KNstRADiYCQ9MHwtklUtFRCq58oNy4d3jfNkJHdc2U4=
   url: https://open-vsx.org/api/snyk-security/vscode-vuln-cost/1.7.1/file/snyk-security.vscode-vuln-cost-1.7.1.vsix
   version: 1.7.1
-- lastUpdated: 2023-01-27T16:59:04.227115Z
+- lastUpdated: 2023-01-31T17:53:37.129889Z
   name: vscode-socket-security
   publisher: socketsecurity
-  sha256: sha256-s4fcN+5MXqzYOlb0oegW/sCB4MfzgYuotjeN82Q1Wyw=
-  url: https://open-vsx.org/api/socketsecurity/vscode-socket-security/0.1.1/file/socketsecurity.vscode-socket-security-0.1.1.vsix
-  version: 0.1.1
+  sha256: sha256-iXtacEXP+JwZGCtQlOLPYlDAG4EJDut2OICpVkfHwAg=
+  url: https://open-vsx.org/api/socketsecurity/vscode-socket-security/1.0.0/file/socketsecurity.vscode-socket-security-1.0.0.vsix
+  version: 1.0.0
 - lastUpdated: 2021-10-23T04:33:56.082829Z
   name: velocity
   publisher: sodatea
@@ -11860,12 +11860,12 @@
   sha256: sha256-Vs5M4fUEL9A9+luUa9WqYypclt+Gh8KJ6sGicx5rDkQ=
   url: https://open-vsx.org/api/t-codespaces/workspace-manager/0.0.3/file/t-codespaces.workspace-manager-0.0.3.vsix
   version: 0.0.3
-- lastUpdated: 2023-01-30T13:01:22.587957Z
+- lastUpdated: 2023-01-31T11:17:47.188899Z
   name: tabnine-vscode
   publisher: tabnine
-  sha256: sha256-je3H/HJefU82TW6ZJz1um76BQBGM9KOFr78MCYur6eg=
-  url: https://open-vsx.org/api/tabnine/tabnine-vscode/3.6.37/file/tabnine.tabnine-vscode-3.6.37.vsix
-  version: 3.6.37
+  sha256: sha256-+LlLsU7ZRDmsSqlDV0BaOjYa7elxtUAxErJCLgkEAYM=
+  url: https://open-vsx.org/api/tabnine/tabnine-vscode/3.6.38/file/tabnine.tabnine-vscode-3.6.38.vsix
+  version: 3.6.38
 - lastUpdated: 2022-03-24T09:31:10.400044Z
   name: webview-test
   publisher: tachish

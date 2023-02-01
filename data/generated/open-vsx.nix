@@ -5285,11 +5285,11 @@
   "devfactory-cloudfix-linter" = {
     name = "cloudfix-linter";
     publisher = "devfactory";
-    version = "0.0.11";
+    version = "0.0.12";
     src = fetchurl {
-      url = "https://open-vsx.org/api/devfactory/cloudfix-linter/0.0.11/file/devfactory.cloudfix-linter-0.0.11.vsix";
-      name = "cloudfix-linter-0.0.11.zip";
-      sha256 = "sha256-aDWDQ1c/05NG7H9RWh5wItYyASxMB5kHcnm2POutfqk=";
+      url = "https://open-vsx.org/api/devfactory/cloudfix-linter/0.0.12/file/devfactory.cloudfix-linter-0.0.12.vsix";
+      name = "cloudfix-linter-0.0.12.zip";
+      sha256 = "sha256-EDPTwdfhn5s9nQ+jB1MmfHtdwgZ9yRSrmznTHCPTOU8=";
     };
   };
 
@@ -5318,22 +5318,22 @@
   "devsense-composer-php-vscode" = {
     name = "composer-php-vscode";
     publisher = "devsense";
-    version = "1.29.12304";
+    version = "1.29.12353";
     src = fetchurl {
-      url = "https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12304/file/devsense.composer-php-vscode-1.29.12304.vsix";
-      name = "composer-php-vscode-1.29.12304.zip";
-      sha256 = "sha256-DdqbU2oYGkdyuVzAJapiFaRUHeYTx1O7J5/uTGA2ctI=";
+      url = "https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12353/file/devsense.composer-php-vscode-1.29.12353.vsix";
+      name = "composer-php-vscode-1.29.12353.zip";
+      sha256 = "sha256-s4kdRVE3e9gsfgM1gC9wmrLDicHiaCtH29i9fqaLPew=";
     };
   };
 
   "devsense-profiler-php-vscode" = {
     name = "profiler-php-vscode";
     publisher = "devsense";
-    version = "1.29.12304";
+    version = "1.29.12353";
     src = fetchurl {
-      url = "https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12304/file/devsense.profiler-php-vscode-1.29.12304.vsix";
-      name = "profiler-php-vscode-1.29.12304.zip";
-      sha256 = "sha256-p/OtC0hLRLdI0oo4tbURPL5sWMhyiYBjlGp7irbe+8s=";
+      url = "https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12353/file/devsense.profiler-php-vscode-1.29.12353.vsix";
+      name = "profiler-php-vscode-1.29.12353.zip";
+      sha256 = "sha256-Pe5J+RNX9bZGyLEQpZ0xqg5ly+XMWGSxpMbL5jLqVgo=";
     };
   };
 
@@ -8860,11 +8860,11 @@
   "heliax-juvix-mode" = {
     name = "juvix-mode";
     publisher = "heliax";
-    version = "0.1.24";
+    version = "0.1.25";
     src = fetchurl {
-      url = "https://open-vsx.org/api/heliax/juvix-mode/0.1.24/file/heliax.juvix-mode-0.1.24.vsix";
-      name = "juvix-mode-0.1.24.zip";
-      sha256 = "sha256-5NmgGF1Bu6s10A2fwoMu1aCfgXF7VpTLZfPmiirdGco=";
+      url = "https://open-vsx.org/api/heliax/juvix-mode/0.1.25/file/heliax.juvix-mode-0.1.25.vsix";
+      name = "juvix-mode-0.1.25.zip";
+      sha256 = "sha256-UIOlJmqoi8hdykCsen1jxLwDGfYbkidkAdGChVOpk/8=";
     };
   };
 
@@ -17583,11 +17583,11 @@
   "prisma-prisma-insider" = {
     name = "prisma-insider";
     publisher = "prisma";
-    version = "31.0.1882";
+    version = "31.0.1889";
     src = fetchurl {
-      url = "https://open-vsx.org/api/prisma/prisma-insider/31.0.1882/file/prisma.prisma-insider-31.0.1882.vsix";
-      name = "prisma-insider-31.0.1882.zip";
-      sha256 = "sha256-sSTsEPBte2XveeZHfNFS/hU/ydztRcTlGRJRPlZv9O4=";
+      url = "https://open-vsx.org/api/prisma/prisma-insider/31.0.1889/file/prisma.prisma-insider-31.0.1889.vsix";
+      name = "prisma-insider-31.0.1889.zip";
+      sha256 = "sha256-XFl0le09QwlLgRFcQ2mIQadCDruGhvt3flpJCp2ZdTk=";
     };
   };
 
@@ -19057,11 +19057,11 @@
   "rokucommunity-brightscript" = {
     name = "brightscript";
     publisher = "rokucommunity";
-    version = "2.38.7";
+    version = "2.38.8";
     src = fetchurl {
-      url = "https://open-vsx.org/api/rokucommunity/brightscript/2.38.7/file/rokucommunity.brightscript-2.38.7.vsix";
-      name = "brightscript-2.38.7.zip";
-      sha256 = "sha256-kkInX3nY1wgb1Oyzt9aMu4LmfE/JvuOhgDiCfP58Xy0=";
+      url = "https://open-vsx.org/api/rokucommunity/brightscript/2.38.8/file/rokucommunity.brightscript-2.38.8.vsix";
+      name = "brightscript-2.38.8.zip";
+      sha256 = "sha256-+LS0Ibg01t/R/4S3XEGIxejvDBaywSHQt/sOvEnfuCQ=";
     };
   };
 
@@ -19530,11 +19530,11 @@
   "sarrus-sourcepawn-vscode" = {
     name = "sourcepawn-vscode";
     publisher = "sarrus";
-    version = "5.0.1";
+    version = "5.0.2";
     src = fetchurl {
-      url = "https://open-vsx.org/api/sarrus/sourcepawn-vscode/5.0.1/file/sarrus.sourcepawn-vscode-5.0.1.vsix";
-      name = "sourcepawn-vscode-5.0.1.zip";
-      sha256 = "sha256-JloMfHB6B4jNJjsmk3Jg3VuvZthwRgKjtlwV9V7O/y4=";
+      url = "https://open-vsx.org/api/sarrus/sourcepawn-vscode/5.0.2/file/sarrus.sourcepawn-vscode-5.0.2.vsix";
+      name = "sourcepawn-vscode-5.0.2.zip";
+      sha256 = "sha256-wQAwuo+Ck29VDtd9DlGXZL3RPh4rx0JPjXZALG7mk5w=";
     };
   };
 
@@ -19695,11 +19695,11 @@
   "sebastianbille-iam-legend" = {
     name = "iam-legend";
     publisher = "sebastianbille";
-    version = "1.1.18";
+    version = "1.1.20";
     src = fetchurl {
-      url = "https://open-vsx.org/api/sebastianbille/iam-legend/1.1.18/file/sebastianbille.iam-legend-1.1.18.vsix";
-      name = "iam-legend-1.1.18.zip";
-      sha256 = "sha256-sGL0dTr0ygWkDOEVdVaBk3mmeSGtBWxfKlGayDhF/3E=";
+      url = "https://open-vsx.org/api/sebastianbille/iam-legend/1.1.20/file/sebastianbille.iam-legend-1.1.20.vsix";
+      name = "iam-legend-1.1.20.zip";
+      sha256 = "sha256-dPdN+wKmzMpBFh2Z1QBptTXDvIu/8uCXCcmO/n7HvVw=";
     };
   };
 
@@ -20432,11 +20432,11 @@
   "slint-slint-nightly" = {
     name = "slint-nightly";
     publisher = "slint";
-    version = "2023.1.3013";
+    version = "2023.1.3115";
     src = fetchurl {
-      url = "https://open-vsx.org/api/slint/slint-nightly/2023.1.3013/file/slint.slint-nightly-2023.1.3013.vsix";
-      name = "slint-nightly-2023.1.3013.zip";
-      sha256 = "sha256-2Mz4Jut35XG2SSn1SdoIbJtFmys7b7qafeKD39MVpNA=";
+      url = "https://open-vsx.org/api/slint/slint-nightly/2023.1.3115/file/slint.slint-nightly-2023.1.3115.vsix";
+      name = "slint-nightly-2023.1.3115.zip";
+      sha256 = "sha256-xbHyYnkSOquqWOdBIOfr56QUrh9vGWSKvffr5fZ/52I=";
     };
   };
 
@@ -20553,11 +20553,11 @@
   "socketsecurity-vscode-socket-security" = {
     name = "vscode-socket-security";
     publisher = "socketsecurity";
-    version = "0.1.1";
+    version = "1.0.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/socketsecurity/vscode-socket-security/0.1.1/file/socketsecurity.vscode-socket-security-0.1.1.vsix";
-      name = "vscode-socket-security-0.1.1.zip";
-      sha256 = "sha256-s4fcN+5MXqzYOlb0oegW/sCB4MfzgYuotjeN82Q1Wyw=";
+      url = "https://open-vsx.org/api/socketsecurity/vscode-socket-security/1.0.0/file/socketsecurity.vscode-socket-security-1.0.0.vsix";
+      name = "vscode-socket-security-1.0.0.zip";
+      sha256 = "sha256-iXtacEXP+JwZGCtQlOLPYlDAG4EJDut2OICpVkfHwAg=";
     };
   };
 
@@ -21752,11 +21752,11 @@
   "tabnine-tabnine-vscode" = {
     name = "tabnine-vscode";
     publisher = "tabnine";
-    version = "3.6.37";
+    version = "3.6.38";
     src = fetchurl {
-      url = "https://open-vsx.org/api/tabnine/tabnine-vscode/3.6.37/file/tabnine.tabnine-vscode-3.6.37.vsix";
-      name = "tabnine-vscode-3.6.37.zip";
-      sha256 = "sha256-je3H/HJefU82TW6ZJz1um76BQBGM9KOFr78MCYur6eg=";
+      url = "https://open-vsx.org/api/tabnine/tabnine-vscode/3.6.38/file/tabnine.tabnine-vscode-3.6.38.vsix";
+      name = "tabnine-vscode-3.6.38.zip";
+      sha256 = "sha256-+LlLsU7ZRDmsSqlDV0BaOjYa7elxtUAxErJCLgkEAYM=";
     };
   };
 
