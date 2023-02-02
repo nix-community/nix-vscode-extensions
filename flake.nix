@@ -24,48 +24,31 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        loadGenerated = repository: let
-          generated = import ./data/generated/${repository}.nix {
-            inherit (pkgs) fetchurl fetchFromGitHub fetchgit;
-          };
+        inherit (pkgs) lib;
+        utils = pkgs.vscode-utils;
 
-          groupedByPublisher = builtins.groupBy (ext: ext.publisher) (builtins.attrValues generated);
-          pkgDefinition = {
-            open-vsx = ext: let
-              utils = pkgs.vscode-utils;
-            in {
-              inherit (ext) name;
+        loadGenerated = path:
+          lib.pipe path [
+            (path:
+              import path {
+                inherit (pkgs) fetchgit fetchurl fetchFromGitHub;
+              })
+            (lib.mapAttrsToList (_: extension: {
+              inherit (extension) name;
               value = utils.buildVscodeMarketplaceExtension {
-                vsix = ext.src;
+                vsix = extension.src;
                 mktplcRef = {
-                  inherit (ext) version publisher name;
-                };
-                meta = {
-                  inherit (ext) changelog downloadPage homepage;
-                  license = utils.licenses.${ext.license};
+                  inherit (extension) name publisher version;
                 };
               };
-            };
-            vscode-marketplace = ext: let
-              utils = pkgs.vscode-utils;
-            in {
-              inherit (ext) name;
-              value = utils.buildVscodeMarketplaceExtension {
-                vsix = ext.src;
-                mktplcRef = {
-                  inherit (ext) version publisher name;
-                };
-              };
-            };
-          };
-        in
-          builtins.mapAttrs (_: val:
-            builtins.listToAttrs (map pkgDefinition.${repository} val))
-          groupedByPublisher;
+            }))
+            (builtins.groupBy ({value, ...}: value.vscodeExtPublisher))
+            (builtins.mapAttrs (_: lib.listToAttrs))
+          ];
 
         extensions = {
-          vscode-marketplace = loadGenerated "vscode-marketplace";
-          open-vsx = loadGenerated "open-vsx";
+          vscode-marketplace = loadGenerated ./data/generated/vscode-marketplace.nix;
+          open-vsx = loadGenerated ./data/generated/open-vsx.nix;
         };
 
         vscodiumWithExtensions = let
