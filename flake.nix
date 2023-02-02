@@ -24,49 +24,44 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        loadGenerated = set:
-          with builtins;
-          with pkgs; let
-            generated = import ./data/generated/${set}.nix {
-              inherit fetchurl fetchFromGitHub;
-              fetchgit = fetchGit;
-            };
+        loadGenerated = repository: let
+          generated = import ./data/generated/${repository}.nix {
+            inherit (pkgs) fetchurl fetchFromGitHub fetchgit;
+          };
 
-            groupedByPublisher = groupBy (e: e.publisher) (attrValues generated);
-            pkgDefinition = {
-              open-vsx = e:
-                with e;
-                with vscode-utils; {
-                  inherit name;
-                  value = buildVscodeMarketplaceExtension {
-                    vsix = src;
-                    mktplcRef = {
-                      inherit version;
-                      publisher = publisher;
-                      name = name;
-                    };
-                    meta = with lib; {
-                      inherit changelog downloadPage homepage;
-                      license = licenses.${license};
-                    };
-                  };
+          groupedByPublisher = builtins.groupBy (ext: ext.publisher) (builtins.attrValues generated);
+          pkgDefinition = {
+            open-vsx = ext: let
+              utils = pkgs.vscode-utils;
+            in {
+              inherit (ext) name;
+              value = utils.buildVscodeMarketplaceExtension {
+                vsix = ext.src;
+                mktplcRef = {
+                  inherit (ext) version publisher name;
                 };
-              vscode-marketplace = e:
-                with e;
-                with vscode-utils; {
-                  inherit name;
-                  value = buildVscodeMarketplaceExtension {
-                    vsix = src;
-                    mktplcRef = {
-                      inherit version;
-                      publisher = publisher;
-                      name = name;
-                    };
-                  };
+                meta = {
+                  inherit (ext) changelog downloadPage homepage;
+                  license = utils.licenses.${ext.license};
                 };
+              };
             };
-          in
-            mapAttrs (_: val: listToAttrs (map pkgDefinition.${set} val)) groupedByPublisher;
+            vscode-marketplace = ext: let
+              utils = pkgs.vscode-utils;
+            in {
+              inherit (ext) name;
+              value = utils.buildVscodeMarketplaceExtension {
+                vsix = ext.src;
+                mktplcRef = {
+                  inherit (ext) version publisher name;
+                };
+              };
+            };
+          };
+        in
+          builtins.mapAttrs (_: val:
+            builtins.listToAttrs (map pkgDefinition.${repository} val))
+          groupedByPublisher;
 
         extensions = {
           vscode-marketplace = loadGenerated "vscode-marketplace";
@@ -75,7 +70,7 @@
 
         vscodiumWithExtensions = let
           inherit (pkgs) vscode-with-extensions vscodium;
-          vscodium_ = vscode-with-extensions.override {
+          vscodium' = vscode-with-extensions.override {
             vscode = vscodium;
             vscodeExtensions = builtins.attrValues {
               inherit (extensions.vscode-marketplace.golang) go;
@@ -83,10 +78,10 @@
             };
           };
         in
-          vscodium_
+          vscodium'
           // {
             meta =
-              (builtins.removeAttrs vscodium_.meta ["description"])
+              (builtins.removeAttrs vscodium'.meta ["description"])
               // {
                 longDescription = ''
                   This is a sample `VSCodium` (= `VS Code` without proprietary stuff) with a couple of extensions.
