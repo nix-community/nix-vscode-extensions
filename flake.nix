@@ -93,7 +93,7 @@
       }
     ) // {
     overlays.default = final: prev: {
-      vscode-extensions = self.extensions.${prev.system};
+      inherit (self.extensions.${prev.system}) vscode-marketplace open-vsx;
     };
   }
   // {
