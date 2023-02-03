@@ -418,12 +418,12 @@
   sha256: sha256-hM7f4RJ5PqzpHpowcHGTGg5TDQ1y/oep1uFvVfHe/MU=
   url: https://open-vsx.org/api/alygin/vscode-tlaplus/1.5.4/file/alygin.vscode-tlaplus-1.5.4.vsix
   version: 1.5.4
-- lastUpdated: 2023-02-01T06:08:05.478475Z
+- lastUpdated: 2023-02-03T06:08:30.345315Z
   name: vscode-tlaplus-nightly
   publisher: alygin
-  sha256: sha256-YqJGIr6OST2cNoh3S0cHGlnmyUZzUx7jFaoocY9vfxk=
-  url: https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.2.106/file/alygin.vscode-tlaplus-nightly-2023.2.106.vsix
-  version: 2023.2.106
+  sha256: sha256-v6DFyeYbBLH5PlAN1WfBb/xDG7MLFqivhE2DImBuJVQ=
+  url: https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.2.306/file/alygin.vscode-tlaplus-nightly-2023.2.306.vsix
+  version: 2023.2.306
 - lastUpdated: 2023-02-01T03:32:26.246183Z
   name: aws-toolkit-vscode
   publisher: amazonwebservices
@@ -2920,12 +2920,12 @@
   sha256: sha256-ra4UfCAhzk/dBaezRVB0xWW9AACyj8/bMQAPut8O3pA=
   url: https://open-vsx.org/api/dez64ru/macos-modern-theme/2.1.8/file/dez64ru.macos-modern-theme-2.1.8.vsix
   version: 2.1.8
-- lastUpdated: 2023-02-02T03:25:45.780879Z
+- lastUpdated: 2023-02-03T03:28:25.420856Z
   name: vscode-motoko
   publisher: dfinity-foundation
-  sha256: sha256-JP/6IfT/Ob3o6fN69pXI9yjneBg7oBvHFkzoVnbGNw4=
-  url: https://open-vsx.org/api/dfinity-foundation/vscode-motoko/0.8.2/file/dfinity-foundation.vscode-motoko-0.8.2.vsix
-  version: 0.8.2
+  sha256: sha256-vZQgVBJ/GlhusStSSOCvlr3OKdDNYU9RTnSY9ctD+e0=
+  url: https://open-vsx.org/api/dfinity-foundation/vscode-motoko/0.8.3/file/dfinity-foundation.vscode-motoko-0.8.3.vsix
+  version: 0.8.3
 - lastUpdated: 2020-11-14T14:35:33.424184Z
   name: dhall-lang
   publisher: dhall
@@ -4342,12 +4342,12 @@
   sha256: sha256-5K4BqTafKy6sX3oUkovSomOwFkLXcM4+Or7DXcgwvtc=
   url: https://open-vsx.org/api/github/vscode-codeql/1.7.8/file/github.vscode-codeql-1.7.8.vsix
   version: 1.7.8
-- lastUpdated: 2022-12-08T03:30:55.175135Z
+- lastUpdated: 2023-02-03T03:29:58.167237Z
   name: vscode-pull-request-github
   publisher: github
-  sha256: sha256-NJRHWH2bJLqjyWFIj3FTzGh/3LtiXjsVcBCMzbhtH1g=
-  url: https://open-vsx.org/api/github/vscode-pull-request-github/0.56.0/file/github.vscode-pull-request-github-0.56.0.vsix
-  version: 0.56.0
+  sha256: sha256-Pn0UypB+CGY1hXPD/xUrkrrKYWlH/0sj9dm2nvlIS14=
+  url: https://open-vsx.org/api/github/vscode-pull-request-github/0.58.0/file/github.vscode-pull-request-github-0.58.0.vsix
+  version: 0.58.0
 - lastUpdated: 2023-01-19T06:23:22.117127Z
   name: gitlab-workflow
   publisher: gitlab
@@ -7780,12 +7780,12 @@
   sha256: sha256-aEJYD6oErV7nMnLTrPjzAlNUlpRB7wZ9NXOtgOECnCA=
   url: https://open-vsx.org/api/ms-azuretools/vscode-azureappservice/0.24.5/file/ms-azuretools.vscode-azureappservice-0.24.5.vsix
   version: 0.24.5
-- lastUpdated: 2022-11-17T03:53:45.877472Z
+- lastUpdated: 2023-02-03T03:33:02.190578Z
   name: vscode-azurefunctions
   publisher: ms-azuretools
-  sha256: sha256-GGDeb20wIh2y0Sn2QXzVA2h0EH5CRM7u3P2mtZapvlo=
-  url: https://open-vsx.org/api/ms-azuretools/vscode-azurefunctions/1.9.0/file/ms-azuretools.vscode-azurefunctions-1.9.0.vsix
-  version: 1.9.0
+  sha256: sha256-OD8zt7PLj66nuxOQ2JNqNOFaPk7yJCYZKIACJitvDVo=
+  url: https://open-vsx.org/api/ms-azuretools/vscode-azurefunctions/1.10.0/file/ms-azuretools.vscode-azurefunctions-1.10.0.vsix
+  version: 1.10.0
 - lastUpdated: 2022-09-16T05:11:18.055087Z
   name: vscode-azureresourcegroups
   publisher: ms-azuretools
@@ -7978,12 +7978,12 @@
   sha256: sha256-P4/hWbWQSZshVeLxSVCJM3HZfuZa3ogwyVnxzNXKpqI=
   url: https://open-vsx.org/api/ms-python/isort/2022.8.0/file/ms-python.isort-2022.8.0.vsix
   version: 2022.8.0
-- lastUpdated: 2023-01-13T03:55:32.374663Z
+- lastUpdated: 2023-02-03T03:51:42.510214Z
   name: python
   publisher: ms-python
-  sha256: sha256-IQg4Vfsm8ZDvDXxcFpnieTSzeOm7DGyUkpiALU8U+Lg=
-  url: https://open-vsx.org/api/ms-python/python/2022.20.2/file/ms-python.python-2022.20.2.vsix
-  version: 2022.20.2
+  sha256: sha256-szYmkTNwz3A1HZoy0OWt8HuTqEEpNbkYNTcO76usz/s=
+  url: https://open-vsx.org/api/ms-python/python/2023.2.0/file/ms-python.python-2023.2.0.vsix
+  version: 2023.2.0
 - lastUpdated: 2022-10-14T20:32:03.241313Z
   name: jupyter
   publisher: ms-toolsai
@@ -8050,12 +8050,12 @@
   sha256: sha256-S/xlwT/J3XuyfWjvPb0FxK69ztNi6AinjOTEGmISELM=
   url: https://open-vsx.org/api/ms-vscode/brackets-pack/0.1.1/file/ms-vscode.brackets-pack-0.1.1.vsix
   version: 0.1.1
-- lastUpdated: 2023-02-01T04:01:44.145112Z
+- lastUpdated: 2023-02-03T04:01:14.419359Z
   name: cmake-tools
   publisher: ms-vscode
-  sha256: sha256-ZAZOIuZmXt0koZQis7aYOachzayVtCTj0+uLrbsswMI=
-  url: https://open-vsx.org/api/ms-vscode/cmake-tools/1.13.44/file/ms-vscode.cmake-tools-1.13.44.vsix
-  version: 1.13.44
+  sha256: sha256-1dOCjx3c5PMj7toYF3pzzTQB6c+E0qCQIkfmxXj/c7g=
+  url: https://open-vsx.org/api/ms-vscode/cmake-tools/1.13.45/file/ms-vscode.cmake-tools-1.13.45.vsix
+  version: 1.13.45
 - lastUpdated: 2022-03-11T23:20:37.553259Z
   name: cpptools-themes
   publisher: ms-vscode
@@ -8878,12 +8878,12 @@
   sha256: sha256-XPOi2fcr/kYx6lRuUw0lcCYYVTNN6OBOAaMkg4bkB+Y=
   url: https://open-vsx.org/api/opencaesar/oml-luxor/1.4.0/file/opencaesar.oml-luxor-1.4.0.vsix
   version: 1.4.0
-- lastUpdated: 2021-09-29T04:23:01.73439Z
+- lastUpdated: 2023-02-03T04:03:33.395743Z
   name: lime-vscode-extension
   publisher: openfl
-  sha256: sha256-YFvvZT3Bq8fD1TMYhCEyNKs+YShcW11ftUtcTf+6klU=
-  url: https://open-vsx.org/api/openfl/lime-vscode-extension/1.4.3/file/openfl.lime-vscode-extension-1.4.3.vsix
-  version: 1.4.3
+  sha256: sha256-F2PKpikTKUbvB5CVT+Yw8gm3a/k7t0rzApJsvBW1xeQ=
+  url: https://open-vsx.org/api/openfl/lime-vscode-extension/1.5.0/file/openfl.lime-vscode-extension-1.5.0.vsix
+  version: 1.5.0
 - lastUpdated: 2021-04-12T18:38:17.547947Z
   name: openhab
   publisher: openhab
@@ -9928,6 +9928,12 @@
   sha256: sha256-UdRjk+sAAvfQLzNYkiGNbZLKAX+lnzWDAb4MnLNdGUk=
   url: https://open-vsx.org/api/redhat/fabric8-analytics/0.3.6/file/redhat.fabric8-analytics-0.3.6.vsix
   version: 0.3.6
+- lastUpdated: 2023-02-02T08:17:26.373075Z
+  name: java
+  publisher: redhat
+  sha256: sha256-51h0UhDqFvuzfz+0vrefRy+3ReXzvWbA6iXPV3pazqY=
+  url: https://open-vsx.org/api/redhat/java/1.15.2023020303/file/redhat.java-1.15.2023020303.vsix
+  version: 1.15.2023020303
 - lastUpdated: 2022-11-14T21:31:47.342506Z
   name: mta-vscode-extension
   publisher: redhat
@@ -11152,12 +11158,12 @@
   sha256: sha256-mBGZRxvhwib3HCAf/1d//O9NlrGRHEP3HmjktfXrCpc=
   url: https://open-vsx.org/api/slint/slint/0.3.4/file/slint.slint-0.3.4.vsix
   version: 0.3.4
-- lastUpdated: 2023-02-01T09:20:26.427478Z
+- lastUpdated: 2023-02-03T04:21:37.864276Z
   name: slint-nightly
   publisher: slint
-  sha256: sha256-OasjuE2alrLNJVc6wHjKEFiRL9PrcduTVrHesS+Mxms=
-  url: https://open-vsx.org/api/slint/slint-nightly/2023.2.109/file/slint.slint-nightly-2023.2.109.vsix
-  version: 2023.2.109
+  sha256: sha256-uqIYc9EdEV08Y23BFMpP7inUYQkgDKr3kTtx23TnykQ=
+  url: https://open-vsx.org/api/slint/slint-nightly/2023.2.217/file/slint.slint-nightly-2023.2.217.vsix
+  version: 2023.2.217
 - lastUpdated: 2021-10-16T09:31:50.644215Z
   name: comment-box
   publisher: slysherz
@@ -13624,12 +13630,12 @@
   sha256: sha256-0h/QeRyNg8rnjf65nQ5SrXiyFRxFhun+7gPDPI+RP9E=
   url: https://open-vsx.org/api/wadoon/jml-vscode/0.2.0/file/wadoon.jml-vscode-0.2.0.vsix
   version: 0.2.0
-- lastUpdated: 2023-02-02T11:35:44.927076Z
+- lastUpdated: 2023-02-03T04:48:42.301851Z
   name: vscode-wakatime
   publisher: wakatime
-  sha256: sha256-Dt3gd8StTouzAFtAHjLl5mqE61LZCEeu/3WbDF8fUA8=
-  url: https://open-vsx.org/api/wakatime/vscode-wakatime/24.0.0/file/wakatime.vscode-wakatime-24.0.0.vsix
-  version: 24.0.0
+  sha256: sha256-HELYwlfGFF8/F8sycbMSxAjLR9o7zXL4aVebqe7YzSE=
+  url: https://open-vsx.org/api/wakatime/vscode-wakatime/24.0.1/file/wakatime.vscode-wakatime-24.0.1.vsix
+  version: 24.0.1
 - lastUpdated: 2021-12-16T19:46:00.590082Z
   name: salt-lint
   publisher: warpnet
@@ -13870,12 +13876,12 @@
   sha256: sha256-SE7mlwjzLqw9xRUCHdWqR8e3+Pq+z9c0wgCiC9aX9RM=
   url: https://open-vsx.org/api/wscats/omi-snippets/2.2.8/file/wscats.omi-snippets-2.2.8.vsix
   version: 2.2.8
-- lastUpdated: 2023-01-27T13:19:39.596215Z
+- lastUpdated: 2023-02-03T03:25:33.287854Z
   name: ballerina
   publisher: wso2
-  sha256: sha256-czVd1EEceCv6L8n7/JzyVnB5OrxxMrGZ/kY0B1lqQBw=
-  url: https://open-vsx.org/api/wso2/ballerina/3.3.7/file/wso2.ballerina-3.3.7.vsix
-  version: 3.3.7
+  sha256: sha256-ZBtQ2zMc1H7AzRmItpZcWdOWqppVJtNGPZ+EhfPfU6g=
+  url: https://open-vsx.org/api/wso2/ballerina/3.3.8/file/wso2.ballerina-3.3.8.vsix
+  version: 3.3.8
 - lastUpdated: 2022-06-06T18:18:11.868708Z
   name: vscode-commit-pro-extension
   publisher: wtho
