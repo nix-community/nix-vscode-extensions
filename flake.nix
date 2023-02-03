@@ -19,37 +19,11 @@
     flake-utils,
     flake-compat,
   }:
-    flake-utils.lib.eachDefaultSystem
-    (
+    flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        inherit (pkgs) lib;
-        utils = pkgs.vscode-utils;
-
-        loadGenerated = path:
-          lib.pipe path [
-            (path:
-              import path {
-                inherit (pkgs) fetchgit fetchurl fetchFromGitHub;
-              })
-            (lib.mapAttrsToList (_: extension: {
-              inherit (extension) name;
-              value = utils.buildVscodeMarketplaceExtension {
-                vsix = extension.src;
-                mktplcRef = {
-                  inherit (extension) name publisher version;
-                };
-              };
-            }))
-            (builtins.groupBy ({value, ...}: value.vscodeExtPublisher))
-            (builtins.mapAttrs (_: lib.listToAttrs))
-          ];
-
-        extensions = {
-          vscode-marketplace = loadGenerated ./data/generated/vscode-marketplace.nix;
-          open-vsx = loadGenerated ./data/generated/open-vsx.nix;
-        };
+        extensions = self.overlays.default null system;
 
         vscodiumWithExtensions = let
           inherit (pkgs) vscode-with-extensions vscodium;
@@ -82,8 +56,32 @@
       }
     )
     // {
-      overlays.default = final: prev: {
-        vscode-extensions = self.extensions.${prev.system};
+      overlays = {
+        default = _: prev: let
+          inherit (prev) lib;
+          utils = prev.vscode-utils;
+          loadGenerated = path:
+            lib.pipe path [
+              (path:
+                import path {
+                  inherit (prev) fetchgit fetchurl fetchFromGitHub;
+                })
+              (lib.mapAttrsToList (_: extension: {
+                inherit (extension) name;
+                value = utils.buildVscodeMarketplaceExtension {
+                  vsix = extension.src;
+                  mktplcRef = {
+                    inherit (extension) name publisher version;
+                  };
+                };
+              }))
+              (builtins.groupBy ({value, ...}: value.vscodeExtPublisher))
+              (builtins.mapAttrs (_: lib.listToAttrs))
+            ];
+        in {
+          vscode-marketplace = loadGenerated ./data/generated/vscode-marketplace.nix;
+          open-vsx = loadGenerated ./data/generated/open-vsx.nix;
+        };
       };
     }
     // {
