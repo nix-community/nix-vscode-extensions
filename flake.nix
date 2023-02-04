@@ -13,95 +13,84 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, flake-compat }: flake-utils.lib.eachDefaultSystem
-    (system:
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    let
+      inherit (nixpkgs) lib;
+      inherit (flake-utils.lib) eachDefaultSystem;
+    in
+    {
+      overlays = {
+        default = _: prev:
+          let
+            utils = prev.vscode-utils;
+            loadGenerated = path:
+              lib.pipe path [
+                (path:
+                  import path {
+                    inherit (prev) fetchurl fetchFromGitHub;
+                    fetchgit = prev.fetchGit;
+                  })
+                (lib.mapAttrsToList (_: extension: {
+                  inherit (extension) name;
+                  value = utils.buildVscodeMarketplaceExtension {
+                    vsix = extension.src;
+                    mktplcRef = {
+                      inherit (extension) name publisher version;
+                    };
+                  };
+                }))
+                (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
+                (builtins.mapAttrs (_: lib.listToAttrs))
+              ];
+          in
+          {
+            vscode-marketplace = loadGenerated ./data/generated/vscode-marketplace.nix;
+            open-vsx = loadGenerated ./data/generated/open-vsx.nix;
+          };
+      };
+      templates = {
+        vscodium-with-extensions = {
+          path = ./template;
+          description = "VSCodium with extensions";
+        };
+      };
+    }
+    // (eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-
-        loadGenerated = set:
-          with builtins; with pkgs; let
-            generated = import ./data/generated/${set}.nix {
-              inherit fetchurl fetchFromGitHub;
-              fetchgit = fetchGit;
-            };
-
-            groupedByPublisher = (groupBy (e: e.publisher) (attrValues generated));
-            pkgDefinition = {
-              open-vsx = e: with e; with vscode-utils; {
-                inherit name;
-                value = buildVscodeMarketplaceExtension {
-                  vsix = src;
-                  mktplcRef = {
-                    inherit version;
-                    publisher = publisher;
-                    name = name;
-                  };
-                  meta = with lib; {
-                    inherit changelog downloadPage homepage;
-                    license = licenses.${license};
-                  };
-                };
-              };
-              vscode-marketplace = e: with e; with vscode-utils; {
-                inherit name;
-                value = buildVscodeMarketplaceExtension {
-                  vsix = src;
-                  mktplcRef = {
-                    inherit version;
-                    publisher = publisher;
-                    name = name;
-                  };
-                };
-              };
-            };
-          in
-          mapAttrs (_: val: listToAttrs (map pkgDefinition.${set} val)) groupedByPublisher;
-
-        extensions = {
-          vscode-marketplace = loadGenerated "vscode-marketplace";
-          open-vsx = loadGenerated "open-vsx";
-        };
-
-        vscodiumWithExtensions =
-          let
-            inherit (pkgs) vscode-with-extensions vscodium;
-            vscodium_ =
-              (vscode-with-extensions.override {
-                vscode = vscodium;
-                vscodeExtensions = builtins.attrValues {
-                  inherit (extensions.vscode-marketplace.golang) go;
-                  inherit (extensions.vscode-marketplace.vlanguage) vscode-vlang;
-                };
-              });
-          in
-          vscodium_ // {
-            meta = (builtins.removeAttrs vscodium_.meta [ "description" ]) // {
-              longDescription = ''
-                This is a sample `VSCodium` (= `VS Code` without proprietary stuff) with a couple of extensions.
-              
-                The [repo](https://github.com/nix-community/nix-vscode-extensions) provides
-                `VS Code Marketplace` (~40K) and `Open VSX` (~3K) extensions as `Nix` expressions.
-              '';
-            };
-          };
       in
       {
+        extensions = self.overlays.default null nixpkgs.legacyPackages.${system};
+
         packages = {
-          inherit vscodiumWithExtensions;
+          vscodium-with-extensions =
+            pkgs.vscode-with-extensions.override
+              {
+                vscode = pkgs.vscodium;
+                vscodeExtensions = with self.extensions.${system}.vscode-marketplace; [
+                  golang.go
+                  vlanguage.vscode-vlang
+                ];
+              }
+            // {
+              meta = lib.addMetaAttrs rec {
+                # TODO don't override `description` when https://github.com/NixOS/nixos-search/pull/607 is merged
+                description = longDescription;
+                longDescription = lib.mdDoc ''
+                  This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
+                  You can override this package and set `vscodeExtensions` to a list of extension
+                  derivations, namely those provided by this flake.
+
+                  The [repository] provides about 40K extensions from [Visual Studio Marketplace]
+                  and another ~3K from [Open VSX Registry].
+
+                  [repository]: https://github.com/nix-community/nix-vscode-extensions
+                  [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
+                  [Open VSX Registry]: https://open-vsx.org/
+                '';
+              };
+            };
         };
-        inherit extensions;
-      }
-    ) // {
-    overlays.default = final: prev: {
-      inherit (self.extensions.${prev.system}) vscode-marketplace open-vsx;
-    };
-  }
-  // {
-    templates = {
-      default = {
-        path = ./template;
-        description = "VSCodium with extensions";
-      };
-    };
-  };
+        formatter = pkgs.writeScriptBin "fmt" "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt flake.nix nix-dev/flake.nix";
+      }));
 }
