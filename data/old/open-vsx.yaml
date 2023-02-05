@@ -1144,12 +1144,12 @@
   sha256: sha256-yShzpcMNq+blgeQ7ZHRBgYIfIFw/ItYEpK3trd+Pn0E=
   url: https://open-vsx.org/api/bceskavich/theme-dracula-at-night/2.6.0/file/bceskavich.theme-dracula-at-night-2.6.0.vsix
   version: 2.6.0
-- lastUpdated: 2022-10-11T08:01:23.487088Z
+- lastUpdated: 2023-02-04T19:04:03.586557Z
   name: beardedicons
   publisher: beardedbear
-  sha256: sha256-w7RqST8H6/4ziBpJ7grdTjIiIdihn/WzkOgsa9Jgvuw=
-  url: https://open-vsx.org/api/beardedbear/beardedicons/1.2.0/file/beardedbear.beardedicons-1.2.0.vsix
-  version: 1.2.0
+  sha256: sha256-JSHHaA54Siy8XFFLX6uUX95MQW+KywIr3LPlx72Gd3M=
+  url: https://open-vsx.org/api/beardedbear/beardedicons/1.3.0/file/beardedbear.beardedicons-1.3.0.vsix
+  version: 1.3.0
 - lastUpdated: 2022-10-11T05:54:18.621789Z
   name: beardedtheme
   publisher: beardedbear
@@ -1678,12 +1678,12 @@
   sha256: sha256-qqzS5t6jP3JR5AOqDXmbuupu0P4ONSfu8MgqsV0fqhU=
   url: https://open-vsx.org/api/caiqichang/vscode-translation/3.0.5/file/caiqichang.vscode-translation-3.0.5.vsix
   version: 3.0.5
-- lastUpdated: 2022-11-07T14:24:33.877648Z
+- lastUpdated: 2023-02-04T15:00:43.0593Z
   name: karavan
   publisher: camel-karavan
-  sha256: sha256-zDuHIUbk0XBWjWC4yQqkBTGBe+AgpQ0Mrl/KKivI+qw=
-  url: https://open-vsx.org/api/camel-karavan/karavan/3.18.5/file/camel-karavan.karavan-3.18.5.vsix
-  version: 3.18.5
+  sha256: sha256-uid4Srk+1SZDq+hVELHu4QV5pMuk54UCJ5uZ7f24J+8=
+  url: https://open-vsx.org/api/camel-karavan/karavan/3.20.0/file/camel-karavan.karavan-3.20.0.vsix
+  version: 3.20.0
 - lastUpdated: 2020-11-07T15:37:38.96374Z
   name: yo
   publisher: camel-tooling
@@ -1786,12 +1786,12 @@
   sha256: sha256-wJ1Bb216u7xTcNg6BPPXcJUOYy+WAGQIYSljjtPvJQw=
   url: https://open-vsx.org/api/ccls-project/ccls/0.1.29/file/ccls-project.ccls-0.1.29.vsix
   version: 0.1.29
-- lastUpdated: 2023-02-03T22:58:10.187554Z
+- lastUpdated: 2023-02-04T23:04:16.665274Z
   name: vscode-chalet
   publisher: chalet-org
-  sha256: sha256-K/HJlggwMhPo/5nV3eEnHUnKvtfMIBNgkZ0FiT361uc=
-  url: https://open-vsx.org/api/chalet-org/vscode-chalet/0.5.11/file/chalet-org.vscode-chalet-0.5.11.vsix
-  version: 0.5.11
+  sha256: sha256-Q+wsotd25WFa+qs1GsIt3GOKRuJKiaEHTbzLhSDRNj0=
+  url: https://open-vsx.org/api/chalet-org/vscode-chalet/0.5.12/file/chalet-org.vscode-chalet-0.5.12.vsix
+  version: 0.5.12
 - lastUpdated: 2021-01-12T12:02:15.916884Z
   name: cheemaps
   publisher: chee
@@ -2620,12 +2620,12 @@
   sha256: sha256-fTCReYQ3no8pKPBL5M/5CcnI51PONPt8Ru90CUUB/kE=
   url: https://open-vsx.org/api/danielsrothstan/uixninja-theme/1.14.0/file/danielsrothstan.uixninja-theme-1.14.0.vsix
   version: 1.14.0
-- lastUpdated: 2023-01-29T23:23:16.440099Z
+- lastUpdated: 2023-02-04T16:35:12.408236Z
   name: civet
   publisher: danielx
-  sha256: sha256-fddEmzNLZhqxT9K4AnMfnVXGWPfJnCSwDvJwwkMXFss=
-  url: https://open-vsx.org/api/danielx/civet/0.3.5/file/danielx.civet-0.3.5.vsix
-  version: 0.3.5
+  sha256: sha256-U+FZfIoZ5vo+B0iJ5K4OkCyQ07usEa9psIhqFkbrkpM=
+  url: https://open-vsx.org/api/danielx/civet/0.3.6/file/danielx.civet-0.3.6.vsix
+  version: 0.3.6
 - lastUpdated: 2021-02-21T18:41:30.995199Z
   name: vscode-fsharp-refactor
   publisher: danmannock
@@ -2902,18 +2902,18 @@
   sha256: sha256-4P/5hpJaBVuzh9VmfxJBF8mpINlmRo6dtemIaySS/3c=
   url: https://open-vsx.org/api/devmikeua/mikrotik-routeros-script/2022.9.2/file/devmikeua.mikrotik-routeros-script-2022.9.2.vsix
   version: 2022.9.2
-- lastUpdated: 2023-02-03T16:57:00.332421Z
+- lastUpdated: 2023-02-04T23:06:33.492359Z
   name: composer-php-vscode
   publisher: devsense
-  sha256: sha256-5ZBrx3GUxpNldicWVHOXImyrOS3gwnJtLbup18Ju6Js=
-  url: https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12393/file/devsense.composer-php-vscode-1.29.12393.vsix
-  version: 1.29.12393
-- lastUpdated: 2023-02-03T16:58:18.860368Z
+  sha256: sha256-UuhddCYZZGMw4O4XmtrW8nzw094LFibR0dEwJgoltUw=
+  url: https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12402/file/devsense.composer-php-vscode-1.29.12402.vsix
+  version: 1.29.12402
+- lastUpdated: 2023-02-04T23:08:02.10227Z
   name: profiler-php-vscode
   publisher: devsense
-  sha256: sha256-3Snkns8EDoIRLWqFeZIs6KxAbyMZfWtJZ30+7lsOUwc=
-  url: https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12393/file/devsense.profiler-php-vscode-1.29.12393.vsix
-  version: 1.29.12393
+  sha256: sha256-paD5Rd0+yv8CxeCRdTnTsoycapcXh/rkMilEIqHlgOk=
+  url: https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12402/file/devsense.profiler-php-vscode-1.29.12402.vsix
+  version: 1.29.12402
 - lastUpdated: 2022-06-23T12:26:01.697016Z
   name: macos-modern-theme
   publisher: dez64ru
@@ -4726,12 +4726,12 @@
   sha256: sha256-c3ny6OpnV7thYAy/HWP9ymXfQsA+aS6u7xegkoSrZjg=
   url: https://open-vsx.org/api/halcyontechltd/vscode-rpgle/0.17.5/file/halcyontechltd.vscode-rpgle-0.17.5.vsix
   version: 0.17.5
-- lastUpdated: 2023-01-11T03:33:36.613573Z
+- lastUpdated: 2023-02-04T23:55:25.915594Z
   name: draw
   publisher: hall
-  sha256: sha256-2EAH77bmavPwDAAAPaqusEaRHAtfwo4YIOJjuyZS5vs=
-  url: https://open-vsx.org/api/hall/draw/0.1.20/file/hall.draw-0.1.20.vsix
-  version: 0.1.20
+  sha256: sha256-pOZwuvUJWaEQn1zdHHTNvzK8KUS46Np5wuR7GDFGtis=
+  url: https://open-vsx.org/api/hall/draw/0.1.21/file/hall.draw-0.1.21.vsix
+  version: 0.1.21
 - lastUpdated: 2021-11-26T21:53:30.943598Z
   name: obsidian-dark
   publisher: hamza-aziane
@@ -5188,7 +5188,7 @@
   sha256: sha256-48NIwyECFeedp90mwBn6wlM26m/ja4qSZEHHYlRGiqY=
   url: https://open-vsx.org/api/idleberg/innosetup/1.6.1/file/idleberg.innosetup-1.6.1.vsix
   version: 1.6.1
-- lastUpdated: 2022-09-08T10:19:03.312773Z
+- lastUpdated: 2023-02-05T00:45:09.160893Z
   name: nsis
   publisher: idleberg
   sha256: sha256-VYt8QJCYAK4XrnXOKEtvUsZ6dwWMIyO+8Kmu+eVzaYE=
@@ -5206,12 +5206,12 @@
   sha256: sha256-JlFUCMyy8rUg5TEUlihcY4nbToea0xp2ri/zwQD/EOM=
   url: https://open-vsx.org/api/idleberg/nsl-assembler/1.2.1/file/idleberg.nsl-assembler-1.2.1.vsix
   version: 1.2.1
-- lastUpdated: 2022-12-28T14:12:00.116252Z
+- lastUpdated: 2023-02-05T00:52:49.528938Z
   name: openvpn
   publisher: idleberg
-  sha256: sha256-Rl6iE8bZo9yEeZby1FvEHNEG9+o9UFcm15XVlvaIBZQ=
-  url: https://open-vsx.org/api/idleberg/openvpn/0.3.0/file/idleberg.openvpn-0.3.0.vsix
-  version: 0.3.0
+  sha256: sha256-WNrLeYE373FRUu+Mswa0+ggSW7p8FKLqXKpbbV3/85w=
+  url: https://open-vsx.org/api/idleberg/openvpn/0.3.1/file/idleberg.openvpn-0.3.1.vsix
+  version: 0.3.1
 - lastUpdated: 2021-03-07T17:36:33.908584Z
   name: pynsist
   publisher: idleberg
@@ -5278,12 +5278,12 @@
   sha256: sha256-satG44qZkXN4GZX8wtRCVMYNXKwm653nlE7NG1rKOjc=
   url: https://open-vsx.org/api/ilingu/standup-extension/0.1.5/file/ilingu.standup-extension-0.1.5.vsix
   version: 0.1.5
-- lastUpdated: 2023-02-01T17:37:46.041612Z
+- lastUpdated: 2023-02-04T17:20:28.895888Z
   name: ui5plugin
   publisher: iljapostnovs
-  sha256: sha256-0JLuLyrpP0cZtQ4jnyIKOfHwVOrFdJfWCg/NVoqxGt8=
-  url: https://open-vsx.org/api/iljapostnovs/ui5plugin/0.15.10/file/iljapostnovs.ui5plugin-0.15.10.vsix
-  version: 0.15.10
+  sha256: sha256-qbrmtt0IaCuVVXxvU5UJQ46p0US6qX/QURk4qx7Qnxs=
+  url: https://open-vsx.org/api/iljapostnovs/ui5plugin/0.15.11/file/iljapostnovs.ui5plugin-0.15.11.vsix
+  version: 0.15.11
 - lastUpdated: 2021-11-18T14:26:46.304902Z
   name: google-java-format
   publisher: ilkka
@@ -5302,6 +5302,12 @@
   sha256: sha256-q3HAUQVwPxoAmBEXcAjmacEltGDyeFO/j1/dZTUmdS4=
   url: https://open-vsx.org/api/imagineee/moon-purple/1.0.3/file/imagineee.moon-purple-1.0.3.vsix
   version: 1.0.3
+- lastUpdated: 2023-02-05T01:13:26.788277Z
+  name: smarty
+  publisher: imperez
+  sha256: sha256-5bWRF9F8n5fRtB+rSy4zW/gPaqAQ3p5cspFbWRTj2ro=
+  url: https://open-vsx.org/api/imperez/smarty/0.4.0/file/imperez.smarty-0.4.0.vsix
+  version: 0.4.0
 - lastUpdated: 2020-09-30T03:30:28.759563Z
   name: haxe-jsx
   publisher: influrium
@@ -5350,12 +5356,12 @@
   sha256: sha256-LHkP8KNtKOTyW6ABRtejOIRe9W2sbsEQajeuIkYX8Bw=
   url: https://open-vsx.org/api/iocave/monkey-patch/0.1.16/file/iocave.monkey-patch-0.1.16.vsix
   version: 0.1.16
-- lastUpdated: 2022-11-09T02:21:04.393187Z
+- lastUpdated: 2023-02-04T21:13:05.85696Z
   name: ionide-fsharp
   publisher: ionide
-  sha256: sha256-lev+bF2P7XZPcdzmR16PTaMqRij1glcXl2ZtaIZKesY=
-  url: https://open-vsx.org/api/ionide/ionide-fsharp/7.4.0/file/ionide.ionide-fsharp-7.4.0.vsix
-  version: 7.4.0
+  sha256: sha256-WsIyo5xYd25RQWuQwH2fMbSUbGUAl/oAJZW2VApgLP8=
+  url: https://open-vsx.org/api/ionide/ionide-fsharp/7.4.1/file/ionide.ionide-fsharp-7.4.1.vsix
+  version: 7.4.1
 - lastUpdated: 2023-02-02T17:08:53.990253Z
   name: path-autocomplete
   publisher: ionutvmi
@@ -6946,6 +6952,12 @@
   sha256: sha256-Dc+8JQCCUU694d44eQrTSAwxlzcTsLwkup6RG1RV7Tc=
   url: https://open-vsx.org/api/luquedaniel/languague-renpy/2.0.14/file/luquedaniel.languague-renpy-2.0.14.vsix
   version: 2.0.14
+- lastUpdated: 2023-02-04T18:53:13.558733Z
+  name: lushay-code
+  publisher: lushay-labs
+  sha256: sha256-joeqYoL8ezqT+Ln7YhIfzo4noatwpDcX9aZuI2pXd8w=
+  url: https://open-vsx.org/api/lushay-labs/lushay-code/0.0.13/file/lushay-labs.lushay-code-0.0.13.vsix
+  version: 0.0.13
 - lastUpdated: 2020-08-25T15:05:11.164076Z
   name: pop-n-lock-theme-vscode
   publisher: luxcium
@@ -9508,6 +9520,12 @@
   sha256: sha256-T3gWvN+nYriiCDEUBSSJZ5fCcrilXeMrj7JGcA2ITN0=
   url: https://open-vsx.org/api/porifa/laravel-intelephense/1.20.4/file/porifa.laravel-intelephense-1.20.4.vsix
   version: 1.20.4
+- lastUpdated: 2023-02-04T20:47:00.246147Z
+  name: shiny-python
+  publisher: posit
+  sha256: sha256-YHsSF6J0HgMnxCXud7p4Be73HzVemky8Br3S7XlpJQA=
+  url: https://open-vsx.org/api/posit/shiny-python/0.1.1/file/posit.shiny-python-0.1.1.vsix
+  version: 0.1.1
 - lastUpdated: 2022-06-28T12:33:04.719339Z
   name: potigol-language
   publisher: potigol
@@ -10132,12 +10150,12 @@
   sha256: sha256-/gLvhw0XcUb6Jch/LZ4k7xpSS9wdYWVf5u7uvOHS+i8=
   url: https://open-vsx.org/api/redwan-hossain/skillavid-pure-black/5.0.0/file/redwan-hossain.skillavid-pure-black-5.0.0.vsix
   version: 5.0.0
-- lastUpdated: 2023-02-04T00:20:42.067105Z
+- lastUpdated: 2023-02-05T00:23:36.2559Z
   name: schemastore
   publisher: remcohaszing
-  sha256: sha256-ah4sQXjomG3I8htvpx/QylLVcNe6mv1UF9XbsIfrZV8=
-  url: https://open-vsx.org/api/remcohaszing/schemastore/1.0.52/file/remcohaszing.schemastore-1.0.52.vsix
-  version: 1.0.52
+  sha256: sha256-GJbafpN1KZ1Q8jIngaraRCBa4nJhc/UR/vWUCLEdyLE=
+  url: https://open-vsx.org/api/remcohaszing/schemastore/1.0.53/file/remcohaszing.schemastore-1.0.53.vsix
+  version: 1.0.53
 - lastUpdated: 2021-07-05T06:10:39.36172Z
   name: shellman
   publisher: remisa
@@ -14284,12 +14302,12 @@
   sha256: sha256-ykyt2J2vmH5CJ9XopBSUBQ5yotXRPlFn7rC25+pSCco=
   url: https://open-vsx.org/api/zardoy/terminal-code-runner/0.1.1/file/zardoy.terminal-code-runner-0.1.1.vsix
   version: 0.1.1
-- lastUpdated: 2023-02-02T10:13:52.981168Z
+- lastUpdated: 2023-02-05T01:04:02.658065Z
   name: ts-essential-plugins
   publisher: zardoy
-  sha256: sha256-L2VqHdbQysa1tp3zl9OSAveNR4CskFROs2hiCcouNyE=
-  url: https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.46/file/zardoy.ts-essential-plugins-0.0.46.vsix
-  version: 0.0.46
+  sha256: sha256-fmkPheh6pyTyX4UOnyoB/FNRHZIGIhWboHemogH6p74=
+  url: https://open-vsx.org/api/zardoy/ts-essential-plugins/0.0.47/file/zardoy.ts-essential-plugins-0.0.47.vsix
+  version: 0.0.47
 - lastUpdated: 2022-05-05T00:59:20.976169Z
   name: typescript-server-logger
   publisher: zardoy
