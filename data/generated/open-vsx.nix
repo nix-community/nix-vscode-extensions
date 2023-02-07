@@ -775,11 +775,11 @@
   "alygin-vscode-tlaplus-nightly" = {
     name = "vscode-tlaplus-nightly";
     publisher = "alygin";
-    version = "2023.2.506";
+    version = "2023.2.606";
     src = fetchurl {
-      url = "https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.2.506/file/alygin.vscode-tlaplus-nightly-2023.2.506.vsix";
-      name = "vscode-tlaplus-nightly-2023.2.506.zip";
-      sha256 = "sha256-GtukUhM19gif26WfCcNFCmrNuT82Mg9HNaahZf32b6s=";
+      url = "https://open-vsx.org/api/alygin/vscode-tlaplus-nightly/2023.2.606/file/alygin.vscode-tlaplus-nightly-2023.2.606.vsix";
+      name = "vscode-tlaplus-nightly-2023.2.606.zip";
+      sha256 = "sha256-2tiv2QMlPW02z+nfWTZfNMmb5TVcog9+Z7kWmhtJRn0=";
     };
   };
 
@@ -1391,11 +1391,11 @@
   "arm-device-manager" = {
     name = "device-manager";
     publisher = "arm";
-    version = "1.3.3";
+    version = "1.3.4";
     src = fetchurl {
-      url = "https://open-vsx.org/api/arm/device-manager/1.3.3/file/arm.device-manager-1.3.3.vsix";
-      name = "device-manager-1.3.3.zip";
-      sha256 = "sha256-w9+neomCEEBZ54DOUYbv56hztwGb2N2LiS8Q9p4qt6U=";
+      url = "https://open-vsx.org/api/arm/device-manager/1.3.4/file/arm.device-manager-1.3.4.vsix";
+      name = "device-manager-1.3.4.zip";
+      sha256 = "sha256-dJ1gwLZ9rHr2pqGFIo5jxjqMA5Z17X45tc4qDixv/cY=";
     };
   };
 
@@ -1710,11 +1710,11 @@
   "asvetliakov-vscode-neovim" = {
     name = "vscode-neovim";
     publisher = "asvetliakov";
-    version = "0.0.96";
+    version = "0.0.97";
     src = fetchurl {
-      url = "https://open-vsx.org/api/asvetliakov/vscode-neovim/0.0.96/file/asvetliakov.vscode-neovim-0.0.96.vsix";
-      name = "vscode-neovim-0.0.96.zip";
-      sha256 = "sha256-0wvfsSpggW/mbxSjkmA+mE+8i8xK0ha6fLr+iXDxiMM=";
+      url = "https://open-vsx.org/api/asvetliakov/vscode-neovim/0.0.97/file/asvetliakov.vscode-neovim-0.0.97.vsix";
+      name = "vscode-neovim-0.0.97.zip";
+      sha256 = "sha256-GItx+rET9XHyi6adhbojT5IdhzUakP9zbjnfik2VitA=";
     };
   };
 
@@ -2491,11 +2491,11 @@
   "bmewburn-vscode-intelephense-client" = {
     name = "vscode-intelephense-client";
     publisher = "bmewburn";
-    version = "1.9.4";
+    version = "1.9.5";
     src = fetchurl {
-      url = "https://open-vsx.org/api/bmewburn/vscode-intelephense-client/1.9.4/file/bmewburn.vscode-intelephense-client-1.9.4.vsix";
-      name = "vscode-intelephense-client-1.9.4.zip";
-      sha256 = "sha256-dnHsQ9jD8Qgk6QjRLbA5T8OETxI0ztd9k0ewDvc6lHk=";
+      url = "https://open-vsx.org/api/bmewburn/vscode-intelephense-client/1.9.5/file/bmewburn.vscode-intelephense-client-1.9.5.vsix";
+      name = "vscode-intelephense-client-1.9.5.zip";
+      sha256 = "sha256-L4dUTtUALTp3nBLUQeIFHy2bCAl0P6Helq0psSf5zdo=";
     };
   };
 
@@ -3316,11 +3316,11 @@
   "chenglou92-rescript-vscode" = {
     name = "rescript-vscode";
     publisher = "chenglou92";
-    version = "1.10.0";
+    version = "1.12.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/chenglou92/rescript-vscode/1.10.0/file/chenglou92.rescript-vscode-1.10.0.vsix";
-      name = "rescript-vscode-1.10.0.zip";
-      sha256 = "sha256-JnsAmRSumKKQRDxVZrz09HUZ2pF4n/3esEJ7qxlNVHQ=";
+      url = "https://open-vsx.org/api/chenglou92/rescript-vscode/1.12.0/file/chenglou92.rescript-vscode-1.12.0.vsix";
+      name = "rescript-vscode-1.12.0.zip";
+      sha256 = "sha256-hZQ+FcNzzG8DKSIqKSpjjkZwc8o7/0HlRmdO/Qe0Xw8=";
     };
   };
 
@@ -3635,22 +3635,22 @@
   "cloudstudio-coding-authentication" = {
     name = "coding-authentication";
     publisher = "cloudstudio";
-    version = "0.0.9";
+    version = "0.0.10";
     src = fetchurl {
-      url = "https://open-vsx.org/api/cloudstudio/coding-authentication/0.0.9/file/cloudstudio.coding-authentication-0.0.9.vsix";
-      name = "coding-authentication-0.0.9.zip";
-      sha256 = "sha256-IqgmS4kj0/zB78hAZUQh9EoPoNH5ByUqv+jyYw1l6xc=";
+      url = "https://open-vsx.org/api/cloudstudio/coding-authentication/0.0.10/file/cloudstudio.coding-authentication-0.0.10.vsix";
+      name = "coding-authentication-0.0.10.zip";
+      sha256 = "sha256-p2RwWvMPufUBK7JRJVzjk4Rrdqt1chPVHepJYq+VJMA=";
     };
   };
 
   "cloudstudio-coding-publish" = {
     name = "coding-publish";
     publisher = "cloudstudio";
-    version = "0.0.11";
+    version = "0.0.12";
     src = fetchurl {
-      url = "https://open-vsx.org/api/cloudstudio/coding-publish/0.0.11/file/cloudstudio.coding-publish-0.0.11.vsix";
-      name = "coding-publish-0.0.11.zip";
-      sha256 = "sha256-HXalZ/xIPw69DrdMbYw67x8E3JKCSul5LzypgbKvjVs=";
+      url = "https://open-vsx.org/api/cloudstudio/coding-publish/0.0.12/file/cloudstudio.coding-publish-0.0.12.vsix";
+      name = "coding-publish-0.0.12.zip";
+      sha256 = "sha256-zvymZ4F21VDd9/Q9awIZ8IYDkykJXJJatIP+4Cyb0Fw=";
     };
   };
 
@@ -3668,11 +3668,11 @@
   "cloudstudio-common" = {
     name = "common";
     publisher = "cloudstudio";
-    version = "0.0.22";
+    version = "0.0.23";
     src = fetchurl {
-      url = "https://open-vsx.org/api/cloudstudio/common/0.0.22/file/cloudstudio.common-0.0.22.vsix";
-      name = "common-0.0.22.zip";
-      sha256 = "sha256-SOpdvRgCeIvOiqqtmHukzqeibQnyb9tHq6TvOvts+3s=";
+      url = "https://open-vsx.org/api/cloudstudio/common/0.0.23/file/cloudstudio.common-0.0.23.vsix";
+      name = "common-0.0.23.zip";
+      sha256 = "sha256-Jwk31wGXxKhNH0+j0buFnPQXI51QMxrgPAalzKfAJp0=";
     };
   };
 
@@ -3712,11 +3712,11 @@
   "cloudstudio-github-authentication" = {
     name = "github-authentication";
     publisher = "cloudstudio";
-    version = "0.0.8";
+    version = "0.0.9";
     src = fetchurl {
-      url = "https://open-vsx.org/api/cloudstudio/github-authentication/0.0.8/file/cloudstudio.github-authentication-0.0.8.vsix";
-      name = "github-authentication-0.0.8.zip";
-      sha256 = "sha256-flB5lFNsOc2zq0Tx2gFFXRMaQhU37uVygVHKK5cSeAY=";
+      url = "https://open-vsx.org/api/cloudstudio/github-authentication/0.0.9/file/cloudstudio.github-authentication-0.0.9.vsix";
+      name = "github-authentication-0.0.9.zip";
+      sha256 = "sha256-zfcUQNkJQpzSsu1OyI0bBKjgAvvSU2hBe1iZ9/4rTuw=";
     };
   };
 
@@ -3811,11 +3811,11 @@
   "cloudstudio-workspaces" = {
     name = "workspaces";
     publisher = "cloudstudio";
-    version = "0.0.39";
+    version = "0.0.40";
     src = fetchurl {
-      url = "https://open-vsx.org/api/cloudstudio/workspaces/0.0.39/file/cloudstudio.workspaces-0.0.39.vsix";
-      name = "workspaces-0.0.39.zip";
-      sha256 = "sha256-BcFAZTyz6HWAc0Ae1ig5xGBVxU1Hobc8dyM+YFwJOuI=";
+      url = "https://open-vsx.org/api/cloudstudio/workspaces/0.0.40/file/cloudstudio.workspaces-0.0.40.vsix";
+      name = "workspaces-0.0.40.zip";
+      sha256 = "sha256-KxffPM6kBBWpdzgz570mRCr/1c1dKMM8UJYoAso0gmg=";
     };
   };
 
@@ -5307,11 +5307,11 @@
   "devfactory-cloudfix-linter" = {
     name = "cloudfix-linter";
     publisher = "devfactory";
-    version = "0.0.13";
+    version = "0.0.14";
     src = fetchurl {
-      url = "https://open-vsx.org/api/devfactory/cloudfix-linter/0.0.13/file/devfactory.cloudfix-linter-0.0.13.vsix";
-      name = "cloudfix-linter-0.0.13.zip";
-      sha256 = "sha256-g4Ij79qtvJAH16Ea7IxZdZE5kdjSprXSoROStkt5yCM=";
+      url = "https://open-vsx.org/api/devfactory/cloudfix-linter/0.0.14/file/devfactory.cloudfix-linter-0.0.14.vsix";
+      name = "cloudfix-linter-0.0.14.zip";
+      sha256 = "sha256-1pwUOaiwoPCTAwwbb2L2ILYWpv7bXhXCCWuxstK0X+o=";
     };
   };
 
@@ -5340,22 +5340,22 @@
   "devsense-composer-php-vscode" = {
     name = "composer-php-vscode";
     publisher = "devsense";
-    version = "1.29.12402";
+    version = "1.30.12417";
     src = fetchurl {
-      url = "https://open-vsx.org/api/devsense/composer-php-vscode/1.29.12402/file/devsense.composer-php-vscode-1.29.12402.vsix";
-      name = "composer-php-vscode-1.29.12402.zip";
-      sha256 = "sha256-UuhddCYZZGMw4O4XmtrW8nzw094LFibR0dEwJgoltUw=";
+      url = "https://open-vsx.org/api/devsense/composer-php-vscode/1.30.12417/file/devsense.composer-php-vscode-1.30.12417.vsix";
+      name = "composer-php-vscode-1.30.12417.zip";
+      sha256 = "sha256-4YBucSR5mdgXN3X5Frzf60l6JbAeJ22yrXcH1Yw9s7Q=";
     };
   };
 
   "devsense-profiler-php-vscode" = {
     name = "profiler-php-vscode";
     publisher = "devsense";
-    version = "1.29.12402";
+    version = "1.30.12417";
     src = fetchurl {
-      url = "https://open-vsx.org/api/devsense/profiler-php-vscode/1.29.12402/file/devsense.profiler-php-vscode-1.29.12402.vsix";
-      name = "profiler-php-vscode-1.29.12402.zip";
-      sha256 = "sha256-paD5Rd0+yv8CxeCRdTnTsoycapcXh/rkMilEIqHlgOk=";
+      url = "https://open-vsx.org/api/devsense/profiler-php-vscode/1.30.12417/file/devsense.profiler-php-vscode-1.30.12417.vsix";
+      name = "profiler-php-vscode-1.30.12417.zip";
+      sha256 = "sha256-TFD21PoiMaMGLPI+wcjL5XGmug/71CurxB9mMMaMC04=";
     };
   };
 
@@ -5373,11 +5373,11 @@
   "dfinity-foundation-vscode-motoko" = {
     name = "vscode-motoko";
     publisher = "dfinity-foundation";
-    version = "0.8.3";
+    version = "0.8.4";
     src = fetchurl {
-      url = "https://open-vsx.org/api/dfinity-foundation/vscode-motoko/0.8.3/file/dfinity-foundation.vscode-motoko-0.8.3.vsix";
-      name = "vscode-motoko-0.8.3.zip";
-      sha256 = "sha256-vZQgVBJ/GlhusStSSOCvlr3OKdDNYU9RTnSY9ctD+e0=";
+      url = "https://open-vsx.org/api/dfinity-foundation/vscode-motoko/0.8.4/file/dfinity-foundation.vscode-motoko-0.8.4.vsix";
+      name = "vscode-motoko-0.8.4.zip";
+      sha256 = "sha256-u5LzfoS8KWsWn9nDhNQJfq6nkrWC7InqVilCBw2aLfE=";
     };
   };
 
@@ -6143,11 +6143,11 @@
   "eliostruyf-vscode-front-matter-beta" = {
     name = "vscode-front-matter-beta";
     publisher = "eliostruyf";
-    version = "8.3.4096865";
+    version = "8.3.4106243";
     src = fetchurl {
-      url = "https://open-vsx.org/api/eliostruyf/vscode-front-matter-beta/8.3.4096865/file/eliostruyf.vscode-front-matter-beta-8.3.4096865.vsix";
-      name = "vscode-front-matter-beta-8.3.4096865.zip";
-      sha256 = "sha256-X4fSRBSg443/www9NERsk/v/ka3Z0zb/mS6nXe0UlTs=";
+      url = "https://open-vsx.org/api/eliostruyf/vscode-front-matter-beta/8.3.4106243/file/eliostruyf.vscode-front-matter-beta-8.3.4106243.vsix";
+      name = "vscode-front-matter-beta-8.3.4106243.zip";
+      sha256 = "sha256-MYSV3UOMzWppyrSkOUAGGRjK6vMRTrlO1+2kt2L0l34=";
     };
   };
 
@@ -6803,11 +6803,11 @@
   "felixangelov-mason" = {
     name = "mason";
     publisher = "felixangelov";
-    version = "0.1.7";
+    version = "0.1.8";
     src = fetchurl {
-      url = "https://open-vsx.org/api/felixangelov/mason/0.1.7/file/felixangelov.mason-0.1.7.vsix";
-      name = "mason-0.1.7.zip";
-      sha256 = "sha256-JrxCKj0Vx9eydRHZWi8PlYFWcAarVkH+vBc30PHfZe4=";
+      url = "https://open-vsx.org/api/felixangelov/mason/0.1.8/file/felixangelov.mason-0.1.8.vsix";
+      name = "mason-0.1.8.zip";
+      sha256 = "sha256-UGKu3Nd+pSogbHsZcJl+JBnTY5D1O4fcTEvQ+Xo/Ycc=";
     };
   };
 
@@ -9773,11 +9773,11 @@
   "innoverio-vscode-dbt-power-user" = {
     name = "vscode-dbt-power-user";
     publisher = "innoverio";
-    version = "0.11.2";
+    version = "0.11.3";
     src = fetchurl {
-      url = "https://open-vsx.org/api/innoverio/vscode-dbt-power-user/0.11.2/file/innoverio.vscode-dbt-power-user-0.11.2.vsix";
-      name = "vscode-dbt-power-user-0.11.2.zip";
-      sha256 = "sha256-mihQRSdFoIe+FNaMCvp+Rj8OZ1d3/EtrNfPyvrnfPMY=";
+      url = "https://open-vsx.org/api/innoverio/vscode-dbt-power-user/0.11.3/file/innoverio.vscode-dbt-power-user-0.11.3.vsix";
+      name = "vscode-dbt-power-user-0.11.3.zip";
+      sha256 = "sha256-ToBdpvSsrkzNiAMx89onsafw8VkiSKpu04Q/J9tF8bw=";
     };
   };
 
@@ -10455,11 +10455,11 @@
   "jeff-hykin-better-shellscript-syntax" = {
     name = "better-shellscript-syntax";
     publisher = "jeff-hykin";
-    version = "1.3.1";
+    version = "1.3.5";
     src = fetchurl {
-      url = "https://open-vsx.org/api/jeff-hykin/better-shellscript-syntax/1.3.1/file/jeff-hykin.better-shellscript-syntax-1.3.1.vsix";
-      name = "better-shellscript-syntax-1.3.1.zip";
-      sha256 = "sha256-0HvCCUipq+BI6zJRi7KIzA1L6QSUjgDlSEt3z/qdXHE=";
+      url = "https://open-vsx.org/api/jeff-hykin/better-shellscript-syntax/1.3.5/file/jeff-hykin.better-shellscript-syntax-1.3.5.vsix";
+      name = "better-shellscript-syntax-1.3.5.zip";
+      sha256 = "sha256-OkFPwQ4blW2wYVY3DV+xLFqfgCT5nOXn9RrsFrlMcoU=";
     };
   };
 
@@ -12014,6 +12014,28 @@
     };
   };
 
+  "kyntrack-test-23" = {
+    name = "test-23";
+    publisher = "kyntrack";
+    version = "0.0.1";
+    src = fetchurl {
+      url = "https://open-vsx.org/api/kyntrack/test-23/0.0.1/file/kyntrack.test-23-0.0.1.vsix";
+      name = "test-23-0.0.1.zip";
+      sha256 = "sha256-RsbTv7Yc+03vV1k2hDJN8YqY5vjUMlpVMGczx5z2LFU=";
+    };
+  };
+
+  "kyntrack-test-24-tc-check" = {
+    name = "test-24-tc-check";
+    publisher = "kyntrack";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "https://open-vsx.org/api/kyntrack/test-24-tc-check/0.0.3/file/kyntrack.test-24-tc-check-0.0.3.vsix";
+      name = "test-24-tc-check-0.0.3.zip";
+      sha256 = "sha256-rJsp+Q8c8kW2EEFSy52NBFVUXL9+Bt0ENtZ91dAPvSk=";
+    };
+  };
+
   "kyntrack-test-ext" = {
     name = "test-ext";
     publisher = "kyntrack";
@@ -12025,6 +12047,17 @@
     };
   };
 
+  "kyntrack-test-logo" = {
+    name = "test-logo";
+    publisher = "kyntrack";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "https://open-vsx.org/api/kyntrack/test-logo/0.0.3/file/kyntrack.test-logo-0.0.3.vsix";
+      name = "test-logo-0.0.3.zip";
+      sha256 = "sha256-5I47tH1NBv2hJmWFThGWNpzra3F8amf3WiC1xb5qe/I=";
+    };
+  };
+
   "kyntrack-test-revature" = {
     name = "test-revature";
     publisher = "kyntrack";
@@ -12033,6 +12066,17 @@
       url = "https://open-vsx.org/api/kyntrack/test-revature/0.0.2/file/kyntrack.test-revature-0.0.2.vsix";
       name = "test-revature-0.0.2.zip";
       sha256 = "sha256-rpcOGyiNiLw2W+7yJZJthLGBWfVZX2kQN2rcXfZe4LI=";
+    };
+  };
+
+  "kyntrack-test-runner-conflicts" = {
+    name = "test-runner-conflicts";
+    publisher = "kyntrack";
+    version = "0.0.1";
+    src = fetchurl {
+      url = "https://open-vsx.org/api/kyntrack/test-runner-conflicts/0.0.1/file/kyntrack.test-runner-conflicts-0.0.1.vsix";
+      name = "test-runner-conflicts-0.0.1.zip";
+      sha256 = "sha256-J5l1WiWh4UdxPAe6PRiEScssqbHYH/ZyWgCLC7ib7V8=";
     };
   };
 
@@ -12534,11 +12578,11 @@
   "lkrms-pretty-php" = {
     name = "pretty-php";
     publisher = "lkrms";
-    version = "0.1.7";
+    version = "0.2.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/lkrms/pretty-php/0.1.7/file/lkrms.pretty-php-0.1.7.vsix";
-      name = "pretty-php-0.1.7.zip";
-      sha256 = "sha256-F4SuccxoVl3CN7kMG1QyA9DcmMBq9/IRCYoTryL/29A=";
+      url = "https://open-vsx.org/api/lkrms/pretty-php/0.2.0/file/lkrms.pretty-php-0.2.0.vsix";
+      name = "pretty-php-0.2.0.zip";
+      sha256 = "sha256-w4mN9kJR4nvqfsTHYA/0VUe3cyl2s/IgTC2blGax79U=";
     };
   };
 
@@ -13370,11 +13414,11 @@
   "mbari-tethysl" = {
     name = "tethysl";
     publisher = "mbari";
-    version = "2.5.1";
+    version = "2.6.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/mbari/tethysl/2.5.1/file/mbari.tethysl-2.5.1.vsix";
-      name = "tethysl-2.5.1.zip";
-      sha256 = "sha256-01PBkDmdjlkeEjbZwHw8T6otExk7QyXhmrlQd0Suj4U=";
+      url = "https://open-vsx.org/api/mbari/tethysl/2.6.1/file/mbari.tethysl-2.6.1.vsix";
+      name = "tethysl-2.6.1.zip";
+      sha256 = "sha256-vHh7X0YCvZDipij9meDywvcCkdG4saYFypWUquz6a3w=";
     };
   };
 
@@ -16450,11 +16494,11 @@
   "orta-vscode-jest" = {
     name = "vscode-jest";
     publisher = "orta";
-    version = "5.2.2";
+    version = "5.2.3";
     src = fetchurl {
-      url = "https://open-vsx.org/api/orta/vscode-jest/5.2.2/file/orta.vscode-jest-5.2.2.vsix";
-      name = "vscode-jest-5.2.2.zip";
-      sha256 = "sha256-2UlnFA8GGSoca7sHKeZ45wNO27/UCtyGPYdq0SY4VCY=";
+      url = "https://open-vsx.org/api/orta/vscode-jest/5.2.3/file/orta.vscode-jest-5.2.3.vsix";
+      name = "vscode-jest-5.2.3.zip";
+      sha256 = "sha256-KL6sX+hVVDCf97i9iltj0lVc1YfwlCUCYiTuXmUFDoU=";
     };
   };
 
@@ -16626,11 +16670,11 @@
   "pascalreitermann93-vscode-yaml-sort" = {
     name = "vscode-yaml-sort";
     publisher = "pascalreitermann93";
-    version = "6.2.0";
+    version = "6.3.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/pascalreitermann93/vscode-yaml-sort/6.2.0/file/pascalreitermann93.vscode-yaml-sort-6.2.0.vsix";
-      name = "vscode-yaml-sort-6.2.0.zip";
-      sha256 = "sha256-YzR16x7qOTWERmkq2w+0axm80/geWbetRVKRuP5prc0=";
+      url = "https://open-vsx.org/api/pascalreitermann93/vscode-yaml-sort/6.3.0/file/pascalreitermann93.vscode-yaml-sort-6.3.0.vsix";
+      name = "vscode-yaml-sort-6.3.0.zip";
+      sha256 = "sha256-M2Xk7qvK8w5AUyoIJTYhKok/jnFIeY+u0ZnPl06j/8A=";
     };
   };
 
@@ -17220,11 +17264,11 @@
   "pixabelle-stryker-runner" = {
     name = "stryker-runner";
     publisher = "pixabelle";
-    version = "0.0.38";
+    version = "0.0.40";
     src = fetchurl {
-      url = "https://open-vsx.org/api/pixabelle/stryker-runner/0.0.38/file/pixabelle.stryker-runner-0.0.38.vsix";
-      name = "stryker-runner-0.0.38.zip";
-      sha256 = "sha256-YVzxArchFOHGj9ykS48E4BHrv3s0CItbO19MlMbWqes=";
+      url = "https://open-vsx.org/api/pixabelle/stryker-runner/0.0.40/file/pixabelle.stryker-runner-0.0.40.vsix";
+      name = "stryker-runner-0.0.40.zip";
+      sha256 = "sha256-Sc7VbV16vUBkBHNvr1MZZrUfMaymWV3vmGCg5jUMy/w=";
     };
   };
 
@@ -17660,11 +17704,11 @@
   "prisma-prisma-insider" = {
     name = "prisma-insider";
     publisher = "prisma";
-    version = "31.0.1916";
+    version = "31.0.1919";
     src = fetchurl {
-      url = "https://open-vsx.org/api/prisma/prisma-insider/31.0.1916/file/prisma.prisma-insider-31.0.1916.vsix";
-      name = "prisma-insider-31.0.1916.zip";
-      sha256 = "sha256-735hJUTWmHYrrohRWiMNwlJ5viQ0uliV8h5HxFXnmUU=";
+      url = "https://open-vsx.org/api/prisma/prisma-insider/31.0.1919/file/prisma.prisma-insider-31.0.1919.vsix";
+      name = "prisma-insider-31.0.1919.zip";
+      sha256 = "sha256-/RK7+iiBRhBFdfOuDx+lpYXEmUThhYcjUBqYhgmgzYM=";
     };
   };
 
@@ -18625,6 +18669,17 @@
     };
   };
 
+  "relationalai-relational-ai" = {
+    name = "relational-ai";
+    publisher = "relationalai";
+    version = "0.9.3";
+    src = fetchurl {
+      url = "https://open-vsx.org/api/relationalai/relational-ai/0.9.3/file/relationalai.relational-ai-0.9.3.vsix";
+      name = "relational-ai-0.9.3.zip";
+      sha256 = "sha256-5RkSgJ25LsPw8T51b5eh6zA2frJFkNNSKAQVHpO3RoA=";
+    };
+  };
+
   "remcohaszing-schemastore" = {
     name = "schemastore";
     publisher = "remcohaszing";
@@ -18661,11 +18716,11 @@
   "revaturepro-non-prod-revature-labs-non-prod" = {
     name = "revature-labs-non-prod";
     publisher = "revaturepro-non-prod";
-    version = "0.0.20";
+    version = "0.0.25";
     src = fetchurl {
-      url = "https://open-vsx.org/api/revaturepro-non-prod/revature-labs-non-prod/0.0.20/file/revaturepro-non-prod.revature-labs-non-prod-0.0.20.vsix";
-      name = "revature-labs-non-prod-0.0.20.zip";
-      sha256 = "sha256-GHBeUCfZtaLv/TncXKHJQ2SjEcyMC881Via0oRjIaLo=";
+      url = "https://open-vsx.org/api/revaturepro-non-prod/revature-labs-non-prod/0.0.25/file/revaturepro-non-prod.revature-labs-non-prod-0.0.25.vsix";
+      name = "revature-labs-non-prod-0.0.25.zip";
+      sha256 = "sha256-OVauU3omyiYYBfqPgYdlC15Q1Znj0Be2mUEdVCNie6c=";
     };
   };
 
@@ -19222,11 +19277,11 @@
   "rubberduck-rubberduck-vscode" = {
     name = "rubberduck-vscode";
     publisher = "rubberduck";
-    version = "1.3.1";
+    version = "1.4.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/rubberduck/rubberduck-vscode/1.3.1/file/rubberduck.rubberduck-vscode-1.3.1.vsix";
-      name = "rubberduck-vscode-1.3.1.zip";
-      sha256 = "sha256-GnTYTOPF7tNsRbhuP10ErPmfFPLe0XlIJwF67xdEBew=";
+      url = "https://open-vsx.org/api/rubberduck/rubberduck-vscode/1.4.0/file/rubberduck.rubberduck-vscode-1.4.0.vsix";
+      name = "rubberduck-vscode-1.4.0.zip";
+      sha256 = "sha256-So9Fx7ySloxgyxpc3dZUOG+RhNinrA7G7u7x4IYE5ac=";
     };
   };
 
@@ -20916,11 +20971,11 @@
   "stateful-runme" = {
     name = "runme";
     publisher = "stateful";
-    version = "0.5.1674767798";
+    version = "0.5.1675718472";
     src = fetchurl {
-      url = "https://open-vsx.org/api/stateful/runme/0.5.1674767798/file/stateful.runme-0.5.1674767798.vsix";
-      name = "runme-0.5.1674767798.zip";
-      sha256 = "sha256-SX9THS10s9Gv+g30mQu7h+2DHvwjoKN51FrSzDtATuc=";
+      url = "https://open-vsx.org/api/stateful/runme/0.5.1675718472/file/stateful.runme-0.5.1675718472.vsix";
+      name = "runme-0.5.1675718472.zip";
+      sha256 = "sha256-VGoIz6uLJyHIzrMAGwTTrb/cxB2iaTxx8Ya0kIyIY98=";
     };
   };
 
@@ -21169,176 +21224,176 @@
   "streetsidesoftware-code-spell-checker-arabic" = {
     name = "code-spell-checker-arabic";
     publisher = "streetsidesoftware";
-    version = "0.1.5";
+    version = "0.1.6";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-arabic/0.1.5/file/streetsidesoftware.code-spell-checker-arabic-0.1.5.vsix";
-      name = "code-spell-checker-arabic-0.1.5.zip";
-      sha256 = "sha256-E8QP+H2kA66asjeZScV6mlpRMGJbX5lIfONdM1NHIRc=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-arabic/0.1.6/file/streetsidesoftware.code-spell-checker-arabic-0.1.6.vsix";
+      name = "code-spell-checker-arabic-0.1.6.zip";
+      sha256 = "sha256-BXMWDQ3s0GkIqi/G77/noV6lzyYlCuU+5OEyY+G2v6k=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-basque" = {
     name = "code-spell-checker-basque";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
+    version = "1.0.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-basque/1.0.0/file/streetsidesoftware.code-spell-checker-basque-1.0.0.vsix";
-      name = "code-spell-checker-basque-1.0.0.zip";
-      sha256 = "sha256-pFNoLFdjVpghv7vFwzpWOpp18SB73lCc8kqbD8TzA90=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-basque/1.0.1/file/streetsidesoftware.code-spell-checker-basque-1.0.1.vsix";
+      name = "code-spell-checker-basque-1.0.1.zip";
+      sha256 = "sha256-f3xXa9sdjDjnZQi6JQYGVB401lmfDHMoKBxDpXujdKY=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-british-english" = {
     name = "code-spell-checker-british-english";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
+    version = "1.0.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-british-english/1.0.0/file/streetsidesoftware.code-spell-checker-british-english-1.0.0.vsix";
-      name = "code-spell-checker-british-english-1.0.0.zip";
-      sha256 = "sha256-rPvQCn5PJmmjHoTKwjAmrb9OqBGiISEOvQSRUb59CKc=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-british-english/1.0.1/file/streetsidesoftware.code-spell-checker-british-english-1.0.1.vsix";
+      name = "code-spell-checker-british-english-1.0.1.zip";
+      sha256 = "sha256-2CAJmt1TGq2GbeYM3cEhrfJINggVLQ3pIJvkcH6zZQ4=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-bulgarian" = {
     name = "code-spell-checker-bulgarian";
     publisher = "streetsidesoftware";
-    version = "0.1.7";
+    version = "0.1.8";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-bulgarian/0.1.7/file/streetsidesoftware.code-spell-checker-bulgarian-0.1.7.vsix";
-      name = "code-spell-checker-bulgarian-0.1.7.zip";
-      sha256 = "sha256-kFiJpd7YH4S/iEjdDyDAwfmgFP0Lrmwsvj4wo73bEGM=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-bulgarian/0.1.8/file/streetsidesoftware.code-spell-checker-bulgarian-0.1.8.vsix";
+      name = "code-spell-checker-bulgarian-0.1.8.zip";
+      sha256 = "sha256-zk0M+nn+aWQQ/kMD47ZWOc1hTF0WNjeHVY+10S1lA2U=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-catalan" = {
     name = "code-spell-checker-catalan";
     publisher = "streetsidesoftware";
-    version = "1.0.1";
+    version = "1.0.2";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-catalan/1.0.1/file/streetsidesoftware.code-spell-checker-catalan-1.0.1.vsix";
-      name = "code-spell-checker-catalan-1.0.1.zip";
-      sha256 = "sha256-bqpC9Hx/+vYJuOkw+xuRiDRnW3M/47yBTWw+i16GTtw=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-catalan/1.0.2/file/streetsidesoftware.code-spell-checker-catalan-1.0.2.vsix";
+      name = "code-spell-checker-catalan-1.0.2.zip";
+      sha256 = "sha256-GgyPdppN4X2vcYGJB6Co9FDLCfbM/e9nK5yyklJNWRg=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-croatian" = {
     name = "code-spell-checker-croatian";
     publisher = "streetsidesoftware";
-    version = "0.1.6";
+    version = "0.1.7";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-croatian/0.1.6/file/streetsidesoftware.code-spell-checker-croatian-0.1.6.vsix";
-      name = "code-spell-checker-croatian-0.1.6.zip";
-      sha256 = "sha256-Ce2cTN3sgMc2WsbLqqnTv/eIzyq7ptvZqqg2v3az/OE=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-croatian/0.1.7/file/streetsidesoftware.code-spell-checker-croatian-0.1.7.vsix";
+      name = "code-spell-checker-croatian-0.1.7.zip";
+      sha256 = "sha256-vbGqVoEZrZd/LJUmhujzRZxqai9hN/FWRvFrEYh5fq8=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-czech" = {
     name = "code-spell-checker-czech";
     publisher = "streetsidesoftware";
-    version = "1.0.1";
+    version = "1.0.2";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-czech/1.0.1/file/streetsidesoftware.code-spell-checker-czech-1.0.1.vsix";
-      name = "code-spell-checker-czech-1.0.1.zip";
-      sha256 = "sha256-PHXrfqIU+dnG+zN3guySSiFt9321Y8i/p24gaero+ns=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-czech/1.0.2/file/streetsidesoftware.code-spell-checker-czech-1.0.2.vsix";
+      name = "code-spell-checker-czech-1.0.2.zip";
+      sha256 = "sha256-7YY9kthUG0H7+Yswi4uqEhVQ0LP03Eo8L/GXNvtunWM=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-danish" = {
     name = "code-spell-checker-danish";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
+    version = "1.0.2";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-danish/1.0.0/file/streetsidesoftware.code-spell-checker-danish-1.0.0.vsix";
-      name = "code-spell-checker-danish-1.0.0.zip";
-      sha256 = "sha256-Wg0mXV4+1QQ4rJbIxVeMvtxrDK+Vemu8nXmszxL2jrw=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-danish/1.0.2/file/streetsidesoftware.code-spell-checker-danish-1.0.2.vsix";
+      name = "code-spell-checker-danish-1.0.2.zip";
+      sha256 = "sha256-8xK3vx5jQj7jqY0hYsfEeKMAft1DmlHQLGP+AvkGScI=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-dutch" = {
     name = "code-spell-checker-dutch";
     publisher = "streetsidesoftware";
-    version = "0.3.6";
+    version = "0.3.7";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-dutch/0.3.6/file/streetsidesoftware.code-spell-checker-dutch-0.3.6.vsix";
-      name = "code-spell-checker-dutch-0.3.6.zip";
-      sha256 = "sha256-qE38shtXuvQ3cKlgOZpURoverTOJy1JjF+6YPEVazpo=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-dutch/0.3.7/file/streetsidesoftware.code-spell-checker-dutch-0.3.7.vsix";
+      name = "code-spell-checker-dutch-0.3.7.zip";
+      sha256 = "sha256-y+8ZLuR4LcjvZlDf3VxGHGnZN+OQvWu46qV3MXkL0Zg=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-esperanto" = {
     name = "code-spell-checker-esperanto";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
+    version = "1.0.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-esperanto/1.0.0/file/streetsidesoftware.code-spell-checker-esperanto-1.0.0.vsix";
-      name = "code-spell-checker-esperanto-1.0.0.zip";
-      sha256 = "sha256-50NPABU+MIp2wdGF2Av7s80PRb3wmKjOyS3Cg80T+BU=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-esperanto/1.0.1/file/streetsidesoftware.code-spell-checker-esperanto-1.0.1.vsix";
+      name = "code-spell-checker-esperanto-1.0.1.zip";
+      sha256 = "sha256-fbMes1pYZlJUdXBZ+8dwMq2OOUAtz/78EcmlKK91iGg=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-estonian" = {
     name = "code-spell-checker-estonian";
     publisher = "streetsidesoftware";
-    version = "0.1.9";
+    version = "0.1.10";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-estonian/0.1.9/file/streetsidesoftware.code-spell-checker-estonian-0.1.9.vsix";
-      name = "code-spell-checker-estonian-0.1.9.zip";
-      sha256 = "sha256-9ncEKQafLDqLICw8GDxQHWgBXLGSVB3tUkj8dkVrYy0=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-estonian/0.1.10/file/streetsidesoftware.code-spell-checker-estonian-0.1.10.vsix";
+      name = "code-spell-checker-estonian-0.1.10.zip";
+      sha256 = "sha256-A8jEDcQS9mQWs36IKL0iradDhICsUIaYJpBNbn3nfgg=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-french" = {
     name = "code-spell-checker-french";
     publisher = "streetsidesoftware";
-    version = "0.2.5";
+    version = "0.2.6";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-french/0.2.5/file/streetsidesoftware.code-spell-checker-french-0.2.5.vsix";
-      name = "code-spell-checker-french-0.2.5.zip";
-      sha256 = "sha256-KeHZ/b1YaC+58tdYAQKf/8W7KvM9DpjkOTVu65KKzDo=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-french/0.2.6/file/streetsidesoftware.code-spell-checker-french-0.2.6.vsix";
+      name = "code-spell-checker-french-0.2.6.zip";
+      sha256 = "sha256-P3HEnXC2axA3ICtvSKb4K5/nyhjlLy8AUAHb0XvdVQQ=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-french-reforme" = {
     name = "code-spell-checker-french-reforme";
     publisher = "streetsidesoftware";
-    version = "2.0.8";
+    version = "2.0.9";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-french-reforme/2.0.8/file/streetsidesoftware.code-spell-checker-french-reforme-2.0.8.vsix";
-      name = "code-spell-checker-french-reforme-2.0.8.zip";
-      sha256 = "sha256-r09ouua6yfRhmUAzIbrTxZV1djCo7JU+KH0VEAItLck=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-french-reforme/2.0.9/file/streetsidesoftware.code-spell-checker-french-reforme-2.0.9.vsix";
+      name = "code-spell-checker-french-reforme-2.0.9.zip";
+      sha256 = "sha256-NlK2Ih6Xez2PyU6jPk0eWUSms/pue1pxIorqXC2m+qc=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-german" = {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.1.1";
+    version = "2.1.2";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-german/2.1.1/file/streetsidesoftware.code-spell-checker-german-2.1.1.vsix";
-      name = "code-spell-checker-german-2.1.1.zip";
-      sha256 = "sha256-+9GftZCbFVvRrn6WJTFSVK7MUwed73ZKafLgc57OhW4=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-german/2.1.2/file/streetsidesoftware.code-spell-checker-german-2.1.2.vsix";
+      name = "code-spell-checker-german-2.1.2.zip";
+      sha256 = "sha256-yl37pYVv7uGpObM0dfktrfWknrTfpLqHCCtPsFcgv5I=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-greek" = {
     name = "code-spell-checker-greek";
     publisher = "streetsidesoftware";
-    version = "1.0.1";
+    version = "1.0.2";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-greek/1.0.1/file/streetsidesoftware.code-spell-checker-greek-1.0.1.vsix";
-      name = "code-spell-checker-greek-1.0.1.zip";
-      sha256 = "sha256-1hNfVtMem1SIfbePKjj36DsUhI2O7c3T7LXFoDWLjZU=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-greek/1.0.2/file/streetsidesoftware.code-spell-checker-greek-1.0.2.vsix";
+      name = "code-spell-checker-greek-1.0.2.zip";
+      sha256 = "sha256-ovep8okXRJ6s6XzkXr71pXL33nu3AFGlUf22TnPac68=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-hebrew" = {
     name = "code-spell-checker-hebrew";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
+    version = "1.0.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-hebrew/1.0.0/file/streetsidesoftware.code-spell-checker-hebrew-1.0.0.vsix";
-      name = "code-spell-checker-hebrew-1.0.0.zip";
-      sha256 = "sha256-MIeXY7UpAWERbq13ee5DwSZPf+SGKQ3xL3rBLQII5gk=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-hebrew/1.0.1/file/streetsidesoftware.code-spell-checker-hebrew-1.0.1.vsix";
+      name = "code-spell-checker-hebrew-1.0.1.zip";
+      sha256 = "sha256-AWp96uArwrMZAD7X/dlZLX/CYA8Gmr0LEV3vAiWutGE=";
     };
   };
 
@@ -21433,44 +21488,44 @@
   "streetsidesoftware-code-spell-checker-scientific-terms" = {
     name = "code-spell-checker-scientific-terms";
     publisher = "streetsidesoftware";
-    version = "0.1.6";
+    version = "0.1.7";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-scientific-terms/0.1.6/file/streetsidesoftware.code-spell-checker-scientific-terms-0.1.6.vsix";
-      name = "code-spell-checker-scientific-terms-0.1.6.zip";
-      sha256 = "sha256-vDmg7W5HYZeWrHpx0UVcgxknvqB8MyykoM3kQTO4sgE=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-scientific-terms/0.1.7/file/streetsidesoftware.code-spell-checker-scientific-terms-0.1.7.vsix";
+      name = "code-spell-checker-scientific-terms-0.1.7.zip";
+      sha256 = "sha256-vzU39/KmC4QUDKekXWiSkWeCyEr0yGQZ3OvaKaZDj9M=";
     };
   };
 
-  "streetsidesoftware-code-spell-checker-serbian" = {
-    name = "code-spell-checker-serbian";
+  "streetsidesoftware-code-spell-checker-slovak" = {
+    name = "code-spell-checker-slovak";
     publisher = "streetsidesoftware";
-    version = "1.0.2";
+    version = "1.0.0";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-serbian/1.0.2/file/streetsidesoftware.code-spell-checker-serbian-1.0.2.vsix";
-      name = "code-spell-checker-serbian-1.0.2.zip";
-      sha256 = "sha256-27RWyKKE+HHsWsoFzuunjlC8Pt13IT0Lq8TZcVs2J00=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-slovak/1.0.0/file/streetsidesoftware.code-spell-checker-slovak-1.0.0.vsix";
+      name = "code-spell-checker-slovak-1.0.0.zip";
+      sha256 = "sha256-J+aih9Qxwq6iDglUXexf9hqdhIe83BE5YfaI1hNNc14=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-slovenian" = {
     name = "code-spell-checker-slovenian";
     publisher = "streetsidesoftware";
-    version = "0.1.5";
+    version = "0.1.6";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-slovenian/0.1.5/file/streetsidesoftware.code-spell-checker-slovenian-0.1.5.vsix";
-      name = "code-spell-checker-slovenian-0.1.5.zip";
-      sha256 = "sha256-aD4oP4fRlqATgnDoCTo6X4oR7X3L/dVCcowswTJI3/8=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-slovenian/0.1.6/file/streetsidesoftware.code-spell-checker-slovenian-0.1.6.vsix";
+      name = "code-spell-checker-slovenian-0.1.6.zip";
+      sha256 = "sha256-NKlub+lGSiJeuyMantVG4q4bh7QKL/5rXSjwWKsszzY=";
     };
   };
 
   "streetsidesoftware-code-spell-checker-spanish" = {
     name = "code-spell-checker-spanish";
     publisher = "streetsidesoftware";
-    version = "2.1.5";
+    version = "2.1.6";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-spanish/2.1.5/file/streetsidesoftware.code-spell-checker-spanish-2.1.5.vsix";
-      name = "code-spell-checker-spanish-2.1.5.zip";
-      sha256 = "sha256-YQtYVOEclRt8ypbCreUtNURQz4WvLX2yZRqrsS0LqX0=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-spanish/2.1.6/file/streetsidesoftware.code-spell-checker-spanish-2.1.6.vsix";
+      name = "code-spell-checker-spanish-2.1.6.zip";
+      sha256 = "sha256-+O3v44M1nxKVgFeUw6Zd4a4ZPeGPeeZ9365ec3FbzbU=";
     };
   };
 
@@ -21499,11 +21554,11 @@
   "streetsidesoftware-code-spell-checker-ukrainian" = {
     name = "code-spell-checker-ukrainian";
     publisher = "streetsidesoftware";
-    version = "1.0.0";
+    version = "1.0.1";
     src = fetchurl {
-      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-ukrainian/1.0.0/file/streetsidesoftware.code-spell-checker-ukrainian-1.0.0.vsix";
-      name = "code-spell-checker-ukrainian-1.0.0.zip";
-      sha256 = "sha256-p832YRQOvlpHgDFKkrow3ulxI6Ky7yamVFBRgT4iM+0=";
+      url = "https://open-vsx.org/api/streetsidesoftware/code-spell-checker-ukrainian/1.0.1/file/streetsidesoftware.code-spell-checker-ukrainian-1.0.1.vsix";
+      name = "code-spell-checker-ukrainian-1.0.1.zip";
+      sha256 = "sha256-etBIYQsl7Cy8J4igOkRRGRMprwL28rO5LotHC8i/9dg=";
     };
   };
 
@@ -21620,11 +21675,11 @@
   "sugatoray-vscode-remotework-extension-pack" = {
     name = "vscode-remotework-extension-pack";
     publisher = "sugatoray";
-    version = "1.1.3";
+    version = "1.1.4";
     src = fetchurl {
-      url = "https://open-vsx.org/api/sugatoray/vscode-remotework-extension-pack/1.1.3/file/sugatoray.vscode-remotework-extension-pack-1.1.3.vsix";
-      name = "vscode-remotework-extension-pack-1.1.3.zip";
-      sha256 = "sha256-thN+jps4r38n+CnW6By8JTumB3lpMjPwsC+DYdZDv8k=";
+      url = "https://open-vsx.org/api/sugatoray/vscode-remotework-extension-pack/1.1.4/file/sugatoray.vscode-remotework-extension-pack-1.1.4.vsix";
+      name = "vscode-remotework-extension-pack-1.1.4.zip";
+      sha256 = "sha256-OyC1HzKf9LtNwzXR9YwRXCn+HLQrYYOv2J/voHEP10c=";
     };
   };
 
@@ -25074,11 +25129,11 @@
   "wakatime-vscode-wakatime" = {
     name = "vscode-wakatime";
     publisher = "wakatime";
-    version = "24.0.3";
+    version = "24.0.5";
     src = fetchurl {
-      url = "https://open-vsx.org/api/wakatime/vscode-wakatime/24.0.3/file/wakatime.vscode-wakatime-24.0.3.vsix";
-      name = "vscode-wakatime-24.0.3.zip";
-      sha256 = "sha256-4QIULo+qyHosV/S/8mKHO1FhQk3zjO0GF9cGM/1LNMk=";
+      url = "https://open-vsx.org/api/wakatime/vscode-wakatime/24.0.5/file/wakatime.vscode-wakatime-24.0.5.vsix";
+      name = "vscode-wakatime-24.0.5.zip";
+      sha256 = "sha256-ZnxmUZEJgTPCifwnodqGtZmOAB8ds+zE9OF6e1sILHI=";
     };
   };
 
