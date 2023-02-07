@@ -1,6 +1,4 @@
 packages: ./
 
-index-state: 2022-12-30T20:10:23Z
-
 package *
     ghc-options: -haddock

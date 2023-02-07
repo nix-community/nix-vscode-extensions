@@ -27,7 +27,6 @@ dependencies:
 - http-client
 - http-conduit
 - aeson
-- yaml
 - bytestring
 - string-interpolate
 - lens-aeson
@@ -45,6 +44,8 @@ dependencies:
 - stm
 - stm-chans
 - hashable
+- mtl
+- exceptions
 
 ghc-options:
 - -Wall
@@ -57,9 +58,6 @@ ghc-options:
 - -Wpartial-fields
 - -Wredundant-constraints
 
-library:
-  source-dirs: src
-
 executables:
   nix-managed:
     main:                Main.hs
@@ -68,16 +66,3 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    dependencies:
-    - nix-managed
-
-tests:
-  nix-managed-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - nix-managed
