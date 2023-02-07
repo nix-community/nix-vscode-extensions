@@ -28,7 +28,7 @@ import Colog.Concurrent (defCapacity, withBackgroundLogger)
 import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async (forConcurrently, mapConcurrently_)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
-import Control.Concurrent.STM (STM, TMVar, atomically, newTMVarIO, readTMVar, takeTMVar, tryReadTMVar, putTMVar)
+import Control.Concurrent.STM (STM, TMVar, atomically, newTMVarIO, putTMVar, takeTMVar, tryReadTMVar)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Lens (filtered, traversed, (^..), (^?))
 import Control.Monad (replicateM_, unless, void, when)
@@ -429,8 +429,8 @@ instance Show ActionStatus where
 ppTarget :: Target -> Text
 ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
 
-extFlags :: [Text]
-extFlags = ["validated", "public", "preview", "verified"]
+extFlagsAllowed :: [Text]
+extFlagsAllowed = ["validated", "public", "preview", "verified"]
 
 -- | Get a list of extension configs from VSCode Marketplace
 getConfigsVSCodeMarketplace :: Int -> LoggerT Message IO (Maybe [ExtensionConfig])
@@ -488,7 +488,7 @@ getConfigsVSCodeMarketplace nRetry = flip fix nRetry $ \ret (nRetry_ :: Int) -> 
                       ( \y ->
                           maybe
                             False
-                            (\z -> not $ null ((Text.splitOn ", " z) & DL.intersect extFlags))
+                            (\z -> length (Text.splitOn ", " z) == length ((Text.splitOn ", " z) & DL.intersect extFlagsAllowed))
                             (y ^? key "flags" . _String)
                       )
               )
@@ -643,5 +643,5 @@ main = do
   withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev > Debug) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> do
     usingLoggerT logger $ logInfo [i|#{START} Updating extensions|]
     -- we'll run the extension crawler and a fetcher several times on both sites
-    traverse_ (replicateM_ 2 . main' logger "data" 100 200) [VSCodeMarketplace, OpenVSX]
+    traverse_ (replicateM_ 1 . main' logger "data" 100 200) [VSCodeMarketplace, OpenVSX]
     usingLoggerT logger $ logInfo [i|#{FINISH} Updating extensions|]
