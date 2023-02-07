@@ -61,20 +61,7 @@
         scripts = mkShellApps
           {
             updateExtensions = {
-              text = ''
-                ${concatMapStringsNewline
-                  (x: with (env x); ''
-                    export DENO_DIR="${DENO_DIR}"
-                    ${pkgs.deno}/bin/deno run \
-                      --allow-write \
-                      --allow-net="${ALLOW_NET}" \
-                      --no-prompt \
-                      updater/index.ts "${TARGET}" \
-                      data/new/"${TARGET}".yaml''
-                  ) [ true false ]}  
-                nix run hs/#updateData
-                rm -rf data/new
-              '';
+              text = ''nix run hs/#updateData'';
             };
           };
       in
