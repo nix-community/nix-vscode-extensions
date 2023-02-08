@@ -123,12 +123,23 @@
           git nix-ide workbench markdown-all-in-one markdown-language-features;
       };
 
-      tools = codiumTools ++ [ codium ];
+      tools = codiumTools;
 
       defaultShell = mkShell {
         packages = tools;
         bash.extra = "export LANG=C.utf8";
-        commands = mkCommands "tools" tools;
+        commands = mkCommands "tools" tools ++ [
+          {
+            category = "ide";
+            name = "nix run .#writeSettings";
+            help = writeSettings.meta.description;
+          }
+          {
+            category = "ide";
+            name = "nix run .#codium .";
+            help = codium.meta.description;
+          }
+        ];
       };
 
       # --- flakes tools ---
@@ -144,6 +155,7 @@
           updateLocks
           pushToCachix;
         inherit
+          codium
           writeSettings
           writeWorkflows
           updateData;
