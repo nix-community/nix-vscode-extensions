@@ -8,14 +8,14 @@ That said, you can now use a different set of extensions for `VS Code` (or `VSCo
 
 ## Note
 
-- Extension names and publishers are lowercased
-- If an extension's publisher or name aren't valid nix identifiers, you may access them by quoting the attribute names like `vscode-marketplace."4"."2"`
-- You may search the repo to find out at what commit a given extension was available
+- Extension names and publishers are lowercased.
+- If an extension's publisher or name aren't valid Nix identifiers, you may access them by quoting the attribute names like `vscode-marketplace."4"."2"`.
+- You may search the repo to find out at what commit a given extension was available.
 - We have a permission from MS to use a crawler on their API in this case (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Please, don't abuse this flake!
 
 ## Template
 
-This template shows how you can get a `VSCodium` with a couple of extensions. Try it:
+A template shows how you can get a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions. Try it:
 
 ```console
 nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
@@ -25,7 +25,10 @@ nix develop
 ```
 
 This will print the extensions available in `VSCodium`.
+
 Run `codium .` or `nix run .#codium .` to start `VSCodium` in the current directory.
+
+In case of problems see [Troubleshooting](#troubleshooting).
 
 ## Usage
 
@@ -34,8 +37,8 @@ Run `codium .` or `nix run .#codium .` to start `VSCodium` in the current direct
 Add the following to your `flake.nix` (see [Flakes](https://nixos.wiki/wiki/Flakes)).
 
 ```nix
-inputs.nix-vscode-extensions = {
-  url = "github:nix-community/nix-vscode-extensions";
+inputs = {
+  nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 };
 ```
 
@@ -53,17 +56,17 @@ nix-repl> inputs.nix-vscode-extensions.extensions.x86_64-linux.open-vsx.golang.g
 «derivation /nix/store/sq3bm44dl8k1g1mm2daqix3ayjn289j2-vscode-extension-golang-Go-0.37.1.drv»
 ```
 
-Alternatively, use the overlay (see `overlays.default` in [flake.nix](./flake.nix)).
+Alternatively, use an overlay (see `overlays.default` in [flake.nix](./flake.nix)).
 
 ### Without flakes
 
-This repo provides a `default.nix`, so you can use [niv](https://github.com/nmattia/niv) or `fetchGit` with an appropriate `rev`.
+This repo provides a `default.nix`, so you can use, e.g.
 
 ```nix
 (import (builtins.fetchGit {
   url = "https://github.com/nix-community/nix-vscode-extensions";
   ref = "refs/heads/master";
-  rev = "13378a0b6026e8b52ccb881454b43201cbe005b4";
+  rev = "a1980daf16eb0d8acfb6e17953d3945bfdac9a4d";
 })).extensions.x86_64-linux.vscode-marketplace.golang.go
 ```
 
@@ -71,24 +74,36 @@ Alternatively, you may use an overlay (see `overlays.default` in [flake.nix](./f
 
 ## Contribute
 
+### Main flake
+
 1. See the [issues](https://github.com/nix-community/nix-vscode-extensions/issues)
 
 1. (Optionally) Install [direnv](https://direnv.net/), e.g., via `nix profile install nixpkgs#direnv`.
 
-1. Start a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
+1. Run a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
 
-  ```console
-  nix develop nix-dev/
-  ```
+    ```console
+    nix develop nix-dev/
+    ```
 
-1. (Optionally) Start `VSCodium` with necessary extensions
+1. (Optionally) Start `VSCodium` with necessary extensions and tools
 
-   ```console
-   nix run nix-dev/#writeSettingsJson
-   nix run nix-dev/#codium
-   ```
+    ```console
+    nix run nix-dev/#writeSettingsJson
+    nix run nix-dev/#codium .
+    ```
+
+### Haskell script
+
+1. See the [hs/README.md](./hs/README.md)
+
+1. Run a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
+
+    ```console
+    cd hs && nix develop
+    ```
 
 ## Troubleshooting
 
-- If `VSCodium` doesn't pick the extensions, try rebooting your computer and starting `VSCodium` again.
+- If `VSCodium` doesn't pick up the extensions, try to reboot your computer and start `VSCodium` again.
 - See [troubleshooting](https://github.com/deemp/flakes/blob/main/README/Troubleshooting.md).
