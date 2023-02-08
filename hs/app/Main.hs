@@ -1,13 +1,10 @@
 {-# LANGUAGE BangPatterns #-}
-{-# HLINT ignore "Use bimap" #-}
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# HLINT ignore "Redundant bracket" #-}
 {-# LANGUAGE InstanceSigs #-}
-{-# HLINT ignore "Use lambda-case" #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE NumericUnderscores #-}
@@ -18,8 +15,13 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE ViewPatterns #-}
+{- FOURMOLU_DISABLE -}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
+{-# HLINT ignore "Redundant bracket" #-}
+{-# HLINT ignore "Use lambda-case" #-}
+{-# HLINT ignore "Use bimap" #-}
+{- FOURMOLU_ENABLE -}
 
 module Main (main) where
 
@@ -62,29 +64,6 @@ import Network.HTTP.Types (status200)
 import System.IO (stdout, withFile)
 import Turtle (Alternative (empty), mktree, rm, shellStrictWithErr, testfile)
 
--- types for constructing a request to VSCode Marketplace
-data Criterion = Criterion
-  { filterType :: Int
-  , value :: Text
-  }
-  deriving (Generic, ToJSON)
-
-data Filter = Filter
-  { criteria :: [Criterion]
-  , pageNumber :: Int
-  , pageSize :: Int
-  , sortBy :: Int
-  , sortOrder :: Int
-  }
-  deriving (Generic, ToJSON)
-
-data Req = Req
-  { filters :: [Filter]
-  , assetTypes :: [String]
-  , flags :: Int
-  }
-  deriving (Generic, ToJSON)
-
 -- | Possible targets
 data Target = VSCodeMarketplace | OpenVSX deriving (Eq)
 
@@ -115,18 +94,23 @@ apiUrl target =
     "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery"
     "https://open-vsx.org/api"
 
--- | select an action based on a target
+-- | Select an action based on a target
 targetSelect :: Target -> p -> p -> p
 targetSelect target f g =
   case target of
     VSCodeMarketplace -> f
     OpenVSX -> g
 
--- | convert a target to a string
+-- | Convert a target to a string
 showTarget :: Target -> String
 showTarget target = targetSelect target "vscode-marketplace" "open-vsx"
 
--- | read everything from a queue into a list
+-- | Handle the case when we need to write the first list of extensions' info into a file
+encodeFirstList :: ToJSON a => Handle -> [a] -> IO ()
+encodeFirstList h (x : xs) = BS.hPutStr h ([i|#{encode x}\n|]) >> traverse_ (\y -> BS.hPutStr h ([i|, #{encode y}\n|])) xs
+encodeFirstList _ _ = error "Please, check the pattern matching at where you call this function"
+
+-- | Read everything from a queue into a list
 -- without retrying (sleeping if a queue is empty)
 --
 -- this is to allow faster reading of a queue
@@ -179,6 +163,7 @@ extLogger file queue =
       -- so, we append a closing bracket
       `finally` BS.hPutStr h "]"
 
+-- | Log info about the number of processed extensions
 processedLogger :: Int -> TMVar Int -> LoggerT Message IO ()
 processedLogger total processed = flip fix 0 $ \ret n -> do
   p <- liftIO $ atomically $ tryReadTMVar processed
@@ -191,36 +176,65 @@ processedLogger total processed = flip fix 0 $ \ret n -> do
     )
     p
 
+-- types for constructing a request to VSCode Marketplace
+data Criterion = Criterion
+  { filterType :: Int
+  , value :: Text
+  }
+  deriving (Generic, ToJSON)
+
+data Filter = Filter
+  { criteria :: [Criterion]
+  , pageNumber :: Int
+  , pageSize :: Int
+  , sortBy :: Int
+  , sortOrder :: Int
+  }
+  deriving (Generic, ToJSON)
+
+data Req = Req
+  { filters :: [Filter]
+  , assetTypes :: [String]
+  , flags :: Int
+  }
+  deriving (Generic, ToJSON)
+
+-- | Compose a body of a request about an extension to VSCode Marketplace
+requestExtensionBodyVSCodeMarketplace :: Text -> Req
+requestExtensionBodyVSCodeMarketplace name_ =
+  Req
+    { filters =
+        [ Filter
+            { criteria =
+                [ Criterion{filterType = 8, value = "Microsoft.VisualStudio.Code"}
+                , Criterion{filterType = 7, value = name_}
+                , Criterion{filterType = 12, value = "4096"}
+                ]
+            , pageNumber = 1
+            , pageSize = 2
+            , sortBy = 0
+            , sortOrder = 0
+            }
+        ]
+    , assetTypes = []
+    , flags = 946
+    }
+
 -- | Get an extension from a target site and pass info about it to other threads
+--
+-- We do this by using the thread-safe data structures like special queues and vars
 getExtension :: Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> ExtensionConfig -> LoggerT Message IO ()
-getExtension target extInfoQueue extFailedConfigQueue extProcessedN c@ExtensionConfig{..} = do
+getExtension target extInfoQueue extFailedConfigQueue extProcessedN c@ExtensionConfig{lastUpdated} = do
   let
+    -- select an action for a target
+    publisher = Text.toLower c.publisher
+    name = Text.toLower c.name
     select = targetSelect target
     extName = [i|#{publisher}.#{name}|] :: Text
-    -- a template of a request about an extension to VSCode Marketplace
-    requestExtension :: Text -> Req
-    requestExtension name_ =
-      Req
-        { filters =
-            [ Filter
-                { criteria =
-                    [ Criterion{filterType = 8, value = "Microsoft.VisualStudio.Code"}
-                    , Criterion{filterType = 7, value = name_}
-                    , Criterion{filterType = 12, value = "4096"}
-                    ]
-                , pageNumber = 1
-                , pageSize = 2
-                , sortBy = 0
-                , sortOrder = 0
-                }
-            ]
-        , assetTypes = []
-        , flags = 946
-        }
     -- prepare a request based on the target site
     request =
       select
-        ( setRequestBodyJSON (requestExtension extName) $
+        ( setRequestBodyJSON (requestExtensionBodyVSCodeMarketplace extName) $
             setRequestHeaders
               [ ("Accept", "application/json; api-version=6.1-preview.1")
               , ("Content-Type", "application/json")
@@ -237,35 +251,39 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN c@ExtensionC
   -- a request may be unsuccessful, so we `try` to catch the error and don't let it kill the app
   response_ <- liftIO $ try @_ @SomeException $ httpJSONEither request
   case response_ of
+    -- if we catch an error
     Left err -> logDebug [i|#{FAIL} Requesting info about #{extName} from #{ppTarget target}. The error:\n #{err}|]
     Right response -> do
       isFailed <-
+        -- if a request is unsuccessful in another way
         if responseStatus response /= status200 || isLeft (responseBody response)
           then do
             logDebug [i|#{FAIL} Requesting info about #{extName} from #{ppTarget target}. Server response:\n #{response}|]
             pure True
           else do
-            -- if we successfully get the response body, it should contain a JSON value
+            -- if we successfully got the response body, it should contain a JSON value
             let body :: Value = fromRight undefined (responseBody response)
                 -- based on the target site, we use an appropriate way to extract a version from that JSON value
                 extVersion =
                   select
                     (body ^? key "results" . nth 0 . key "extensions" . nth 0 . key "versions" . nth 0 . key "version" . _String)
                     (body ^? key "version" . _String)
+            -- if we can't extract the version info
             if isNothing extVersion
               then do
                 logDebug $
                   [i|#{FAIL} Getting the version of #{extName}.|]
-                    <> ( if target == VSCodeMarketplace && (null (body ^.. key "results" . nth 0 . key "extensions" . _Array . traversed))
-                          then -- on VSCode marketplace, if there's no info about an extension,
-                          -- the `results.extensions` value of a body will be an empty array
-                            [i| #{ppTarget target} doesn't provide info about this extension.|]
+                    <> ( -- on VSCode marketplace, if there's no info about an extension,
+                         -- the `results.extensions` value of a body will be an empty array
+                         if target == VSCodeMarketplace && (null (body ^.. key "results" . nth 0 . key "extensions" . _Array . traversed))
+                          then [i| #{ppTarget target} doesn't provide info about this extension.|]
                           else mempty
                        )
                 pure True
               else do
+                -- we got the version info
                 let version = fromJust extVersion
-                    -- we prepare a url for a target site
+                    -- and can prepare a url for a target site
                     url =
                       select
                         [i|https://#{publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/#{publisher}/extension/#{name}/#{version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage|]
@@ -274,21 +292,21 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN c@ExtensionC
                 -- and let nix fetch a file from that url into nix/store
                 -- nix produces a SHA (we extract it via `jq`)
                 (_, strip -> sha256, errText) <- shellStrictWithErr [i|nix store prefetch-file --json #{url} | jq -r .hash|] empty
+                -- if stderr was non-empty, there was an error
                 if not (Text.null errText)
                   then do
                     logDebug [i|#{FAIL} Fetching #{extName} from #{url}. The stderr:\n#{errText}|]
                     pure True
                   else do
                     logInfo [i|#{FINISH} Fetching extension #{extName} from #{url}.|]
-                    -- when everything is ok, we write the info into a queue with extension info
+                    -- when everything is ok, we write the extension info into a queue
                     -- this is to let other threads read from it
                     liftIO $ atomically $ writeTBMQueue extInfoQueue $ ExtensionInfo{..}
                     pure False
       -- if at some point we failed to obtain an extension's info,
-      -- we write its config into a queue for failed configs (just in case)
+      -- we write its config into a queue for failed configs
       when isFailed $ liftIO $ atomically $ writeTBMQueue extFailedConfigQueue c
   -- when finished, we update a shared counter
-  -- to let other threads know that another extension was processed
   liftIO $ atomically $ takeTMVar extProcessedN >>= \x -> putTMVar extProcessedN (x + 1)
 
 -- | Config of a fetcher
@@ -323,11 +341,10 @@ runFetcher FetcherConfig{..} = do
   let mkKey :: Text -> Text -> UTCTime -> Text
       mkKey publisher name lastUpdated = [i|#{publisher}-#{name}-#{lastUpdated}|]
       -- we load the cached info into a map for quicker access
-      infoCacheMap :: Map.HashMap Text ExtensionInfo
       infoCacheMap = Map.fromList ((\d@ExtensionInfo{..} -> (mkKey publisher name lastUpdated, d)) <$> infoCache)
       -- also, we filter out the duplicates among the extension configs
       configs = Set.toList . Set.fromList $ extConfigs
-  -- we partition the extension configs based on if they're present in the cache
+  -- we partition the extension configs based on if they're present in a cache
   let (present, missing) =
         partition
           (isJust . fst)
@@ -342,6 +359,8 @@ runFetcher FetcherConfig{..} = do
   -- we prepare the shared queues and variables
   extInfoQueue <- newTBMQueueIO queueCapacity
   extFailedConfigQueue <- newTBMQueueIO queueCapacity
+  -- this is a counter of processed extensions
+  -- it should become empty when all extensions are processed
   extProcessed <- newTMVarIO 0
   -- as well as file names where threads will write to
   let extInfoFile = mkTargetJSON fetchedTmpDir
@@ -349,14 +368,14 @@ runFetcher FetcherConfig{..} = do
   -- and run together
   ( mapConcurrently_
       id
-      [ -- a logger reads from a queue and logs info about the number of successfully processed extensions
+      [ -- a logger of info about the number of successfully processed extensions
         (usingLoggerT logger $ processedLogger extMissingN extProcessed)
-      , -- a logger that writes the info about successfully fetched extensions' info into a file
+      , -- a logger that writes the info about successfully fetched extensions into a file
         (extLogger extInfoFile extInfoQueue)
-      , -- a logger that writes the info about failed extensions' info into a file
+      , -- a logger that writes the info about failed extensions into a file
         (extLogger extFailedConfigFile extFailedConfigQueue)
-      , -- and an action that spawns a limited group of threads to fetch the extensions
-        -- it's more efficient than spawning a thread per each element of the list with extensions' configs
+      , -- and an action that uses a thread pool to fetch the extensions
+        -- it's more efficient than spawning a thread per each element of a list with extensions' configs
         ( withTaskGroup nThreads $ \g -> do
             void
               ( mapConcurrently
@@ -374,18 +393,16 @@ runFetcher FetcherConfig{..} = do
       ]
     )
     -- even if there are some errors
-    -- we want to append the info about the newly fetched extensions to the cache
-    -- that's why, we run this action in a `finally` block
+    -- we want to finally append the info about the newly fetched extensions to the cache
     `finally` do
       usingLoggerT logger $ logInfo [i|#{START} Caching updated info about extensions from #{ppTarget target}|]
-      -- we combine the cached info with the new info that we read from a file
-      -- and sort the list
+      -- we combine into a sorted list the cached info and the new info that we read from a file
       extSorted <-
         DL.sortBy (\x y -> compare (mkKey x.publisher x.name x.lastUpdated) (mkKey y.publisher y.name y.lastUpdated))
           . (++ presentData)
           . fromRight []
           <$> (eitherDecodeFileStrict' extInfoFile `catch` (\(_ :: SomeException) -> pure $ Left "Error reading a file"))
-      -- after that, we compactly write the extensions' info into the cache file
+      -- after that, we compactly write the extensions' info
       withFile (mkTargetJSON cacheDir) WriteMode $ \h -> do
         BS.hPutStr h "[ "
         case extSorted of
@@ -393,11 +410,6 @@ runFetcher FetcherConfig{..} = do
           xs -> encodeFirstList h xs
         BS.hPutStr h "]"
       usingLoggerT logger $ logInfo [i|#{FINISH} Caching updated info about extensions from #{ppTarget target}|]
-
--- | handle the case when we need to write the first list of extensions' info into a file
-encodeFirstList :: ToJSON a => Handle -> [a] -> IO ()
-encodeFirstList h (x : xs) = BS.hPutStr h ([i|#{encode x}\n|]) >> traverse_ (\y -> BS.hPutStr h ([i|, #{encode y}\n|])) xs
-encodeFirstList _ _ = error "Please, check the pattern matching at where you call this function"
 
 -- | Retry an action a given number of times with a given delay and log about its status
 retry_ :: (MonadIO m, WithLog env Message m, Monoid b) => (Int -> m b) -> Int -> Text -> Text -> m b
@@ -439,7 +451,6 @@ getConfigsVSCodeMarketplace nRetry = flip fix nRetry $ \ret (nRetry_ :: Int) -> 
     pageCount = _VSCODE_MARKETPLACE_PAGE_COUNT
     pageSize = _VSCODE_MARKETPLACE_PAGE_SIZE
     target = VSCodeMarketplace
-    requestExtensionsList :: Int -> Req
     requestExtensionsList pageNumber =
       Req
         { filters =
@@ -550,9 +561,7 @@ getConfigsOpenVSX nRetry = flip fix nRetry $ \retryInfo (nRetryInfo :: Int) -> d
                   -- from the response
                   let extList = (fromRight undefined (responseBody extListResp_))
                   pure . pure $
-                    -- we filter out the non-universal value
-
-                    -- we filter out the non-universal value
+                    -- we filter out the non-universal values
                     ( extList
                         ^.. key "extensions"
                           . _Array
@@ -574,25 +583,35 @@ getConfigsOpenVSX nRetry = flip fix nRetry $ \retryInfo (nRetryInfo :: Int) -> d
                         )
 
 -- | Config for a crawler
-data CrawlerConfig a = CrawlerConfig
+data CrawlerEnv a = CrawlerEnv
   { target :: Target
   , nRetry :: Int
   , logger :: LogAction a Message
   }
 
 -- | Run a crawler depending on the target site to (hopefully) get the extension configs
-runCrawler :: CrawlerConfig IO -> IO (Maybe [ExtensionConfig])
-runCrawler CrawlerConfig{..} =
+runCrawler :: CrawlerEnv IO -> IO (Maybe [ExtensionConfig])
+runCrawler CrawlerEnv{..} =
   usingLoggerT logger do
     logInfo [i|#{START} Updating info about extensions from #{ppTarget target}.|]
     -- we select the target crawler and run it
-    s <- targetSelect target getConfigsVSCodeMarketplace getConfigsOpenVSX nRetry
+    configs <- targetSelect target getConfigsVSCodeMarketplace getConfigsOpenVSX nRetry
+    -- we normalize the configs by lowercasing the extension name and publisher
+    let configsNormalized = ((\ExtensionConfig{..} -> ExtensionConfig{name = Text.toLower name, publisher = Text.toLower publisher, ..}) <$>) <$> configs
     logInfo [i|#{FINISH} Updating info about extensions from #{ppTarget target}.|]
-    -- finally, we return what we got
-    pure s
+    -- finally, we return the configs
+    pure configsNormalized
 
-main' :: LogAction IO Message -> FilePath -> Int -> Int -> Target -> IO ()
-main' logger dataDir nThreads queueCapacity target =
+data ProcessTargetEnv = ProcessTargetEnv
+  { target :: Target
+  , nThreads :: Int
+  , queueCapacity :: Int
+  , dataDir :: FilePath
+  , logger :: LogAction IO Message
+  }
+
+processTarget :: ProcessTargetEnv -> IO ()
+processTarget ProcessTargetEnv{..} =
   do
     let
       cacheDir :: FilePath = [i|#{dataDir}/cache|]
@@ -604,10 +623,11 @@ main' logger dataDir nThreads queueCapacity target =
 
       nRetry = _N_RETRY
 
-    -- we first run a crawler, then a fetcher
-    -- a crawler will get the extension configs
-    -- and the fetcher will fetch them via nix and cache info about them
-    runCrawler CrawlerConfig{..} >>= \x -> maybe (pure ()) (\extConfigs -> runFetcher FetcherConfig{..}) x
+    -- we first run a crawler to get the extension configs
+    extConfigs_ <- runCrawler CrawlerEnv{..}
+    -- if we got them, we'll write a fetcher
+    maybe (pure ()) (\extConfigs -> runFetcher FetcherConfig{..}) extConfigs_
+    -- in case of errors
     `catch` (\(x :: SomeException) -> do usingLoggerT logger $ logError [i|Got an exception when requesting #{ppTarget target}:\n #{x}|])
 
 -- Here are some constants that were used throughout the script
@@ -630,11 +650,15 @@ _OPEN_VSX_REQUEST_RESPONSE_TIMEOUT = 120_000_000
 
 -- | How long to wait before retrying
 _RETRY_DELAY :: Int
-_RETRY_DELAY = 10_000_000
+_RETRY_DELAY = 2_000_000
 
--- | How much for a logger to wait until logging again
+-- | How much for a logger of info about processed extensions to wait until logging again
 _PROCESSED_LOGGER_DELAY :: Int
 _PROCESSED_LOGGER_DELAY = 2_000_000
+
+-- | How many times to process a target site
+_RUN_N :: Int
+_RUN_N = 1
 
 main :: IO ()
 main = do
@@ -642,6 +666,12 @@ main = do
   hSetBuffering stdout NoBuffering
   withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev > Debug) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> do
     usingLoggerT logger $ logInfo [i|#{START} Updating extensions|]
-    -- we'll run the extension crawler and a fetcher several times on both sites
-    traverse_ (replicateM_ 1 . main' logger "data" 100 200) [VSCodeMarketplace, OpenVSX]
+    -- we'll run the extension crawler and a fetcher a given number of times on both target sites
+    traverse_
+      ( \target ->
+          replicateM_ _RUN_N $
+            processTarget ProcessTargetEnv{dataDir = "data", nThreads = 100, queueCapacity = 200, ..}
+      )
+      -- TODO add vscode
+      [OpenVSX, VSCodeMarketplace]
     usingLoggerT logger $ logInfo [i|#{FINISH} Updating extensions|]
