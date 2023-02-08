@@ -1,10 +1,7 @@
 .direnv/
 result
-.deno
 tmp
-.venv
 .vscode
-__pycache__
 dist-newstyle
 data/*
 !data/cache
