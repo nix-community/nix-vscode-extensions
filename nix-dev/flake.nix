@@ -26,7 +26,7 @@
         inherit (my-codium.configs.${system}) extensions settingsNix;
         devshell = my-devshell.devshell.${system};
         inherit (my-devshell.functions.${system}) mkCommands;
-        inherit (drv-tools.functions.${system}) mkShellApps concatMapStringsNewline;
+        inherit (drv-tools.functions.${system}) mkShellApps;
         codium = mkCodium {
           extensions = {
             inherit (extensions) nix misc markdown github;
@@ -39,25 +39,6 @@
             errorlens
             ;
         };
-        tools = [
-          pkgs.deno
-        ];
-
-        env = isTargetOpenVSX:
-          builtins.mapAttrs (_: toString)
-            ({
-              DENO_DIR = "$(pwd)/.deno";
-            } // (
-              if isTargetOpenVSX then {
-                TARGET = "vscode-marketplace";
-                NAME = "VSCode Marketplace";
-                ALLOW_NET = "marketplace.visualstudio.com";
-              } else {
-                TARGET = "open-vsx";
-                NAME = "Open VSX";
-                ALLOW_NET = "open-vsx.org";
-              }
-            ));
         scripts = mkShellApps
           {
             updateExtensions = {
@@ -70,8 +51,7 @@
           inherit codium writeSettings;
         } // scripts;
         devShells.default = devshell.mkShell {
-          packages = tools;
-          commands = (mkCommands "tools" tools) ++ [
+          commands = [
             {
               category = "ide";
               name = "nix run nix-dev/#writeSettings";
