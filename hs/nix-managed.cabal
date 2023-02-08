@@ -23,41 +23,6 @@ source-repository head
   type: git
   location: https://github.com/value/nix-managed
 
-library
-  exposed-modules:
-      Lib
-  other-modules:
-      Paths_nix_managed
-  hs-source-dirs:
-      src
-  default-extensions:
-      ImportQualifiedPost
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
-  build-depends:
-      aeson
-    , async
-    , async-pool
-    , base >=4.7 && <5
-    , bytestring
-    , co-log
-    , co-log-concurrent
-    , hashable
-    , http-client
-    , http-conduit
-    , http-types
-    , lens
-    , lens-aeson
-    , pretty-simple
-    , stm
-    , stm-chans
-    , string-interpolate
-    , text
-    , time
-    , turtle
-    , unordered-containers
-    , yaml
-  default-language: Haskell2010
-
 executable nix-managed
   main-is: Main.hs
   other-modules:
@@ -75,13 +40,14 @@ executable nix-managed
     , bytestring
     , co-log
     , co-log-concurrent
+    , exceptions
     , hashable
     , http-client
     , http-conduit
     , http-types
     , lens
     , lens-aeson
-    , nix-managed
+    , mtl
     , pretty-simple
     , stm
     , stm-chans
@@ -90,41 +56,4 @@ executable nix-managed
     , time
     , turtle
     , unordered-containers
-    , yaml
-  default-language: Haskell2010
-
-test-suite nix-managed-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_nix_managed
-  hs-source-dirs:
-      test
-  default-extensions:
-      ImportQualifiedPost
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      aeson
-    , async
-    , async-pool
-    , base >=4.7 && <5
-    , bytestring
-    , co-log
-    , co-log-concurrent
-    , hashable
-    , http-client
-    , http-conduit
-    , http-types
-    , lens
-    , lens-aeson
-    , nix-managed
-    , pretty-simple
-    , stm
-    , stm-chans
-    , string-interpolate
-    , text
-    , time
-    , turtle
-    , unordered-containers
-    , yaml
   default-language: Haskell2010

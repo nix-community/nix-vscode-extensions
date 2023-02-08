@@ -4,7 +4,7 @@
     my-codium.url = "github:deemp/flakes?dir=codium";
     flake-utils_.url = "github:deemp/flakes?dir=source-flake/flake-utils";
     flake-utils.follows = "flake-utils_/flake-utils";
-    vscode-extensions_.url = "github:deemp/flakes?dir=source-flake/vscode-extensions";
+    vscode-extensions_.url = "github:deemp/flakes?dir=source-flake/nix-vscode-extensions";
     vscode-extensions.follows = "vscode-extensions_/vscode-extensions";
     my-devshell.url = "github:deemp/flakes?dir=devshell";
     drv-tools.url = "github:deemp/flakes?dir=drv-tools";
@@ -61,20 +61,7 @@
         scripts = mkShellApps
           {
             updateExtensions = {
-              text = ''
-                ${concatMapStringsNewline
-                  (x: with (env x); ''
-                    export DENO_DIR="${DENO_DIR}"
-                    ${pkgs.deno}/bin/deno run \
-                      --allow-write \
-                      --allow-net="${ALLOW_NET}" \
-                      --no-prompt \
-                      updater/index.ts "${TARGET}" \
-                      data/new/"${TARGET}".yaml''
-                  ) [ true false ]}  
-                nix run hs/#updateData
-                rm -rf data/new
-              '';
+              text = ''nix run hs/#updateData'';
             };
           };
       in

@@ -25,27 +25,31 @@
             utils = prev.vscode-utils;
             loadGenerated = path:
               lib.pipe path [
-                (path:
-                  import path {
-                    inherit (prev) fetchurl fetchFromGitHub;
-                    fetchgit = prev.fetchGit;
-                  })
-                (lib.mapAttrsToList (_: extension: {
-                  inherit (extension) name;
-                  value = utils.buildVscodeMarketplaceExtension {
-                    vsix = extension.src;
-                    mktplcRef = {
-                      inherit (extension) name publisher version;
+                (path_: builtins.fromJSON (builtins.readFile path_))
+                (builtins.map (extension:
+                  let
+                    publisher = lib.strings.removePrefix "_" extension.publisher;
+                    name = lib.strings.removePrefix "_" extension.name;
+                  in
+                  {
+                    inherit name;
+                    value = utils.buildVscodeMarketplaceExtension {
+                      vsix = prev.fetchurl {
+                        inherit (extension) url sha256;
+                        name = "${name}-${extension.version}.zip";
+                      };
+                      mktplcRef = {
+                        inherit (extension) version; inherit name publisher;
+                      };
                     };
-                  };
-                }))
+                  }))
                 (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
                 (builtins.mapAttrs (_: lib.listToAttrs))
               ];
           in
           {
-            vscode-marketplace = loadGenerated ./data/generated/vscode-marketplace.nix;
-            open-vsx = loadGenerated ./data/generated/open-vsx.nix;
+            vscode-marketplace = loadGenerated ./data/cache/vscode-marketplace.json;
+            open-vsx = loadGenerated ./data/cache/open-vsx.json;
           };
       };
       templates = {

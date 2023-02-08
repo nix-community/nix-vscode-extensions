@@ -80,8 +80,8 @@
             (super.callCabal2nix myPackageName ./. { })
             (_: {
               # these deps will be in haskellPackages.myPackage.getCabalDeps.librarySystemDepends
-              librarySystemDepends = myPackageDepsLib;
-              executableSystemDepends = myPackageDepsBin;
+              librarySystemDepends = myPackageDepsLib ++ (super.librarySystemDepends or [ ]);
+              executableSystemDepends = myPackageDepsBin ++ (super.executableSystemDepends or [ ]);
             });
         };
       };

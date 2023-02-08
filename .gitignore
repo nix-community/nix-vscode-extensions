@@ -6,3 +6,5 @@ tmp
 .vscode
 __pycache__
 dist-newstyle
+data/*
+!data/cache
