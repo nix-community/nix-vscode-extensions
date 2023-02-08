@@ -5,7 +5,7 @@
   ";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/dbc68fa4bb132d990945d39801b0d7f2ba15b08f";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = {
       url = "github:edolstra/flake-compat";
@@ -20,9 +20,9 @@
     in
     {
       overlays = {
-        default = _: prev:
+        default = final: prev:
           let
-            utils = prev.vscode-utils;
+            utils = nixpkgs.legacyPackages.${final.system}.vscode-utils;
             loadGenerated = path:
               lib.pipe path [
                 (path_: builtins.fromJSON (builtins.readFile path_))
