@@ -672,6 +672,5 @@ main = do
           replicateM_ _RUN_N $
             processTarget ProcessTargetEnv{dataDir = "data", nThreads = 100, queueCapacity = 200, ..}
       )
-      -- TODO add vscode
       [OpenVSX, VSCodeMarketplace]
     usingLoggerT logger $ logInfo [i|#{FINISH} Updating extensions|]
