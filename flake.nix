@@ -64,7 +64,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        extensions = self.overlays.default null nixpkgs.legacyPackages.${system};
+        extensions = self.overlays.default pkgs pkgs;
 
         packages = {
           vscodium-with-extensions =
