@@ -94,7 +94,11 @@
       # More specifically, if we're developing Haskell packages A and B and A depends on B, we need to supply both A and B
       # This will prevent nix from building B as a dev dependency of A
 
-      inherit (toolsGHC ghcVersion_ override (ps: [ ps.myPackage ]) myPackageDepsBin)
+      inherit (toolsGHC {
+        version = ghcVersion_; inherit override;
+        packages = (ps: [ ps.myPackage ]);
+        runtimeDependencies = myPackageDepsBin;
+      })
         hls cabal implicit-hie justStaticExecutable
         ghcid callCabal2nix haskellPackages hpack;
 
