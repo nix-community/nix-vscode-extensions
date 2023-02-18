@@ -63,8 +63,8 @@
         extensions = self.overlays.default pkgs pkgs;
 
         packages = {
-          vscodium-with-extensions =
-            pkgs.vscode-with-extensions.override
+          vscodium-with-extensions = pkgs.lib.attrsets.recursiveUpdate
+            (pkgs.vscode-with-extensions.override
               {
                 vscode = pkgs.vscodium;
                 vscodeExtensions = with self.extensions.${system}.vscode-marketplace; [
@@ -72,16 +72,15 @@
                   vlanguage.vscode-vlang
                 ];
               }
-            // {
-              meta = lib.addMetaAttrs rec {
-                # TODO don't override `description` when https://github.com/NixOS/nixos-search/pull/607 is merged
-                description = longDescription;
+            )
+            {
+              meta = rec {
                 longDescription = lib.mdDoc ''
                   This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
                   You can override this package and set `vscodeExtensions` to a list of extension
                   derivations, namely those provided by this flake.
 
-                  The [repository] provides about 40K extensions from [Visual Studio Marketplace]
+                  The [repository] provides ~40K extensions from [Visual Studio Marketplace]
                   and another ~3K from [Open VSX Registry].
 
                   [repository]: https://github.com/nix-community/nix-vscode-extensions
