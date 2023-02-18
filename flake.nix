@@ -26,20 +26,16 @@
             loadGenerated = path:
               lib.pipe path [
                 (path_: builtins.fromJSON (builtins.readFile path_))
-                (builtins.map (extension:
-                  let
-                    publisher = lib.strings.removePrefix "_" extension.publisher;
-                    name = lib.strings.removePrefix "_" extension.name;
-                  in
+                (builtins.map (extension@{ name, publisher, version, sha256, url, ... }:
                   {
                     inherit name;
                     value = utils.buildVscodeMarketplaceExtension {
                       vsix = prev.fetchurl {
-                        inherit (extension) url sha256;
-                        name = "${name}-${extension.version}.zip";
+                        inherit url sha256;
+                        name = "${name}-${version}.zip";
                       };
                       mktplcRef = {
-                        inherit (extension) version; inherit name publisher;
+                        inherit name version publisher;
                       };
                     };
                   }))
