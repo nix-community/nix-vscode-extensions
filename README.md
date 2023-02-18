@@ -30,6 +30,14 @@ Run `codium .` or `nix run .#codium .` to start `VSCodium` in the current direct
 
 In case of problems see [Troubleshooting](#troubleshooting).
 
+## Example
+
+There's a sample package `vscodium-with-extensions` with a couple of extensions that you can try.
+
+```console
+nix run github:nix-community/nix-vscode-extensions#vscodium-with-extensions -- --list-extensions
+```
+
 ## Usage
 
 ### With flakes
