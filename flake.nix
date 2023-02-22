@@ -75,7 +75,7 @@
             )
             {
               meta = rec {
-                longDescription = lib.mdDoc ''
+                longDescription = ''
                   This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
                   You can override this package and set `vscodeExtensions` to a list of extension
                   derivations, namely those provided by this flake.
