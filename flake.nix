@@ -63,7 +63,7 @@
         extensions = self.overlays.default pkgs pkgs;
 
         packages = {
-          vscodium-with-extensions = pkgs.lib.attrsets.recursiveUpdate
+          vscodium-with-extensions = pkgs.lib.trivial.pipe
             (pkgs.vscode-with-extensions.override
               {
                 vscode = pkgs.vscodium;
@@ -73,23 +73,29 @@
                 ];
               }
             )
-            {
-              meta = rec {
-                longDescription = ''
-                  This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
-                  You can override this package and set `vscodeExtensions` to a list of extension
-                  derivations, namely those provided by this flake.
+            [
+              (x: pkgs.lib.attrsets.recursiveUpdate x
+                {
+                  meta = rec {
+                    longDescription = ''
+                      This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
+                      You can override this package and set `vscodeExtensions` to a list of extension
+                      derivations, namely those provided by this flake.
 
-                  The [repository] provides ~40K extensions from [Visual Studio Marketplace]
-                  and another ~3K from [Open VSX Registry].
+                      The [repository] provides ~40K extensions from [Visual Studio Marketplace]
+                      and another ~3K from [Open VSX Registry].
 
-                  [repository]: https://github.com/nix-community/nix-vscode-extensions
-                  [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
-                  [Open VSX Registry]: https://open-vsx.org/
-                '';
-              };
-            };
+                      [repository]: https://github.com/nix-community/nix-vscode-extensions
+                      [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
+                      [Open VSX Registry]: https://open-vsx.org/
+                    '';
+                  };
+                })
+              (x: x // { meta = builtins.removeAttrs x.meta [ "description" ]; })
+            ];
         };
-        formatter = pkgs.writeScriptBin "fmt" "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt flake.nix nix-dev/flake.nix";
+        formatter = pkgs.writeScriptBin
+          "fmt"
+          "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt flake.nix nix-dev/flake.nix";
       }));
 }
