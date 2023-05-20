@@ -634,7 +634,7 @@
 , {"lastUpdated":"2022-06-03T11:17:34.949465Z","missingTimes":0,"name":"bulma-css-class-completion","platform":"universal","publisher":"eliutdev","sha256":"sha256-R2kAXAsdezz7aL9lpVvIvppov44zAfqPYhgbsNMEfOQ=","version":"0.3.0"}
 , {"lastUpdated":"2023-05-06T17:26:32.600256Z","missingTimes":0,"name":"elixir-ls","platform":"universal","publisher":"elixir-lsp","sha256":"sha256-QgmnPH8xsUh6Ymg01F1Spz7IoutTHM9fRqNCumto+yQ=","version":"0.14.7"}
 , {"lastUpdated":"2023-05-17T18:36:13.330912Z","missingTimes":0,"name":"elm-ls-vscode","platform":"universal","publisher":"elmtooling","sha256":"sha256-xfV2Mid/+wT0qdIro4kz396yqw6NdvzOn/7KbI+kBFI=","version":"2.7.2"}
-, {"lastUpdated":"2023-03-01T22:42:20.567491Z","missingTimes":2,"name":"elvish","platform":"universal","publisher":"elves","sha256":"sha256-Z7hMEIfhZZUJPNsnQ8HB0gFB3uk1a6p8NWpyefKGKXs=","version":"0.2.2"}
+, {"lastUpdated":"2023-03-01T22:42:20.567491Z","missingTimes":3,"name":"elvish","platform":"universal","publisher":"elves","sha256":"sha256-Z7hMEIfhZZUJPNsnQ8HB0gFB3uk1a6p8NWpyefKGKXs=","version":"0.2.2"}
 , {"lastUpdated":"2023-05-20T10:49:57.804441Z","missingTimes":0,"name":"elvish","platform":"universal","publisher":"elves","sha256":"sha256-Z7hMEIfhZZUJPNsnQ8HB0gFB3uk1a6p8NWpyefKGKXs=","version":"0.2.2"}
 , {"lastUpdated":"2023-02-11T17:22:45.277089Z","missingTimes":0,"name":"sobrio","platform":"universal","publisher":"elvessousa","sha256":"sha256-KEStU4wcbi3zrBODFt9+WBGzyc7kX9NQlVBvAOlHMXY=","version":"0.2.0"}
 , {"lastUpdated":"2022-01-04T03:36:14.894821Z","missingTimes":0,"name":"ide-purescript","platform":"universal","publisher":"emattiza","sha256":"sha256-quSZdOJmt8/1ADBGKUt9EXot6gvf8Bbx008zfO2sCiI=","version":"0.25.5"}
@@ -1141,7 +1141,6 @@
 , {"lastUpdated":"2023-05-15T05:11:58.27606Z","missingTimes":0,"name":"jsonforms-vuetify-tooling","platform":"universal","publisher":"kchobantonov","sha256":"sha256-T1CiZqEEcfqLutWjsCpTQhT5O0S5w8/vuWIZrymOziE=","version":"0.0.5"}
 , {"lastUpdated":"2022-11-20T15:02:29.075644Z","missingTimes":0,"name":"mips","platform":"universal","publisher":"kdarkhan","sha256":"sha256-a0+E7PjQ31PRTeWBmksSHzdpfZDlWJMRcDX5LoCjEjY=","version":"0.1.1"}
 , {"lastUpdated":"2022-04-14T16:35:52.641006Z","missingTimes":0,"name":"three-snippets","platform":"universal","publisher":"kdjfs","sha256":"sha256-HJY0nCg6RdsjJzS22sc0FaPV0pcsqzU2tIc1CnD+ToI=","version":"0.1.12"}
-, {"lastUpdated":"2023-03-31T10:32:23.346263Z","missingTimes":2,"name":"vscode-home-assistant","platform":"universal","publisher":"keesschollaart","sha256":"sha256-IEuEP+dbxS8+9wJ40YGk8/FUO3uZiKYxowrJ5bi0R04=","version":"1.36.0"}
 , {"lastUpdated":"2023-05-20T10:31:03.58324Z","missingTimes":0,"name":"vscode-home-assistant","platform":"universal","publisher":"keesschollaart","sha256":"sha256-IEuEP+dbxS8+9wJ40YGk8/FUO3uZiKYxowrJ5bi0R04=","version":"1.36.0"}
 , {"lastUpdated":"2023-05-09T18:25:20.635081Z","missingTimes":0,"name":"compare-helper","platform":"universal","publisher":"keewek","sha256":"sha256-LLuSG/SZOP745YK2exiAIPBwVsSaYlLviVXvB97p49s=","version":"1.1.1"}
 , {"lastUpdated":"2023-04-16T20:03:04.175117Z","missingTimes":0,"name":"vscode-sshfs","platform":"universal","publisher":"kelvin","sha256":"sha256-WO9vYELNvwmuNeI05sUBE969KAiKYtrJ1fRfdZx3OYU=","version":"1.26.1"}
@@ -1770,7 +1769,7 @@
 , {"lastUpdated":"2023-02-27T18:37:53.651574Z","missingTimes":0,"name":"material-product-icons","platform":"universal","publisher":"pkief","sha256":"sha256-gKU21OS2ZFyzCQVQ1fa3qlahLBAcJaHDEcz7xof3P4A=","version":"1.5.0"}
 , {"lastUpdated":"2022-10-28T11:26:25.869555Z","missingTimes":0,"name":"plain","platform":"universal","publisher":"plain","sha256":"sha256-rmI7zS7X01vd1ZMxodSh0PVXVd6JtH6AXW5/54HuLRQ=","version":"1.0.1"}
 , {"lastUpdated":"2021-12-14T00:46:58.497721Z","missingTimes":0,"name":"dm-langclient","platform":"universal","publisher":"platymuus","sha256":"sha256-DsN4kIJLoQ+pwfJbOLryuiwO4MkIPUznQUYUdbehAIU=","version":"0.2.2"}
-, {"lastUpdated":"2023-05-20T01:43:09.32527Z","missingTimes":2,"name":"java-extension-pack-jdk","platform":"universal","publisher":"pleiades","sha256":"sha256-Lik45V+NDjpQhSSL/jH+pmtLLtvn4rgolNo4YUIxYYM=","version":"2023.520.1"}
+, {"lastUpdated":"2023-05-20T01:43:09.32527Z","missingTimes":3,"name":"java-extension-pack-jdk","platform":"universal","publisher":"pleiades","sha256":"sha256-Lik45V+NDjpQhSSL/jH+pmtLLtvn4rgolNo4YUIxYYM=","version":"2023.520.1"}
 , {"lastUpdated":"2023-05-20T09:58:18.795925Z","missingTimes":0,"name":"java-extension-pack-jdk","platform":"universal","publisher":"pleiades","sha256":"sha256-Lik45V+NDjpQhSSL/jH+pmtLLtvn4rgolNo4YUIxYYM=","version":"2023.520.1"}
 , {"lastUpdated":"2022-07-11T09:12:33.253676Z","missingTimes":0,"name":"devicetree","platform":"universal","publisher":"plorefice","sha256":"sha256-Gmg8nOJd9D85NZW427T7ULowxDtAKar9Yrcn//dR6zs=","version":"0.1.1"}
 , {"lastUpdated":"2021-07-16T12:02:03.718619Z","missingTimes":0,"name":"plus-pro","platform":"universal","publisher":"plushugh","sha256":"sha256-x6sMIOOwIwqXfqWkQSXboycBbuzmBCD33UtKinnvvaQ=","version":"0.0.1"}
