@@ -1,0 +1,15 @@
+{
+    "runN": 1,
+    "processedLoggerDelay": 2,
+    "retryDelay": 2,
+    "openVsxRequestResponseTimeout": 120,
+    "vscodeMarketplacePageSize": 1000,
+    "vscodeMarketplacePageCount": 70,
+    "nRetry": 3,
+    "logSeverity": "Info",
+    "dataDir": "data",
+    "nThreadsVSCodeMarketplace": 100,
+    "nThreadsOpenVSX": 50,
+    "queueCapacity": 200,
+    "maxMissingTimes": 5
+}

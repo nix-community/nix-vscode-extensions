@@ -1,69 +1,51 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/dbc68fa4bb132d990945d39801b0d7f2ba15b08f";
-    my-codium.url = "github:deemp/flakes?dir=codium";
+    nixpkgs_.url = "github:deemp/flakes?dir=source-flake/nixpkgs";
+    nixpkgs.follows = "nixpkgs_/nixpkgs";
+    codium.url = "github:deemp/flakes?dir=codium";
     flake-utils_.url = "github:deemp/flakes?dir=source-flake/flake-utils";
     flake-utils.follows = "flake-utils_/flake-utils";
-    vscode-extensions_.url = "github:deemp/flakes?dir=source-flake/nix-vscode-extensions";
-    vscode-extensions.follows = "vscode-extensions_/vscode-extensions";
-    my-devshell.url = "github:deemp/flakes?dir=devshell";
+    devshell.url = "github:deemp/flakes?dir=devshell";
     drv-tools.url = "github:deemp/flakes?dir=drv-tools";
   };
-  outputs =
-    { self
-    , my-codium
-    , flake-utils
-    , vscode-extensions
-    , my-devshell
-    , nixpkgs
-    , drv-tools
-    , ...
-    }: flake-utils.lib.eachDefaultSystem
-      (system:
+  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem
+    (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-        inherit (my-codium.functions.${system}) mkCodium writeSettingsJSON;
-        inherit (my-codium.configs.${system}) extensions settingsNix;
-        devshell = my-devshell.devshell.${system};
-        inherit (my-devshell.functions.${system}) mkCommands;
-        inherit (drv-tools.functions.${system}) mkShellApps;
-        codium = mkCodium {
-          extensions = {
-            inherit (extensions) nix misc markdown github;
-          };
-        };
-        writeSettings = writeSettingsJSON {
-          inherit (settingsNix)
-            nix-ide markdown-all-in-one git gitlens todo-tree
-            markdown-language-features files workbench editor
-            errorlens
-            ;
-        };
-        scripts = mkShellApps
-          {
-            updateExtensions = {
-              text = ''nix run hs/#updateData'';
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        inherit (inputs.codium.functions.${system}) mkCodium writeSettingsJSON;
+        inherit (inputs.codium.configs.${system}) extensions settingsNix;
+        inherit (inputs.devshell.functions.${system}) mkRunCommandsDir mkShell;
+        inherit (inputs.drv-tools.functions.${system}) mkShellApps;
+        packages = {
+          codium = mkCodium {
+            extensions = {
+              inherit (extensions) nix misc markdown github;
             };
           };
+          writeSettings = writeSettingsJSON {
+            inherit (settingsNix)
+              nix-ide markdown-all-in-one git gitlens todo-tree
+              markdown-language-features files workbench editor
+              errorlens
+              ;
+          };
+        } //
+        (mkShellApps {
+          updateExtensions = {
+            text = ''nix run hs/#updateExtensions'';
+            description = "Update extensions data";
+          };
+        });
+
+        devShells.default = mkShell {
+          commands = mkRunCommandsDir "nix-dev/" "ide" {
+            inherit (packages) writeSettings updateExtensions;
+            "codium ." = packages.codium;
+          };
+        };
       in
       {
-        packages = {
-          inherit codium writeSettings;
-        } // scripts;
-        devShells.default = devshell.mkShell {
-          commands = [
-            {
-              category = "ide";
-              name = "nix run nix-dev/#writeSettings";
-              help = writeSettings.meta.description;
-            }
-            {
-              category = "ide";
-              name = "nix run nix-dev/#codium .";
-              help = codium.meta.description;
-            }
-          ];
-        };
+        inherit packages devShells;
       });
 
   nixConfig = {

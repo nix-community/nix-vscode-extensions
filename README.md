@@ -40,6 +40,10 @@ nix run github:nix-community/nix-vscode-extensions#vscodium-with-extensions -- -
 
 ## Usage
 
+We provide extensions attrsets that contain both universal and platform-specific extensions.
+We provide a reasonable mapping between the sites target platforms and Nix-supported platforms.
+See the [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20) for more info.
+
 ### With flakes
 
 Add the following to your `flake.nix` (see [Flakes](https://nixos.wiki/wiki/Flakes)).

@@ -17,21 +17,42 @@
     let
       inherit (nixpkgs) lib;
       inherit (flake-utils.lib) eachDefaultSystem;
+      vscode-marketplace = "vscode-marketplace";
+      open-vsx = "open-vsx";
+      universal = "universal";
+
+      systemPlatform = {
+        "aarch64-darwin" = "darwin-arm64";
+        "x86_64-linux" = "linux-x64";
+        "aarch64-linux" = "linux-arm64";
+        "x86_64-darwin" = "darwin-x64";
+      };
     in
     {
       overlays = {
         default = final: prev:
           let
             utils = nixpkgs.legacyPackages.${final.system}.vscode-utils;
-            loadGenerated = path:
-              lib.pipe path [
-                (path_: builtins.fromJSON (builtins.readFile path_))
-                (builtins.map (extension@{ name, publisher, version, sha256, url, ... }:
+            currentPlatform = systemPlatform.${final.system};
+            loadGenerated = site:
+              lib.pipe site [
+                (x: ./data/cache/${site}.json)
+                __readFile
+                __fromJSON
+                (__filter (x: x.platform == universal || x.platform == currentPlatform))
+                (map (extension@{ name, publisher, version, sha256, platform, ... }:
                   {
-                    inherit name;
+                    inherit name platform;
                     value = utils.buildVscodeMarketplaceExtension {
                       vsix = prev.fetchurl {
-                        inherit url sha256;
+                        inherit sha256;
+                        url =
+                          if site == vscode-marketplace then
+                            let platform' = if platform == universal then "" else "targetPlatform=${platform}"; in
+                            "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platform'}"
+                          else
+                            let platform' = if platform == universal then "" else "@${platform}"; in
+                            "https://open-vsx.org/api/${publisher}/${name}/${version}/file/${publisher}.${name}-${version}${platform'}.vsix";
                         name = "${name}-${version}.zip";
                       };
                       mktplcRef = {
@@ -39,13 +60,16 @@
                       };
                     };
                   }))
-                (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
-                (builtins.mapAttrs (_: lib.listToAttrs))
+                (map (x: builtins.removeAttrs x [ "platform" ]))
+                (__groupBy ({ value, ... }: value.vscodeExtPublisher))
+                # platform-specific extensions will overwrite the universal extensions
+                # due to the sorting order of platforms in the Haskell script
+                (__mapAttrs (_: __foldl' (k: { name, value }: k // { ${name} = value; }) { }))
               ];
           in
           {
-            vscode-marketplace = loadGenerated ./data/cache/vscode-marketplace.json;
-            open-vsx = loadGenerated ./data/cache/open-vsx.json;
+            vscode-marketplace = loadGenerated vscode-marketplace;
+            open-vsx = loadGenerated open-vsx;
           };
       };
       templates = {
@@ -61,7 +85,6 @@
       in
       {
         extensions = self.overlays.default pkgs pkgs;
-
         packages = {
           vscodium-with-extensions = pkgs.lib.trivial.pipe
             (pkgs.vscode-with-extensions.override
@@ -70,6 +93,7 @@
                 vscodeExtensions = with self.extensions.${system}.vscode-marketplace; [
                   golang.go
                   vlanguage.vscode-vlang
+                  rust-lang.rust-analyzer
                 ];
               }
             )

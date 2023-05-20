@@ -36,6 +36,7 @@ dependencies:
 - time
 - unordered-containers
 - async
+- generic-lens
 - turtle
 - http-types
 - async-pool
@@ -45,7 +46,8 @@ dependencies:
 - stm-chans
 - hashable
 - mtl
-- exceptions
+- vector
+- unliftio
 
 ghc-options:
 - -Wall

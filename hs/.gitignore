@@ -4,4 +4,4 @@
 .vscode
 dist-newstyle
 tmp
-data
+data*
