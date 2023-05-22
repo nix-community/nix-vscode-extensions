@@ -38,10 +38,10 @@ import Control.Concurrent.Async (forConcurrently, mapConcurrently_)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM (STM, TMVar, TVar, atomically, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, takeTMVar, tryReadTMVar, writeTVar)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
-import Control.Lens (Bifunctor (bimap), Field1 (_1), Prism', Suffixed (suffixed), Traversal', filtered, indexing, itraversed, non, prism', reindexed, review, selfIndex, to, traversed, (%~), (+~), (<&>), (<.), (^.), (^..), (^?), (^@..), _2, _Just)
-import Control.Monad (replicateM_, unless, void, when)
+import Control.Lens (Bifunctor (bimap), Field1 (_1), Prism', Suffixed (suffixed), Traversal', filtered, has, non, only, prism', review, to, traversed, (#), (%~), (+~), (<&>), (^.), (^..), (^?), _Just)
+import Control.Monad (guard, replicateM_, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
-import Data.Aeson (FromJSON (..), Options (constructorTagModifier, unwrapUnaryRecords), ToJSON (toJSON), Value (..), defaultOptions, eitherDecodeFileStrict', encode, genericParseJSON, genericToJSON, withObject, (.:), (.:?))
+import Data.Aeson (FromJSON (..), Options (constructorTagModifier, unwrapUnaryRecords), ToJSON (toJSON), Value (..), defaultOptions, eitherDecodeFileStrict', encode, genericParseJSON, genericToJSON, withObject, withText, (.:), (.:?))
 import Data.Aeson.Lens (key, nth, _Array, _Integer, _String)
 import Data.Aeson.Types (parseFail, parseMaybe)
 import Data.ByteString qualified as BS
@@ -61,6 +61,7 @@ import Data.Text (Text, pack, strip, unpack)
 import Data.Text qualified as Text
 import Data.Text.Lazy qualified as T
 import Data.Time (UTCTime)
+import Data.Void
 import GHC.Generics (Generic)
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
@@ -70,9 +71,13 @@ import Network.HTTP.Simple (httpJSONEither, setRequestBodyJSON, setRequestHeader
 import Network.HTTP.Types (status200)
 import System.Environment (getEnv)
 import System.IO (stdout, withFile)
+import Text.Megaparsec (Parsec, choice, skipMany, (<|>))
+import Text.Megaparsec qualified as TM (parseMaybe)
+import Text.Megaparsec.Char (asciiChar, string)
+import Text.Megaparsec.Char.Lexer
 import Text.Pretty.Simple (defaultOutputOptionsNoColor, pShowOpt)
 import Turtle (Alternative (empty), mktree, rm, shellStrictWithErr, testfile)
-import UnliftIO.Exception
+import UnliftIO.Exception (SomeException, catchAny, finally, try, tryAny)
 
 -- | Possible targets
 data Target = VSCodeMarketplace | OpenVSX deriving (Eq)
@@ -93,6 +98,35 @@ newtype Version = Version {_version :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)
   deriving (Generic)
 
+data VersionModifier = Veq | Vgeq deriving (Ord, Eq, Generic, Hashable)
+
+data EngineVersion = EngineVersion {_modifier :: VersionModifier, _majorVersion, _minorVersion, _patchVersion :: Int}
+  deriving (Eq, Ord, Hashable, Generic)
+
+_VersionModifier :: Prism' Text VersionModifier
+_VersionModifier = prism' embed_ match_
+ where
+  embed_ = \case
+    Veq -> ""
+    Vgeq -> "^"
+  match_ x
+    | x == embed_ Veq = Just Veq
+    | x == embed_ Vgeq = Just Vgeq
+    | x == ">=" = Just Vgeq
+    | otherwise = Nothing
+
+instance Show VersionModifier where
+  show = unpack . (_VersionModifier #)
+
+instance Show EngineVersion where
+  show = unpack . (_EngineVersion #)
+
+_EngineVersion :: Prism' Text EngineVersion
+_EngineVersion = prism' embed_ match_
+ where
+  embed_ EngineVersion{..} = [i|#{review _VersionModifier _modifier}#{_majorVersion}.#{_minorVersion}.#{_patchVersion}|]
+  match_ = TM.parseMaybe parseVersion'
+
 aesonOptions :: Options
 aesonOptions = defaultOptions{unwrapUnaryRecords = True}
 
@@ -108,6 +142,15 @@ instance Show Version where show = Text.unpack . _version
 instance FromJSON Version where parseJSON = genericParseJSON aesonOptions
 instance ToJSON Version where toJSON = genericToJSON aesonOptions
 
+instance FromJSON EngineVersion where
+  parseJSON = withText "Engine version" $ \t -> do
+    let t' = t ^? _EngineVersion
+    guard (has _Just t')
+    pure (fromJust t')
+
+instance ToJSON EngineVersion where
+  toJSON = (_String #) . (_EngineVersion #)
+
 -- | A simple config that is enough to fetch an extension
 data ExtensionConfig = ExtensionConfig
   { name :: Name
@@ -116,8 +159,12 @@ data ExtensionConfig = ExtensionConfig
   , version :: Version
   , platform :: Platform
   , missingTimes :: Int
+  , engineVersion :: EngineVersion
   }
   deriving (Generic, FromJSON, ToJSON, Show, Eq, Hashable)
+
+defaultEngineVersion :: EngineVersion
+defaultEngineVersion = EngineVersion{_modifier = Vgeq, _majorVersion = 0, _minorVersion = 0, _patchVersion = 0}
 
 -- | Full necessary info about an extension
 data ExtensionInfo = ExtensionInfo
@@ -129,6 +176,10 @@ data ExtensionInfo = ExtensionInfo
   , platform :: Platform
   , missingTimes :: Int
   -- ^ how many times the extension could not be fetched
+  , engineVersion :: EngineVersion
+  -- ^ engine version that's required to run this extension
+  --
+  -- See [Visual Studio Code compatibility](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility)
   }
   deriving (Generic, FromJSON, ToJSON, Show)
 
@@ -311,11 +362,53 @@ instance Show Platform where
   show :: Platform -> String
   show = show . unpack . review _Platform
 
+-- | Examples of versions for VSCode engine used in extensions
+versions :: [Text]
+versions =
+  [ "^0.0.0"
+  , "^0.10.x"
+  , "^1.27.0-insider"
+  , ">=0.10.0"
+  , ">=0.10.x"
+  , ">=0.9.0-pre.1"
+  , "0.1.x"
+  , "1.57.0-insider"
+  , "1.x.x"
+  , "*"
+  ]
+
+-- | Parsed versions
+--
+-- >>> versionsParsed
+-- [Just ^0.0.0,Just ^0.10.0,Just ^1.27.0,Just ^0.10.0,Just ^0.10.0,Just ^0.9.0,Just 0.1.0,Just 1.57.0,Just 1.0.0,Just ^0.0.0]
+versionsParsed :: [Maybe EngineVersion]
+versionsParsed = TM.parseMaybe parseVersion' <$> versions
+
+type Parser = Parsec Void Text
+
+-- | Parse 'EngineVersion'
+parseVersion' :: Parser EngineVersion
+parseVersion' =
+  (string "*" >> pure defaultEngineVersion)
+    <|> do
+      _modifier <-
+        choice
+          [ Vgeq <$ (string "^" <|> string ">=")
+          , Veq <$ string ""
+          ]
+      _majorVersion <- decimal <|> (0 <$ string "x")
+      void $ string "."
+      _minorVersion <- decimal <|> (0 <$ string "x")
+      void $ string "."
+      _patchVersion <- decimal <|> (0 <$ string "x")
+      skipMany asciiChar
+      pure EngineVersion{..}
+
 -- | Get an extension from a target site and pass info about it to other threads
 --
 -- We do this by using the thread-safe data structures like special queues and vars
 getExtension :: AppConfigImpl => Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> LoggerT Message IO ()
-getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN extConfig@ExtensionConfig{platform, lastUpdated, missingTimes} = do
+getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN extConfig@ExtensionConfig{platform, lastUpdated, missingTimes, engineVersion} = do
   let
     -- select an action for a target
     publisher = extConfig.publisher & #_publisher %~ Text.toLower
@@ -456,7 +549,6 @@ runFetcher FetcherConfig{..} = do
 
   let mkKey :: Publisher -> Name -> Platform -> LastUpdated -> (Publisher, Name, Platform, LastUpdated)
       mkKey publisher name platform lastUpdated = (publisher, name, platform, lastUpdated)
-      -- [i|#{publisher}-#{name}-#{platform}-#{lastUpdated}|]
       mkKeyInfo ExtensionInfo{..} = mkKey publisher name platform lastUpdated
       mkKeyConfig ExtensionConfig{..} = mkKey publisher name platform lastUpdated
       -- we load the cached info into a map for quicker access
@@ -639,10 +731,11 @@ getConfigsVSCodeMarketplace nRetry = flip fix nRetry $ \ret (nRetry_ :: Int) -> 
     -- if we were unsuccessful, we need to retry
     Left l -> retry_ ret (nRetry - nRetry_ + 1) [i|Getting info about extensions from #{ppTarget target}|] [i|#{l}|]
     Right r -> do
-      let configs =
-            -- we'll turn each page into a list of extension configs, concatenate them and return
-            r
-              ^@.. traversed
+      pure $
+        pure $
+          -- we'll turn each page into a list of extension configs, concatenate them and return
+          r
+            ^.. traversed
               . key "results"
               . nth 0
               . key "extensions"
@@ -650,39 +743,38 @@ getConfigsVSCodeMarketplace nRetry = flip fix nRetry $ \ret (nRetry_ :: Int) -> 
               . traversed
               . filteredByFlags
               . to
-                ( \k ->
-                    parseMaybe
-                      ( withObject [i|Extension|] $ \o -> do
-                          name :: Name <- o .: "extensionName"
-                          publisher :: Publisher <- o .: "publisher" >>= \x -> x .: "publisherName"
-                          pure ((name, publisher), k)
-                      )
-                      k
+                ( parseMaybe
+                    ( withObject [i|Extension|] $ \o -> do
+                        name :: Name <- o .: "extensionName"
+                        publisher :: Publisher <- o .: "publisher" >>= \x -> x .: "publisherName"
+                        versions_ :: [Value] <- o .: "versions"
+                        pure $
+                          versions_
+                            ^.. traversed
+                              . to
+                                ( parseMaybe
+                                    ( withObject [i|Version|] $ \o1 -> do
+                                        lastUpdated <- o1 .: "lastUpdated"
+                                        version <- o1 .: "version"
+                                        platform <- o1 .:? "targetPlatform" <&> (^. non PUniversal)
+                                        properties :: [Value] <- o1 .: "properties"
+                                        let engineVersion =
+                                              properties
+                                                ^? traversed
+                                                . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.Engine"))
+                                                . key "value"
+                                                . _String
+                                                . _EngineVersion
+                                            missingTimes = 0
+                                        guard (isJust engineVersion)
+                                        pure ExtensionConfig{engineVersion = fromJust engineVersion, ..}
+                                    )
+                                )
+                    )
                 )
               . _Just
-              . (reindexed fst selfIndex)
-              <. indexing _2
-              <. indexing (key "versions")
-              <. indexing _Array
-              <. itraversed
-              ^.. traversed
-              . to
-                ( \(k, v) ->
-                    parseMaybe
-                      ( withObject [i|Extension version|] $ \o -> do
-                          lastUpdated <- o .: "lastUpdated"
-                          version <- o .: "version"
-                          platform <- o .:? "targetPlatform" <&> (^. non PUniversal)
-                          let (name, publisher) = k
-                              -- for now, the configs are fresh
-                              missingTimes = 0
-                          pure ExtensionConfig{..}
-                      )
-                      v
-                )
+              . traversed
               . _Just
-      -- logInfo $ pShow' configs
-      pure . pure $ configs
 
 -- | Get a list of extension configs from Open VSX
 getConfigsOpenVSX :: AppConfigImpl => Int -> LoggerT Message IO (Maybe [ExtensionConfig])
@@ -724,41 +816,42 @@ getConfigsOpenVSX nRetry = flip fix nRetry $ \retryInfo (nRetryInfo :: Int) -> d
               if responseStatus extListResp_ /= status200 || isLeft (responseBody extListResp_)
                 then retry_ retryList (nRetry - nRetryList + 1) [i|Getting extension list from #{ppTarget_}|] [i|Got: #{responseBody extListResp_}|]
                 else do
-                  -- if everything was ok, we extract the list of the values that correspond to extensions
-                  -- from the response
+                  -- if everything was ok, we extract the list of the values that correspond to extensions from the response
                   let extList = (fromRight undefined (responseBody extListResp_))
-                  -- logInfo $ pShow' extList
                   pure . pure $
                     extList
-                      ^@.. key "extensions"
-                      . _Array
-                      . traversed
-                      . to
-                        -- we parse the values to obtain the extension configs
-                        ( \k ->
-                            parseMaybe
-                              ( withObject [i|Extension|] $ \o -> do
-                                  name :: Name <- o .: "name"
-                                  publisher :: Publisher <- o .: "namespace"
-                                  lastUpdated :: LastUpdated <- o .: "timestamp"
-                                  version :: Version <- o .: "version"
-                                  pure ((name, publisher, lastUpdated, version), k)
-                              )
-                              k
-                        )
-                      . _Just
-                      . reindexed fst selfIndex
-                      <. indexing _2
-                      <. indexing (key "files")
-                      <. indexing (key "download")
-                      <. indexing _String
-                      <. indexing (suffixed ".vsix")
-                      -- platform-specific extensions have a download link like "https://open-vsx.org/api/astro-build/astro-vscode/win32-x64/0.29.5/file/astro-build.astro-vscode-0.29.5@win32-x64.vsix"
-                      <. indexing (to (Text.dropWhile (== '@') . Text.dropWhile (/= '@')))
-                      <. indexing (to (\x -> if Text.null x then Just PUniversal else x ^? _Platform))
-                      <. _Just
-                      ^.. traversed
-                      . to (\((name, publisher, lastUpdated, version), platform) -> ExtensionConfig{missingTimes = 0, ..})
+                      ^.. key "extensions"
+                        . _Array
+                        . traversed
+                        . to
+                          -- we parse the values to obtain the extension configs
+                          ( \k ->
+                              parseMaybe
+                                ( withObject [i|Extension|] $ \o -> do
+                                    name :: Name <- o .: "name"
+                                    publisher :: Publisher <- o .: "namespace"
+                                    lastUpdated :: LastUpdated <- o .: "timestamp"
+                                    version :: Version <- o .: "version"
+                                    download :: Value <- o .: "files" >>= (.: "download")
+                                    let platform' =
+                                          download
+                                            ^? _String
+                                            . suffixed ".vsix"
+                                            . to (Text.dropWhile (/= '@'))
+                                            . to (Text.dropWhile (== '@'))
+                                            . to (\x -> if Text.null x then Just PUniversal else x ^? _Platform)
+                                            . _Just
+                                    guard (isJust platform')
+                                    let platform = fromJust platform'
+                                        missingTimes = 0
+                                        -- TODO parse engine version when it's added into responses
+                                        -- https://github.com/eclipse/openvsx/issues/743
+                                        engineVersion = defaultEngineVersion
+                                    pure ExtensionConfig{..}
+                                )
+                                k
+                          )
+                        . _Just
 
 -- | Config for a crawler
 data CrawlerEnv a = CrawlerEnv
@@ -806,6 +899,7 @@ processTarget ProcessTargetEnv{..} =
 
     -- we first run a crawler to get the extension configs
     extConfigs_ <- runCrawler CrawlerEnv{..}
+
     -- if we got them, we'll run a fetcher
     traverse_ (\extConfigs -> runFetcher FetcherConfig{..}) extConfigs_
     -- in case of errors
