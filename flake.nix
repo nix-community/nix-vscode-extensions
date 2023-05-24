@@ -34,15 +34,23 @@
           let
             utils = nixpkgs.legacyPackages.${final.system}.vscode-utils;
             currentPlatform = systemPlatform.${final.system};
-            loadGenerated = site:
+            dropWhile = cond: xs: if __length xs > 0 && cond (lib.lists.take 1 xs) then dropWhile cond (lib.lists.drop 1 xs) else xs;
+            isCompatibleVersion = vscodeVersion: engineVersion:
+              if lib.strings.hasPrefix "^" engineVersion then lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
+              else vscodeVersion == engineVersion;
+            # version of VSCode or VSCodium
+            loadGenerated = { needLatest ? true, checkVSCodeVersion ? false, vscodeVersion ? "*", site }:
               lib.pipe site [
-                (x: ./data/cache/${site}.json)
+                (x: ./data/cache/${site}${if needLatest then "-latest" else "-release"}.json)
                 __readFile
                 __fromJSON
-                (__filter (x: x.platform == universal || x.platform == currentPlatform))
+                (__filter (x:
+                  (x.platform == universal ||
+                  x.platform == currentPlatform) &&
+                  (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)))
                 (map (extension@{ name, publisher, version, sha256, platform, ... }:
                   {
-                    inherit name platform;
+                    inherit name;
                     value = utils.buildVscodeMarketplaceExtension {
                       vsix = prev.fetchurl {
                         inherit sha256;
@@ -60,17 +68,20 @@
                       };
                     };
                   }))
-                (map (x: builtins.removeAttrs x [ "platform" ]))
                 (__groupBy ({ value, ... }: value.vscodeExtPublisher))
                 # platform-specific extensions will overwrite the universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (__mapAttrs (_: __foldl' (k: { name, value }: k // { ${name} = value; }) { }))
               ];
+            mkSet = attrs@{ checkVSCodeVersion ? false, vscodeVersion ? "*" }: {
+              vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });
+              open-vsx = loadGenerated (attrs // { site = open-vsx; });
+              vscode-marketplace-release = loadGenerated (attrs // { needLatest = false; site = vscode-marketplace; });
+              open-vsx-release = loadGenerated (attrs // { needLatest = false; site = open-vsx; });
+            };
+            res = (mkSet { }) // { forVSCodeVersion = vscodeVersion: mkSet { checkVSCodeVersion = true; inherit vscodeVersion; }; };
           in
-          {
-            vscode-marketplace = loadGenerated vscode-marketplace;
-            open-vsx = loadGenerated open-vsx;
-          };
+          res;
       };
       templates = {
         vscodium-with-extensions = {
