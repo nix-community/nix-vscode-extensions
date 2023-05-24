@@ -9,7 +9,15 @@
     "maxMissingTimes": 5,
     "openVSX": {
         "requestResponseTimeout": 120,
-        "nThreads": 50
+        "nThreads": 50,
+        "release": {
+            "eamodio": [
+                "gitlens"
+            ],
+            "rust-lang": [
+                "rust-analyzer"
+            ]
+        }
     },
     "vscodeMarketplace": {
         "pageSize": 1000,
@@ -18,6 +26,9 @@
         "release": {
             "eamodio": [
                 "gitlens"
+            ],
+            "rust-lang": [
+                "rust-analyzer"
             ]
         },
         "requestResponseTimeout": 120
