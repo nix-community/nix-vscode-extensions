@@ -20,7 +20,32 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/value/nix-managed#readme>
 
 default-extensions:
+- BangPatterns
+- BlockArguments
+- ConstraintKinds
+- DeriveGeneric
+- DerivingStrategies
+- DuplicateRecordFields
+- FlexibleContexts
+- FlexibleInstances
+- GeneralizedNewtypeDeriving
+- ImplicitParams
 - ImportQualifiedPost
+- InstanceSigs
+- LambdaCase
+- NamedFieldPuns
+- NumericUnderscores
+- OverloadedLabels
+- OverloadedRecordDot
+- OverloadedStrings
+- QuasiQuotes
+- RankNTypes
+- RecordWildCards
+- ScopedTypeVariables
+- StandaloneDeriving
+- TypeApplications
+- TypeFamilies
+- ViewPatterns
 
 dependencies:
 - base >= 4.7 && < 5
@@ -48,6 +73,7 @@ dependencies:
 - mtl
 - vector
 - unliftio
+- megaparsec
 
 ghc-options:
 - -Wall
@@ -60,6 +86,9 @@ ghc-options:
 - -Wpartial-fields
 - -Wredundant-constraints
 
+library:
+  source-dirs: src
+
 executables:
   nix-managed:
     main:                Main.hs
@@ -68,3 +97,5 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    dependencies:
+    - nix-managed
