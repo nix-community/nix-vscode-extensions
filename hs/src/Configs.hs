@@ -28,9 +28,9 @@ data SiteConfig f = SiteConfig
   }
   deriving (Generic)
 
-newtype ReleaseExtensions = ReleaseExtensions [ReleaseExtension] deriving (Eq, Show)
+newtype ReleaseExtensions = ReleaseExtensions {_releaseExtensions :: [ReleaseExtension]} deriving (Eq, Show)
 
-data ReleaseExtension = ReleaseExtension {publisher :: Publisher, name :: Name} deriving (Eq, Show)
+data ReleaseExtension = ReleaseExtension {_publisher :: Publisher, _name :: Name} deriving (Eq, Show)
 
 data AppConfig f = AppConfig
   { runN :: HKD f Int
@@ -99,10 +99,10 @@ instance FromJSON ReleaseExtensions where
           ^.. traversed
             . to
               ( \(k, v) ->
-                  let publisher = Publisher (toText k)
+                  let _publisher = Publisher (toText k)
                    in parseMaybe
                         ( withArray "Names" $ \a ->
-                            pure $ a ^.. traversed . _String . to (\name -> ReleaseExtension{name = Name name, ..})
+                            pure $ a ^.. traversed . _String . to (\name -> ReleaseExtension{_name = Name name, ..})
                         )
                         v
               )

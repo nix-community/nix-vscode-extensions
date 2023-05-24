@@ -61,7 +61,7 @@ data Platform
   | PLinux_arm64
   | PDarwin_x64
   | PDarwin_arm64
-  deriving (Generic, Eq, Hashable, Ord)
+  deriving (Generic, Eq, Hashable, Ord, Enum, Bounded)
 
 instance FromJSON Platform where
   parseJSON (String s) =
@@ -95,7 +95,7 @@ _Platform = prism' embed_ match_
 
 instance Show Platform where
   show :: Platform -> String
-  show = show . unpack . review _Platform
+  show = unpack . review _Platform
 
 _VersionModifier :: Prism' Text VersionModifier
 _VersionModifier = prism' embed_ match_
