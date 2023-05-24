@@ -1,7 +1,5 @@
 # Haskell
 
-`VSCodium` with extensions and executables for `Haskell`.
-
 ## Prerequisites
 
 - [flake.nix](./flake.nix) - extensively commented code
@@ -12,20 +10,33 @@
 
 1. Install Nix - see [how](https://github.com/deemp/flakes/blob/main/README/InstallNix.md).
 
-1. In a new terminal, run a devshell from the `hs` dir:
+1. In a new terminal, run a devshell from the `hs` dir. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
 
-```console
-cd hs
-nix develop
-cabal run
-```
+    ```console
+    cd hs
+    nix develop
+    ```
 
-1. Optionally, run `VSCodium`
+1. (Optionally) Edit the [config](./config.json).
 
-```console
-nix run .#writeSettings
-nix run .#codium .
-```
+1. Run the app.
+
+    ```console
+    set -a
+    source .env
+    cabal run
+    ```
+
+1. The fetched extensions will be in [data](./data).
+
+1. (Optionally) Run `VSCodium`.
+
+    ```console
+    nix run .#writeSettings
+    nix run .#codium .
+    ```
+
+1. (Optionally) Open a `.hs` file and hover over a function. Wait until HLS gives the type info.
 
 ### Configs
 

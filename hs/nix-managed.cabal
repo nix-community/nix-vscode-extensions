@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -23,6 +23,71 @@ source-repository head
   type: git
   location: https://github.com/value/nix-managed
 
+library
+  exposed-modules:
+      Configs
+      Extensions
+  other-modules:
+      Paths_nix_managed
+  hs-source-dirs:
+      src
+  default-extensions:
+      BangPatterns
+      BlockArguments
+      ConstraintKinds
+      DeriveGeneric
+      DerivingStrategies
+      DuplicateRecordFields
+      FlexibleContexts
+      FlexibleInstances
+      GeneralizedNewtypeDeriving
+      ImplicitParams
+      ImportQualifiedPost
+      InstanceSigs
+      LambdaCase
+      NamedFieldPuns
+      NumericUnderscores
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      ScopedTypeVariables
+      StandaloneDeriving
+      TypeApplications
+      TypeFamilies
+      ViewPatterns
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      aeson
+    , async
+    , async-pool
+    , base >=4.7 && <5
+    , bytestring
+    , co-log
+    , co-log-concurrent
+    , generic-lens
+    , hashable
+    , http-client
+    , http-conduit
+    , http-types
+    , lens
+    , lens-aeson
+    , megaparsec
+    , mtl
+    , pretty-simple
+    , stm
+    , stm-chans
+    , string-interpolate
+    , text
+    , time
+    , turtle
+    , unliftio
+    , unordered-containers
+    , vector
+  default-language: Haskell2010
+
 executable nix-managed
   main-is: Main.hs
   other-modules:
@@ -30,7 +95,32 @@ executable nix-managed
   hs-source-dirs:
       app
   default-extensions:
+      BangPatterns
+      BlockArguments
+      ConstraintKinds
+      DeriveGeneric
+      DerivingStrategies
+      DuplicateRecordFields
+      FlexibleContexts
+      FlexibleInstances
+      GeneralizedNewtypeDeriving
+      ImplicitParams
       ImportQualifiedPost
+      InstanceSigs
+      LambdaCase
+      NamedFieldPuns
+      NumericUnderscores
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RankNTypes
+      RecordWildCards
+      ScopedTypeVariables
+      StandaloneDeriving
+      TypeApplications
+      TypeFamilies
+      ViewPatterns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -40,14 +130,16 @@ executable nix-managed
     , bytestring
     , co-log
     , co-log-concurrent
-    , exceptions
+    , generic-lens
     , hashable
     , http-client
     , http-conduit
     , http-types
     , lens
     , lens-aeson
+    , megaparsec
     , mtl
+    , nix-managed
     , pretty-simple
     , stm
     , stm-chans
@@ -55,5 +147,7 @@ executable nix-managed
     , text
     , time
     , turtle
+    , unliftio
     , unordered-containers
+    , vector
   default-language: Haskell2010

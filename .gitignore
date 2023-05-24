@@ -5,3 +5,4 @@ tmp
 dist-newstyle
 data/*
 !data/cache
+data_*

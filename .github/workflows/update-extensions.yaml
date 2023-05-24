@@ -22,13 +22,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install latest Nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v20
         with:
           extra_nix_config: ${{ env.extra_nix_config }}
           nix_path: ${{ env.nixpkgs }}
 
       - name: Run updater
         uses: nick-fields/retry@v2
+        env:
+          CONFIG: 'hs/config.json'
         with:
           timeout_minutes: 360
           retry_wait_seconds: 300

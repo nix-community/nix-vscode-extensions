@@ -1,8 +1,8 @@
-# Nix VSCode Extensions
+# Nix expressions for VS Code Extensions
 
 At the time of writing this, searching `nixpkgs` yields around **200** `VS Code` extensions. However, the `VS Code Marketplace` contains more than **40,000** extensions!
 
-This flake provides the Nix expressions for the majority of available extensions from [Open VSX](https://open-vsx.org/) and [VSCode Marketplace](https://marketplace.visualstudio.com/vscode). A `GitHub Action` updates the extensions daily.
+This flake provides the Nix expressions for the majority of available extensions from [Open VSX](https://open-vsx.org/) and [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). A `GitHub Action` updates the extensions daily.
 
 That said, you can now use a different set of extensions for `VS Code` (or `VSCodium`) in each of your projects. Moreover, you can share your flakes and cache them so that other people don't need to install these extensions manually!
 
@@ -39,6 +39,18 @@ nix run github:nix-community/nix-vscode-extensions#vscodium-with-extensions -- -
 ```
 
 ## Usage
+
+### Extensions
+
+We provide extensions attrsets that contain both universal and platform-specific extensions.
+We provide a [reasonable](https://github.com/nix-community/nix-vscode-extensions/issues/20) mapping between the sites target platforms and Nix-supported platforms.
+
+There are several attrsets
+
+- `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `-release` attrsets.
+- `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions manually listed in the [config](hs/config.json).
+- `forVSCodeVersion "4.228.1"` allows to leave only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"4.228.1"` version of `VS Code`.
+  - You may supply the actual version of your `VS Code` instead of `"4.228.1"`.
 
 ### With flakes
 
@@ -82,6 +94,12 @@ Alternatively, you may use an overlay (see `overlays.default` in [flake.nix](./f
 
 ## Contribute
 
+### Release extensions
+
+The [config](hs/config.json) contains several extensions.
+We cache the information about the latest release versions of these extensions (see [Extensions](#extensions)).
+If you'd like to use release versions of an extension, please, add that extension to the config and make a PR.
+
 ### Main flake
 
 1. See the [issues](https://github.com/nix-community/nix-vscode-extensions/issues)
@@ -105,10 +123,17 @@ Alternatively, you may use an overlay (see `overlays.default` in [flake.nix](./f
 
 1. See the [hs/README.md](./hs/README.md)
 
-1. Run a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
+1. Get the environment.
 
     ```console
-    cd hs && nix develop
+    set -a
+    source .env
+    ```
+
+1. Run the script.
+
+    ```console
+    nix run hs/#updateExtensions
     ```
 
 ## Troubleshooting

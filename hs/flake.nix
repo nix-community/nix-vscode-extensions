@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs_.url = "github:deemp/flakes?dir=source-flake/nixpkgs";
     nixpkgs.follows = "nixpkgs_/nixpkgs";
-    my-codium.url = "github:deemp/flakes?dir=codium";
+    codium.url = "github:deemp/flakes?dir=codium";
     drv-tools.url = "github:deemp/flakes?dir=drv-tools";
     flake-utils_.url = "github:deemp/flakes?dir=source-flake/flake-utils";
     flake-utils.follows = "flake-utils_/flake-utils";
@@ -11,42 +11,27 @@
     flakes-tools.url = "github:deemp/flakes?dir=flakes-tools";
     workflows.url = "github:deemp/flakes?dir=workflows";
   };
-  outputs =
-    { self
-    , flake-utils
-    , flakes-tools
-    , nixpkgs
-    , my-codium
-    , drv-tools
-    , haskell-tools
-    , devshell
-    , workflows
-    , ...
-    }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system:
     let
       # We're going to make some dev tools for our Haskell package
       # See NixOS wiki for more info - https://nixos.wiki/wiki/Haskell
 
       # First, we import stuff
-      pkgs = nixpkgs.legacyPackages.${system};
-      inherit (my-codium.functions.${system}) writeSettingsJSON mkCodium;
-      inherit (my-codium.configs.${system}) extensions settingsNix;
-      inherit (flakes-tools.functions.${system}) mkFlakesTools;
-      inherit (devshell.functions.${system}) mkCommands mkShell;
-      inherit (haskell-tools.functions.${system}) toolsGHC;
-      inherit (workflows.functions.${system}) writeWorkflow;
-      inherit (workflows.configs.${system}) nixCI;
-      inherit (drv-tools.functions.${system}) mkShellApp;
+      pkgs = inputs.nixpkgs.legacyPackages.${system};
+      inherit (inputs.codium.functions.${system}) writeSettingsJSON mkCodium;
+      inherit (inputs.codium.configs.${system}) extensions settingsNix;
+      inherit (inputs.flakes-tools.functions.${system}) mkFlakesTools;
+      inherit (inputs.devshell.functions.${system}) mkCommands mkShell mkRunCommands;
+      inherit (inputs.haskell-tools.functions.${system}) toolsGHC;
+      inherit (inputs.workflows.functions.${system}) writeWorkflow;
+      inherit (inputs.workflows.configs.${system}) nixCI;
+      inherit (inputs.drv-tools.functions.${system}) mkShellApp;
 
       # Next, set the desired GHC version
       ghcVersion_ = "92";
 
       # and the name of the package
       myPackageName = "nix-managed";
-
-      # Then, we list separately the libraries that our package needs
-      myPackageDepsLib = [ ];
 
       # And the binaries. 
       # In our case, the Haskell app will call the `hello` command
@@ -80,7 +65,6 @@
             (super.callCabal2nix myPackageName ./. { })
             (_: {
               # these deps will be in haskellPackages.myPackage.getCabalDeps.librarySystemDepends
-              librarySystemDepends = myPackageDepsLib ++ (super.librarySystemDepends or [ ]);
               executableSystemDepends = myPackageDepsBin ++ (super.executableSystemDepends or [ ]);
             });
         };
@@ -102,11 +86,12 @@
         hls cabal implicit-hie justStaticExecutable
         ghcid callCabal2nix haskellPackages hpack;
 
-      myPackageExeName = "update-data";
+      updateExtensions = justStaticExecutable {
+        package = haskellPackages.myPackage;
+        runtimeDependencies = myPackageDepsBin;
+      };
 
-      updateData = justStaticExecutable myPackageExeName haskellPackages.myPackage;
-
-      codiumTools = [
+      tools = [
         ghcid
         hpack
         implicit-hie
@@ -115,59 +100,43 @@
         pkgs.jq
       ];
 
-      # And compose VSCodium with dev tools and HLS
-      codium = mkCodium {
-        extensions = { inherit (extensions) nix haskell misc github markdown; };
-        runtimeDependencies = codiumTools;
-      };
-
-      # a script to write .vscode/settings.json
-      writeSettings = writeSettingsJSON {
-        inherit (settingsNix) haskell todo-tree files editor gitlens
-          git nix-ide workbench markdown-all-in-one markdown-language-features;
-      };
-
-      tools = codiumTools;
-
-      defaultShell = mkShell {
-        packages = tools;
-        bash.extra = "export LANG=C.utf8";
-        commands = mkCommands "tools" tools ++ [
-          {
-            category = "ide";
-            name = "nix run .#writeSettings";
-            help = writeSettings.meta.description;
-          }
-          {
-            category = "ide";
-            name = "nix run .#codium .";
-            help = codium.meta.description;
-          }
-        ];
-      };
-
-      # --- flakes tools ---
-      # Also, we provide scripts that can be used in CI
-      flakesTools = mkFlakesTools [ "." ];
-
-      # write .github/ci.yaml to get a GitHub Actions workflow file
-      writeWorkflows = writeWorkflow "ci" nixCI;
-    in
-    {
       packages = {
-        inherit (flakesTools)
-          updateLocks
-          pushToCachix;
-        inherit
-          codium
-          writeSettings
-          writeWorkflows
-          updateData;
+        # And compose VSCodium with dev tools and HLS
+        codium = mkCodium {
+          extensions = { inherit (extensions) nix haskell misc github markdown; };
+          runtimeDependencies = tools;
+        };
+
+        # a script to write .vscode/settings.json
+        writeSettings = writeSettingsJSON {
+          inherit (settingsNix) haskell todo-tree files editor gitlens
+            git nix-ide workbench markdown-all-in-one markdown-language-features;
+        };
+
+        # --- flakes tools ---
+        # Also, we provide scripts that can be used in CI
+        flakesTools = mkFlakesTools [ "." ];
+
+        # write .github/ci.yaml to get a GitHub Actions workflow file
+        writeWorkflows = writeWorkflow "ci" nixCI;
+        inherit (mkFlakesTools) updateLocks pushToCachix;
+
+        inherit updateExtensions;
       };
 
       devShells = {
-        default = defaultShell;
+        default = mkShell {
+          packages = tools;
+          commands = mkCommands "tools" tools ++
+            mkRunCommands "ide" {
+              "codium ." = packages.codium;
+              inherit (packages) writeSettings;
+            };
+        };
       };
+    in
+    {
+      inherit packages devShells;
     });
 
   nixConfig = {
