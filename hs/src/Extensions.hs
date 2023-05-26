@@ -2,7 +2,7 @@
 
 module Extensions where
 
-import Control.Lens (Prism', has, prism', review, (#), (^?), _Just)
+import Control.Lens
 import Control.Monad (guard, void)
 import Data.Aeson (FromJSON (..), Options (unwrapUnaryRecords), ToJSON (toJSON), Value (..), defaultOptions, genericParseJSON, genericToJSON, withText)
 import Data.Aeson.Lens (_String)
@@ -31,6 +31,35 @@ targetSelect target f g =
   case target of
     VSCodeMarketplace -> f
     OpenVSX -> g
+
+-- | Possible action statuses
+ppTarget :: Target -> Text
+ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
+
+data Flags = Flags'Validated | Flags'Public | Flags'Preview | Flags'Verified deriving (Enum, Bounded)
+
+_Flags :: Prism' Text Flags
+_Flags = prism' embed_ match_
+ where
+  embed_ = \case
+    Flags'Validated -> "validated"
+    Flags'Public -> "public"
+    Flags'Preview -> "preview"
+    Flags'Verified -> "verified"
+  match_ :: Text -> Maybe Flags
+  match_ x
+    | x == embed_ Flags'Validated = Just Flags'Validated
+    | x == embed_ Flags'Public = Just Flags'Public
+    | x == embed_ Flags'Preview = Just Flags'Preview
+    | x == embed_ Flags'Verified = Just Flags'Verified
+    | otherwise = Nothing
+
+instance Show Flags where
+  show :: Flags -> String
+  show = Text.unpack . (_Flags #)
+
+extFlagsAllowed :: [Text]
+extFlagsAllowed = enumFrom minBound ^.. traversed . to (_Flags #)
 
 newtype Name = Name {_name :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)

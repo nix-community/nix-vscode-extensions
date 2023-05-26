@@ -27,6 +27,8 @@ library
   exposed-modules:
       Configs
       Extensions
+      Logger
+      Requests
   other-modules:
       Paths_nix_managed
   hs-source-dirs:
@@ -76,7 +78,6 @@ library
     , lens-aeson
     , megaparsec
     , mtl
-    , pretty-simple
     , stm
     , stm-chans
     , string-interpolate
@@ -140,7 +141,6 @@ executable nix-managed
     , megaparsec
     , mtl
     , nix-managed
-    , pretty-simple
     , stm
     , stm-chans
     , string-interpolate
