@@ -156,7 +156,7 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
             PUniversal -> ""
             x -> [i|/#{x}|]
         )
-      platformSuff :: Text =
+      platformSuffix :: Text =
         ( case platform of
             PUniversal -> ""
             x -> select [i|targetPlatform=#{x}|] [i|@#{x}|]
@@ -164,8 +164,8 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
       url :: Text
       url =
         select
-          [i|https://#{publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/#{publisher}/extension/#{name}/#{version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?#{platformSuff}|]
-          [i|https://open-vsx.org/api/#{publisher}/#{name}#{platformInfix}/#{version}/file/#{extName}-#{version}#{platformSuff}.vsix|]
+          [i|https://#{publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/#{publisher}/extension/#{name}/#{version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?#{platformSuffix}|]
+          [i|https://open-vsx.org/api/#{publisher}/#{name}#{platformInfix}/#{version}/file/#{extName}-#{version}#{platformSuffix}.vsix|]
 
     logDebug [i|#{START} Fetching #{extName} from #{url}|]
     -- and let nix fetch a file from that url into nix/store

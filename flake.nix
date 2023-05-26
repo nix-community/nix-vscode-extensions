@@ -56,11 +56,13 @@
                         inherit sha256;
                         url =
                           if site == vscode-marketplace then
-                            let platform' = if platform == universal then "" else "targetPlatform=${platform}"; in
-                            "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platform'}"
+                            let platformSuffix = if platform == universal then "" else "targetPlatform=${platform}"; in
+                            "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platformSuffix}"
                           else
-                            let platform' = if platform == universal then "" else "@${platform}"; in
-                            "https://open-vsx.org/api/${publisher}/${name}/${version}/file/${publisher}.${name}-${version}${platform'}.vsix";
+                            let platformSuffix = if platform == universal then "" else "@${platform}";
+                                platformInfix = if platform == universal then "" else "/${platform}";
+                            in
+                            "https://open-vsx.org/api/${publisher}/${name}${platformInfix}/${version}/file/${publisher}.${name}-${version}${platformSuffix}.vsix";
                         name = "${name}-${version}.zip";
                       };
                       mktplcRef = {
