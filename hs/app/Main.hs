@@ -1,34 +1,34 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TupleSections #-}
+
 {- FOURMOLU_DISABLE -}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
 {-# HLINT ignore "Redundant bracket" #-}
 {-# HLINT ignore "Use lambda-case" #-}
 {-# HLINT ignore "Use bimap" #-}
-{-# LANGUAGE DeriveAnyClass #-}
 {-# HLINT ignore "Redundant lambda" #-}
-{-# LANGUAGE TupleSections #-}
 {- FOURMOLU_ENABLE -}
 
 module Main (main) where
 
-import Colog (LoggerT, Message, Msg (..), WithLog, cfilter, fmtMessage, formatWith, logDebug, logError, logInfo, logTextStdout, usingLoggerT)
+import Colog (LogAction (..), Message, Msg (..), WithLog, cfilter, fmtMessage, formatWith, logDebug, logError, logInfo, logTextStdout, usingLoggerT)
 import Colog.Concurrent (defCapacity, withBackgroundLogger)
 import Configs
 import Control.Concurrent (threadDelay)
-import Control.Concurrent.Async (forConcurrently, mapConcurrently_)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
-import Control.Concurrent.STM (STM, TMVar, TVar, atomically, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, takeTMVar, tryReadTMVar, writeTVar)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
 import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (<&>), (^.), (^..), (^?), _Just)
-import Control.Monad (guard, replicateM_, unless, void, when)
+import Control.Monad (guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
 import Data.Aeson.Lens (key, nth, _Array, _String)
 import Data.Aeson.Types (parseMaybe)
 import Data.ByteString qualified as BS
 import Data.Either (fromRight)
-import Data.Foldable (Foldable (foldl'), traverse_)
+import Data.Foldable (Foldable (foldl'), asum, traverse_)
 import Data.Function (fix, (&))
 import Data.Generics.Labels ()
 import Data.HashMap.Strict qualified as Map
@@ -40,18 +40,17 @@ import Data.String (IsString (fromString))
 import Data.String.Interpolate (i)
 import Data.Text (Text, pack, strip)
 import Data.Text qualified as Text
-import Data.Text.Lazy qualified as T
 import Extensions
-import GHC.Generics (Generic)
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
+import Logger
 import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
+import Requests
 import System.Environment (getEnv)
-import System.IO (stdout, withFile)
-import Text.Pretty.Simple (defaultOutputOptionsNoColor, pShowOpt)
-import Turtle (Alternative (empty), mktree, rm, shellStrictWithErr, testfile)
+import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
+import UnliftIO (MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 
 -- | Select a base API URL depending on the target
@@ -84,8 +83,8 @@ flushTBMQueue q = flip fix [] $ \ret contents -> do
     _ -> pure $ pure contents
 
 -- | Log info about extensions from a queue into a file
-extLogger :: ToJSON a => FilePath -> TBMQueue a -> IO ()
-extLogger file queue =
+extLogger :: ToJSON a => FilePath -> TBMQueue a -> MyLogger ()
+extLogger file queue = liftIO $
   withFile file AppendMode $ \h ->
     do
       -- let the logs go straight to a file
@@ -124,7 +123,7 @@ extLogger file queue =
       `finally` BS.hPutStr h "]"
 
 -- | Log info about the number of processed extensions
-processedLogger :: AppConfig' => Int -> TMVar Int -> LoggerT Message IO ()
+processedLogger :: AppConfig' => Int -> TMVar Int -> MyLogger ()
 processedLogger total processed = flip fix 0 $ \ret n -> do
   p <- liftIO $ atomically $ tryReadTMVar processed
   traverse_
@@ -135,54 +134,10 @@ processedLogger total processed = flip fix 0 $ \ret n -> do
     )
     p
 
--- types for constructing a request to VSCode Marketplace
-data Criterion = Criterion
-  { filterType :: Int
-  , value :: Text
-  }
-  deriving (Generic, ToJSON)
-
-data Filter = Filter
-  { criteria :: [Criterion]
-  , pageNumber :: Int
-  , pageSize :: Int
-  , sortBy :: Int
-  , sortOrder :: Int
-  }
-  deriving (Generic, ToJSON)
-
-data Req = Req
-  { filters :: [Filter]
-  , assetTypes :: [String]
-  , flags :: Int
-  }
-  deriving (Generic, ToJSON)
-
--- | Compose a body of a request about an extension to VSCode Marketplace
-requestExtensionBodyVSCodeMarketplace :: Text -> Req
-requestExtensionBodyVSCodeMarketplace name_ =
-  Req
-    { filters =
-        [ Filter
-            { criteria =
-                [ Criterion{filterType = 8, value = "Microsoft.VisualStudio.Code"}
-                , Criterion{filterType = 7, value = name_}
-                , Criterion{filterType = 12, value = "4096"}
-                ]
-            , pageNumber = 1
-            , pageSize = 2
-            , sortBy = 0
-            , sortOrder = 0
-            }
-        ]
-    , assetTypes = []
-    , flags = 946
-    }
-
 -- | Get an extension from a target site and pass info about it to other threads
 --
 -- We do this by using the thread-safe data structures like special queues and vars
-getExtension :: AppConfig' => Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> LoggerT Message IO ()
+getExtension :: AppConfig' => Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> MyLogger ()
 getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN extConfig@ExtensionConfig{platform, lastUpdated, missingTimes, engineVersion, version} = do
   let
     -- select an action for a target
@@ -239,7 +194,7 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
   liftIO $ atomically $ takeTMVar extProcessedN >>= \x -> putTMVar extProcessedN (x + 1)
 
 -- | Fetch the extensions given their configurations
-runFetcher :: AppConfig' => FetcherConfig IO -> IO ()
+runFetcher :: AppConfig' => FetcherConfig IO -> MyLogger ()
 runFetcher FetcherConfig{..} = do
   let fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
       failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
@@ -248,19 +203,16 @@ runFetcher FetcherConfig{..} = do
   -- if there were previous files with given names, we remove them
   traverse_ (\x -> let f = [i|#{mkTargetJSON x}|] in testfile f >>= (`when` rm f)) [fetchedTmpDir, failedTmpDir]
 
-  let
-    logInfo_ = usingLoggerT logger . logInfo
-    logError_ = usingLoggerT logger . logError
-    extensionInfoCachedJSON = mkTargetJSON cacheDir
+  let extensionInfoCachedJSON = mkTargetJSON cacheDir
 
   -- if there is a file with cached info, we read it into a list
-  extensionInfoCached <-
+  extensionInfoCached <- withRunInIO $ \runInIO ->
     ( eitherDecodeFileStrict' extensionInfoCachedJSON
         >>= \case
-          Left err -> logError_ (pack $ show err) >> pure []
+          Left err -> runInIO $ logError (pack $ show err) >> pure []
           Right v -> pure v
-      )
-      `catchAny` (\err -> logError_ (pack $ show err) >> pure [])
+    )
+      `catchAny` (\err -> runInIO $ logError (pack $ show err) >> pure [])
 
   let mkKey :: Publisher -> Name -> Platform -> Version -> LastUpdated -> (Publisher, Name, Platform, Version, LastUpdated)
       mkKey publisher name platform version lastUpdated = (publisher, name, platform, version, lastUpdated)
@@ -290,15 +242,18 @@ runFetcher FetcherConfig{..} = do
       -- and calculate the number of the configs of extensions that are missing
       numberExtensionConfigsMissing = length extensionConfigsMissing'
   -- collect extensions from cache that are not present
-  logInfo_ [i|#{START} Running a fetcher on #{ppTarget target}|]
-  logInfo_ [i|From #{ppTarget target} have #{length extensionInfoCached} cached extensions|]
-  logInfo_ [i|There are #{length extensionConfigsMissing} new extension configs.|]
-  logInfo_ [i|From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{ppTarget target}.|]
-  logInfo_ [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{ppTarget target}|]
+  traverse_
+    logInfo
+    [ [i|#{START} Running a fetcher on #{ppTarget target}|]
+    , [i|#{INFO}From #{ppTarget target} have #{length extensionInfoCached} cached extensions|]
+    , [i|#{INFO}There are #{length extensionConfigsMissing} new extension configs.|]
+    , [i|#{INFO}From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{ppTarget target}.|]
+    , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{ppTarget target}|]
+    ]
 
   -- we prepare the shared queues and variables
-  extInfoQueue <- newTBMQueueIO queueCapacity
-  extFailedConfigQueue <- newTBMQueueIO queueCapacity
+  extInfoQueue <- liftIO $ newTBMQueueIO queueCapacity
+  extFailedConfigQueue <- liftIO $ newTBMQueueIO queueCapacity
   -- this is a counter of processed extensions
   -- it should become empty when all extensions are processed
   extProcessedN <- newTMVarIO 0
@@ -312,18 +267,19 @@ runFetcher FetcherConfig{..} = do
   ( mapConcurrently_
       id
       [ -- a logger of info about the number of successfully processed extensions
-        (usingLoggerT logger $ processedLogger numberExtensionConfigsMissing extProcessedN)
+        processedLogger numberExtensionConfigsMissing extProcessedN
       , -- a logger that writes the info about successfully fetched extensions into a file
-        (extLogger fetchedExtensionInfoFile extInfoQueue)
+        extLogger fetchedExtensionInfoFile extInfoQueue
       , -- a logger that writes the info about failed extensions into a file
-        (extLogger failedExtensionConfigFile extFailedConfigQueue)
+        extLogger failedExtensionConfigFile extFailedConfigQueue
       , -- and an action that uses a thread pool to fetch the extensions
         -- it's more efficient than spawning a thread per each element of a list with extensions' configs
-        ( withTaskGroup nThreads $ \g -> do
+        withRunInIO $ \runInIO ->
+          withTaskGroup nThreads $ \g -> do
             void
               ( mapConcurrently
                   g
-                  (usingLoggerT logger . (getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN))
+                  (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
                   extensionConfigsMissing'
               )
             -- when all configs are processed, we need to close both queues
@@ -333,65 +289,48 @@ runFetcher FetcherConfig{..} = do
             -- make this var empty to notify the threads reading from it
             -- clone its value
             atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
-        )
       ]
     )
     -- even if there are some errors
     -- we want to finally append the info about the newly fetched extensions to the cache
     `finally` do
-      logInfo_ [i|#{START} Caching updated info about extensions from #{ppTarget target}|]
+      logInfo [i|#{START} Caching updated info about extensions from #{ppTarget target}|]
       -- we combine into a sorted list the cached info and the new info that we read from a file
       extSorted <-
         DL.sortBy (\x y -> compare (mkKeyInfo x) (mkKeyInfo y))
           . (<> presentExtensionInfo)
           . fromRight []
-          <$> eitherDecodeFileStrict' fetchedExtensionInfoFile
+          <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
       -- after that, we compactly write the extensions info
 
-      withFile extensionInfoCachedJSON WriteMode $ \h -> do
+      liftIO $ withFile extensionInfoCachedJSON WriteMode $ \h -> do
         BS.hPutStr h "[ "
         case extSorted of
           [] -> pure ()
           xs -> encodeFirstList h xs
         BS.hPutStr h "]"
-      logInfo_ [i|#{FINISH} Caching updated info about extensions from #{ppTarget target}|]
+      logInfo [i|#{FINISH} Caching updated info about extensions from #{ppTarget target}|]
       extProcessedNFinal' <- readTVarIO extProcessedNFinal
       extFailedN' <- readTVarIO extFailedN
-      logInfo_ [i|Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
-      logInfo_ [i|#{FINISH} Running a fetcher on #{ppTarget target}|]
+      logInfo [i|Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
+      logInfo [i|#{FINISH} Running a fetcher on #{ppTarget target}|]
 
 -- | Retry an action a given number of times with a given delay and log about its status
-retry_ :: (MonadIO m, WithLog env Message m, AppConfig') => (Int -> m b) -> Int -> Text -> Text -> m b
-retry_ ret n msg msgTryExtra =
-  if n > 0
-    then logDebug [i|#{FAIL} Attempt #{n}. #{msg}. #{msgTryExtra}|] >> liftIO (threadDelay ?config.retryDelay) >> ret (n - 1)
-    else logDebug [i|#{ABORT} All #{n} attempts have failed|] >> error [i|#{msg}|]
-
--- | Possible action statuses
---
--- used in logs
-data ActionStatus = INFO | START | FAIL | ABORT | FINISH
-
-instance Show ActionStatus where
-  show :: ActionStatus -> String
-  show d =
-    let
-      repr :: ActionStatus -> String
-      repr e = case e of
-        INFO -> "INFO"
-        START -> "START"
-        FAIL -> "FAIL"
-        ABORT -> "ABORT"
-        FINISH -> "FINISH"
-      width = maximum $ length . repr <$> [INFO, START, FAIL, ABORT, FINISH]
-     in
-      (\x -> [i|[ #{x <> (replicate (width - length x) ' ') } ]|]) (repr d)
-
-ppTarget :: Target -> Text
-ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
-
-extFlagsAllowed :: [Text]
-extFlagsAllowed = ["validated", "public", "preview", "verified"]
+retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, AppConfig') => Int -> Text -> m b -> m b
+retry_ total msg action
+  | total >= 0 =
+      let retryDelay = ?config.retryDelay
+          action' n =
+            action
+              `catchAny` ( \x -> do
+                            logError [i|#{FAIL} (#{n}/#{total}) #{msg}. Retrying in #{retryDelay} seconds.|]
+                            liftIO (threadDelay (?config.retryDelay * _MICROSECONDS))
+                            throw x
+                         )
+       in asum (action' <$> [1 .. total])
+            `catchAny` (\x -> logError [i|#{ABORT} All #{total} attempts have failed. #{msg}|] >> error [i|#{x}|])
+  | total < 0 = error [i|retry_: count must be 0 or more.\nCount: #{total}|]
+retry_ _ _ _ = error "retry_: count must be 1 or more."
 
 filteredByFlags :: Traversal' Value Value
 filteredByFlags =
@@ -404,6 +343,15 @@ filteredByFlags =
               (\z -> length (flags z) == length (flags z & DL.intersect extFlagsAllowed))
               (y ^? key "flags" . _String)
     )
+
+filteredExtensions :: Traversal' Value Value
+filteredExtensions =
+  key "results"
+    . nth 0
+    . key "extensions"
+    . _Array
+    . traversed
+    . filteredByFlags
 
 mkRequest :: ToJSON a => Target -> a -> Request
 mkRequest target request_ =
@@ -419,11 +367,11 @@ mkEitherRequest :: (MonadIO w, ToJSON a) => Target -> a -> w (Response (Either J
 mkEitherRequest target request_ = httpJSONEither @_ @Value (mkRequest target request_)
 
 -- | Get a list of extension configs from VSCode Marketplace
-getConfigs :: AppConfig' => Target -> LoggerT Message IO [ExtensionConfig]
+getConfigs :: AppConfig' => Target -> MyLogger [ExtensionConfig]
 getConfigs target =
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
-   in flip fix nRetry $ \ret (nRetry_ :: Int) -> do
+   in retry_ nRetry [i|Collecting the extension configs from #{ppTarget target}|] do
         let
           pageCount = siteConfig.pageCount
           pageSize = siteConfig.pageSize
@@ -448,17 +396,12 @@ getConfigs target =
         pages <- traverse responseBody <$> liftIO (forConcurrently [1 .. pageCount] (mkEitherRequest target . requestExtensionsList))
         case pages of
           -- if we were unsuccessful, we need to retry
-          Left l -> retry_ ret (nRetry - nRetry_ + 1) [i|Getting info about extensions from #{ppTarget target}|] [i|#{l}|]
+          Left l -> logError [i|#{FAIL} Getting info about extensions from #{ppTarget target}|] >> error [i|#{l}|]
           Right r -> do
             pure $
               r
                 ^.. traversed
-                  . key "results"
-                  . nth 0
-                  . key "extensions"
-                  . _Array
-                  . traversed
-                  . filteredByFlags
+                  . filteredExtensions
                   . to
                     ( parseMaybe
                         ( withObject [i|Extension|] $ \o -> do
@@ -494,12 +437,12 @@ getConfigs target =
                   . traversed
 
 -- | Get a list of extension configs from VSCode Marketplace
-getConfigsRelease :: AppConfig' => Target -> LoggerT Message IO [ExtensionConfig]
+getConfigsRelease :: AppConfig' => Target -> MyLogger [ExtensionConfig]
 getConfigsRelease target = do
   logInfo [i|#{START} Collecting release versions of extensions|]
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
-   in flip fix nRetry $ \ret (nRetry_ :: Int) -> do
+   in retry_ nRetry [i|Collecting the release extension configs from #{ppTarget target}|] do
         let
           extensionCriteria =
             siteConfig.release._releaseExtensions
@@ -523,17 +466,12 @@ getConfigsRelease target = do
         pages <- responseBody <$> liftIO (mkEitherRequest target requestExtensionsList)
         case pages of
           -- if we were unsuccessful, we need to retry
-          Left l -> retry_ ret (nRetry - nRetry_ + 1) [i|Getting info about extensions from #{ppTarget target}|] [i|#{l}|]
+          Left l -> logError [i|#{FAIL} Getting info about extensions from #{ppTarget target}|] >> error [i|#{l}|]
           Right r -> do
             -- liftIO $ encodeFile "tmp/release.json" r
             pure $
               r
-                ^.. key "results"
-                  . nth 0
-                  . key "extensions"
-                  . _Array
-                  . traversed
-                  . filteredByFlags
+                ^.. filteredExtensions
                   . to
                     ( parseMaybe
                         ( withObject [i|Extension|] $ \o -> do
@@ -583,15 +521,15 @@ getConfigsRelease target = do
                   . traversed
 
 -- | Run a crawler depending on the target site to (hopefully) get the extension configs
-runCrawler :: AppConfig' => CrawlerConfig IO -> IO ([ExtensionConfig], [ExtensionConfig])
+runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger ([ExtensionConfig], [ExtensionConfig])
 runCrawler CrawlerConfig{..} =
-  usingLoggerT logger do
+  do
     logInfo [i|#{START} Updating info about extensions from #{ppTarget target}.|]
     -- we select the target crawler and run it
-    -- on all configs
-    configs <- getConfigs target
     -- on release configs
     configsRelease <- getConfigsRelease target
+    -- on all configs
+    configs <- getConfigs target
     -- we normalize the configs by lowercasing the extension name and publisher
     let
       normalizeConfig = \config -> config & #name . #_name %~ Text.toLower & #publisher . #_publisher %~ Text.toLower
@@ -602,10 +540,7 @@ runCrawler CrawlerConfig{..} =
     -- finally, we return the configs
     pure (configsNormalized, configsReleaseNormalized)
 
-pShow' :: Show a => a -> Text
-pShow' = T.toStrict . pShowOpt defaultOutputOptionsNoColor
-
-processTarget :: AppConfig' => ProcessTargetConfig IO -> IO ()
+processTarget :: AppConfig' => ProcessTargetConfig IO -> MyLogger ()
 processTarget ProcessTargetConfig{..} =
   do
     let
@@ -626,7 +561,7 @@ processTarget ProcessTargetConfig{..} =
     runFetcher FetcherConfig{extConfigs = configsNormalized, ..}
 
     -- in case of errors, rethrow an exception
-    `catchAny` \x -> usingLoggerT logger (logError [i|Got an exception when requesting #{ppTarget target}:\n #{x}|]) >> throw x
+    `catchAny` \x -> logError [i|Got an exception when requesting #{ppTarget target}:\n #{x}|] >> throw x
 
 main :: IO ()
 main = do
@@ -641,21 +576,26 @@ main = do
         config'@AppConfig{..} = mkDefaultAppConfig conf
        in
         let ?config = config'
-         in withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> do
-              usingLoggerT logger $ logInfo [i|#{START} Updating extensions|]
+         in withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
+              logInfo [i|#{START} Updating extensions|]
               -- we'll run the extension crawler and a fetcher a given number of times on both target sites
               traverse_
                 ( \target ->
-                    replicateM_ ?config.runN $
-                      processTarget
-                        ProcessTargetConfig
-                          { dataDir = dataDir
-                          , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
-                          , queueCapacity = queueCapacity
-                          , ..
-                          }
+                    _myLoggerT
+                      ( retry_
+                          ?config.nRetry
+                          [i|Processing #{showTarget target}|]
+                          ( processTarget
+                              ProcessTargetConfig
+                                { dataDir = dataDir
+                                , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
+                                , queueCapacity = queueCapacity
+                                , ..
+                                }
+                          )
+                      )
                 )
                 [ VSCodeMarketplace
                 , OpenVSX
                 ]
-              usingLoggerT logger $ logInfo [i|#{FINISH} Updating extensions|]
+              logInfo [i|#{FINISH} Updating extensions|]
