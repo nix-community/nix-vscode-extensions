@@ -35,7 +35,7 @@
 
       # And the binaries. 
       # In our case, the Haskell app will call the `hello` command
-      myPackageDepsBin = [ pkgs.jq ];
+      myPackageDepsBin = [ pkgs.jq pkgs.nix ];
 
       # --- shells ---
 
