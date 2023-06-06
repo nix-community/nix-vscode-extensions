@@ -130,9 +130,11 @@ garbageCollector t = forever $ do
   t_ <- liftIO $ atomically $ tryReadTMVar t
   traverse_
     ( const do
+        logInfo [i|#{START} Collecting garbage in /nix/store.|]
         (_, infoText, errText) <- shellStrictWithErr [i|nix store gc |] empty
         logInfo [i|#{infoText}|]
         logDebug [i|#{errText}|]
+        logInfo [i|#{FINISH} Collecting garbage in /nix/store.|]
         liftIO $ threadDelay (?config.garbageCollectorDelay * _MICROSECONDS)
     )
     t_
@@ -276,6 +278,7 @@ runFetcher FetcherConfig{..} = do
   extFailedN <- newTVarIO 0
   -- flag for garbage collector
   collectGarbage <- newTMVarIO ()
+  unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
 
   -- as well as file names where threads will write to
   let fetchedExtensionInfoFile = mkTargetJSON fetchedTmpDir
@@ -310,7 +313,7 @@ runFetcher FetcherConfig{..} = do
             -- clone its value
             atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
             -- also, stop garbage collector
-            atomically $ takeTMVar collectGarbage
+            when ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
       ]
     )
     -- even if there are some errors

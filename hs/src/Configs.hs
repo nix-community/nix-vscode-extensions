@@ -180,7 +180,7 @@ mkDefaultAppConfig AppConfig{..} =
   AppConfig
     { runN = runN ^. non 1
     , processedLoggerDelay = processedLoggerDelay ^. non 2
-    , garbageCollectorDelay = garbageCollectorDelay ^. non 20
+    , garbageCollectorDelay = garbageCollectorDelay ^. non 30
     , collectGarbage = collectGarbage ^. non False
     , retryDelay = retryDelay ^. non 20
     , nRetry = nRetry ^. non 3
