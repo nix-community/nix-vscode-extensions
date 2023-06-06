@@ -21,7 +21,7 @@ import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
 import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (<&>), (^.), (^..), (^?), _Just)
-import Control.Monad (forever, guard, unless, void, when)
+import Control.Monad (guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
 import Data.Aeson.Lens (key, nth, _Array, _String)
@@ -126,16 +126,18 @@ extLogger file queue = liftIO $
       `finally` BS.hPutStr h "]"
 
 garbageCollector :: AppConfig' => TMVar () -> MyLogger ()
-garbageCollector t = forever $ do
+garbageCollector t = do
   t_ <- liftIO $ atomically $ tryReadTMVar t
-  traverse_
-    ( const do
+  maybe
+    (pure ())
+    ( const $ do
         logInfo [i|#{START} Collecting garbage in /nix/store.|]
         (_, infoText, errText) <- shellStrictWithErr [i|nix store gc |] empty
         logInfo [i|#{infoText}|]
         logDebug [i|#{errText}|]
         logInfo [i|#{FINISH} Collecting garbage in /nix/store.|]
         liftIO $ threadDelay (?config.garbageCollectorDelay * _MICROSECONDS)
+        garbageCollector t
     )
     t_
 
@@ -278,6 +280,7 @@ runFetcher FetcherConfig{..} = do
   extFailedN <- newTVarIO 0
   -- flag for garbage collector
   collectGarbage <- newTMVarIO ()
+  
   unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
 
   -- as well as file names where threads will write to
@@ -297,14 +300,17 @@ runFetcher FetcherConfig{..} = do
         garbageCollector collectGarbage
       , -- and an action that uses a thread pool to fetch the extensions
         -- it's more efficient than spawning a thread per each element of a list with extensions' configs
-        withRunInIO $ \runInIO ->
-          withTaskGroup nThreads $ \g -> do
-            void
-              ( mapConcurrently
-                  g
-                  (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
-                  extensionConfigsMissing'
-              )
+        withRunInIO
+          ( \runInIO ->
+              withTaskGroup nThreads $ \g -> do
+                void
+                  ( mapConcurrently
+                      g
+                      (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
+                      extensionConfigsMissing'
+                  )
+          )
+          `finally` do
             -- when all configs are processed, we need to close both queues
             -- this will let loggers know that they should quit
             atomically $ closeTBMQueue extInfoQueue
@@ -312,7 +318,7 @@ runFetcher FetcherConfig{..} = do
             -- make this var empty to notify the threads reading from it
             -- clone its value
             atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
-            -- also, stop garbage collector
+            -- also, stop the garbage collector
             when ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
       ]
     )
@@ -554,7 +560,7 @@ getConfigsRelease target = do
 runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger ([ExtensionConfig], [ExtensionConfig])
 runCrawler CrawlerConfig{..} =
   do
-    logInfo [i|#{START} Updating info about extensions from #{ppTarget target}.|]
+    logInfo [i|#{START} - about extensions from #{ppTarget target}.|]
     -- we select the target crawler and run it
     -- on release configs
     configsRelease <- getConfigsRelease target
@@ -609,7 +615,8 @@ main = do
         case appConfig of
           Left err -> error [i|Could not decode the config file\n\n#{err}. Aborting.|]
           Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
-  (maybe (error "Timed out!") (const ()) <$>) $
+
+  void $
     timeout (config_.programTimeout * _MICROSECONDS) $
       let ?config = config_
        in do
