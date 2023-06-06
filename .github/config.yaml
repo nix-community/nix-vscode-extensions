@@ -1,0 +1,2 @@
+collectGarbage: true
+logSeverity: Debug

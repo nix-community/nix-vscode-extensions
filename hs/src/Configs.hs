@@ -39,7 +39,11 @@ data AppConfig f = AppConfig
   { runN :: HKD f Int
   -- ^ Times to process a target site
   , processedLoggerDelay :: HKD f Int
-  -- ^ Seconds to wait for a logger of info about processed extensions until logging again
+  -- ^ Period in seconds till the next logging about processed extensions
+  , garbageCollectorDelay :: HKD f Int
+  -- ^ Period in seconds till the next garbage collection
+  , collectGarbage :: HKD f Bool
+  -- ^ Whether to collect garbage in /nix/store
   , retryDelay :: HKD f Int
   -- ^ Seconds to wait before retrying
   , nRetry :: HKD f Int
@@ -176,6 +180,8 @@ mkDefaultAppConfig AppConfig{..} =
   AppConfig
     { runN = runN ^. non 1
     , processedLoggerDelay = processedLoggerDelay ^. non 2
+    , garbageCollectorDelay = garbageCollectorDelay ^. non 20
+    , collectGarbage = collectGarbage ^. non False
     , retryDelay = retryDelay ^. non 20
     , nRetry = nRetry ^. non 3
     , logSeverity = logSeverity ^. non Info
@@ -194,7 +200,7 @@ readConfig f = do
   pure $ mkDefaultAppConfig c1
 
 checkReadConfig :: IO Text
-checkReadConfig = do readConfig "config/config.yaml" <&> encodePretty defConfig <&> decodeUtf8
+checkReadConfig = do readConfig "config.yaml" <&> encodePretty defConfig <&> decodeUtf8
 
 -- >>> checkReadConfig
--- "dataDir: data\nlogSeverity: Info\nmaxMissingTimes: 5\nnRetry: 3\nopenVSX:\n  nThreads: 50\n  pageCount: 5\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\nprocessedLoggerDelay: 2000000\nqueueCapacity: 200\nrequestResponseTimeout: 100\nretryDelay: 2000000\nrunN: 3\nvscodeMarketplace:\n  nThreads: 100\n  pageCount: 70\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\n"
+-- "collectGarbage: false\ndataDir: data\ngarbageCollectorDelay: 20\nlogSeverity: Info\nmaxMissingTimes: 5\nnRetry: 3\nopenVSX:\n  nThreads: 50\n  pageCount: 5\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\nprocessedLoggerDelay: 2\nqueueCapacity: 200\nrequestResponseTimeout: 100\nretryDelay: 5\nrunN: 1\nvscodeMarketplace:\n  nThreads: 100\n  pageCount: 70\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\n"

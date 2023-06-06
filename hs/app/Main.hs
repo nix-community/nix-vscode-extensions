@@ -21,7 +21,7 @@ import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
 import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (<&>), (^.), (^..), (^?), _Just)
-import Control.Monad (guard, unless, void, when)
+import Control.Monad (forever, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
 import Data.Aeson.Lens (key, nth, _Array, _String)
@@ -53,7 +53,7 @@ import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, s
 import Requests
 import System.Environment (lookupEnv)
 import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
-import UnliftIO (MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, try, tryReadTMVar, withFile, writeTVar, SomeException)
+import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 
 -- | Select a base API URL depending on the target
@@ -124,6 +124,18 @@ extLogger file queue = liftIO $
       -- we want the opened file to store a valid JSON.
       -- so, we append a closing bracket
       `finally` BS.hPutStr h "]"
+
+garbageCollector :: AppConfig' => TMVar () -> MyLogger ()
+garbageCollector t = forever $ do
+  t_ <- liftIO $ atomically $ tryReadTMVar t
+  traverse_
+    ( const do
+        (_, infoText, errText) <- shellStrictWithErr [i|nix store gc |] empty
+        logInfo [i|#{infoText}|]
+        logDebug [i|#{errText}|]
+        liftIO $ threadDelay (?config.garbageCollectorDelay * _MICROSECONDS)
+    )
+    t_
 
 -- | Log info about the number of processed extensions
 processedLogger :: AppConfig' => Int -> TMVar Int -> MyLogger ()
@@ -262,6 +274,9 @@ runFetcher FetcherConfig{..} = do
   extProcessedN <- newTMVarIO 0
   extProcessedNFinal <- newTVarIO 0
   extFailedN <- newTVarIO 0
+  -- flag for garbage collector
+  collectGarbage <- newTMVarIO ()
+
   -- as well as file names where threads will write to
   let fetchedExtensionInfoFile = mkTargetJSON fetchedTmpDir
       failedExtensionConfigFile = mkTargetJSON failedTmpDir
@@ -275,6 +290,8 @@ runFetcher FetcherConfig{..} = do
         extLogger fetchedExtensionInfoFile extInfoQueue
       , -- a logger that writes the info about failed extensions into a file
         extLogger failedExtensionConfigFile extFailedConfigQueue
+      , -- a garbage collector
+        garbageCollector collectGarbage
       , -- and an action that uses a thread pool to fetch the extensions
         -- it's more efficient than spawning a thread per each element of a list with extensions' configs
         withRunInIO $ \runInIO ->
@@ -292,6 +309,8 @@ runFetcher FetcherConfig{..} = do
             -- make this var empty to notify the threads reading from it
             -- clone its value
             atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
+            -- also, stop garbage collector
+            atomically $ takeTMVar collectGarbage
       ]
     )
     -- even if there are some errors

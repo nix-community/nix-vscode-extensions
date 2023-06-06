@@ -1,5 +1,7 @@
 runN: 1
 processedLoggerDelay: 2
+garbageCollectorDelay: 20
+collectGarbage: false
 retryDelay: 5
 nRetry: 3
 logSeverity: Info

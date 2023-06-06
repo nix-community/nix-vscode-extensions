@@ -36,7 +36,7 @@ jobs:
       - name: Run updater
         uses: nick-fields/retry@v2
         env:
-          CONFIG: "hs/config.yaml"
+          CONFIG: ".github/config.yaml"
         with:
           timeout_minutes: 360
           retry_wait_seconds: 300
