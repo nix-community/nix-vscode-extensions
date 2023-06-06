@@ -53,7 +53,7 @@ import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, s
 import Requests
 import System.Environment (lookupEnv)
 import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
-import UnliftIO (MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, try, tryReadTMVar, withFile, writeTVar)
+import UnliftIO (MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, try, tryReadTMVar, withFile, writeTVar, SomeException)
 import UnliftIO.Exception (catchAny, finally)
 
 -- | Select a base API URL depending on the target
@@ -323,19 +323,20 @@ retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, 
 retry_ nAttempts msg action
   | nAttempts >= 0 =
       let retryDelay = ?config.retryDelay
-          action' n = do
-            res <- try (action >>= \res -> logInfo [i|#{INFO} Attempt (#{n}/#{nAttempts}) succeeded. Continuing.|] >> pure res)
+          action_ n = do
+            let n_ = nAttempts - n + 1
+            res <- try (action >>= \res -> logInfo [i|#{INFO} Attempt (#{n_}/#{nAttempts}) succeeded. Continuing.|] >> pure res)
             case res of
               Left (err :: SomeException)
                 | n >= 1 -> do
-                    logError [i|#{FAIL} (#{nAttempts - n + 1}/#{nAttempts}) #{msg}.\nError:\n#{err}\nRetrying in #{retryDelay} seconds.|]
+                    logError [i|#{FAIL} (#{n_}/#{nAttempts}) #{msg}.\nError:\n#{err}\nRetrying in #{retryDelay} seconds.|]
                     liftIO (threadDelay (?config.retryDelay * _MICROSECONDS))
-                    action' (n - 1)
+                    action_ (n - 1)
                 | otherwise -> do
                     logError [i|#{ABORT} All #{nAttempts} attempts have failed. #{msg}|]
                     throw err
               Right r -> pure r
-       in action' nAttempts
+       in action_ nAttempts
   | nAttempts < 0 = error [i|retry_: count must be 0 or more.\nCount: #{nAttempts}|]
 retry_ _ _ _ = error "retry_: count must be 0 or more."
 
