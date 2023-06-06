@@ -629,7 +629,7 @@ main = do
                 ( \target ->
                     _myLoggerT
                       ( retry_
-                          ?config.nRetry
+                          ?config.runN
                           [i|Processing #{showTarget target}|]
                           ( processTarget
                               ProcessTargetConfig
