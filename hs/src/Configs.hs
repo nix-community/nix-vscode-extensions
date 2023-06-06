@@ -2,19 +2,26 @@ module Configs where
 
 import Colog
 import Control.Lens
-import Data.Aeson (FromJSON (parseJSON), Value (String), decodeFileStrict, withArray, withText)
+import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withArray, withText)
 import Data.Aeson.Key (toText)
 import Data.Aeson.Lens (members, _String)
 import Data.Aeson.Types (parseMaybe, typeMismatch)
+import Data.Default (Default (..))
+import Data.String.Interpolate (i)
+import Data.Text (Text)
+import Data.Text.Encoding (decodeUtf8)
+import Data.Yaml (ParseException, decodeFileEither)
+import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.Generics (Generic)
-
-_CONFIG_ENV_VAR :: String
-_CONFIG_ENV_VAR = "CONFIG"
 
 type family HKD f a where
   HKD Identity a = a
   HKD f a = f a
+
+data ReleaseExtension = ReleaseExtension {publisher :: Publisher, name :: Name} deriving (Eq, Show, Generic)
+
+newtype ReleaseExtensions = ReleaseExtensions {releaseExtensions :: [ReleaseExtension]} deriving (Eq, Show, Generic)
 
 data SiteConfig f = SiteConfig
   { pageSize :: HKD f Int
@@ -27,10 +34,6 @@ data SiteConfig f = SiteConfig
   -- ^ Extensions that require the release version
   }
   deriving (Generic)
-
-newtype ReleaseExtensions = ReleaseExtensions {_releaseExtensions :: [ReleaseExtension]} deriving (Eq, Show)
-
-data ReleaseExtension = ReleaseExtension {_publisher :: Publisher, _name :: Name} deriving (Eq, Show)
 
 data AppConfig f = AppConfig
   { runN :: HKD f Int
@@ -57,6 +60,20 @@ data AppConfig f = AppConfig
   -- ^ Config for VSCode Marketplace
   }
   deriving (Generic)
+
+deriving instance Generic Severity
+
+instance ToJSON ReleaseExtension
+
+instance ToJSON ReleaseExtensions
+
+instance ToJSON (SiteConfig Identity)
+
+instance ToJSON Severity
+
+instance ToJSON (AppConfig Identity)
+
+instance Default (SiteConfig Maybe)
 
 type AppConfig' = (?config :: AppConfig Identity)
 
@@ -99,10 +116,10 @@ instance FromJSON ReleaseExtensions where
           ^.. traversed
             . to
               ( \(k, v) ->
-                  let _publisher = Publisher (toText k)
+                  let publisher = Publisher (toText k)
                    in parseMaybe
                         ( withArray "Names" $ \a ->
-                            pure $ a ^.. traversed . _String . to (\name -> ReleaseExtension{_name = Name name, ..})
+                            pure $ a ^.. traversed . _String . to (\name -> ReleaseExtension{name = Name name, ..})
                         )
                         v
               )
@@ -122,17 +139,10 @@ instance FromJSON Severity where
 instance FromJSON (AppConfig Identity)
 instance FromJSON (AppConfig Maybe)
 
+instance Default (AppConfig Maybe)
+
 _MICROSECONDS :: Int
 _MICROSECONDS = 1_000_000
-
-defaultSiteConfig :: SiteConfig Maybe
-defaultSiteConfig =
-  SiteConfig
-    { pageSize = Nothing
-    , pageCount = Nothing
-    , nThreads = Nothing
-    , release = Nothing
-    }
 
 defaultOpenVSXConfig :: SiteConfig Identity
 defaultOpenVSXConfig =
@@ -165,24 +175,26 @@ mkDefaultAppConfig :: AppConfig Maybe -> AppConfig Identity
 mkDefaultAppConfig AppConfig{..} =
   AppConfig
     { runN = runN ^. non 1
-    , processedLoggerDelay = (processedLoggerDelay ^. non 2) * _MICROSECONDS
-    , retryDelay = (retryDelay ^. non 2) * _MICROSECONDS
+    , processedLoggerDelay = processedLoggerDelay ^. non 2
+    , retryDelay = retryDelay ^. non 20
     , nRetry = nRetry ^. non 3
     , logSeverity = logSeverity ^. non Info
     , dataDir = dataDir ^. non "data"
     , queueCapacity = queueCapacity ^. non 200
     , maxMissingTimes = maxMissingTimes ^. non 5
     , requestResponseTimeout = requestResponseTimeout ^. non 100
-    , openVSX = openVSX ^. non defaultSiteConfig . to (mkDefaultConfig defaultOpenVSXConfig)
-    , vscodeMarketplace = vscodeMarketplace ^. non defaultSiteConfig . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
+    , openVSX = openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
+    , vscodeMarketplace = vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
     }
 
-checkReadConfig :: IO String
-checkReadConfig = do
-  f :: Maybe (AppConfig Maybe) <- decodeFileStrict "config.json"
-  case f of
-    Nothing -> pure "bad"
-    Just (mkDefaultAppConfig -> a) -> pure $ show a.vscodeMarketplace.release
+readConfig :: FilePath -> IO (AppConfig Identity)
+readConfig f = do
+  c :: Either ParseException (AppConfig Maybe) <- decodeFileEither f
+  c1 <- either (\e -> error [i|Error parsing #{f}: #{e}|]) pure c
+  pure $ mkDefaultAppConfig c1
+
+checkReadConfig :: IO Text
+checkReadConfig = do readConfig "config/config.yaml" <&> encodePretty defConfig <&> decodeUtf8
 
 -- >>> checkReadConfig
--- "ReleaseExtensions [ReleaseExtension {publisher = eamodio, name = gitlens}]"
+-- "dataDir: data\nlogSeverity: Info\nmaxMissingTimes: 5\nnRetry: 3\nopenVSX:\n  nThreads: 50\n  pageCount: 5\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\nprocessedLoggerDelay: 2000000\nqueueCapacity: 200\nrequestResponseTimeout: 100\nretryDelay: 2000000\nrunN: 3\nvscodeMarketplace:\n  nThreads: 100\n  pageCount: 70\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\n"

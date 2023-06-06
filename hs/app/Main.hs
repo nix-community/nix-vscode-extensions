@@ -27,8 +27,9 @@ import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObje
 import Data.Aeson.Lens (key, nth, _Array, _String)
 import Data.Aeson.Types (parseMaybe)
 import Data.ByteString qualified as BS
+import Data.Default (def)
 import Data.Either (fromRight)
-import Data.Foldable (Foldable (foldl'), asum, traverse_)
+import Data.Foldable (Foldable (foldl'), traverse_)
 import Data.Function (fix, (&))
 import Data.Generics.Labels ()
 import Data.HashMap.Strict qualified as Map
@@ -40,6 +41,8 @@ import Data.String (IsString (fromString))
 import Data.String.Interpolate (i)
 import Data.Text (Text, pack, strip)
 import Data.Text qualified as Text
+import Data.Yaml (decodeFileEither)
+import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
@@ -48,9 +51,9 @@ import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Requests
-import System.Environment (getEnv)
+import System.Environment (lookupEnv)
 import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
-import UnliftIO (MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, tryReadTMVar, withFile, writeTVar)
+import UnliftIO (MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 
 -- | Select a base API URL depending on the target
@@ -129,7 +132,7 @@ processedLogger total processed = flip fix 0 $ \ret n -> do
   traverse_
     ( \cnt -> do
         when (cnt /= n) $ logInfo [i|#{INFO} Processed (#{cnt}/#{total}) extensions|]
-        liftIO $ threadDelay ?config.processedLoggerDelay
+        liftIO $ threadDelay (?config.processedLoggerDelay * _MICROSECONDS)
         ret cnt
     )
     p
@@ -245,9 +248,9 @@ runFetcher FetcherConfig{..} = do
   traverse_
     logInfo
     [ [i|#{START} Running a fetcher on #{ppTarget target}|]
-    , [i|#{INFO}From #{ppTarget target} have #{length extensionInfoCached} cached extensions|]
-    , [i|#{INFO}There are #{length extensionConfigsMissing} new extension configs.|]
-    , [i|#{INFO}From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{ppTarget target}.|]
+    , [i|#{INFO} From #{ppTarget target} have #{length extensionInfoCached} cached extensions|]
+    , [i|#{INFO} There are #{length extensionConfigsMissing} new extension configs.|]
+    , [i|#{INFO} From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{ppTarget target}.|]
     , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{ppTarget target}|]
     ]
 
@@ -317,20 +320,24 @@ runFetcher FetcherConfig{..} = do
 
 -- | Retry an action a given number of times with a given delay and log about its status
 retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, AppConfig') => Int -> Text -> m b -> m b
-retry_ total msg action
-  | total >= 0 =
+retry_ nAttempts msg action
+  | nAttempts >= 0 =
       let retryDelay = ?config.retryDelay
-          action' n =
-            action
-              `catchAny` ( \x -> do
-                            logError [i|#{FAIL} (#{n}/#{total}) #{msg}. Retrying in #{retryDelay} seconds.|]
-                            liftIO (threadDelay (?config.retryDelay * _MICROSECONDS))
-                            throw x
-                         )
-       in asum (action' <$> [1 .. total])
-            `catchAny` (\x -> logError [i|#{ABORT} All #{total} attempts have failed. #{msg}|] >> error [i|#{x}|])
-  | total < 0 = error [i|retry_: count must be 0 or more.\nCount: #{total}|]
-retry_ _ _ _ = error "retry_: count must be 1 or more."
+          action' n = do
+            res <- try (action >>= \res -> logInfo [i|#{INFO} Attempt (#{n}/#{nAttempts}) succeeded. Continuing.|] >> pure res)
+            case res of
+              Left (err :: SomeException)
+                | n >= 1 -> do
+                    logError [i|#{FAIL} (#{nAttempts - n + 1}/#{nAttempts}) #{msg}.\nError:\n#{err}\nRetrying in #{retryDelay} seconds.|]
+                    liftIO (threadDelay (?config.retryDelay * _MICROSECONDS))
+                    action' (n - 1)
+                | otherwise -> do
+                    logError [i|#{ABORT} All #{nAttempts} attempts have failed. #{msg}|]
+                    throw err
+              Right r -> pure r
+       in action' nAttempts
+  | nAttempts < 0 = error [i|retry_: count must be 0 or more.\nCount: #{nAttempts}|]
+retry_ _ _ _ = error "retry_: count must be 0 or more."
 
 filteredByFlags :: Traversal' Value Value
 filteredByFlags =
@@ -445,8 +452,8 @@ getConfigsRelease target = do
    in retry_ nRetry [i|Collecting the release extension configs from #{ppTarget target}|] do
         let
           extensionCriteria =
-            siteConfig.release._releaseExtensions
-              ^.. traversed . to (\ReleaseExtension{..} -> Criterion{filterType = 7, value = [i|#{_publisher}.#{_name}|]})
+            siteConfig.release.releaseExtensions
+              ^.. traversed . to (\ReleaseExtension{..} -> Criterion{filterType = 7, value = [i|#{publisher}.#{name}|]})
           pageSize = length extensionCriteria
           requestExtensionsList =
             Req
@@ -563,39 +570,45 @@ processTarget ProcessTargetConfig{..} =
     -- in case of errors, rethrow an exception
     `catchAny` \x -> logError [i|Got an exception when requesting #{ppTarget target}:\n #{x}|] >> throw x
 
+_CONFIG_ENV_VAR :: String
+_CONFIG_ENV_VAR = "CONFIG"
+
 main :: IO ()
 main = do
   -- we'll let logs be written to stdout as soon as they come
   hSetBuffering stdout NoBuffering
-  config <- getEnv _CONFIG_ENV_VAR `catchAny` (\x -> error [i|No config file specified in the #{_CONFIG_ENV_VAR} environment variable\n\n#{x}|])
-  appConfig <- eitherDecodeFileStrict' config
-  case appConfig of
-    Left err -> error [i|Could not decode the config file\n\n#{err}|]
-    Right conf ->
-      let
-        config'@AppConfig{..} = mkDefaultAppConfig conf
-       in
-        let ?config = config'
-         in withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
-              logInfo [i|#{START} Updating extensions|]
-              -- we'll run the extension crawler and a fetcher a given number of times on both target sites
-              traverse_
-                ( \target ->
-                    _myLoggerT
-                      ( retry_
-                          ?config.nRetry
-                          [i|Processing #{showTarget target}|]
-                          ( processTarget
-                              ProcessTargetConfig
-                                { dataDir = dataDir
-                                , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
-                                , queueCapacity = queueCapacity
-                                , ..
-                                }
-                          )
-                      )
-                )
-                [ VSCodeMarketplace
-                , OpenVSX
-                ]
-              logInfo [i|#{FINISH} Updating extensions|]
+  config <- lookupEnv _CONFIG_ENV_VAR
+  config_ <-
+    case config of
+      Nothing -> putStrLn [i|No config file specified in the #{_CONFIG_ENV_VAR} environment variable. Using the default config.|] >> pure (mkDefaultAppConfig def)
+      Just s -> do
+        appConfig <- decodeFileEither s
+        case appConfig of
+          Left err -> error [i|Could not decode the config file\n\n#{err}. Aborting.|]
+          Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
+  let ?config = config_
+   in let AppConfig{..} = config_
+       in withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
+            logInfo [i|#{START} Updating extensions|]
+            logInfo [i|#{START} Config:\n#{encodePretty defConfig config_}|]
+            -- we'll run the extension crawler and a fetcher a given number of times on both target sites
+            traverse_
+              ( \target ->
+                  _myLoggerT
+                    ( retry_
+                        ?config.nRetry
+                        [i|Processing #{showTarget target}|]
+                        ( processTarget
+                            ProcessTargetConfig
+                              { dataDir = dataDir
+                              , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
+                              , queueCapacity = queueCapacity
+                              , ..
+                              }
+                        )
+                    )
+              )
+              [ VSCodeMarketplace
+              , OpenVSX
+              ]
+            logInfo [i|#{FINISH} Updating extensions|]
