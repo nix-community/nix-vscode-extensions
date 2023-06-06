@@ -1,3 +1,2 @@
 collectGarbage: true
-logSeverity: Debug
-garbageCollectorDelay: 30
+logSeverity: Info
