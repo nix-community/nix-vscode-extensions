@@ -1,0 +1,14 @@
+collectGarbage: true
+logSeverity: Info
+openVSX:
+  release:
+    eamodio:
+    - gitlens
+    rust-lang:
+    - rust-analyzer
+vscodeMarketplace:
+  release:
+    eamodio:
+    - gitlens
+    rust-lang:
+    - rust-analyzer

@@ -17,7 +17,7 @@
     nix develop
     ```
 
-1. (Optionally) Edit the [config](./config.json).
+1. (Optionally) Edit the [config](./config.yaml).
 
 1. Run the app.
 
