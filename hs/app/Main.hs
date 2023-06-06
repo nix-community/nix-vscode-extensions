@@ -571,6 +571,8 @@ runCrawler CrawlerConfig{..} =
     -- we select the target crawler and run it
     -- on release configs
     configsRelease <- getConfigsRelease target
+
+    logInfo [i|#{configsRelease}|]
     -- on all configs
     configs <- getConfigs target
     -- we normalize the configs by lowercasing the extension name and publisher
