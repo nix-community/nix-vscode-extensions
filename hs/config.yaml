@@ -1,27 +1,14 @@
-runN: 1
-processedLoggerDelay: 2
 collectGarbage: false
-retryDelay: 5
-nRetry: 3
 logSeverity: Info
-dataDir: data
-queueCapacity: 200
-maxMissingTimes: 5
 openVSX:
-  requestResponseTimeout: 120
-  nThreads: 50
   release:
     eamodio:
     - gitlens
     rust-lang:
     - rust-analyzer
 vscodeMarketplace:
-  pageSize: 1000
-  pageCount: 70
-  nThreads: 100
   release:
     eamodio:
     - gitlens
     rust-lang:
     - rust-analyzer
-  requestResponseTimeout: 120
