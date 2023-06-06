@@ -125,17 +125,21 @@ extLogger file queue = liftIO $
       -- so, we append a closing bracket
       `finally` BS.hPutStr h "]"
 
+collectGarbageOnce :: MyLogger ()
+collectGarbageOnce = do
+  logInfo [i|#{START} Collecting garbage in /nix/store.|]
+  (_, infoText, errText) <- shellStrictWithErr [i|nix store gc |] empty
+  logInfo [i|#{infoText}|]
+  logDebug [i|#{errText}|]
+  logInfo [i|#{FINISH} Collecting garbage in /nix/store.|]
+
 garbageCollector :: AppConfig' => TMVar () -> MyLogger ()
 garbageCollector t = do
   t_ <- liftIO $ atomically $ tryReadTMVar t
   maybe
     (pure ())
     ( const $ do
-        logInfo [i|#{START} Collecting garbage in /nix/store.|]
-        (_, infoText, errText) <- shellStrictWithErr [i|nix store gc |] empty
-        logInfo [i|#{infoText}|]
-        logDebug [i|#{errText}|]
-        logInfo [i|#{FINISH} Collecting garbage in /nix/store.|]
+        collectGarbageOnce
         liftIO $ threadDelay (?config.garbageCollectorDelay * _MICROSECONDS)
         garbageCollector t
     )
@@ -280,7 +284,7 @@ runFetcher FetcherConfig{..} = do
   extFailedN <- newTVarIO 0
   -- flag for garbage collector
   collectGarbage <- newTMVarIO ()
-  
+
   unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
 
   -- as well as file names where threads will write to
@@ -319,7 +323,9 @@ runFetcher FetcherConfig{..} = do
             -- clone its value
             atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
             -- also, stop the garbage collector
-            when ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
+            when ?config.collectGarbage do
+              atomically $ takeTMVar collectGarbage
+              collectGarbageOnce
       ]
     )
     -- even if there are some errors
@@ -560,7 +566,7 @@ getConfigsRelease target = do
 runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger ([ExtensionConfig], [ExtensionConfig])
 runCrawler CrawlerConfig{..} =
   do
-    logInfo [i|#{START} - about extensions from #{ppTarget target}.|]
+    logInfo [i|#{START} Updating info about extensions from #{ppTarget target}.|]
     -- we select the target crawler and run it
     -- on release configs
     configsRelease <- getConfigsRelease target
