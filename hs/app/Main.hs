@@ -433,6 +433,7 @@ getConfigs target =
               , assetTypes = []
               , flags = 946
               }
+        logInfo [i|#{START} Collecting the latest versions of extensions|]
         logInfo [i|#{START} Collecting #{pageCount} page(s) of size #{pageSize}.|]
         -- we request the pages of extensions from VSCode Marketplace concurrently
         pages <- traverse responseBody <$> liftIO (forConcurrently [1 .. pageCount] (mkEitherRequest target . requestExtensionsList))
@@ -481,7 +482,7 @@ getConfigs target =
 -- | Get a list of extension configs from VSCode Marketplace
 getConfigsRelease :: AppConfig' => Target -> MyLogger [ExtensionConfig]
 getConfigsRelease target = do
-  logInfo [i|#{START} Collecting release versions of extensions|]
+  logInfo [i|#{START} Collecting the release versions of extensions|]
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
    in retry_ nRetry [i|Collecting the release extension configs from #{ppTarget target}|] do
