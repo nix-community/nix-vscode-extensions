@@ -41,8 +41,7 @@ jobs:
           timeout_minutes: 360
           retry_wait_seconds: 300
           max_attempts: 6
-          command: nix run nix-dev/#updateExtensions
-
+          command: nix run hs/#updateExtensions
       - name: Commit and push changes
         run: |
           git config user.name github-actions
