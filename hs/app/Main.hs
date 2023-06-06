@@ -325,7 +325,7 @@ retry_ nAttempts msg action
       let retryDelay = ?config.retryDelay
           action_ n = do
             let n_ = nAttempts - n + 1
-            res <- try (action >>= \res -> logInfo [i|#{INFO} Attempt (#{n_}/#{nAttempts}) succeeded. Continuing.|] >> pure res)
+            res <- try (action >>= \res -> logDebug [i|#{INFO} Attempt (#{n_}/#{nAttempts}) succeeded. Continuing.|] >> pure res)
             case res of
               Left (err :: SomeException)
                 | n >= 1 -> do
