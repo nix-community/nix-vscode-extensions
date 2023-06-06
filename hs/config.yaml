@@ -1,8 +1,8 @@
-runN: 3
+runN: 1
 processedLoggerDelay: 2
 retryDelay: 5
 nRetry: 3
-logSeverity: Info
+logSeverity: Debug
 dataDir: data
 queueCapacity: 200
 maxMissingTimes: 5
