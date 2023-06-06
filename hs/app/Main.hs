@@ -53,7 +53,7 @@ import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, s
 import Requests
 import System.Environment (lookupEnv)
 import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
-import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, try, tryReadTMVar, withFile, writeTVar)
+import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 
 -- | Select a base API URL depending on the target
@@ -609,29 +609,32 @@ main = do
         case appConfig of
           Left err -> error [i|Could not decode the config file\n\n#{err}. Aborting.|]
           Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
-  let ?config = config_
-   in let AppConfig{..} = config_
-       in withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
-            logInfo [i|#{START} Updating extensions|]
-            logInfo [i|#{START} Config:\n#{encodePretty defConfig config_}|]
-            -- we'll run the extension crawler and a fetcher a given number of times on both target sites
-            traverse_
-              ( \target ->
-                  _myLoggerT
-                    ( retry_
-                        ?config.nRetry
-                        [i|Processing #{showTarget target}|]
-                        ( processTarget
-                            ProcessTargetConfig
-                              { dataDir = dataDir
-                              , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
-                              , queueCapacity = queueCapacity
-                              , ..
-                              }
-                        )
-                    )
-              )
-              [ VSCodeMarketplace
-              , OpenVSX
-              ]
-            logInfo [i|#{FINISH} Updating extensions|]
+  (maybe (error "Timed out!") (const ()) <$>) $
+    timeout (config_.programTimeout * _MICROSECONDS) $
+      let ?config = config_
+       in do
+            let AppConfig{..} = config_
+            withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
+              logInfo [i|#{START} Updating extensions|]
+              logInfo [i|#{START} Config:\n#{encodePretty defConfig config_}|]
+              -- we'll run the extension crawler and a fetcher a given number of times on both target sites
+              traverse_
+                ( \target ->
+                    _myLoggerT
+                      ( retry_
+                          ?config.nRetry
+                          [i|Processing #{showTarget target}|]
+                          ( processTarget
+                              ProcessTargetConfig
+                                { dataDir = dataDir
+                                , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
+                                , queueCapacity = queueCapacity
+                                , ..
+                                }
+                          )
+                      )
+                )
+                [ VSCodeMarketplace
+                , OpenVSX
+                ]
+              logInfo [i|#{FINISH} Updating extensions|]

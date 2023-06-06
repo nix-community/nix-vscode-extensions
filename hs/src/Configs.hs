@@ -44,6 +44,8 @@ data AppConfig f = AppConfig
   -- ^ Period in seconds till the next garbage collection
   , collectGarbage :: HKD f Bool
   -- ^ Whether to collect garbage in /nix/store
+  , programTimeout :: HKD f Int
+  -- ^ Total time a program may run
   , retryDelay :: HKD f Int
   -- ^ Seconds to wait before retrying
   , nRetry :: HKD f Int
@@ -182,6 +184,7 @@ mkDefaultAppConfig AppConfig{..} =
     , processedLoggerDelay = processedLoggerDelay ^. non 2
     , garbageCollectorDelay = garbageCollectorDelay ^. non 30
     , collectGarbage = collectGarbage ^. non False
+    , programTimeout = programTimeout ^. non 900
     , retryDelay = retryDelay ^. non 20
     , nRetry = nRetry ^. non 3
     , logSeverity = logSeverity ^. non Info
