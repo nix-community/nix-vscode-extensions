@@ -48,7 +48,7 @@ We provide a [reasonable](https://github.com/nix-community/nix-vscode-extensions
 There are several attrsets
 
 - `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `-release` attrsets.
-- `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions manually listed in the [config](hs/config.json).
+- `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions manually listed in the [config](hs/config.yaml).
 - `forVSCodeVersion "4.228.1"` allows to leave only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"4.228.1"` version of `VS Code`.
   - You may supply the actual version of your `VS Code` instead of `"4.228.1"`.
 
@@ -96,7 +96,7 @@ Alternatively, you may use an overlay (see `overlays.default` in [flake.nix](./f
 
 ### Release extensions
 
-The [config](hs/config.json) contains several extensions.
+The [config](hs/config.yaml) contains several extensions.
 We cache the information about the latest release versions of these extensions (see [Extensions](#extensions)).
 If you'd like to use release versions of an extension, please, add that extension to the config and make a PR.
 
