@@ -1,52 +1,63 @@
 {
-  inputs = {
-    nixpkgs_.url = "github:deemp/flakes?dir=source-flake/nixpkgs";
-    nixpkgs.follows = "nixpkgs_/nixpkgs";
-    codium.url = "github:deemp/flakes?dir=codium";
-    flake-utils_.url = "github:deemp/flakes?dir=source-flake/flake-utils";
-    flake-utils.follows = "flake-utils_/flake-utils";
-    devshell.url = "github:deemp/flakes?dir=devshell";
-    drv-tools.url = "github:deemp/flakes?dir=drv-tools";
-  };
-  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem
-    (system:
-      let
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-        inherit (inputs.codium.functions.${system}) mkCodium writeSettingsJSON;
-        inherit (inputs.codium.configs.${system}) extensions settingsNix;
-        inherit (inputs.devshell.functions.${system}) mkRunCommandsDir mkShell;
-        inherit (inputs.drv-tools.functions.${system}) mkShellApps;
-        packages = {
-          codium = mkCodium {
-            extensions = {
-              inherit (extensions) nix misc markdown github;
-            };
-          };
-          writeSettings = writeSettingsJSON {
-            inherit (settingsNix)
-              nix-ide markdown-all-in-one git gitlens todo-tree
-              markdown-language-features files workbench editor
-              errorlens
-              ;
-          };
-        } //
-        (mkShellApps {
-          updateExtensions = {
-            text = ''nix run hs/#updateExtensions'';
-            description = "Update extensions data";
-          };
-        });
-
-        devShells.default = mkShell {
-          commands = mkRunCommandsDir "nix-dev/" "ide" {
-            inherit (packages) writeSettings updateExtensions;
-            "codium ." = packages.codium;
-          };
+  inputs.flakes.url = "github:deemp/flakes";
+  outputs = inputs:
+    let
+      inputs_ =
+        let flakes = inputs.flakes.flakes; in
+        {
+          inherit (flakes.source-flake) nixpkgs flake-utils;
+          inherit (flakes) drv-tools devshell codium;
         };
-      in
-      {
-        inherit packages devShells;
-      });
+
+      outputs = outputs_ { } // { inputs = inputs_; outputs = outputs_; };
+
+      outputs_ =
+        inputs__:
+        let inputs = inputs_ // inputs__; in
+        inputs.flake-utils.lib.eachDefaultSystem
+          (system:
+          let
+            pkgs = inputs.nixpkgs.legacyPackages.${system};
+            inherit (inputs.codium.lib.${system}) mkCodium writeSettingsJSON extensions settingsNix;
+            inherit (inputs.devshell.lib.${system}) mkRunCommandsDir mkShell;
+            inherit (inputs.drv-tools.lib.${system}) mkShellApps;
+            packages = {
+              codium = mkCodium {
+                extensions = {
+                  inherit (extensions) nix misc markdown github;
+                };
+              };
+              writeSettings = writeSettingsJSON {
+                inherit (settingsNix)
+                  nix-ide markdown-all-in-one git gitlens todo-tree
+                  markdown-language-features files workbench editor
+                  errorlens
+                  ;
+              };
+            } //
+            (mkShellApps {
+              updateExtensions = {
+                text = ''nix run hs/#updateExtensions'';
+                description = "Update extensions data";
+              };
+            });
+
+            devShells.default = mkShell {
+              commands = mkRunCommandsDir "nix-dev/" "ide"
+                {
+                  "codium ." = packages.codium;
+                  inherit (packages) writeSettings;
+                }
+              ++ mkRunCommandsDir "nix-dev/" "scripts" {
+                inherit (packages) updateExtensions;
+              };
+            };
+          in
+          {
+            inherit packages devShells;
+          });
+    in
+    outputs;
 
   nixConfig = {
     extra-trusted-substituters = [
