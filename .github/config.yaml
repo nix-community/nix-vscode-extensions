@@ -6,9 +6,13 @@ openVSX:
     - gitlens
     rust-lang:
     - rust-analyzer
+    stkb:
+    - rewrap
 vscodeMarketplace:
   release:
     eamodio:
     - gitlens
     rust-lang:
     - rust-analyzer
+    stkb:
+    - rewrap

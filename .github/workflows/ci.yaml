@@ -18,9 +18,7 @@ jobs:
         with:
           key: nix-${{ matrix.os }}-update-${{ hashfiles('**/flake.nix', '**/flake.lock', 'haskell/**/*') }}
           linux-gc-enabled: true
-          linux-max-store-size: 100000000000
-          macos-gc-enabled: true
-          macos-max-store-size: 100000000000
+          linux-max-store-size: 5000000000
           restore-keys: |
             nix-${{ matrix.os }}-update-${{ hashfiles('**/flake.nix', '**/flake.lock', 'haskell/**/*') }}
             nix-${{ matrix.os }}-update-
@@ -29,7 +27,9 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-      - name: Update extensions
+      - env:
+          CONFIG: .github/config.yaml
+        name: Update extensions
         run: |+
           nix run nix-dev/#updateExtensions
           nix profile install nix-dev/#updateExtensions

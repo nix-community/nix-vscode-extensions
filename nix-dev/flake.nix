@@ -31,8 +31,8 @@
               writeWorkflows = writeWorkflow "ci" (nixCI {
                 strategy.matrix.os = [ os.ubuntu-22 ];
                 cacheNixArgs = {
-                  linuxMaxStoreSize = 100000000000;
-                  macosMaxStoreSize = 100000000000;
+                  linuxMaxStoreSize = 5000000000;
+                  macosGCEnabled = false;
                   keyJob = "update";
                   files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
                 };
@@ -46,6 +46,7 @@
                     let name = "Update extensions"; in
                     {
                       inherit name;
+                      env.CONFIG = ".github/config.yaml";
                       run = run.nixScript { inherit dir; name = "updateExtensions"; commitMessage = name; };
                     }
                   )
