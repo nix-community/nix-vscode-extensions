@@ -86,7 +86,7 @@ This repo provides a `default.nix`, so you can use, e.g.
 (import (builtins.fetchGit {
   url = "https://github.com/nix-community/nix-vscode-extensions";
   ref = "refs/heads/master";
-  rev = "a1980daf16eb0d8acfb6e17953d3945bfdac9a4d";
+  rev = "c43d9089df96cf8aca157762ed0e2ddca9fcd71e";
 })).extensions.x86_64-linux.vscode-marketplace.golang.go
 ```
 
@@ -96,8 +96,8 @@ Alternatively, you may use an overlay (see `overlays.default` in [flake.nix](./f
 
 ### Release extensions
 
-The [config](hs/config.yaml) contains several extensions.
-We cache the information about the latest release versions of these extensions (see [Extensions](#extensions)).
+The [config](.github/config.yaml) contains several extensions.
+We cache the information about the latest **release** versions of these extensions (see [Extensions](#extensions)).
 If you'd like to use release versions of an extension, please, add that extension to the config and make a PR.
 
 ### Main flake
@@ -112,10 +112,10 @@ If you'd like to use release versions of an extension, please, add that extensio
     nix develop nix-dev/
     ```
 
-1. (Optionally) Start `VSCodium` with necessary extensions and tools
+1. (Optionally) Start `VSCodium` with necessary extensions and tools.
 
     ```console
-    nix run nix-dev/#writeSettingsJson
+    nix run nix-dev/#writeSettings
     nix run nix-dev/#codium .
     ```
 
