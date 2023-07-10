@@ -31,8 +31,8 @@ jobs:
           CONFIG: .github/config.yaml
         name: Update extensions
         run: |+
-          nix run nix-dev/#updateExtensions
           nix profile install nix-dev/#updateExtensions
+          nix run nix-dev/#updateExtensions
 
       - name: Commit and push changes.
         run: |
