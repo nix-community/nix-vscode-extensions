@@ -36,7 +36,7 @@ targetSelect target f g =
 ppTarget :: Target -> Text
 ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
 
-data Flags = Flags'Validated | Flags'Public | Flags'Preview | Flags'Verified deriving (Enum, Bounded)
+data Flags = Flags'Validated | Flags'Public | Flags'Preview | Flags'Verified | Flags'Trial deriving (Enum, Bounded)
 
 _Flags :: Prism' Text Flags
 _Flags = prism' embed_ match_
@@ -46,12 +46,14 @@ _Flags = prism' embed_ match_
     Flags'Public -> "public"
     Flags'Preview -> "preview"
     Flags'Verified -> "verified"
+    Flags'Trial -> "trial"
   match_ :: Text -> Maybe Flags
   match_ x
     | x == embed_ Flags'Validated = Just Flags'Validated
     | x == embed_ Flags'Public = Just Flags'Public
     | x == embed_ Flags'Preview = Just Flags'Preview
     | x == embed_ Flags'Verified = Just Flags'Verified
+    | x == embed_ Flags'Trial = Just Flags'Trial
     | otherwise = Nothing
 
 instance Show Flags where
