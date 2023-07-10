@@ -38,6 +38,18 @@
 
 1. (Optionally) Open a `.hs` file and hover over a function. Wait until HLS gives the type info.
 
+## Requests
+
+- [filterType](https://github.com/microsoft/vscode/blob/6aca75d9d09f7d9d32c18e58c836067f2d420495/src/vs/platform/extensionManagement/common/extensionGalleryService.ts#L185)
+
+- [flags](https://github.com/microsoft/vscode/blob/6aca75d9d09f7d9d32c18e58c836067f2d420495/src/vs/platform/extensionManagement/common/extensionGalleryService.ts#L101)
+
+- Run sample requests. Results will be printed to the `./tmp` dir.
+  
+  ```console
+  bash requests.sh
+  ```
+
 ### Configs
 
 - [package.yaml] - used by `hpack` to generate a `.cabal`
