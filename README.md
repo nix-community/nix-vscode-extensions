@@ -48,7 +48,7 @@ We provide a [reasonable](https://github.com/nix-community/nix-vscode-extensions
 There are several attrsets
 
 - `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `-release` attrsets.
-- `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions manually listed in the [config](hs/config.yaml).
+- `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions (see [Release extensions](#release-extensions)).
 - `forVSCodeVersion "4.228.1"` allows to leave only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"4.228.1"` version of `VS Code`.
   - You may supply the actual version of your `VS Code` instead of `"4.228.1"`.
 
@@ -121,7 +121,7 @@ If you'd like to use release versions of an extension, please, add that extensio
 
 ### Haskell script
 
-1. See the [hs/README.md](./hs/README.md)
+1. See the [README](./haskell/README.md).
 
 1. Get the environment.
 
@@ -133,7 +133,7 @@ If you'd like to use release versions of an extension, please, add that extensio
 1. Run the script.
 
     ```console
-    nix run hs/#updateExtensions
+    nix run haskell/#updateExtensions
     ```
 
 ## Troubleshooting
