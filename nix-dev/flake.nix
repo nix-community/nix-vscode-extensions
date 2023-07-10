@@ -6,7 +6,8 @@
         let flakes = inputs.flakes.flakes; in
         {
           inherit (flakes.source-flake) nixpkgs flake-utils;
-          inherit (flakes) drv-tools devshell codium;
+          inherit (flakes) drv-tools devshell codium workflows flakes-tools;
+          haskell = import ../haskell;
         };
 
       outputs = outputs_ { } // { inputs = inputs_; outputs = outputs_; };
@@ -20,27 +21,51 @@
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             inherit (inputs.codium.lib.${system}) mkCodium writeSettingsJSON extensionsCommon settingsCommonNix;
             inherit (inputs.devshell.lib.${system}) mkRunCommandsDir mkShell;
-            inherit (inputs.drv-tools.lib.${system}) mkShellApps;
+            inherit (inputs.drv-tools.lib.${system}) mkShellApps withDescription;
+            inherit (inputs.workflows.lib.${system}) writeWorkflow nixCI os run;
+
             packages = {
               codium = mkCodium { extensions = extensionsCommon; };
               writeSettings = writeSettingsJSON settingsCommonNix;
-            } //
-            (mkShellApps {
-              updateExtensions = {
-                text = ''nix run hs/#updateExtensions'';
-                description = "Update extensions data";
-              };
-            });
+              updateExtensions = withDescription inputs.haskell.packages.${system}.updateExtensions (x: ''Update extensions.'');
+              writeWorkflows = writeWorkflow "ci" (nixCI {
+                strategy.matrix.os = [ os.ubuntu-22 ];
+                cacheNixArgs = {
+                  linuxMaxStoreSize = 100000000000;
+                  macosMaxStoreSize = 100000000000;
+                  keyJob = "update";
+                  files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
+                };
+                dir = "nix-dev/";
+                doRemoveCacheProfiles = false;
+                doPushToCachix = false;
+                doUpdateLocks = false;
+                doFormat = false;
+                steps = dir: [
+                  (
+                    let name = "Update extensions"; in
+                    {
+                      inherit name;
+                      run = run.nixScript { inherit dir; name = "updateExtensions"; commitMessage = name; };
+                    }
+                  )
+                  {
+                    name = "Commit and push changes.";
+                    run = ''
+                      git add .
+                      git commit --allow-empty -m "action: update extensions"
+                      git push
+                    '';
+                  }
+                ];
+              });
+            };
 
             devShells.default = mkShell {
-              commands = mkRunCommandsDir "nix-dev/" "ide"
-                {
-                  "codium ." = packages.codium;
-                  inherit (packages) writeSettings;
-                }
-              ++ mkRunCommandsDir "nix-dev/" "scripts" {
-                inherit (packages) updateExtensions;
-              };
+              commands =
+                mkRunCommandsDir "nix-dev/" "ide" { "codium ." = packages.codium; inherit (packages) writeSettings; }
+                ++ mkRunCommandsDir "nix-dev/" "scripts" { inherit (packages) updateExtensions; }
+                ++ mkRunCommandsDir "nix-dev/" "infra" { inherit (packages) writeWorkflows; };
             };
           in
           {
