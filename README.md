@@ -153,6 +153,8 @@ nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyz
 
 ### Overlay
 
+See [Overlays](https://nixos.wiki/wiki/Overlays#Using_overlays).
+
 #### Get overlay with flakes
 
 ```console
