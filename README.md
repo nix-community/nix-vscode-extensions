@@ -54,10 +54,6 @@ There are several attrsets:
 - `forVSCodeVersion "4.228.1"` allows to leave only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"4.228.1"` version of `VS Code`.
   - You may supply the actual version of your `VS Code` instead of `"4.228.1"`.
 
-### Overlay
-
-The [flake.nix](./flake.nix) and `default.nix` provide an overlay that you can apply to `nixpkgs`.
-
 ### With flakes
 
 See [Template](#template).
@@ -95,7 +91,7 @@ Press the `Tab` button (denoted as `<TAB>` here) to see attrset attributes.
 
 ### Get the `extensions` attrset
 
-#### Get with flakes
+#### Get `extensions` with flakes
 
 ```console
 $ nix repl
@@ -113,7 +109,7 @@ t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace
 t.open-vsx                    t.vscode-marketplace
 ```
 
-#### Get without flakes
+#### Get `extensions` without flakes
 
 ```console
 $ nix repl
@@ -153,6 +149,38 @@ nix-repl> t.vscode-marketplace-release.rust-lang.rust-analyzer
 ```console
 nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyzer
 «derivation /nix/store/jyzab0pdcgj4q9l73zsnyvc1k7qpb381-vscode-extension-rust-lang-rust-analyzer-0.4.1582.drv»
+```
+
+### Overlay
+
+#### Get overlay with flakes
+
+```console
+nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
+Added 14 variables.
+
+nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
+Added 14 variables.
+
+nix-repl> pkgs = (legacyPackages.x86_64-linux.extend overlays.default)
+
+nix-repl> pkgs.vscode-marketplace-release.rust-lang.rust-analyzer
+«derivation /nix/store/midv6wrnpxfm3in3miilyx914zzck4d7-vscode-extension-rust-lang-rust-analyzer-0.3.1575.drv»
+```
+
+#### Get overlay without flakes
+
+```console
+nix-repl> t1 = (import (builtins.fetchGit {
+                url = "https://github.com/nix-community/nix-vscode-extensions";
+                ref = "refs/heads/master";
+                rev = "c43d9089df96cf8aca157762ed0e2ddca9fcd71e";
+              }))
+
+nix-repl> pkgs = import <nixpkgs> { overlays = [ t1.overlays.default ]; system = builtins.currentSystem; }
+
+nix-repl> pkgs.vscode-marketplace-release.rust-lang.rust-analyzer
+«derivation /nix/store/a701wlb8ckidpikr57bff16mmvsf3jir-vscode-extension-rust-lang-rust-analyzer-0.3.1575.drv»
 ```
 
 ## Contribute
