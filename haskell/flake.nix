@@ -1,17 +1,15 @@
 {
-  inputs.flakes.url = "github:deemp/flakes";
+  inputs = { };
   outputs = inputs:
     let
       inputs_ =
         let
-          nix-dev = import ../nix-dev;
-          flakes = inputs.flakes.flakes;
+          flakes = (import ../nix-files).flakes;
         in
         {
           inherit (flakes.source-flake) nixpkgs flake-utils;
           inherit (flakes) drv-tools devshell codium workflows;
           haskell-tools = flakes.language-tools.haskell;
-          inherit flakes;
         };
 
       outputs = outputs_ { } // { inputs = inputs_; outputs = outputs_; };

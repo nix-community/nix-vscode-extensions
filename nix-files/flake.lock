@@ -1,0 +1,26 @@
+{
+  "nodes": {
+    "flakes": {
+      "locked": {
+        "lastModified": 1689535566,
+        "narHash": "sha256-k4gt71N8fjYhDJyAVEWNfa6JXkfzFEAjuP3AYDrmwsE=",
+        "owner": "deemp",
+        "repo": "flakes",
+        "rev": "031a38abf8cc64df8be3de7fe379170fe8305abb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "deemp",
+        "repo": "flakes",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flakes": "flakes"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
