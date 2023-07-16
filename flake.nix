@@ -27,12 +27,14 @@
         "aarch64-linux" = "linux-arm64";
         "x86_64-darwin" = "darwin-x64";
       };
+      platforms = lib.attrsets.genAttrs (builtins.attrValues systemPlatform) (x: x);
     in
     {
       overlays = {
         default = final: prev:
           let
-            utils = nixpkgs.legacyPackages.${final.system}.vscode-utils;
+            pkgs = nixpkgs.legacyPackages.${final.system};
+            utils = pkgs.vscode-utils;
             currentPlatform = systemPlatform.${final.system};
             dropWhile = cond: xs: if __length xs > 0 && cond (lib.lists.take 1 xs) then dropWhile cond (lib.lists.drop 1 xs) else xs;
             isCompatibleVersion = vscodeVersion: engineVersion:
@@ -62,7 +64,12 @@
                         in
                         "https://open-vsx.org/api/${publisher}/${name}${platformInfix}/${version}/file/${publisher}.${name}-${version}${platformSuffix}.vsix";
                   }))
-                (x: x ++ filterByPlatform { inherit checkVSCodeVersion vscodeVersion; } (import ./nix-files/extra.nix))
+                (x:
+                  x ++
+                  filterByPlatform
+                    { inherit checkVSCodeVersion vscodeVersion; }
+                    (import ./nix-files/extra.nix { inherit pkgs platforms; })
+                )
                 (map (extension@{ name, publisher, version, sha256, url, ... }:
                   {
                     inherit name;
