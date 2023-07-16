@@ -45,7 +45,7 @@ nix run github:nix-community/nix-vscode-extensions#vscodium-with-extensions -- -
 ### Extensions
 
 We provide extensions attrsets that contain both universal and platform-specific extensions.
-We provide a [reasonable](https://github.com/nix-community/nix-vscode-extensions/issues/20) mapping between the sites target platforms and Nix-supported platforms.
+We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see the [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20) and `systemPlatform` in [flake.nix](./flake.nix)).
 
 There are several attrsets:
 
@@ -202,7 +202,12 @@ Resolve [issues](https://github.com/nix-community/nix-vscode-extensions/issues).
 
 The [config](.github/config.yaml) contains several extensions.
 We cache the information about the latest **release** versions of these extensions (see [Extensions](#extensions)).
-If you'd like to use release versions of an extension, please, add that extension to the config and make a Pull request.
+If you'd like to use release versions of an extension, please, add that extension to the config and make a Pull Request.
+
+### Extra extensions
+
+The [extra.nix](nix-files/extra.nix) file contains a list of extensions to be fetched from places other than `VS Code Marketplace` and `Open VSX`.
+Add necessary extensions there, preferrably, for all supported platforms (see [Extensions](#extensions)).
 
 ### Main flake
 

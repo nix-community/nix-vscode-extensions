@@ -1,4 +1,5 @@
 [
+  # https://github.com/nix-community/nix-vscode-extensions/issues/34
   {
     name = "vscode-lldb";
     version = "1.9.2";
