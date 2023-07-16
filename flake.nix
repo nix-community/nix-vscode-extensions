@@ -39,30 +39,36 @@
               if lib.strings.hasPrefix "^" engineVersion then lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
               else vscodeVersion == engineVersion;
             # version of VSCode or VSCodium
+            filterByPlatform = { checkVSCodeVersion, vscodeVersion }: (__filter (x:
+              (x.platform == universal ||
+              x.platform == currentPlatform) &&
+              (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)));
             loadGenerated = { needLatest ? true, checkVSCodeVersion ? false, vscodeVersion ? "*", site }:
               lib.pipe site [
                 (x: ./data/cache/${site}${if needLatest then "-latest" else "-release"}.json)
                 __readFile
                 __fromJSON
-                (__filter (x:
-                  (x.platform == universal ||
-                  x.platform == currentPlatform) &&
-                  (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)))
-                (map (extension@{ name, publisher, version, sha256, platform, ... }:
+                (filterByPlatform { inherit checkVSCodeVersion vscodeVersion; })
+                (map (extension@{ name, publisher, version, platform, ... }:
+                  extension // {
+                    url =
+                      if site == vscode-marketplace then
+                        let platformSuffix = if platform == universal then "" else "targetPlatform=${platform}"; in
+                        "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platformSuffix}"
+                      else
+                        let
+                          platformSuffix = if platform == universal then "" else "@${platform}";
+                          platformInfix = if platform == universal then "" else "/${platform}";
+                        in
+                        "https://open-vsx.org/api/${publisher}/${name}${platformInfix}/${version}/file/${publisher}.${name}-${version}${platformSuffix}.vsix";
+                  }))
+                (x: x ++ filterByPlatform { inherit checkVSCodeVersion vscodeVersion; } (import ./nix-files/extra.nix))
+                (map (extension@{ name, publisher, version, sha256, url, ... }:
                   {
                     inherit name;
                     value = utils.buildVscodeMarketplaceExtension {
                       vsix = prev.fetchurl {
-                        inherit sha256;
-                        url =
-                          if site == vscode-marketplace then
-                            let platformSuffix = if platform == universal then "" else "targetPlatform=${platform}"; in
-                            "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platformSuffix}"
-                          else
-                            let platformSuffix = if platform == universal then "" else "@${platform}";
-                                platformInfix = if platform == universal then "" else "/${platform}";
-                            in
-                            "https://open-vsx.org/api/${publisher}/${name}${platformInfix}/${version}/file/${publisher}.${name}-${version}${platformSuffix}.vsix";
+                        inherit url sha256;
                         name = "${name}-${version}.zip";
                       };
                       mktplcRef = {
@@ -70,8 +76,9 @@
                       };
                     };
                   }))
+                # append extra extensions fetched from elsewhere to overwrite site extensions
                 (__groupBy ({ value, ... }: value.vscodeExtPublisher))
-                # platform-specific extensions will overwrite the universal extensions
+                # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (__mapAttrs (_: __foldl' (k: { name, value }: k // { ${name} = value; }) { }))
               ];
@@ -107,6 +114,7 @@
                   golang.go
                   vlanguage.vscode-vlang
                   rust-lang.rust-analyzer
+                  vadimcn.vscode-lldb
                 ];
               }
             )
