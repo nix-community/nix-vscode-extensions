@@ -15,7 +15,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 
 ## Template
 
-This repository provides a [template](templates/flake.nix).
+This repository provides a [template](template/flake.nix).
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 Try it:
 
