@@ -1,0 +1,19 @@
+[vadimcn--vscode-lldb--linux-x64]
+src.github = "vadimcn/codelldb"
+fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-x86_64-linux.vsix"
+passthru = { platform = "linux-x64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
+
+[vadimcn--vscode-lldb--linux-arm64]
+src.github = "vadimcn/codelldb"
+fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-aarch64-linux.vsix"
+passthru = { platform = "linux-arm64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
+
+[vadimcn--vscode-lldb--darwin-x64]
+src.github = "vadimcn/codelldb"
+fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-x86_64-darwin.vsix"
+passthru = { platform = "darwin-x64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
+
+[vadimcn--vscode-lldb--darwin-arm64]
+src.github = "vadimcn/codelldb"
+fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-aarch64-darwin.vsix"
+passthru = { platform = "darwin-arm64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }

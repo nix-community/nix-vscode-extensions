@@ -68,7 +68,16 @@
                   x ++
                   filterByPlatform
                     { inherit checkVSCodeVersion vscodeVersion; }
-                    (import ./nix-files/extra.nix { inherit pkgs platforms; })
+                    (
+                      pkgs.lib.attrsets.mapAttrsToList
+                        (name: value:
+                          {
+                            url = value.src.url;
+                            sha256 = value.src.outputHash;
+                            inherit (value) publisher name version platform engineVersion;
+                          })
+                        (import ./data/extra-extensions/generated.nix { inherit (pkgs) fetchgit fetchurl fetchFromGitHub dockerTools; })
+                    )
                 )
                 (map (extension@{ name, publisher, version, sha256, url, ... }:
                   {
