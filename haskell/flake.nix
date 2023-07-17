@@ -1,11 +1,10 @@
 {
-  inputs.flakes.url = "github:deemp/flakes";
   outputs = inputs:
     let
       inputs_ =
         let
           nix-dev = import ../nix-dev;
-          flakes = inputs.flakes.flakes;
+          flakes = nix-dev.outputs.inputs.flakes;
         in
         {
           inherit (flakes.source-flake) nixpkgs flake-utils;

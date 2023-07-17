@@ -1,7 +1,7 @@
 (import
   (
     let
-      lock = (builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.flakes.locked;
+      lock = (builtins.fromJSON (builtins.readFile ../nix-dev/flake.lock)).nodes.flakes.locked;
     in
     (
       import

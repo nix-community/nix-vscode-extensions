@@ -7,6 +7,7 @@
         {
           inherit (flakes.source-flake) nixpkgs flake-utils;
           inherit (flakes) drv-tools devshell codium workflows flakes-tools;
+          inherit flakes;
           haskell = import ../haskell;
         };
 
@@ -62,7 +63,10 @@
               });
             };
 
+            tools = [ pkgs.nvfetcher ];
+
             devShells.default = mkShell {
+              packages = tools;
               commands =
                 mkRunCommandsDir "nix-dev/" "ide" { "codium ." = packages.codium; inherit (packages) writeSettings; }
                 ++ mkRunCommandsDir "nix-dev/" "scripts" { inherit (packages) updateExtensions; }
