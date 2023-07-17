@@ -27,6 +27,14 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+      - name: Update codelldb.nix
+        run: |
+          export aarch64_darwin=`nix-prefetch-url https://github.com/vadimcn/codelldb/releases/download/v1.9.2/codelldb-aarch64-darwin.vsix`;
+          export aarch64_linux=`nix-prefetch-url https://github.com/vadimcn/codelldb/releases/download/v1.9.2/codelldb-aarch64-linux.vsix`;
+          export x86_64_darwin=`nix-prefetch-url https://github.com/vadimcn/codelldb/releases/download/v1.9.2/codelldb-x86_64-darwin.vsix`;
+          export x86_64_linux=`nix-prefetch-url https://github.com/vadimcn/codelldb/releases/download/v1.9.2/codelldb-x86_64-linux.vsix`;
+          python3 ./nix-files/update_codelldb.py > ./nix-files/codelldb.nix
+
       - env:
           CONFIG: .github/config.yaml
         name: Update extensions
