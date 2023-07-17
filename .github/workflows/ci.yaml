@@ -33,6 +33,10 @@ jobs:
         run: |-
           nix profile install nix-dev/#updateExtensions
           nix run nix-dev/#updateExtensions
+      - name: Update extra extensions
+        run: |-
+          nix profile install nix-dev/#updateExtraExtensions
+          nix run nix-dev/#updateExtraExtensions
       - name: Commit and push changes.
         run: |
           git add .
