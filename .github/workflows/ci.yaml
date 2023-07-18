@@ -17,6 +17,8 @@ jobs:
         uses: nix-community/cache-nix-action@v1
         with:
           key: nix-${{ runner.os }}-update-${{ hashfiles('**/flake.nix', '**/flake.lock', 'haskell/**/*') }}
+          linux-gc-enabled: true
+          linux-max-store-size: 1000000000
           restore-keys: |
             nix-${{ runner.os }}-update-${{ hashfiles('**/flake.nix', '**/flake.lock', 'haskell/**/*') }}
             nix-${{ runner.os }}-update-
@@ -33,7 +35,9 @@ jobs:
           nix profile install nix-dev/#updateLocks
           nix run nix-dev/#updateLocks
       - name: Check template VSCodium
-        run: nix run template/# -- --list-extensions
+        run: |
+          nix profile install template/
+          nix run template/ -- --list-extensions
       - env:
           CONFIG: .github/config.yaml
         name: Update extensions

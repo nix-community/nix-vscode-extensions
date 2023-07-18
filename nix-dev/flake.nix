@@ -27,29 +27,30 @@
             inherit (inputs.flakes-tools.lib.${system}) mkFlakesTools;
 
             packages =
-              let scripts =
-                (mkShellApps {
-                  updateExtensions = {
-                    text = getExe inputs.haskell.packages.${system}.updateExtensions;
-                    description = "Update extensions";
-                  };
-                  updateExtraExtensions = {
-                    text = "${getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
-                    description = "Update extra extensions";
-                  };
-                });
+              let
+                scripts =
+                  (mkShellApps {
+                    updateExtensions = {
+                      text = getExe inputs.haskell.packages.${system}.updateExtensions;
+                      description = "Update extensions";
+                    };
+                    updateExtraExtensions = {
+                      text = "${getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
+                      description = "Update extra extensions";
+                    };
+                  });
               in
               scripts //
               {
                 codium = mkCodium { extensions = extensionsCommon; };
                 writeSettings = writeSettingsJSON settingsCommonNix;
-                inherit (mkFlakesTools { dirs = [ "template" ]; root = ../.; }) updateLocks;
+                inherit (mkFlakesTools { dirs = [ "template" "nix-dev" ]; root = ../.; }) updateLocks;
                 inherit (mkFlakesTools { dirs = [ "." "template" "nix-dev" "haskell" ]; root = ../.; }) format;
 
                 writeWorkflows = writeWorkflow "ci" (nixCI {
                   cacheNixArgs = {
-                    linuxMaxStoreSize = 5000000000;
-                    macosGCEnabled = false;
+                    linuxGCEnabled = true;
+                    linuxMaxStoreSize = 1000000000;
                     keyJob = "update";
                     files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
                     keyOS = expr names.runner.os;
@@ -67,7 +68,10 @@
                       let name = "Check template VSCodium"; in
                       {
                         inherit name;
-                        run = "${run.nixScript { dir = "template/"; name = ""; doInstall = false; }} -- --list-extensions";
+                        run = ''
+                          nix profile install template/
+                          nix run template/ -- --list-extensions
+                        '';
                       }
                     )
                     (
