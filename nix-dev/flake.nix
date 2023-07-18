@@ -44,6 +44,7 @@
                 codium = mkCodium { extensions = extensionsCommon; };
                 writeSettings = writeSettingsJSON settingsCommonNix;
                 inherit (mkFlakesTools { dirs = [ "template" ]; root = ../.; }) updateLocks;
+                inherit (mkFlakesTools { dirs = [ "." "template" "nix-dev" "haskell" ]; root = ../.; }) format;
 
                 writeWorkflows = writeWorkflow "ci" (nixCI {
                   cacheNixArgs = {
