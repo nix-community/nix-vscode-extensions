@@ -21,20 +21,21 @@
           let
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             inherit (inputs.codium.lib.${system}) mkCodium writeSettingsJSON extensionsCommon settingsCommonNix;
-            inherit (inputs.devshell.lib.${system}) mkRunCommandsDir mkShell;
+            inherit (inputs.devshell.lib.${system}) mkRunCommandsDir mkShell mkCommands;
             inherit (inputs.drv-tools.lib.${system}) mkShellApps withDescription getExe;
-            inherit (inputs.workflows.lib.${system}) writeWorkflow nixCI os run;
+            inherit (inputs.workflows.lib.${system}) writeWorkflow nixCI os run expr names;
+            inherit (inputs.flakes-tools.lib.${system}) mkFlakesTools;
 
             packages =
               let scripts =
                 (mkShellApps {
                   updateExtensions = {
                     text = getExe inputs.haskell.packages.${system}.updateExtensions;
-                    description = ''Update extensions.'';
+                    description = "Update extensions";
                   };
                   updateExtraExtensions = {
                     text = "${getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
-                    description = "Update extra extensions.";
+                    description = "Update extra extensions";
                   };
                 });
               in
@@ -42,44 +43,50 @@
               {
                 codium = mkCodium { extensions = extensionsCommon; };
                 writeSettings = writeSettingsJSON settingsCommonNix;
+                inherit (mkFlakesTools { dirs = [ "template" ]; root = ../.; }) updateLocks;
+
                 writeWorkflows = writeWorkflow "ci" (nixCI {
-                  strategy.matrix.os = [ os.ubuntu-22 ];
                   cacheNixArgs = {
                     linuxMaxStoreSize = 5000000000;
                     macosGCEnabled = false;
                     keyJob = "update";
                     files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
+                    keyOS = expr names.runner.os;
                   };
                   dir = "nix-dev/";
                   doRemoveCacheProfiles = false;
                   doPushToCachix = false;
-                  doUpdateLocks = false;
-                  doFormat = false;
+                  doUpdateLocks = true;
+                  updateLocksArgs = { doGitPull = false; doCommit = false; };
+                  doFormat = true;
+                  strategy = { };
+                  runsOn = os.ubuntu-22;
                   steps = dir: [
+                    (
+                      let name = "Check template VSCodium"; in
+                      {
+                        inherit name;
+                        run = "${run.nixScript { dir = "template/"; name = ""; doInstall = false; }} -- --list-extensions";
+                      }
+                    )
                     (
                       let name = "Update extensions"; in
                       {
                         inherit name;
                         env.CONFIG = ".github/config.yaml";
-                        run = run.nixScript { inherit dir; name = scripts.updateExtensions.pname; commitMessage = name; };
+                        run = run.nixScript { inherit dir; name = scripts.updateExtensions.pname; commitArgs.commitMessage = name; };
                       }
                     )
                     (
-                      (
-                        let name = "Update extra extensions"; in
-                        {
-                          inherit name;
-                          run = run.nixScript { inherit dir; name = scripts.updateExtraExtensions.pname; commitMessage = name; };
-                        }
-                      )
+                      let name = "Update extra extensions"; in
+                      {
+                        inherit name;
+                        run = run.nixScript { inherit dir; name = scripts.updateExtraExtensions.pname; commitArgs.commitMessage = name; };
+                      }
                     )
                     {
-                      name = "Commit and push changes.";
-                      run = ''
-                        git add .
-                        git commit --allow-empty -m "action: update extensions"
-                        git push
-                      '';
+                      name = "Commit and push changes";
+                      run = run.commit { commitMessages = [ "Update flake locks" "Update extensions" "Update extra extensions" ]; };
                     }
                   ];
                 });
@@ -91,8 +98,9 @@
               packages = tools;
               commands =
                 mkRunCommandsDir "nix-dev/" "ide" { "codium ." = packages.codium; inherit (packages) writeSettings; }
-                ++ mkRunCommandsDir "nix-dev/" "scripts" { inherit (packages) updateExtensions; }
-                ++ mkRunCommandsDir "nix-dev/" "infra" { inherit (packages) writeWorkflows; };
+                ++ mkRunCommandsDir "nix-dev/" "scripts" { inherit (packages) updateExtensions updateExtraExtensions; }
+                ++ mkRunCommandsDir "nix-dev/" "infra" { inherit (packages) writeWorkflows updateLocks; }
+                ++ mkCommands "tools" tools;
             };
           in
           {
