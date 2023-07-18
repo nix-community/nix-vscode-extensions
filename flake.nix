@@ -97,6 +97,7 @@
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (__mapAttrs (_: __foldl' (k: { name, value }: k // { ${name} = value; }) { }))
+                (import ./overrides.nix { inherit pkgs; })
               ];
             mkSet = attrs@{ checkVSCodeVersion ? false, vscodeVersion ? "*" }: {
               vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });

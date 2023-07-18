@@ -218,9 +218,17 @@ If you'd like to use release versions of an extension, please, add that extensio
 
 ### Extra extensions
 
-The [extra-extensions.toml](extra-extensions.toml) file contains a list of extensions to be fetched from places other than `VS Code Marketplace` and `Open VSX`.
+The [extra-extensions.toml](extra-extensions.toml) file contains a list of extensions to be fetched from sites other than `VS Code Marketplace` and `Open VSX`.
+These extensions replace ones fetched from `VS Code Marketplace` and `Open VSX`.
 Add necessary extensions there, preferrably, for all supported platforms (see [Extensions](#extensions)).
 [nvfetcher](https://github.com/berberman/nvfetcher) will fetch the latest release versions of these extensions and write configs to [generated.nix](data/extra-extensions/generated.nix).
+
+### Special extensions
+
+Certain extensions require special treatment.
+Provide functions to modify such extensions derivations in [overrides.nix](overrides.nix).
+Optionally, create and link there issues explaining chosen override functions.
+The overrides apply to a whole attrset of extensions, including [Extra extensions](#extra-extensions).
 
 ### Main flake
 
