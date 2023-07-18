@@ -122,7 +122,7 @@
       {
         extensions = self.overlays.default pkgs pkgs;
         packages = {
-          vscodium-with-extensions = pkgs.lib.trivial.pipe
+          default = pkgs.lib.trivial.pipe
             (pkgs.vscode-with-extensions.override
               {
                 vscode = pkgs.vscodium;
