@@ -113,6 +113,7 @@
           path = ./template;
           description = "VSCodium with extensions";
         };
+        default = self.templates.vscodium-with-extensions;
       };
     }
     // (eachDefaultSystem (system:
