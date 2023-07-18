@@ -15,29 +15,41 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 
 ## Template
 
-This repository provides a [template](template/flake.nix).
+This repository has a flake [template](template/flake.nix).
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
-Try it:
 
-```console
-nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
-cd vscodium-project
-git init && git add .
-nix develop
-```
+1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-new.html)).
 
-This will print extensions available in the `VSCodium`.
+    ```console
+    nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
+    cd vscodium-project
+    git init && git add .
+    ```
 
-Run `codium .` or `nix run .#codium .` to start `VSCodium` in the current directory.
+1. Run `VSCodium`.
+
+    ```console
+    nix run .# .
+    ```
+
+1. Alternatively, start a devShell and run `VSCodium`. A `shellHook` will print extensions available in the `VSCodium`.
+
+    ```console
+    nix develop
+    codium .
+    ```
 
 In case of problems see [Troubleshooting](#troubleshooting).
 
 ## Example
 
-There's a sample package `vscodium-with-extensions` with a couple of extensions that you can try.
+[flake.nix](./flake.nix) provides a default package.
+This package is `VSCodium` with a couple of extensions.
+
+Run `VSCodium` and list installed extensions.
 
 ```console
-nix run github:nix-community/nix-vscode-extensions#vscodium-with-extensions -- --list-extensions
+nix run github:nix-community/nix-vscode-extensions# -- --list-extensions
 ```
 
 ## Usage
@@ -231,7 +243,7 @@ Add necessary extensions there, preferrably, for all supported platforms (see [E
 
 1. See the [README](./haskell/README.md).
 
-1. Get the environment.
+1. Set the environment.
 
     ```console
     set -a
