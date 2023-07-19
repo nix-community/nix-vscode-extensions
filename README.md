@@ -93,6 +93,14 @@ let
 in ...
 ```
 
+## History
+
+You can search for an extension in the repo history:
+
+- get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.json`
+- select a commit: `0910d1e`
+- search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.json`
+
 ## Explore
 
 Explore extensions in `nix repl`.
