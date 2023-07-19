@@ -8,9 +8,9 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 
 ## Note
 
-- Extension names and publishers are lowercased.
-- If an extension's publisher or name aren't valid Nix identifiers, you may access them by quoting the attribute names like `vscode-marketplace."4"."2"`.
-- You may search the repo to find out at what commit a given extension was available.
+- Extension publishers and names are lowercased.
+- Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
+- If an extension publisher or name aren't valid Nix identifiers, quote them like `<attrset>."4"."2"`.
 - We have a permission from MS to use a crawler on their API in this case (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Please, don't abuse this flake!
 
 ## Template
@@ -103,7 +103,7 @@ You can search for an extension in the repo history:
 
 ## Explore
 
-Explore extensions in `nix repl`.
+Explore extensions via `nix repl`.
 
 Use your system instead of `x86_64-linux`.
 
@@ -175,7 +175,7 @@ nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyz
 
 See [Overlays](https://nixos.wiki/wiki/Overlays#Using_overlays).
 
-#### Get overlay with flakes
+#### Get an overlay with flakes
 
 ```console
 nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
@@ -190,7 +190,7 @@ nix-repl> pkgs.vscode-marketplace-release.rust-lang.rust-analyzer
 «derivation /nix/store/midv6wrnpxfm3in3miilyx914zzck4d7-vscode-extension-rust-lang-rust-analyzer-0.3.1575.drv»
 ```
 
-#### Get overlay without flakes
+#### Get an overlay without flakes
 
 ```console
 nix-repl> t1 = (import (builtins.fetchGit {
