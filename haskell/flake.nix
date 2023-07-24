@@ -1,24 +1,9 @@
 {
   outputs = inputs:
-    let
-      inputs_ =
-        let
-          nix-dev = import ../nix-dev;
-          flakes = nix-dev.outputs.inputs.flakes;
-        in
-        {
-          inherit (flakes.source-flake) nixpkgs flake-utils;
-          inherit (flakes) drv-tools devshell codium workflows;
-          haskell-tools = flakes.language-tools.haskell;
-          inherit flakes;
-        };
-
-      outputs = outputs_ { } // { inputs = inputs_; outputs = outputs_; };
-
-      outputs_ =
-        inputs__:
-        let inputs = inputs_ // inputs__; in
-        inputs.flake-utils.lib.eachDefaultSystem (system:
+    let flakes = (import ../nix-dev).outputs.inputs.flakes; in
+    flakes.makeFlake {
+      inputs = { inherit (flakes.all) nixpkgs drv-tools devshell codium haskell-tools; };
+      perSystem = { inputs, system }:
         let
           # We're going to make some dev tools for our Haskell package
           # See NixOS wiki for more info - https://nixos.wiki/wiki/Haskell
@@ -27,11 +12,8 @@
           pkgs = inputs.nixpkgs.legacyPackages.${system};
           inherit (inputs.codium.lib.${system}) writeSettingsJSON mkCodium;
           inherit (inputs.codium.lib.${system}) extensions settingsNix;
-          inherit (inputs.flakes-tools.lib.${system}) mkFlakesTools;
           inherit (inputs.devshell.lib.${system}) mkCommands mkShell mkRunCommands;
           inherit (inputs.haskell-tools.lib.${system}) toolsGHC;
-          inherit (inputs.workflows.lib.${system}) writeWorkflow;
-          inherit (inputs.workflows.lib.${system}) nixCI;
           inherit (inputs.drv-tools.lib.${system}) mkShellApp;
 
           # Next, set the desired GHC version
@@ -55,10 +37,6 @@
           # So, override as few packages as possible and consider making a PR when haskellPackages.somePackage doesn't build
 
           inherit (pkgs.haskell.lib)
-            # doJailbreak - remove package bounds from build-depends of a package
-            doJailbreak
-            # dontCheck - skip tests
-            dontCheck
             # override deps of a package
             # see what can be overriden - https://github.com/NixOS/nixpkgs/blob/0ba44a03f620806a2558a699dba143e6cf9858db/pkgs/development/haskell-modules/generic-builder.nix#L13
             overrideCabal
@@ -136,11 +114,8 @@
         in
         {
           inherit packages devShells;
-        });
-
-    in
-    outputs;
-
+        };
+    };
   nixConfig = {
     extra-substituters = [
       "https://haskell-language-server.cachix.org"
