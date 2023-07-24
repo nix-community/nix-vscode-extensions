@@ -1,6 +1,9 @@
 jobs:
   nixCI:
     name: Nix CI
+    permissions:
+      actions: write
+      contents: write
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout this repo
@@ -20,24 +23,19 @@ jobs:
           linux-gc-enabled: true
           linux-max-store-size: 6500000000
           restore-keys: |
-            nix-${{ runner.os }}-update-${{ hashfiles('**/flake.nix', '**/flake.lock', 'haskell/**/*') }}
             nix-${{ runner.os }}-update-
-      - name: Config git for github-actions
+      - name: Configure git for github-actions
         run: |
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
-      - name: Format Nix files
-        run: |-
-          nix profile install nix-dev/#format
-          nix run nix-dev/#format
       - name: Update flake locks
         run: |-
           nix profile install nix-dev/#updateLocks
           nix run nix-dev/#updateLocks
-      - name: Check template VSCodium
-        run: |
-          nix profile install template/
-          nix run template/ -- --list-extensions
+      - name: Format Nix files
+        run: |-
+          nix profile install nix-dev/#format
+          nix run nix-dev/#format
       - env:
           CONFIG: .github/config.yaml
         name: Update extensions
@@ -50,12 +48,33 @@ jobs:
           nix run nix-dev/#updateExtraExtensions
       - name: Commit and push changes
         run: |-
+          git pull --rebase --autostash
+
           git add .
+
           git commit \
-            -m "action: Update flake locks" \
-            -m "action: Update extensions" \
-            -m "action: Update extra extensions"
+            -m "action" \
+            -m "Update flake locks" \
+            -m "Update extensions" \
+            -m "Update extra extensions" \
+            || echo "commit failed!"
+
           git push
+      - name: Check template VSCodium
+        run: |
+          nix profile install template/
+          nix run template/ -- --list-extensions
+      - name: Save flakes
+        run: |-
+          nix profile install nix-dev/#saveFlakes
+          nix run nix-dev/#saveFlakes
+      - name: Purge cache
+        uses: deemp/purge-cache@v1
+        with:
+          accessed: false
+          created: true
+          debug: true
+          max-age: 172800
 name: Nix CI
 "on":
   pull_request: {}

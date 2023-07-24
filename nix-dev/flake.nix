@@ -39,52 +39,45 @@
               inherit (mkFlakesTools { dirs = [ "." "template" "nix-dev" "haskell" ]; root = ../.; }) format;
 
               writeWorkflows = writeWorkflow "ci" (nixCI {
-                cacheNixArgs = {
-                  linuxGCEnabled = true;
-                  linuxMaxStoreSize = 6500000000;
-                  keyJob = "update";
-                  files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
-                  keyOS = expr names.runner.os;
-                };
-                dir = "nix-dev/";
-                doRemoveCacheProfiles = false;
-                doPushToCachix = false;
-                doUpdateLocks = true;
-                updateLocksArgs = { doGitPull = false; doCommit = false; };
-                doFormat = true;
-                strategy = { };
-                runsOn = os.ubuntu-22;
-                steps = dir: [
-                  (
-                    let name = "Check template VSCodium"; in
+                jobArgs = {
+                  cacheNixArgs = {
+                    linuxGCEnabled = true;
+                    linuxMaxStoreSize = 6500000000;
+                    keyJob = "update";
+                    files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
+                    keyOS = expr names.runner.os;
+                  };
+                  dir = "nix-dev/";
+                  doRemoveCacheProfiles = false;
+                  doPushToCachix = false;
+                  doUpdateLocks = true;
+                  doCommit = false;
+                  doFormat = true;
+                  strategy = { };
+                  runsOn = os.ubuntu-22;
+                  steps = dir: [
                     {
-                      inherit name;
+                      name = "Update extensions";
+                      env.CONFIG = ".github/config.yaml";
+                      run = run.nixScript { inherit dir; name = scripts.updateExtensions.pname; };
+                    }
+                    {
+                      name = "Update extra extensions";
+                      run = run.nixScript { inherit dir; name = scripts.updateExtraExtensions.pname; };
+                    }
+                    {
+                      name = "Commit and push changes";
+                      run = run.commit { messages = [ "Update flake locks" "Update extensions" "Update extra extensions" ]; };
+                    }
+                    {
+                      name = "Check template VSCodium";
                       run = ''
                         nix profile install template/
                         nix run template/ -- --list-extensions
                       '';
                     }
-                  )
-                  (
-                    let name = "Update extensions"; in
-                    {
-                      inherit name;
-                      env.CONFIG = ".github/config.yaml";
-                      run = run.nixScript { inherit dir; name = scripts.updateExtensions.pname; commitArgs.commitMessage = name; };
-                    }
-                  )
-                  (
-                    let name = "Update extra extensions"; in
-                    {
-                      inherit name;
-                      run = run.nixScript { inherit dir; name = scripts.updateExtraExtensions.pname; commitArgs.commitMessage = name; };
-                    }
-                  )
-                  {
-                    name = "Commit and push changes";
-                    run = run.commit { commitMessages = [ "Update flake locks" "Update extensions" "Update extra extensions" ]; };
-                  }
-                ];
+                  ];
+                };
               });
             };
 
