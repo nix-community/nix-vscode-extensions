@@ -24,6 +24,8 @@ jobs:
           linux-max-store-size: 6500000000
           restore-keys: |
             nix-${{ runner.os }}-update-
+      - name: Remove old cache profiles
+        run: rm -rf /nix/var/nix/profiles/cache
       - name: Configure git for github-actions
         run: |
           git config --global user.name github-actions

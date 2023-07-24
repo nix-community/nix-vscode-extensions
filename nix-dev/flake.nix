@@ -14,7 +14,7 @@
           inherit (inputs.codium.lib.${system}) mkCodium writeSettingsJSON extensionsCommon settingsCommonNix;
           inherit (inputs.devshell.lib.${system}) mkRunCommandsDir mkShell mkCommands;
           inherit (inputs.drv-tools.lib.${system}) mkShellApps withDescription getExe;
-          inherit (inputs.workflows.lib.${system}) writeWorkflow nixCI os run expr names;
+          inherit (inputs.workflows.lib.${system}) writeWorkflow nixCI os run expr names steps;
           inherit (inputs.flakes-tools.lib.${system}) mkFlakesTools;
 
           packages =
@@ -48,14 +48,10 @@
                     keyOS = expr names.runner.os;
                   };
                   dir = "nix-dev/";
-                  doRemoveCacheProfiles = false;
-                  doPushToCachix = false;
-                  doUpdateLocks = true;
                   doCommit = false;
-                  doFormat = true;
                   strategy = { };
                   runsOn = os.ubuntu-22;
-                  steps = dir: [
+                  steps = { dir, stepsAttrs }: [
                     {
                       name = "Update extensions";
                       env.CONFIG = ".github/config.yaml";
@@ -67,7 +63,13 @@
                     }
                     {
                       name = "Commit and push changes";
-                      run = run.commit { messages = [ "Update flake locks" "Update extensions" "Update extra extensions" ]; };
+                      run = run.commit {
+                        messages = [
+                          (steps.updateLocks { }).name
+                          stepsAttrs."Update extensions".name
+                          stepsAttrs."Update extra extensions".name
+                        ];
+                      };
                     }
                     {
                       name = "Check template VSCodium";
