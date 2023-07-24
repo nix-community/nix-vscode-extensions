@@ -21,7 +21,7 @@ jobs:
         with:
           key: nix-${{ runner.os }}-update-${{ hashfiles('**/flake.nix', '**/flake.lock', 'haskell/**/*') }}
           linux-gc-enabled: true
-          linux-max-store-size: 6500000000
+          linux-max-store-size: 7000000000
           restore-keys: |
             nix-${{ runner.os }}-update-
       - name: Remove old cache profiles

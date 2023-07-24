@@ -42,7 +42,7 @@
                 jobArgs = {
                   cacheNixArgs = {
                     linuxGCEnabled = true;
-                    linuxMaxStoreSize = 6500000000;
+                    linuxMaxStoreSize = 7000000000;
                     keyJob = "update";
                     files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
                     keyOS = expr names.runner.os;
