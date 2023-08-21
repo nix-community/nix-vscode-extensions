@@ -239,6 +239,11 @@ Provide functions to modify such extensions derivations in [overrides.nix](overr
 Optionally, create and link there issues explaining chosen override functions.
 The overrides apply to a whole attrset of extensions, including [Extra extensions](#extra-extensions).
 
+#### Build problems
+
+- Extension with multiple extensions in a zipfile ([issue](https://github.com/nix-community/nix-vscode-extensions/issues/31))
+- Platform-specific extensions ([comment](https://github.com/nix-community/nix-vscode-extensions/issues/20#issuecomment-1543679655))
+
 ### Main flake
 
 1. (Optionally) Install [direnv](https://direnv.net/), e.g., via `nix profile install nixpkgs#direnv`.
