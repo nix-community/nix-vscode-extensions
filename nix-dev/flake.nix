@@ -41,8 +41,12 @@
               writeWorkflows = writeWorkflow "ci" (nixCI {
                 jobArgs = {
                   cacheNixArgs = {
-                    linuxGCEnabled = true;
-                    linuxMaxStoreSize = 7000000000;
+                    gcEnabledLinux = true;
+                    gcMaxStoreSizeLinux = 7500000000;
+                    purgeEnabled = true;
+                    purgeByCreatedTime = true;
+                    purgeMaxAge = 86400;
+                    debug = true;
                     keyJob = "update";
                     files = [ "**/flake.nix" "**/flake.lock" "haskell/**/*" ];
                     keyOS = expr names.runner.os;

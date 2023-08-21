@@ -2,11 +2,11 @@
   "nodes": {
     "flakes": {
       "locked": {
-        "lastModified": 1690624309,
-        "narHash": "sha256-4JZP+29mZfkdi1MZERKhEYT6yBSneQcHovX17y2HrVE=",
+        "lastModified": 1692645458,
+        "narHash": "sha256-bILdCepZbysy+bP3uMkjkFcONnJ7HtwGDVj2EFpsIQk=",
         "owner": "deemp",
         "repo": "flakes",
-        "rev": "366d95bada8a6f35286b3519c6bad52351a5eaa6",
+        "rev": "f00d47953e7b21049ec9cbdba65a28232d7c142d",
         "type": "github"
       },
       "original": {
