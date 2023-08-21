@@ -12,6 +12,8 @@ vscodeMarketplace:
   release:
     eamodio:
     - gitlens
+    ms-vscode-remote:
+    - remote-ssh
     rust-lang:
     - rust-analyzer
     stkb:
