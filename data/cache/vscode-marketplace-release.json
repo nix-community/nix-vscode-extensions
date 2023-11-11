@@ -2,9 +2,7 @@
 , {"engineVersion":"^1.84.0","lastUpdated":"2023-11-01T00:40:25.947Z","missingTimes":0,"name":"remote-ssh","platform":"universal","publisher":"ms-vscode-remote","sha256":"sha256-eHisA9sD+qQyTC/eqAyEjw/OUGjabn0Inl1LqckhvQ0=","version":"0.107.0"}
 , {"engineVersion":"^1.75.0","lastUpdated":"2023-11-06T06:28:42.727Z","missingTimes":0,"name":"rust-analyzer","platform":"linux-x64","publisher":"rust-lang","sha256":"sha256-+TfkH/w84KPEk98rrPI3nMcrj5V4HkJ3ScFW4YFtfTk=","version":"0.3.1722"}
 , {"engineVersion":"^1.75.0","lastUpdated":"2023-11-06T06:29:05.627Z","missingTimes":0,"name":"rust-analyzer","platform":"linux-arm64","publisher":"rust-lang","sha256":"sha256-opgY2pmOIwEQ+Yla9jdLOx8I5Ax5hMGsNPP1HV+lshI=","version":"0.3.1722"}
-, {"engineVersion":"^1.75.0","lastUpdated":"2023-10-30T05:42:01.21Z","missingTimes":4,"name":"rust-analyzer","platform":"darwin-x64","publisher":"rust-lang","sha256":"sha256-mgcI7LATC685SY6HN03QWyR957MtL1sL0+iuDM2/1dM=","version":"0.3.1713"}
 , {"engineVersion":"^1.75.0","lastUpdated":"2023-11-06T06:28:28.427Z","missingTimes":0,"name":"rust-analyzer","platform":"darwin-x64","publisher":"rust-lang","sha256":"sha256-eu+LIkXECJVPqrdNNZjWzHMD9OlPnSWG3uJILX66LEw=","version":"0.3.1722"}
-, {"engineVersion":"^1.75.0","lastUpdated":"2023-10-30T05:41:47.64Z","missingTimes":4,"name":"rust-analyzer","platform":"darwin-arm64","publisher":"rust-lang","sha256":"sha256-oFdwIswLc6j2/aHFnvYibDuu69z276tUies6l0eQI/M=","version":"0.3.1713"}
 , {"engineVersion":"^1.75.0","lastUpdated":"2023-11-06T06:28:47.557Z","missingTimes":0,"name":"rust-analyzer","platform":"darwin-arm64","publisher":"rust-lang","sha256":"sha256-+l+1LNdfD2DwgPWZB2xcIOZpF2dCr9Ktn1piptt5Hxc=","version":"0.3.1722"}
 , {"engineVersion":"^1.45.0","lastUpdated":"2022-02-21T10:37:36.17Z","missingTimes":0,"name":"rewrap","platform":"universal","publisher":"stkb","sha256":"sha256-WHeLTN992ltEZw2W7B3sJrHfAFsOGMq3llV4C0hXLNA=","version":"1.16.3"}
 ]
