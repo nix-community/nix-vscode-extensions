@@ -9,4 +9,5 @@ in
 updateExtensions {
   # https://github.com/nix-community/nix-vscode-extensions/issues/31
   asf.apache-netbeans-java = _: { sourceRoot = "extension"; };
+  ms-dotnettools.csdevkit = _: { sourceRoot = "extension"; };
 }
