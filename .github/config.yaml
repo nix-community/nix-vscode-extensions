@@ -12,6 +12,9 @@ vscodeMarketplace:
   release:
     eamodio:
     - gitlens
+    github:
+    - copilot
+    - copilot-chat
     ms-vscode-remote:
     - remote-ssh
     rust-lang:
