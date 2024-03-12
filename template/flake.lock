@@ -41,11 +41,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1710033560,
-        "narHash": "sha256-jLEVnMZBxZ/0ziOvzrM9t5NvrwYFvhWLG9lh+ZS6Hhs=",
+        "lastModified": 1710119770,
+        "narHash": "sha256-WKUrnOtFBEGCSgmMQn9Utaaf514WZD/7dAJDbmVULKs=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "25aca378639791d20fe0bd9bf0189130369447c1",
+        "rev": "b25f888a82dbe5a45094746940f10ff5438936c4",
         "type": "github"
       },
       "original": {
