@@ -68,6 +68,11 @@ There are several attrsets:
 - `forVSCodeVersion "4.228.1"` allows to leave only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"4.228.1"` version of `VS Code`.
   - You may supply the actual version of your `VS Code` instead of `"4.228.1"`.
 
+> [!NOTE]
+> In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
+> Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
+> See [With-expressions](https://nixos.org/manual/nix/unstable/language/constructs.html?highlight=langua#with-expressions).
+
 ### With flakes
 
 See [Template](#template).
