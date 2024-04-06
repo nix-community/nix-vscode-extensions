@@ -237,7 +237,7 @@ runFetcher FetcherConfig{..} = do
     )
       `catchAny` (\err -> runInIO $ logError (pack $ show err) >> pure [])
 
-  let mkKey :: Publisher -> Name -> Platform -> Version -> LastUpdated -> (Publisher, Name, Platform, Version, LastUpdated)
+  let mkKey :: Publisher -> Name -> Platform -> Version -> LastUpdated -> (Publisher, Name, Version, Platform, LastUpdated)
       mkKey publisher name platform version lastUpdated = (publisher, name, version, platform, lastUpdated)
       mkKeyInfo ExtensionInfo{..} = mkKey publisher name platform version lastUpdated
       mkKeyConfig ExtensionConfig{..} = mkKey publisher name platform version lastUpdated
