@@ -31,6 +31,8 @@ jobs:
         run: |
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
+      - name: Pull latest changes
+        run: git pull --rebase --autostash
       - name: Update flake locks
         run: |-
           nix profile install nix-dev/#updateLocks
