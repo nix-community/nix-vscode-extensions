@@ -21,3 +21,4 @@ vscodeMarketplace:
     - rust-analyzer
     stkb:
     - rewrap
+maxMissingTimes: 10
