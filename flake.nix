@@ -95,7 +95,16 @@
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (builtins.mapAttrs (_: builtins.foldl' (k: { name, value }: k // { ${name} = value; }) { }))
-                (import ./overrides.nix { inherit pkgs; })
+                (extensions:
+                  let
+                    inherit (pkgs.lib.attrsets) hasAttrByPath recursiveUpdate getAttrFromPath setAttrByPath mapAttrsToList;
+                    modifyAttrByPath = path: f: attrs: if hasAttrByPath path attrs then recursiveUpdate attrs (setAttrByPath path (f (getAttrFromPath path extensions))) else attrs;
+                    overrideAttrsByPath = path: f: attrs: modifyAttrByPath path (x: x.overrideAttrs f) attrs;
+                    mkModifyAttrs = attrs: pkgs.lib.lists.flatten (mapAttrsToList (publisher: mapAttrsToList (name: f: overrideAttrsByPath [ publisher name ] f)) attrs);
+                    updateExtensions = attrs: pkgs.lib.trivial.pipe extensions (mkModifyAttrs attrs);
+                  in
+                  updateExtensions (import ./overrides.nix { inherit pkgs; })
+                )
               ];
             mkSet = attrs@{ checkVSCodeVersion ? false, vscodeVersion ? "*" }: {
               vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });
