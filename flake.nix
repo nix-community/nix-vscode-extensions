@@ -163,8 +163,6 @@
               (x: x // { meta = builtins.removeAttrs x.meta [ "description" ]; })
             ];
         };
-        formatter = pkgs.writeScriptBin
-          "fmt"
-          "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt flake.nix nix-dev/flake.nix";
+        formatter = pkgs.nixfmt-rfc-style;
       }));
 }
