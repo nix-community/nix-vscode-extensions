@@ -13,7 +13,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      ...
+    }:
     let
       inherit (nixpkgs) lib;
       inherit (flake-utils.lib) eachDefaultSystem;
@@ -30,30 +36,53 @@
     in
     {
       overlays = {
-        default = final: prev:
+        default =
+          final: prev:
           let
             pkgs = nixpkgs.legacyPackages.${final.system};
             utils = pkgs.vscode-utils;
             currentPlatform = systemPlatform.${final.system};
-            isCompatibleVersion = vscodeVersion: engineVersion:
-              if lib.strings.hasPrefix "^" engineVersion then lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
-              else vscodeVersion == engineVersion;
+            isCompatibleVersion =
+              vscodeVersion: engineVersion:
+              if lib.strings.hasPrefix "^" engineVersion then
+                lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
+              else
+                vscodeVersion == engineVersion;
             # version of VSCode or VSCodium
-            filterByPlatform = { checkVSCodeVersion, vscodeVersion }: (builtins.filter (x:
-              (x.platform == universal ||
-              x.platform == currentPlatform) &&
-              (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)));
-            loadGenerated = { needLatest ? true, checkVSCodeVersion ? false, vscodeVersion ? "*", site }:
+            filterByPlatform =
+              { checkVSCodeVersion, vscodeVersion }:
+              (builtins.filter (
+                x:
+                (x.platform == universal || x.platform == currentPlatform)
+                && (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)
+              ));
+            loadGenerated =
+              {
+                needLatest ? true,
+                checkVSCodeVersion ? false,
+                vscodeVersion ? "*",
+                site,
+              }:
               lib.pipe site [
                 (x: ./data/cache/${site}${if needLatest then "-latest" else "-release"}.json)
                 builtins.readFile
                 builtins.fromJSON
                 (filterByPlatform { inherit checkVSCodeVersion vscodeVersion; })
-                (map (extension@{ name, publisher, version, platform, ... }:
-                  extension // {
+                (map (
+                  extension@{
+                    name,
+                    publisher,
+                    version,
+                    platform,
+                    ...
+                  }:
+                  extension
+                  // {
                     url =
                       if site == vscode-marketplace then
-                        let platformSuffix = if platform == universal then "" else "targetPlatform=${platform}"; in
+                        let
+                          platformSuffix = if platform == universal then "" else "targetPlatform=${platform}";
+                        in
                         "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platformSuffix}"
                       else
                         let
@@ -61,23 +90,45 @@
                           platformInfix = if platform == universal then "" else "/${platform}";
                         in
                         "https://open-vsx.org/api/${publisher}/${name}${platformInfix}/${version}/file/${publisher}.${name}-${version}${platformSuffix}.vsix";
-                  }))
-                (x:
-                  x ++
-                  filterByPlatform
-                    { inherit checkVSCodeVersion vscodeVersion; }
-                    (
-                      pkgs.lib.attrsets.mapAttrsToList
-                        (name: value:
-                          {
-                            url = value.src.url;
-                            sha256 = value.src.outputHash;
-                            inherit (value) publisher name version platform engineVersion;
-                          })
-                        (import ./data/extra-extensions/generated.nix { inherit (pkgs) fetchgit fetchurl fetchFromGitHub dockerTools; })
-                    )
+                  }
+                ))
+                (
+                  x:
+                  x
+                  ++ filterByPlatform { inherit checkVSCodeVersion vscodeVersion; } (
+                    pkgs.lib.attrsets.mapAttrsToList
+                      (name: value: {
+                        url = value.src.url;
+                        sha256 = value.src.outputHash;
+                        inherit (value)
+                          publisher
+                          name
+                          version
+                          platform
+                          engineVersion
+                          ;
+                      })
+                      (
+                        import ./data/extra-extensions/generated.nix {
+                          inherit (pkgs)
+                            fetchgit
+                            fetchurl
+                            fetchFromGitHub
+                            dockerTools
+                            ;
+                        }
+                      )
+                  )
                 )
-                (map ({ name, publisher, version, sha256, url, ... }:
+                (map (
+                  {
+                    name,
+                    publisher,
+                    version,
+                    sha256,
+                    url,
+                    ...
+                  }:
                   {
                     inherit name;
                     value = utils.buildVscodeMarketplaceExtension {
@@ -89,30 +140,82 @@
                         inherit name version publisher;
                       };
                     };
-                  }))
+                  }
+                ))
                 # append extra extensions fetched from elsewhere to overwrite site extensions
                 (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (builtins.mapAttrs (_: builtins.foldl' (k: { name, value }: k // { ${name} = value; }) { }))
-                (extensions:
+                (
+                  extensions:
                   let
-                    inherit (pkgs.lib.attrsets) hasAttrByPath recursiveUpdate getAttrFromPath setAttrByPath mapAttrsToList;
-                    modifyAttrByPath = path: f: attrs: if hasAttrByPath path attrs then recursiveUpdate attrs (setAttrByPath path (f (getAttrFromPath path extensions))) else attrs;
-                    overrideAttrsByPath = path: f: attrs: modifyAttrByPath path (x: x.overrideAttrs f) attrs;
-                    mkModifyAttrs = attrs: pkgs.lib.lists.flatten (mapAttrsToList (publisher: mapAttrsToList (name: f: overrideAttrsByPath [ publisher name ] f)) attrs);
+                    inherit (pkgs.lib.attrsets)
+                      hasAttrByPath
+                      recursiveUpdate
+                      getAttrFromPath
+                      setAttrByPath
+                      mapAttrsToList
+                      ;
+                    modifyAttrByPath =
+                      path: f: attrs:
+                      if hasAttrByPath path attrs then
+                        recursiveUpdate attrs (setAttrByPath path (f (getAttrFromPath path extensions)))
+                      else
+                        attrs;
+                    overrideAttrsByPath =
+                      path: f: attrs:
+                      modifyAttrByPath path (x: x.overrideAttrs f) attrs;
+                    mkModifyAttrs =
+                      attrs:
+                      pkgs.lib.lists.flatten (
+                        mapAttrsToList (
+                          publisher:
+                          mapAttrsToList (
+                            name: f:
+                            overrideAttrsByPath [
+                              publisher
+                              name
+                            ] f
+                          )
+                        ) attrs
+                      );
                     updateExtensions = attrs: pkgs.lib.trivial.pipe extensions (mkModifyAttrs attrs);
                   in
                   updateExtensions (import ./overrides.nix { inherit pkgs; })
                 )
               ];
-            mkSet = attrs@{ checkVSCodeVersion ? false, vscodeVersion ? "*" }: {
-              vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });
-              open-vsx = loadGenerated (attrs // { site = open-vsx; });
-              vscode-marketplace-release = loadGenerated (attrs // { needLatest = false; site = vscode-marketplace; });
-              open-vsx-release = loadGenerated (attrs // { needLatest = false; site = open-vsx; });
+            mkSet =
+              attrs@{
+                checkVSCodeVersion ? false,
+                vscodeVersion ? "*",
+              }:
+              {
+                vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });
+                open-vsx = loadGenerated (attrs // { site = open-vsx; });
+                vscode-marketplace-release = loadGenerated (
+                  attrs
+                  // {
+                    needLatest = false;
+                    site = vscode-marketplace;
+                  }
+                );
+                open-vsx-release = loadGenerated (
+                  attrs
+                  // {
+                    needLatest = false;
+                    site = open-vsx;
+                  }
+                );
+              };
+            res = (mkSet { }) // {
+              forVSCodeVersion =
+                vscodeVersion:
+                mkSet {
+                  checkVSCodeVersion = true;
+                  inherit vscodeVersion;
+                };
             };
-            res = (mkSet { }) // { forVSCodeVersion = vscodeVersion: mkSet { checkVSCodeVersion = true; inherit vscodeVersion; }; };
           in
           res;
       };
@@ -123,16 +226,17 @@
         };
       };
     }
-    // (eachDefaultSystem (system:
+    // (eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
         extensions = self.overlays.default pkgs pkgs;
         packages = {
-          default = pkgs.lib.trivial.pipe
-            (pkgs.vscode-with-extensions.override
-              {
+          default =
+            pkgs.lib.trivial.pipe
+              (pkgs.vscode-with-extensions.override {
                 vscode = pkgs.vscodium;
                 vscodeExtensions = with self.extensions.${system}.vscode-marketplace; [
                   golang.go
@@ -140,29 +244,31 @@
                   rust-lang.rust-analyzer
                   vadimcn.vscode-lldb
                 ];
-              }
-            )
-            [
-              (x: pkgs.lib.attrsets.recursiveUpdate x
-                {
-                  meta = {
-                    longDescription = ''
-                      This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
-                      You can override this package and set `vscodeExtensions` to a list of extension
-                      derivations, namely those provided by this flake.
+              })
+              [
+                (
+                  x:
+                  pkgs.lib.attrsets.recursiveUpdate x {
+                    meta = {
+                      longDescription = ''
+                        This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
+                        You can override this package and set `vscodeExtensions` to a list of extension
+                        derivations, namely those provided by this flake.
 
-                      The [repository] provides ~40K extensions from [Visual Studio Marketplace]
-                      and another ~3K from [Open VSX Registry].
+                        The [repository] provides ~40K extensions from [Visual Studio Marketplace]
+                        and another ~3K from [Open VSX Registry].
 
-                      [repository]: https://github.com/nix-community/nix-vscode-extensions
-                      [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
-                      [Open VSX Registry]: https://open-vsx.org/
-                    '';
-                  };
-                })
-              (x: x // { meta = builtins.removeAttrs x.meta [ "description" ]; })
-            ];
+                        [repository]: https://github.com/nix-community/nix-vscode-extensions
+                        [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
+                        [Open VSX Registry]: https://open-vsx.org/
+                      '';
+                    };
+                  }
+                )
+                (x: x // { meta = builtins.removeAttrs x.meta [ "description" ]; })
+              ];
         };
         formatter = pkgs.nixfmt-rfc-style;
-      }));
+      }
+    ));
 }

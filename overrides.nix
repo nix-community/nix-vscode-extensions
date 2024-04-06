@@ -23,16 +23,8 @@
         ["aarch64-darwin"]="darwin-arm64"
       )
 
-      declare patchCommand=${
-        if stdenv.isDarwin
-        then "install_name_tool"
-        else "patchelf"
-      }
-      declare add_rpath_command=${
-        if stdenv.isDarwin
-        then "-add_rpath"
-        else "--set-rpath"
-      }
+      declare patchCommand=${if stdenv.isDarwin then "install_name_tool" else "patchelf"}
+      declare add_rpath_command=${if stdenv.isDarwin then "-add_rpath" else "--set-rpath"}
 
       patchelf_add_icu_as_needed() {
         declare elf="''${1?}"
@@ -49,7 +41,14 @@
         patchelf --add-needed "libssl.so" "$elf"
         patchelf --add-needed "libz.so.1" "$elf"
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${lib.makeLibraryPath [stdenv.cc.cc openssl zlib icu.out]}:\$ORIGIN" \
+          --set-rpath "${
+            lib.makeLibraryPath [
+              stdenv.cc.cc
+              openssl
+              zlib
+              icu.out
+            ]
+          }:\$ORIGIN" \
           "$elf"
       }
 
@@ -62,7 +61,14 @@
         exit 1
       fi
 
-      declare new_rpath="${lib.makeLibraryPath [stdenv.cc.cc openssl zlib icu.out]}:\$ORIGIN"
+      declare new_rpath="${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          openssl
+          zlib
+          icu.out
+        ]
+      }:\$ORIGIN"
       declare base_path="./components/vs-green-server/platforms/$platform/node_modules"
       declare -a paths=(
         "@microsoft/visualstudio-server.$platform/Microsoft.VisualStudio.Code.Server"

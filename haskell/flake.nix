@@ -1,9 +1,21 @@
 {
-  outputs = inputs:
-    let flakes = (import ../nix-dev).outputs.inputs.flakes; in
+  outputs =
+    inputs:
+    let
+      flakes = (import ../nix-dev).outputs.inputs.flakes;
+    in
     flakes.makeFlake {
-      inputs = { inherit (flakes.all) nixpkgs drv-tools devshell codium haskell-tools; };
-      perSystem = { inputs, system }:
+      inputs = {
+        inherit (flakes.all)
+          nixpkgs
+          drv-tools
+          devshell
+          codium
+          haskell-tools
+          ;
+      };
+      perSystem =
+        { inputs, system }:
         let
           # We're going to make some dev tools for our Haskell package
           # See NixOS wiki for more info - https://nixos.wiki/wiki/Haskell
@@ -24,7 +36,10 @@
 
           # And the binaries. 
           # In our case, the Haskell app will call the `hello` command
-          myPackageDepsBin = [ pkgs.jq pkgs.nix ];
+          myPackageDepsBin = [
+            pkgs.jq
+            pkgs.nix
+          ];
 
           # --- shells ---
 
@@ -45,13 +60,13 @@
           # Here's our override
           override = {
             overrides = self: super: {
-              co-log-concurrent = overrideCabal (super.co-log-concurrent) (_: { broken = false; });
-              myPackage = overrideCabal
-                (super.callCabal2nix myPackageName ./. { })
-                (_: {
-                  # these deps will be in haskellPackages.myPackage.getCabalDeps.librarySystemDepends
-                  executableSystemDepends = myPackageDepsBin ++ (super.executableSystemDepends or [ ]);
-                });
+              co-log-concurrent = overrideCabal (super.co-log-concurrent) (_: {
+                broken = false;
+              });
+              myPackage = overrideCabal (super.callCabal2nix myPackageName ./. { }) (_: {
+                # these deps will be in haskellPackages.myPackage.getCabalDeps.librarySystemDepends
+                executableSystemDepends = myPackageDepsBin ++ (super.executableSystemDepends or [ ]);
+              });
             };
           };
 
@@ -63,13 +78,21 @@
           # More specifically, if we're developing Haskell packages A and B and A depends on B, we need to supply both A and B
           # This will prevent nix from building B as a dev dependency of A
 
-          inherit (toolsGHC {
-            version = ghcVersion_; inherit override;
-            packages = (ps: [ ps.myPackage ]);
-            runtimeDependencies = myPackageDepsBin;
-          })
-            hls cabal justStaticExecutable
-            ghcid callCabal2nix haskellPackages hpack;
+          inherit
+            (toolsGHC {
+              version = ghcVersion_;
+              inherit override;
+              packages = (ps: [ ps.myPackage ]);
+              runtimeDependencies = myPackageDepsBin;
+            })
+            hls
+            cabal
+            justStaticExecutable
+            ghcid
+            callCabal2nix
+            haskellPackages
+            hpack
+            ;
 
           updateExtensions = justStaticExecutable {
             package = haskellPackages.myPackage;
@@ -87,14 +110,32 @@
           packages = {
             # And compose VSCodium with dev tools and HLS
             codium = mkCodium {
-              extensions = { inherit (extensions) nix haskell misc github markdown; };
+              extensions = {
+                inherit (extensions)
+                  nix
+                  haskell
+                  misc
+                  github
+                  markdown
+                  ;
+              };
               runtimeDependencies = tools;
             };
 
             # a script to write .vscode/settings.json
             writeSettings = writeSettingsJSON {
-              inherit (settingsNix) haskell todo-tree files editor gitlens
-                git nix-ide workbench markdown-all-in-one markdown-language-features;
+              inherit (settingsNix)
+                haskell
+                todo-tree
+                files
+                editor
+                gitlens
+                git
+                nix-ide
+                workbench
+                markdown-all-in-one
+                markdown-language-features
+                ;
             };
 
             inherit updateExtensions;
@@ -103,8 +144,9 @@
           devShells = {
             default = mkShell {
               packages = tools;
-              commands = mkCommands "tools" tools ++
-                mkRunCommands "ide" {
+              commands =
+                mkCommands "tools" tools
+                ++ mkRunCommands "ide" {
                   "codium ." = packages.codium;
                   inherit (packages) writeSettings;
                 };
