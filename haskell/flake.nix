@@ -68,7 +68,7 @@
             packages = (ps: [ ps.myPackage ]);
             runtimeDependencies = myPackageDepsBin;
           })
-            hls cabal implicit-hie justStaticExecutable
+            hls cabal justStaticExecutable
             ghcid callCabal2nix haskellPackages hpack;
 
           updateExtensions = justStaticExecutable {
@@ -79,7 +79,6 @@
           tools = [
             ghcid
             hpack
-            implicit-hie
             cabal
             hls
             pkgs.jq
