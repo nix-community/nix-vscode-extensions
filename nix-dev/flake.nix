@@ -1,19 +1,23 @@
 {
-  inputs.flakes.url = "github:deemp/flakes";
+  inputs = {
+    flakes.url = "github:deemp/flakes";
+    nixpkgs.url = "github:nixos/nixpkgs/23ff7d9dc4f3d553939e7bfe0d2667198f993536";
+  };
   outputs = inputs:
     let flakes = inputs.flakes; in
     flakes.makeFlake {
       inputs = {
-        inherit (flakes.all) nixpkgs drv-tools devshell codium workflows flakes-tools;
+        inherit (flakes.all) drv-tools devshell codium workflows flakes-tools;
         inherit flakes;
         haskell = import ../haskell;
+        inherit (inputs) nixpkgs;
       };
       perSystem = { inputs, system }:
         let
           pkgs = inputs.nixpkgs.legacyPackages.${system};
           inherit (inputs.codium.lib.${system}) mkCodium writeSettingsJSON extensionsCommon settingsCommonNix;
           inherit (inputs.devshell.lib.${system}) mkRunCommandsDir mkShell mkCommands;
-          inherit (inputs.drv-tools.lib.${system}) mkShellApps withDescription getExe;
+          inherit (inputs.drv-tools.lib.${system}) mkShellApps getExe;
           inherit (inputs.workflows.lib.${system}) writeWorkflow nixCI os run expr names steps;
           inherit (inputs.flakes-tools.lib.${system}) mkFlakesTools;
 
