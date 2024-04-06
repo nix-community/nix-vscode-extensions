@@ -27,7 +27,6 @@
         "aarch64-linux" = "linux-arm64";
         "x86_64-darwin" = "darwin-x64";
       };
-      platforms = lib.attrsets.genAttrs (builtins.attrValues systemPlatform) (x: x);
     in
     {
       overlays = {
@@ -36,20 +35,19 @@
             pkgs = nixpkgs.legacyPackages.${final.system};
             utils = pkgs.vscode-utils;
             currentPlatform = systemPlatform.${final.system};
-            dropWhile = cond: xs: if __length xs > 0 && cond (lib.lists.take 1 xs) then dropWhile cond (lib.lists.drop 1 xs) else xs;
             isCompatibleVersion = vscodeVersion: engineVersion:
               if lib.strings.hasPrefix "^" engineVersion then lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
               else vscodeVersion == engineVersion;
             # version of VSCode or VSCodium
-            filterByPlatform = { checkVSCodeVersion, vscodeVersion }: (__filter (x:
+            filterByPlatform = { checkVSCodeVersion, vscodeVersion }: (builtins.filter (x:
               (x.platform == universal ||
               x.platform == currentPlatform) &&
               (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)));
             loadGenerated = { needLatest ? true, checkVSCodeVersion ? false, vscodeVersion ? "*", site }:
               lib.pipe site [
                 (x: ./data/cache/${site}${if needLatest then "-latest" else "-release"}.json)
-                __readFile
-                __fromJSON
+                builtins.readFile
+                builtins.fromJSON
                 (filterByPlatform { inherit checkVSCodeVersion vscodeVersion; })
                 (map (extension@{ name, publisher, version, platform, ... }:
                   extension // {
@@ -79,7 +77,7 @@
                         (import ./data/extra-extensions/generated.nix { inherit (pkgs) fetchgit fetchurl fetchFromGitHub dockerTools; })
                     )
                 )
-                (map (extension@{ name, publisher, version, sha256, url, ... }:
+                (map ({ name, publisher, version, sha256, url, ... }:
                   {
                     inherit name;
                     value = utils.buildVscodeMarketplaceExtension {
@@ -93,10 +91,10 @@
                     };
                   }))
                 # append extra extensions fetched from elsewhere to overwrite site extensions
-                (__groupBy ({ value, ... }: value.vscodeExtPublisher))
+                (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
-                (__mapAttrs (_: __foldl' (k: { name, value }: k // { ${name} = value; }) { }))
+                (builtins.mapAttrs (_: builtins.foldl' (k: { name, value }: k // { ${name} = value; }) { }))
                 (import ./overrides.nix { inherit pkgs; })
               ];
             mkSet = attrs@{ checkVSCodeVersion ? false, vscodeVersion ? "*" }: {
@@ -138,7 +136,7 @@
             [
               (x: pkgs.lib.attrsets.recursiveUpdate x
                 {
-                  meta = rec {
+                  meta = {
                     longDescription = ''
                       This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
                       You can override this package and set `vscodeExtensions` to a list of extension
