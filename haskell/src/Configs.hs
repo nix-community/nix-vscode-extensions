@@ -7,12 +7,11 @@ import Control.Lens
 import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withArray, withText)
 import Data.Aeson.Key (toText)
 import Data.Aeson.Lens (members, _String)
-import Data.Aeson.Types (Parser, parseMaybe, typeMismatch)
+import Data.Aeson.Types (Parser, typeMismatch)
 import Data.Default (Default (..))
-import Data.String.Interpolate (i)
-import Data.Text (Text)
+import Data.Text qualified as T
 import Data.Text.Encoding (decodeUtf8)
-import Data.Yaml (ParseException, decodeFileEither)
+import Data.Yaml (decodeFileEither, parseMaybe)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.Generics (Generic)
@@ -199,14 +198,49 @@ mkDefaultAppConfig AppConfig{..} =
     , vscodeMarketplace = vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
     }
 
-readConfig :: FilePath -> IO (AppConfig Identity)
-readConfig f = do
-  c :: Either ParseException (AppConfig Maybe) <- decodeFileEither f
-  c1 <- either (\e -> error [i|Error parsing #{f}: #{e}|]) pure c
-  pure $ mkDefaultAppConfig c1
+-- | A type for printing multiline stuff when using HLS
+newtype Pretty = Pretty String
 
-checkReadConfig :: IO Text
-checkReadConfig = decodeUtf8 . encodePretty defConfig <$> readConfig "config.yaml"
+instance Show Pretty where
+  show :: Pretty -> String
+  show (Pretty s) = s
 
--- >>> checkReadConfig
--- "collectGarbage: false\ndataDir: data\ngarbageCollectorDelay: 30\nlogSeverity: Debug\nmaxMissingTimes: 5\nnRetry: 3\nopenVSX:\n  nThreads: 50\n  pageCount: 5\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\nprocessedLoggerDelay: 2\nprogramTimeout: 20\nqueueCapacity: 200\nrequestResponseTimeout: 100\nretryDelay: 5\nrunN: 1\nvscodeMarketplace:\n  nThreads: 100\n  pageCount: 70\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\n"
+-- >>> prettyConfig
+-- collectGarbage: false
+-- dataDir: data
+-- garbageCollectorDelay: 30
+-- logSeverity: Info
+-- maxMissingTimes: 5
+-- nRetry: 3
+-- openVSX:
+--   nThreads: 100
+--   pageCount: 5
+--   pageSize: 1000
+--   release:
+--     releaseExtensions:
+--     - name: gitlens
+--       publisher: eamodio
+--     - name: rust-analyzer
+--       publisher: rust-lang
+--     - name: rewrap
+--       publisher: stkb
+-- processedLoggerDelay: 2
+-- programTimeout: 900
+-- queueCapacity: 200
+-- requestResponseTimeout: 100
+-- retryDelay: 20
+-- runN: 1
+-- vscodeMarketplace:
+--   nThreads: 100
+--   pageCount: 70
+--   pageSize: 1000
+--   release:
+--     releaseExtensions:
+--     - name: gitlens
+--       publisher: eamodio
+--     - name: rust-analyzer
+--       publisher: rust-lang
+--     - name: rewrap
+--       publisher: stkb
+prettyConfig :: IO Pretty
+prettyConfig = Pretty . either show (T.unpack . decodeUtf8 . encodePretty defConfig . mkDefaultAppConfig) <$> decodeFileEither @(AppConfig Maybe) "config.yaml"
