@@ -174,7 +174,7 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
     select :: a -> a -> a
     select = targetSelect target
     extName = [i|#{publisher}.#{name}|] :: Text
-  logDebug [i|#{START} Requesting info about #{extName} from #{ppTarget target}|]
+  logDebug [i|#{START} Requesting info about #{extName} from #{target}|]
   isFailed <- do
     let
       -- and prepare a url for a target site
@@ -288,11 +288,11 @@ runFetcher FetcherConfig{..} = do
   -- collect extensions from cache that are not present
   traverse_
     logInfo
-    [ [i|#{START} Running a fetcher on #{ppTarget target}|]
-    , [i|#{INFO} From #{ppTarget target} have #{length extensionInfoCached} cached extensions|]
+    [ [i|#{START} Running a fetcher on #{target}|]
+    , [i|#{INFO} From #{target} have #{length extensionInfoCached} cached extensions|]
     , [i|#{INFO} There are #{length extensionConfigsMissing} new extension configs.|]
-    , [i|#{INFO} From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{ppTarget target}.|]
-    , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{ppTarget target}|]
+    , [i|#{INFO} From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{target}.|]
+    , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{target}|]
     ]
 
   -- we prepare shared queues and variables
@@ -357,7 +357,7 @@ runFetcher FetcherConfig{..} = do
     -- even if there are some errors
     -- we want to finally append the info about the newly fetched extensions to the cache
     `finally` do
-      logInfo [i|#{START} Caching updated info about extensions from #{ppTarget target}|]
+      logInfo [i|#{START} Caching updated info about extensions from #{target}|]
       -- we combine into a sorted list the cached info and the new info that we read from a file
       extSorted <-
         DL.sortBy (\x y -> compare (mkKeyInfo x) (mkKeyInfo y))
@@ -375,11 +375,11 @@ runFetcher FetcherConfig{..} = do
             BS.hPutStr h "]"
         )
         `logAndForwardError` "when writing extensions to file"
-      logInfo [i|#{FINISH} Caching updated info about extensions from #{ppTarget target}|]
+      logInfo [i|#{FINISH} Caching updated info about extensions from #{target}|]
       extProcessedNFinal' <- readTVarIO extProcessedNFinal
       extFailedN' <- readTVarIO extFailedN
       logInfo [i|Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
-      logInfo [i|#{FINISH} Running a fetcher on #{ppTarget target}|]
+      logInfo [i|#{FINISH} Running a fetcher on #{target}|]
 
 -- | Retry an action a given number of times with a given delay and log about its status
 retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, AppConfig') => Int -> Text -> m b -> m b
@@ -442,7 +442,7 @@ getConfigs :: AppConfig' => Target -> MyLogger [ExtensionConfig]
 getConfigs target =
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
-   in retry_ nRetry [i|Collecting the extension configs from #{ppTarget target}|] do
+   in retry_ nRetry [i|Collecting the extension configs from #{target}|] do
         let
           pageCount = siteConfig.pageCount
           pageSize = siteConfig.pageSize
@@ -468,7 +468,7 @@ getConfigs target =
         pages <- traverse responseBody <$> liftIO (forConcurrently [1 .. pageCount] (mkEitherRequest target . requestExtensionsList))
         case pages of
           -- if we were unsuccessful, we need to retry
-          Left l -> logError [i|#{FAIL} Getting info about extensions from #{ppTarget target}|] >> error [i|#{l}|]
+          Left l -> logError [i|#{FAIL} Getting info about extensions from #{target}|] >> error [i|#{l}|]
           Right r -> do
             pure $
               r
@@ -514,7 +514,7 @@ getConfigsRelease target = do
   logInfo [i|#{START} Collecting the release versions of extensions|]
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
-   in retry_ nRetry [i|Collecting the release extension configs from #{ppTarget target}|] do
+   in retry_ nRetry [i|Collecting the release extension configs from #{target}|] do
         let
           extensionCriteria =
             siteConfig.release.releaseExtensions
@@ -538,7 +538,7 @@ getConfigsRelease target = do
         pages <- responseBody <$> liftIO (mkEitherRequest target requestExtensionsList)
         case pages of
           -- if we were unsuccessful, we need to retry
-          Left l -> logError [i|#{FAIL} Getting info about extensions from #{ppTarget target}|] >> error [i|#{l}|]
+          Left l -> logError [i|#{FAIL} Getting info about extensions from #{target}|] >> error [i|#{l}|]
           Right r -> do
             -- liftIO $ encodeFile "tmp/release.json" r
             pure $
@@ -596,7 +596,7 @@ getConfigsRelease target = do
 runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger ([ExtensionConfig], [ExtensionConfig])
 runCrawler CrawlerConfig{..} =
   do
-    logInfo [i|#{START} Updating info about extensions from #{ppTarget target}.|]
+    logInfo [i|#{START} Updating info about extensions from #{target}.|]
     -- we select the target crawler and run it
     -- on release configs
     configsRelease <- getConfigsRelease target
@@ -607,7 +607,7 @@ runCrawler CrawlerConfig{..} =
     -- on all configs
     configs <- getConfigs target
 
-    logInfo [i|#{FINISH} Updating info about extensions from #{ppTarget target}.|]
+    logInfo [i|#{FINISH} Updating info about extensions from #{target}.|]
     -- finally, we return the configs
     pure (configs, configsRelease)
 
@@ -635,7 +635,7 @@ processTarget ProcessTargetConfig{..} =
     runFetcher FetcherConfig{extConfigs = configs, ..}
       `logAndForwardError` "when running fetcher for latest extensions"
     -- in case of errors, rethrow an exception
-    `logAndForwardError` [i|when requesting #{ppTarget target}|]
+    `logAndForwardError` [i|when requesting #{target}|]
 
 _CONFIG_ENV_VAR :: String
 _CONFIG_ENV_VAR = "CONFIG"
@@ -668,7 +668,7 @@ main = withUtf8 do
                     _myLoggerT
                       ( retry_
                           ?config.runN
-                          [i|Processing #{showTarget target}|]
+                          [i|Processing #{target}|]
                           ( processTarget
                               ProcessTargetConfig
                                 { dataDir = dataDir

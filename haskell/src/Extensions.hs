@@ -40,6 +40,10 @@ targetSelect target f g =
 ppTarget :: Target -> Text
 ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
 
+instance Show Target where
+  show :: Target -> String
+  show = T.unpack . ppTarget
+
 data Flags = Flags'Validated | Flags'Public | Flags'Preview | Flags'Verified | Flags'Trial deriving (Enum, Bounded)
 
 _Flags :: Prism' Text Flags
