@@ -75,6 +75,7 @@ dependencies:
 - megaparsec
 - yaml
 - data-default
+- versions
 
 ghc-options:
 - -Wall
