@@ -40,7 +40,7 @@ import Data.List qualified as DL
 import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
 import Data.String.Interpolate (i)
-import Data.Text (Text, pack, strip)
+import Data.Text (Text, pack)
 import Data.Text qualified as Text
 import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
@@ -174,8 +174,7 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
   logDebug [i|#{START} Requesting info about #{extName} from #{ppTarget target}|]
   isFailed <- do
     let
-      -- version = fromJust extVersion
-      -- and can prepare a url for a target site
+      -- and prepare a url for a target site
       platformInfix :: Text =
         ( case platform of
             PUniversal -> ""
@@ -193,22 +192,26 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
           [i|https://open-vsx.org/api/#{publisher}/#{name}#{platformInfix}/#{version}/file/#{extName}-#{version}#{platformSuffix}.vsix|]
 
     logDebug [i|#{START} Fetching #{extName} from #{url}|]
-    -- and let nix fetch a file from that url into nix/store
-    -- nix produces a SHA (we extract it via `jq`)
+    -- let nix fetch a file from that url
     let timeout' = ?config.requestResponseTimeout
-    (_, strip -> sha256, errText) <- shellStrictWithErr [i|nix store prefetch-file --timeout #{timeout'} --json #{url} --name #{extName}-#{version}-#{platform} | jq -r .hash|] empty
+    (_, json, errText) <- shellStrictWithErr [i|nix store prefetch-file --timeout #{timeout'} --json #{url} --name #{extName}-#{version}-#{platform}|] empty
+    let sha256Maybe = json ^? key "hash" . _String
     -- if stderr was non-empty, there was an error
     if not (Text.null errText)
       then do
         logDebug [i|#{FAIL} Fetching #{extName} from #{url}. The stderr:\n#{errText}|]
         pure True
-      else do
-        logInfo [i|#{FINISH} Fetching extension #{extName} from #{url}|]
-        -- when everything is ok, we write the extension info into a queue
-        -- this is to let other threads read from it
-        liftIO $ atomically $ writeTBMQueue extInfoQueue $ ExtensionInfo{..}
-        pure False
-  -- if at some point we failed to obtain an extension's info,
+      else case sha256Maybe of
+        Nothing -> do
+          logDebug [i|#{FAIL} Fetching #{extName} from #{url}. Could not parse JSON: #{json}|]
+          pure True
+        Just sha256 -> do
+          logInfo [i|#{FINISH} Fetching extension #{extName} from #{url}|]
+          -- when everything is ok, we write the extension info into a queue
+          -- this is to let other threads read from it
+          liftIO $ atomically $ writeTBMQueue extInfoQueue $ ExtensionInfo{..}
+          pure False
+  -- if at some point we failed to obtain an extension info,
   -- we write its config into a queue for failed configs
   when
     isFailed
