@@ -6,9 +6,6 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
 {-# HLINT ignore "Redundant bracket" #-}
-{-# HLINT ignore "Use lambda-case" #-}
-{-# HLINT ignore "Use bimap" #-}
-{-# HLINT ignore "Redundant lambda" #-}
 {- FOURMOLU_ENABLE -}
 
 module Main (main) where
@@ -478,10 +475,10 @@ getConfigs target =
                                             let engineVersion =
                                                   properties
                                                     ^? traversed
-                                                    . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.Engine"))
-                                                    . key "value"
-                                                    . _String
-                                                    . _EngineVersion
+                                                      . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.Engine"))
+                                                      . key "value"
+                                                      . _String
+                                                      . _EngineVersion
                                                 missingTimes = 0
                                             guard (isJust engineVersion)
                                             pure ExtensionConfig{engineVersion = fromJust engineVersion, ..}
@@ -548,15 +545,15 @@ getConfigsRelease target = do
                                                 let engineVersion =
                                                       properties
                                                         ^? traversed
-                                                        . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.Engine"))
-                                                        . key "value"
-                                                        . _String
-                                                        . _EngineVersion
+                                                          . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.Engine"))
+                                                          . key "value"
+                                                          . _String
+                                                          . _EngineVersion
                                                     missingTimes = 0
                                                     preRelease =
                                                       properties
                                                         ^? traversed
-                                                        . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
+                                                          . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
                                                 guard (isNothing preRelease && isJust engineVersion)
                                                 pure ExtensionConfig{engineVersion = fromJust engineVersion, ..}
                                             )
@@ -593,7 +590,7 @@ runCrawler CrawlerConfig{..} =
     configs <- getConfigs target
     -- we normalize the configs by lowercasing the extension name and publisher
     let
-      normalizeConfig = \config -> config & #name . #_name %~ Text.toLower & #publisher . #_publisher %~ Text.toLower
+      normalizeConfig config = config & #name . #_name %~ Text.toLower & #publisher . #_publisher %~ Text.toLower
       configsNormalized = normalizeConfig <$> configs
       configsReleaseNormalized = normalizeConfig <$> configsRelease
 

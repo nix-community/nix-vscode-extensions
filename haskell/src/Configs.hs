@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
+
 module Configs where
 
 import Colog
@@ -6,7 +7,7 @@ import Control.Lens
 import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withArray, withText)
 import Data.Aeson.Key (toText)
 import Data.Aeson.Lens (members, _String)
-import Data.Aeson.Types (parseMaybe, typeMismatch, Parser)
+import Data.Aeson.Types (Parser, parseMaybe, typeMismatch)
 import Data.Default (Default (..))
 import Data.String.Interpolate (i)
 import Data.Text (Text)
@@ -205,7 +206,7 @@ readConfig f = do
   pure $ mkDefaultAppConfig c1
 
 checkReadConfig :: IO Text
-checkReadConfig = do readConfig "config.yaml" <&> encodePretty defConfig <&> decodeUtf8
+checkReadConfig = decodeUtf8 . encodePretty defConfig <$> readConfig "config.yaml"
 
 -- >>> checkReadConfig
 -- "collectGarbage: false\ndataDir: data\ngarbageCollectorDelay: 30\nlogSeverity: Debug\nmaxMissingTimes: 5\nnRetry: 3\nopenVSX:\n  nThreads: 50\n  pageCount: 5\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\nprocessedLoggerDelay: 2\nprogramTimeout: 20\nqueueCapacity: 200\nrequestResponseTimeout: 100\nretryDelay: 5\nrunN: 1\nvscodeMarketplace:\n  nThreads: 100\n  pageCount: 70\n  pageSize: 1000\n  release:\n    releaseExtensions:\n    - name: gitlens\n      publisher: eamodio\n    - name: rust-analyzer\n      publisher: rust-lang\n"
