@@ -17,7 +17,7 @@ import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
-import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (<&>), (^.), (^..), (^?), _Just)
+import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (<&>), (^.), (^..), (^?), _Just)
 import Control.Monad (guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
@@ -164,8 +164,8 @@ getExtension :: AppConfig' => Target -> TBMQueue ExtensionInfo -> TBMQueue Exten
 getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN extConfig@ExtensionConfig{platform, lastUpdated, missingTimes, engineVersion, version} = do
   let
     -- select an action for a target
-    publisher = extConfig.publisher & #_publisher %~ Text.toLower
-    name = extConfig.name & #_name %~ Text.toLower
+    publisher = extConfig.publisher
+    name = extConfig.name
     select :: a -> a -> a
     select = targetSelect target
     extName = [i|#{publisher}.#{name}|] :: Text
@@ -589,15 +589,10 @@ runCrawler CrawlerConfig{..} =
 
     -- on all configs
     configs <- getConfigs target
-    -- we normalize the configs by lowercasing the extension name and publisher
-    let
-      normalizeConfig config = config & #name . #_name %~ Text.toLower & #publisher . #_publisher %~ Text.toLower
-      configsNormalized = normalizeConfig <$> configs
-      configsReleaseNormalized = normalizeConfig <$> configsRelease
 
     logInfo [i|#{FINISH} Updating info about extensions from #{ppTarget target}.|]
     -- finally, we return the configs
-    pure (configsNormalized, configsReleaseNormalized)
+    pure (configs, configsRelease)
 
 processTarget :: AppConfig' => ProcessTargetConfig IO -> MyLogger ()
 processTarget ProcessTargetConfig{..} =
@@ -613,12 +608,12 @@ processTarget ProcessTargetConfig{..} =
       nRetry = ?config.nRetry
 
     -- we first run a crawler to get the extension configs
-    (configsNormalized, configsReleaseNormalized) <- runCrawler CrawlerConfig{..}
+    (configs, configsRelease) <-
+      runCrawler CrawlerConfig{..}
 
     -- then, we run a fetcher
-    runFetcher FetcherConfig{extConfigs = configsReleaseNormalized, mkTargetJSON = mkTargetReleaseJSON, ..}
-    runFetcher FetcherConfig{extConfigs = configsNormalized, ..}
-
+    runFetcher FetcherConfig{extConfigs = configsRelease, mkTargetJSON = mkTargetReleaseJSON, ..}
+    runFetcher FetcherConfig{extConfigs = configs, ..}
     -- in case of errors, rethrow an exception
     `catchAny` \x -> logError [i|Got an exception when requesting #{ppTarget target}:\n #{x}|] >> throw x
 
