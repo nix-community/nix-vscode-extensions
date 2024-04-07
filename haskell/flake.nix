@@ -7,7 +7,6 @@
     haskell-flake.url = "github:srid/haskell-flake";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-    fourmolu-nix.url = "github:jedimahdi/fourmolu-nix";
   };
 
   outputs =
@@ -17,7 +16,6 @@
       imports = [
         inputs.haskell-flake.flakeModule
         inputs.treefmt-nix.flakeModule
-        inputs.fourmolu-nix.flakeModule
       ];
       perSystem =
         {
@@ -91,26 +89,9 @@
           # source tree was auto formatted.
           treefmt.config = {
             projectRootFile = "flake.nix";
-
-            programs.fourmolu = {
-              enable = true;
-              package = config.fourmolu.wrapper;
-            };
+            programs.fourmolu.enable = true;
             programs.nixfmt-rfc-style.enable = true;
-            programs.cabal-fmt.enable = true;
             programs.hlint.enable = true;
-          };
-
-          fourmolu.settings = {
-            indentation = 2;
-            comma-style = "leading";
-            record-brace-space = true;
-            indent-wheres = true;
-            import-export-style = "diff-friendly";
-            respectful = true;
-            haddock-style = "multi-line";
-            newlines-between-decls = 1;
-            extensions = [ "ImportQualifiedPost" ];
           };
 
           # Default package & app.
