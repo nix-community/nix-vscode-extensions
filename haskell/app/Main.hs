@@ -18,7 +18,7 @@ import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
 import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (<&>), (^.), (^..), (^?), _Just)
-import Control.Monad (guard, unless, void, when)
+import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
 import Data.Aeson.Lens (key, nth, _Array, _String)
@@ -52,6 +52,7 @@ import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Requests
 import System.Environment (lookupEnv)
+import Turtle (Alternative (..), mktree, rm)
 import Turtle.Bytes (shellStrictWithErr)
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
@@ -242,10 +243,11 @@ runFetcher FetcherConfig{..} = do
   let
     fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
     failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
-  -- if don't exist, we create the directories for files with fetched, failed, and cached extensions
-  traverse_ (\x -> mktree [i|#{x}|]) [fetchedTmpDir, failedTmpDir, cacheDir]
-  -- if there were previous files with given names, we remove them
-  traverse_ (\x -> let f = [i|#{mkTargetJSON x}|] in testfile f >>= (`when` rm f)) [fetchedTmpDir, failedTmpDir]
+  -- create directories for files with fetched, failed, and cached extensions
+  -- just in case these directories don't exist
+  forM_ [fetchedTmpDir, failedTmpDir, cacheDir] mktree
+  -- if there were target files, remove them
+  forM_ [fetchedTmpDir, failedTmpDir] (rm . mkTargetJSON)
 
   let extensionInfoCachedJSON = mkTargetJSON cacheDir
 
