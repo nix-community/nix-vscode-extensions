@@ -44,6 +44,7 @@
                   ./updater.cabal
                   ./LICENSE
                   ./README.md
+                  ./CHANGELOG.md
                 ];
               }
             );
