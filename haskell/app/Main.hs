@@ -158,6 +158,9 @@ processedLogger total processed = flip fix 0 $ \ret n -> do
     )
     p
 
+logAndForwardError :: MyLogger a -> String -> MyLogger a
+logAndForwardError action message = action `catchAny` \error' -> logError [i|Error #{message}:\n#{error'}|] >> throw error'
+
 -- | Get an extension from a target site and pass info about it to other threads
 --
 -- We do this by using the thread-safe data structures like special queues and vars
@@ -196,6 +199,7 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
     (_, decodeUtf8 -> stdout', errText) <-
       let command = [i|nix store prefetch-file --timeout #{timeout'} --json #{url} --name #{extName}-#{version}-#{platform}|]
        in shellStrictWithErr command empty
+            `logAndForwardError` [i|during prefetch-file: #{command}|]
     let sha256Maybe = stdout' ^? key "hash" . _String
     -- if stderr was non-empty, there was an error
     if not (BS.null errText)
@@ -311,12 +315,16 @@ runFetcher FetcherConfig{..} = do
       id
       [ -- a logger of info about the number of successfully processed extensions
         processedLogger numberExtensionConfigsMissing extProcessedN
+          `logAndForwardError` [i|in "processed" logger thread|]
       , -- a logger that writes the info about successfully fetched extensions into a file
         extLogger fetchedExtensionInfoFile extInfoQueue
+          `logAndForwardError` [i|in "fetched" logger thread|]
       , -- a logger that writes the info about failed extensions into a file
         extLogger failedExtensionConfigFile extFailedConfigQueue
+          `logAndForwardError` [i|in "failed" logger thread|]
       , -- a garbage collector
         garbageCollector collectGarbage
+          `logAndForwardError` [i|in "garbage collector" thread|]
       , -- and an action that uses a thread pool to fetch the extensions
         -- it's more efficient than spawning a thread per each element of a list with extensions' configs
         withRunInIO
@@ -329,6 +337,7 @@ runFetcher FetcherConfig{..} = do
                       extensionConfigsMissing'
                   )
           )
+          `logAndForwardError` [i|in "worker" threads|]
           `finally` do
             -- when all configs are processed, we need to close both queues
             -- this will let loggers know that they should quit
@@ -355,12 +364,15 @@ runFetcher FetcherConfig{..} = do
           <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
       -- after that, we compactly write the extensions info
 
-      liftIO $ withFile extensionInfoCachedJSON WriteMode $ \h -> do
-        BS.hPutStr h "[ "
-        case extSorted of
-          [] -> pure ()
-          xs -> encodeFirstList h xs
-        BS.hPutStr h "]"
+      liftIO
+        ( withFile extensionInfoCachedJSON WriteMode $ \h -> do
+            BS.hPutStr h "[ "
+            case extSorted of
+              [] -> pure ()
+              xs -> encodeFirstList h xs
+            BS.hPutStr h "]"
+        )
+        `logAndForwardError` "when writing extensions to file"
       logInfo [i|#{FINISH} Caching updated info about extensions from #{ppTarget target}|]
       extProcessedNFinal' <- readTVarIO extProcessedNFinal
       extFailedN' <- readTVarIO extFailedN
@@ -613,12 +625,15 @@ processTarget ProcessTargetConfig{..} =
     -- we first run a crawler to get the extension configs
     (configs, configsRelease) <-
       runCrawler CrawlerConfig{..}
+        `logAndForwardError` "when running crawler"
 
     -- then, we run a fetcher
     runFetcher FetcherConfig{extConfigs = configsRelease, mkTargetJSON = mkTargetReleaseJSON, ..}
+      `logAndForwardError` "when running fetcher for release extensions"
     runFetcher FetcherConfig{extConfigs = configs, ..}
+      `logAndForwardError` "when running fetcher for latest extensions"
     -- in case of errors, rethrow an exception
-    `catchAny` \x -> logError [i|Got an exception when requesting #{ppTarget target}:\n #{x}|] >> throw x
+    `logAndForwardError` [i|when requesting #{ppTarget target}|]
 
 _CONFIG_ENV_VAR :: String
 _CONFIG_ENV_VAR = "CONFIG"
