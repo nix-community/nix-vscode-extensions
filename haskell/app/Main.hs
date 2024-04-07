@@ -205,11 +205,11 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
     -- if stderr was non-empty, there was an error
     if not (BS.null errText)
       then do
-        logDebug [i|#{FAIL} Fetching #{extName} from #{url}. The stderr:\n#{errText}|]
+        logInfo [i|#{FAIL} Fetching #{extName} from #{url}. The stderr:\n#{errText}|]
         pure True
       else case sha256Maybe of
         Nothing -> do
-          logDebug [i|#{FAIL} Fetching #{extName} from #{url}. Could not parse JSON: #{json}|]
+          logInfo [i|#{FAIL} Fetching #{extName} from #{url}. Could not parse JSON: #{stdout'}|]
           pure True
         Just sha256 -> do
           logInfo [i|#{FINISH} Fetching extension #{extName} from #{url}|]
