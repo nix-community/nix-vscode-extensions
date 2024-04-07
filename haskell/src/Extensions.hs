@@ -8,6 +8,7 @@ import Data.Aeson (FromJSON (..), Options (unwrapUnaryRecords), ToJSON (toJSON),
 import Data.Aeson.Lens (_String)
 import Data.Aeson.Types (parseFail)
 import Data.Aeson.Types qualified
+import Data.Functor (void)
 import Data.Generics.Labels ()
 import Data.Hashable (Hashable)
 import Data.Maybe (fromJust)
@@ -17,12 +18,13 @@ import Data.Text (Text, unpack)
 import Data.Text qualified as T
 import Data.Text qualified as Text
 import Data.Time (UTCTime)
-import Data.Versions (SemVer (..), prettySemVer, semver, semver')
+import Data.Versions (SemVer (..), prettySemVer)
 import Data.Void (Void)
 import GHC.Generics (Generic)
-import Text.Megaparsec (Parsec, choice, (<|>))
-import Text.Megaparsec qualified as TM (parseMaybe)
-import Text.Megaparsec.Char (string)
+import Text.Megaparsec (Parsec, choice, skipMany, (<|>))
+import Text.Megaparsec qualified as TM (parse, parseMaybe)
+import Text.Megaparsec.Char (asciiChar, string)
+import Text.Megaparsec.Char.Lexer (decimal)
 
 -- | Possible targets
 data Target = VSCodeMarketplace | OpenVSX deriving (Eq)
@@ -155,6 +157,35 @@ instance Show VersionModifier where
 instance Show EngineVersion where
   show = unpack . (_EngineVersion #)
 
+type Parser = Parsec Void Text
+
+parseVersion :: Parser Version
+parseVersion = do
+  _svMajor <- decimal
+  void $ string "."
+  _svMinor <- decimal
+  void $ string "."
+  _svPatch <- decimal
+  pure $ Version SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}
+
+-- | Parse 'EngineVersion'
+parseEngineVersion :: Parser EngineVersion
+parseEngineVersion =
+  (string "*" >> pure defaultEngineVersion)
+    <|> do
+      _modifier <-
+        choice
+          [ Vgeq <$ (string "^" <|> string ">=")
+          , Veq <$ string ""
+          ]
+      _svMajor <- decimal <|> (0 <$ string "x")
+      void $ string "."
+      _svMinor <- decimal <|> (0 <$ string "x")
+      void $ string "."
+      _svPatch <- decimal <|> (0 <$ string "x")
+      skipMany asciiChar
+      pure EngineVersion{_version = SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}, ..}
+
 -- | Examples of versions for VSCode engine used in extensions
 versions :: [Text]
 versions =
@@ -175,28 +206,13 @@ versions =
 -- >>> versionsParsed
 -- [Just ^0.0.0,Just ^0.10.0,Just ^1.27.0,Just ^0.10.0,Just ^0.10.0,Just ^0.9.0,Just 0.1.0,Just 1.57.0,Just 1.0.0,Just ^0.0.0]
 versionsParsed :: [Maybe EngineVersion]
-versionsParsed = TM.parseMaybe parseVersion' <$> versions
-
-type Parser = Parsec Void Text
-
--- | Parse 'EngineVersion'
-parseVersion' :: Parser EngineVersion
-parseVersion' =
-  (string "*" >> pure defaultEngineVersion)
-    <|> do
-      _modifier <-
-        choice
-          [ Vgeq <$ (string "^" <|> string ">=")
-          , Veq <$ string ""
-          ]
-      _version <- semver'
-      pure EngineVersion{..}
+versionsParsed = TM.parseMaybe parseEngineVersion <$> versions
 
 _EngineVersion :: Prism' Text EngineVersion
 _EngineVersion = prism' embed_ match_
  where
   embed_ EngineVersion{_version = SemVer{..}, ..} = [i|#{review _VersionModifier _modifier}#{_svMajor}.#{_svMinor}.#{_svPatch}|]
-  match_ = TM.parseMaybe parseVersion'
+  match_ = TM.parseMaybe parseEngineVersion
 
 aesonOptions :: Options
 aesonOptions = defaultOptions{unwrapUnaryRecords = True}
@@ -212,19 +228,21 @@ instance ToJSON LastUpdated where toJSON = genericToJSON aesonOptions
 
 instance FromJSON Version where
   parseJSON :: Value -> Data.Aeson.Types.Parser Version
-  parseJSON = withText "SemVer" $ either (parseFail . show) (pure . Version) . semver
+  parseJSON = withText "SemVer" $ either (parseFail . show) pure . TM.parse parseVersion "SemVer"
 
 instance ToJSON Version where
   toJSON :: Version -> Value
   toJSON v = String $ prettySemVer v._version
 
 instance FromJSON EngineVersion where
-  parseJSON = withText "Engine version" $ \t -> do
-    let t' = t ^? _EngineVersion
+  parseJSON :: Value -> Data.Aeson.Types.Parser EngineVersion
+  parseJSON = withText "Engine version" $ \engineVersion -> do
+    let t' = engineVersion ^? _EngineVersion
     guard (has _Just t')
     pure (fromJust t')
 
 instance ToJSON EngineVersion where
+  toJSON :: EngineVersion -> Value
   toJSON = (_String #) . (_EngineVersion #)
 
 -- | A simple config that is enough to fetch an extension
