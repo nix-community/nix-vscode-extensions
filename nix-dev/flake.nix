@@ -49,7 +49,7 @@
               scripts = (
                 mkShellApps {
                   updateExtensions = {
-                    text = getExe inputs.haskell.packages.${system}.default;
+                    text = "${getExe inputs.haskell.packages.${system}.default} $@";
                     description = "Update extensions";
                   };
                   updateExtraExtensions = {
