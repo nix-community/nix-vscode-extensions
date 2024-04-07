@@ -11,17 +11,17 @@ import Data.Aeson.Types qualified
 import Data.Functor (void)
 import Data.Generics.Labels ()
 import Data.Hashable (Hashable)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 import Data.String (IsString)
 import Data.String.Interpolate (i)
 import Data.Text (Text, unpack)
 import Data.Text qualified as T
 import Data.Text qualified as Text
 import Data.Time (UTCTime)
-import Data.Versions (SemVer (..), prettySemVer)
+import Data.Versions (SemVer (..), prettySemVer, semver')
 import Data.Void (Void)
 import GHC.Generics (Generic)
-import Text.Megaparsec (Parsec, choice, skipMany, (<|>))
+import Text.Megaparsec (Parsec, choice, many, (<|>))
 import Text.Megaparsec qualified as TM (parse, parseMaybe)
 import Text.Megaparsec.Char (asciiChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
@@ -106,6 +106,7 @@ data Platform
   deriving (Generic, Eq, Hashable, Ord, Enum, Bounded)
 
 instance FromJSON Platform where
+  parseJSON :: Value -> Data.Aeson.Types.Parser Platform
   parseJSON (String s) =
     case s ^? _Platform of
       Just s' -> pure s'
@@ -159,6 +160,20 @@ instance Show EngineVersion where
 
 type Parser = Parsec Void Text
 
+versions :: [Text]
+versions =
+  [ "2022.09.290700"
+  , "23.3.0-canary-open-0313-1900"
+  , "1.0.0-beta.1"
+  , "1.13.1712347770"
+  , "0.1.8+vizcar"
+  ]
+
+-- | Parse a SemVer-like 'Version'.
+--
+-- Allow leading zeros.
+-- 
+-- >>> TM.parseMaybe parseVersion <$> versions
 parseVersion :: Parser Version
 parseVersion = do
   _svMajor <- decimal
@@ -166,9 +181,29 @@ parseVersion = do
   _svMinor <- decimal
   void $ string "."
   _svPatch <- decimal
-  pure $ Version SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}
+  rest <- many asciiChar
+  let semVer = SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}
+  pure $ Version $ fromMaybe semVer (TM.parseMaybe semver' (prettySemVer semVer <> T.pack rest))
+
+-- | Examples of versions for VSCode engine used in extensions
+engineVersions :: [Text]
+engineVersions =
+  [ "^0.0.0"
+  , "^0.10.x"
+  , "^1.27.0-insider"
+  , ">=0.10.0"
+  , ">=0.10.x"
+  , ">=0.9.0-pre.1"
+  , "0.1.x"
+  , "1.57.0-insider"
+  , "1.x.x"
+  , "*"
+  ]
 
 -- | Parse 'EngineVersion'
+-- 
+-- >>> TM.parseMaybe parseEngineVersion <$> engineVersions
+-- [Just ^0.0.0,Just ^0.10.0,Just ^1.27.0-insider,Just ^0.10.0,Just ^0.10.0,Just ^0.9.0-pre.1,Just 0.1.0,Just 1.57.0-insider,Just 1.0.0,Just ^0.0.0]
 parseEngineVersion :: Parser EngineVersion
 parseEngineVersion =
   (string "*" >> pure defaultEngineVersion)
@@ -183,35 +218,14 @@ parseEngineVersion =
       _svMinor <- decimal <|> (0 <$ string "x")
       void $ string "."
       _svPatch <- decimal <|> (0 <$ string "x")
-      skipMany asciiChar
-      pure EngineVersion{_version = SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}, ..}
-
--- | Examples of versions for VSCode engine used in extensions
-versions :: [Text]
-versions =
-  [ "^0.0.0"
-  , "^0.10.x"
-  , "^1.27.0-insider"
-  , ">=0.10.0"
-  , ">=0.10.x"
-  , ">=0.9.0-pre.1"
-  , "0.1.x"
-  , "1.57.0-insider"
-  , "1.x.x"
-  , "*"
-  ]
-
--- | Parsed versions
---
--- >>> versionsParsed
--- [Just ^0.0.0,Just ^0.10.0,Just ^1.27.0,Just ^0.10.0,Just ^0.10.0,Just ^0.9.0,Just 0.1.0,Just 1.57.0,Just 1.0.0,Just ^0.0.0]
-versionsParsed :: [Maybe EngineVersion]
-versionsParsed = TM.parseMaybe parseEngineVersion <$> versions
+      rest <- many asciiChar
+      let semVer = SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}
+      pure EngineVersion{_version = fromMaybe semVer (TM.parseMaybe semver' (prettySemVer semVer <> T.pack rest)), ..}
 
 _EngineVersion :: Prism' Text EngineVersion
 _EngineVersion = prism' embed_ match_
  where
-  embed_ EngineVersion{_version = SemVer{..}, ..} = [i|#{review _VersionModifier _modifier}#{_svMajor}.#{_svMinor}.#{_svPatch}|]
+  embed_ EngineVersion{..} = [i|#{review _VersionModifier _modifier}#{prettySemVer _version}|]
   match_ = TM.parseMaybe parseEngineVersion
 
 aesonOptions :: Options
