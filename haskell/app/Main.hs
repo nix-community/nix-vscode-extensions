@@ -295,7 +295,7 @@ runFetcher FetcherConfig{..} = do
     , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{ppTarget target}|]
     ]
 
-  -- we prepare the shared queues and variables
+  -- we prepare shared queues and variables
   extInfoQueue <- liftIO $ newTBMQueueIO queueCapacity
   extFailedConfigQueue <- liftIO $ newTBMQueueIO queueCapacity
   -- this is a counter of processed extensions
@@ -308,7 +308,7 @@ runFetcher FetcherConfig{..} = do
 
   unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
 
-  -- as well as file names where threads will write to
+  -- we prepare file names where threads will write to
   let fetchedExtensionInfoFile = mkTargetJSON fetchedTmpDir
       failedExtensionConfigFile = mkTargetJSON failedTmpDir
 
