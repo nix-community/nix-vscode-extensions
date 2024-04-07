@@ -48,34 +48,34 @@ default-extensions:
 - ViewPatterns
 
 dependencies:
+- aeson
+- async
+- async-pool
 - base >= 4.7 && < 5
+- bytestring
+- co-log
+- co-log-concurrent
+- data-default
+- generic-lens
+- hashable
 - http-client
 - http-conduit
-- aeson
-- bytestring
-- string-interpolate
-- lens-aeson
-- lens
-- text
-- time
-- unordered-containers
-- async
-- generic-lens
-- turtle
 - http-types
-- async-pool
-- co-log-concurrent
-- co-log
+- lens
+- lens-aeson
+- megaparsec
+- mtl
 - stm
 - stm-chans
-- hashable
-- mtl
-- vector
+- string-interpolate
+- text
+- time
+- turtle
 - unliftio
-- megaparsec
-- yaml
-- data-default
+- unordered-containers
+- vector
 - versions
+- yaml
 
 ghc-options:
 - -Wall
