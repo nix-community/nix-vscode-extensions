@@ -39,6 +39,7 @@ import Data.String (IsString (fromString))
 import Data.String.Interpolate (i)
 import Data.Text (Text, pack)
 import Data.Text qualified as Text
+import Data.Text.Encoding (decodeUtf8)
 import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
@@ -51,7 +52,7 @@ import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Requests
 import System.Environment (lookupEnv)
-import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
+import Turtle.Bytes (shellStrictWithErr)
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 import Main.Utf8 (withUtf8)
@@ -192,10 +193,12 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
     logDebug [i|#{START} Fetching #{extName} from #{url}|]
     -- let nix fetch a file from that url
     let timeout' = ?config.requestResponseTimeout
-    (_, json, errText) <- shellStrictWithErr [i|nix store prefetch-file --timeout #{timeout'} --json #{url} --name #{extName}-#{version}-#{platform}|] empty
-    let sha256Maybe = json ^? key "hash" . _String
+    (_, decodeUtf8 -> stdout', errText) <-
+      let command = [i|nix store prefetch-file --timeout #{timeout'} --json #{url} --name #{extName}-#{version}-#{platform}|]
+       in shellStrictWithErr command empty
+    let sha256Maybe = stdout' ^? key "hash" . _String
     -- if stderr was non-empty, there was an error
-    if not (Text.null errText)
+    if not (BS.null errText)
       then do
         logDebug [i|#{FAIL} Fetching #{extName} from #{url}. The stderr:\n#{errText}|]
         pure True
