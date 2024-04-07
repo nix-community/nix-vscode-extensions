@@ -89,6 +89,7 @@ library
     , unordered-containers
     , vector
     , versions
+    , with-utf8
     , yaml
   default-language: Haskell2010
 
@@ -155,5 +156,6 @@ executable updater
     , updater
     , vector
     , versions
+    , with-utf8
     , yaml
   default-language: Haskell2010

@@ -75,6 +75,7 @@ dependencies:
 - unordered-containers
 - vector
 - versions
+- with-utf8
 - yaml
 
 ghc-options:

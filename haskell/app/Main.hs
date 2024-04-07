@@ -54,6 +54,7 @@ import System.Environment (lookupEnv)
 import Turtle (Alternative (..), mktree, rm, shellStrictWithErr, testfile)
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
+import Main.Utf8 (withUtf8)
 
 -- | Select a base API URL depending on the target
 apiUrl :: Target -> String
@@ -625,7 +626,7 @@ _CONFIG_ENV_VAR :: String
 _CONFIG_ENV_VAR = "CONFIG"
 
 main :: IO ()
-main = do
+main = withUtf8 do
   -- we'll let logs be written to stdout as soon as they come
   hSetBuffering stdout NoBuffering
   config <- lookupEnv _CONFIG_ENV_VAR
