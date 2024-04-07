@@ -120,6 +120,15 @@
                       )
                   )
                 )
+                # lowercase all names and publishers
+                (map (
+                  extension@{ name, publisher, ... }:
+                  extension
+                  // {
+                    name = lib.toLower name;
+                    publisher = lib.toLower publisher;
+                  }
+                ))
                 (map (
                   {
                     name,
