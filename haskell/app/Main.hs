@@ -378,7 +378,7 @@ runFetcher FetcherConfig{..} = do
       logInfo [i|#{FINISH} Caching updated info about extensions from #{target}|]
       extProcessedNFinal' <- readTVarIO extProcessedNFinal
       extFailedN' <- readTVarIO extFailedN
-      logInfo [i|Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
+      logInfo [i|#{INFO} Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
       logInfo [i|#{FINISH} Running a fetcher on #{target}|]
 
 -- | Retry an action a given number of times with a given delay and log about its status
@@ -672,7 +672,7 @@ main = withUtf8 do
                           ( processTarget
                               ProcessTargetConfig
                                 { dataDir = dataDir
-                                , nThreads = (targetSelect target vscodeMarketplace.nThreads openVSX.nThreads)
+                                , nThreads = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
                                 , queueCapacity = queueCapacity
                                 , ..
                                 }
