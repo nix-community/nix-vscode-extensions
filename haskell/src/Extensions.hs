@@ -3,24 +3,26 @@
 module Extensions where
 
 import Control.Lens
-import Control.Monad (guard, void)
+import Control.Monad (guard)
 import Data.Aeson (FromJSON (..), Options (unwrapUnaryRecords), ToJSON (toJSON), Value (..), defaultOptions, genericParseJSON, genericToJSON, withText)
 import Data.Aeson.Lens (_String)
 import Data.Aeson.Types (parseFail)
+import Data.Aeson.Types qualified
 import Data.Generics.Labels ()
 import Data.Hashable (Hashable)
 import Data.Maybe (fromJust)
 import Data.String (IsString)
 import Data.String.Interpolate (i)
 import Data.Text (Text, unpack)
+import Data.Text qualified as T
 import Data.Text qualified as Text
 import Data.Time (UTCTime)
+import Data.Versions (SemVer (..), prettySemVer, semver, semver')
 import Data.Void (Void)
 import GHC.Generics (Generic)
-import Text.Megaparsec (Parsec, choice, skipMany, (<|>))
+import Text.Megaparsec (Parsec, choice, (<|>))
 import Text.Megaparsec qualified as TM (parseMaybe)
-import Text.Megaparsec.Char (asciiChar, string)
-import Text.Megaparsec.Char.Lexer (decimal)
+import Text.Megaparsec.Char (string)
 
 -- | Possible targets
 data Target = VSCodeMarketplace | OpenVSX deriving (Eq)
@@ -75,13 +77,20 @@ newtype LastUpdated = LastUpdated {_lastUpdated :: UTCTime}
   deriving newtype (Eq, Ord, Hashable, Show)
   deriving (Generic)
 
-newtype Version = Version {_version :: Text}
-  deriving newtype (IsString, Eq, Ord, Hashable)
+newtype Version = Version {_version :: SemVer}
+  deriving newtype (Eq, Ord, Hashable)
   deriving (Generic)
+
+instance Show Version where
+  show :: Version -> String
+  show v = T.unpack $ prettySemVer v._version
 
 data VersionModifier = Veq | Vgeq deriving (Ord, Eq, Generic, Hashable)
 
-data EngineVersion = EngineVersion {_modifier :: VersionModifier, _majorVersion, _minorVersion, _patchVersion :: Int}
+data EngineVersion = EngineVersion
+  { _modifier :: VersionModifier
+  , _version :: SemVer
+  }
   deriving (Eq, Ord, Hashable, Generic)
 
 -- platform of an extension
@@ -180,18 +189,13 @@ parseVersion' =
           [ Vgeq <$ (string "^" <|> string ">=")
           , Veq <$ string ""
           ]
-      _majorVersion <- decimal <|> (0 <$ string "x")
-      void $ string "."
-      _minorVersion <- decimal <|> (0 <$ string "x")
-      void $ string "."
-      _patchVersion <- decimal <|> (0 <$ string "x")
-      skipMany asciiChar
+      _version <- semver'
       pure EngineVersion{..}
 
 _EngineVersion :: Prism' Text EngineVersion
 _EngineVersion = prism' embed_ match_
  where
-  embed_ EngineVersion{..} = [i|#{review _VersionModifier _modifier}#{_majorVersion}.#{_minorVersion}.#{_patchVersion}|]
+  embed_ EngineVersion{_version = SemVer{..}, ..} = [i|#{review _VersionModifier _modifier}#{_svMajor}.#{_svMinor}.#{_svPatch}|]
   match_ = TM.parseMaybe parseVersion'
 
 aesonOptions :: Options
@@ -205,9 +209,14 @@ instance FromJSON Publisher where parseJSON = genericParseJSON aesonOptions
 instance ToJSON Publisher where toJSON = genericToJSON aesonOptions
 instance FromJSON LastUpdated where parseJSON = genericParseJSON aesonOptions
 instance ToJSON LastUpdated where toJSON = genericToJSON aesonOptions
-instance Show Version where show = Text.unpack . _version
-instance FromJSON Version where parseJSON = genericParseJSON aesonOptions
-instance ToJSON Version where toJSON = genericToJSON aesonOptions
+
+instance FromJSON Version where
+  parseJSON :: Value -> Data.Aeson.Types.Parser Version
+  parseJSON = withText "SemVer" $ either (parseFail . show) (pure . Version) . semver
+
+instance ToJSON Version where
+  toJSON :: Version -> Value
+  toJSON v = String $ prettySemVer v._version
 
 instance FromJSON EngineVersion where
   parseJSON = withText "Engine version" $ \t -> do
@@ -231,7 +240,18 @@ data ExtensionConfig = ExtensionConfig
   deriving (Generic, FromJSON, ToJSON, Show, Eq, Hashable)
 
 defaultEngineVersion :: EngineVersion
-defaultEngineVersion = EngineVersion{_modifier = Vgeq, _majorVersion = 0, _minorVersion = 0, _patchVersion = 0}
+defaultEngineVersion =
+  EngineVersion
+    { _modifier = Vgeq
+    , _version =
+        SemVer
+          { _svMajor = 0
+          , _svMinor = 0
+          , _svPatch = 0
+          , _svPreRel = Nothing
+          , _svMeta = Nothing
+          }
+    }
 
 -- | Full necessary info about an extension
 data ExtensionInfo = ExtensionInfo

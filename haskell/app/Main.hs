@@ -34,6 +34,7 @@ import Data.Function (fix, (&))
 import Data.Generics.Labels ()
 import Data.HashMap.Strict qualified as Map
 import Data.HashSet qualified as Set
+import Data.Hashable
 import Data.List (partition)
 import Data.List qualified as DL
 import Data.Maybe (fromJust, isJust, isNothing)
@@ -44,6 +45,7 @@ import Data.Text qualified as Text
 import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
+import GHC.Generics (Generic)
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
 import Logger
@@ -216,6 +218,16 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
   -- when finished, we update a shared counter
   liftIO $ atomically $ takeTMVar extProcessedN >>= \x -> putTMVar extProcessedN (x + 1)
 
+data Key = Key
+  { publisher :: Publisher
+  , name :: Name
+  , version :: Version
+  , platform :: Platform
+  , lastUpdated :: LastUpdated
+  }
+  deriving stock (Eq, Generic, Ord)
+  deriving anyclass (Hashable)
+
 -- | Fetch the extensions given their configurations
 runFetcher :: AppConfig' => FetcherConfig IO -> MyLogger ()
 runFetcher FetcherConfig{..} = do
@@ -237,10 +249,8 @@ runFetcher FetcherConfig{..} = do
     )
       `catchAny` (\err -> runInIO $ logError (pack $ show err) >> pure [])
 
-  let mkKey :: Publisher -> Name -> Platform -> Version -> LastUpdated -> (Publisher, Name, Version, Platform, LastUpdated)
-      mkKey publisher name platform version lastUpdated = (publisher, name, version, platform, lastUpdated)
-      mkKeyInfo ExtensionInfo{..} = mkKey publisher name platform version lastUpdated
-      mkKeyConfig ExtensionConfig{..} = mkKey publisher name platform version lastUpdated
+  let mkKeyInfo ExtensionInfo{..} = Key{..}
+      mkKeyConfig ExtensionConfig{..} = Key{..}
       -- we load the cached info into a map for quicker access
       extensionInfoCacheMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoCached)
       -- also, we filter out the duplicates among the extension configs
