@@ -1,12 +1,11 @@
+{-# HLINT ignore "Redundant bracket" #-}
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TupleSections #-}
-
-{- FOURMOLU_DISABLE -}
+{-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
-{-# HLINT ignore "Redundant bracket" #-}
-{- FOURMOLU_ENABLE -}
 
 module Main (main) where
 
@@ -37,13 +36,12 @@ import Data.List qualified as DL
 import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
 import Data.String.Interpolate (i)
-import Data.Text (Text, pack)
+import Data.Text (pack)
 import Data.Text qualified as Text
 import Data.Text.Encoding (decodeUtf8)
 import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
-import GHC.Generics (Generic)
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
 import Logger
@@ -51,8 +49,8 @@ import Main.Utf8 (withUtf8)
 import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
+import Options.Generic
 import Requests
-import System.Environment (lookupEnv)
 import Turtle (Alternative (..), mktree, rm, testfile)
 import Turtle.Bytes (shellStrictWithErr)
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
@@ -639,17 +637,22 @@ processTarget ProcessTargetConfig{..} =
     -- in case of errors, rethrow an exception
     `logAndForwardError` [i|when requesting #{target}|]
 
-_CONFIG_ENV_VAR :: String
-_CONFIG_ENV_VAR = "CONFIG"
+newtype ConfigOptions w = ConfigOptions
+  { config :: w ::: Maybe FilePath <?> "Path to a config file"
+  }
+  deriving stock (Generic)
+
+instance ParseRecord (ConfigOptions Wrapped)
+deriving anyclass instance ParseRecord (ConfigOptions Unwrapped)
 
 main :: IO ()
 main = withUtf8 do
+  configOptions :: (ConfigOptions Unwrapped) <- unwrapRecord "Updater"
   -- we'll let logs be written to stdout as soon as they come
   hSetBuffering stdout NoBuffering
-  config <- lookupEnv _CONFIG_ENV_VAR
   config_ <-
-    case config of
-      Nothing -> putStrLn [i|No config file specified in the #{_CONFIG_ENV_VAR} environment variable. Using the default config.|] >> pure (mkDefaultAppConfig def)
+    case configOptions.config of
+      Nothing -> putStrLn [i|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
       Just s -> do
         appConfig <- decodeFileEither s
         case appConfig of
