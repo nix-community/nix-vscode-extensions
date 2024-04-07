@@ -53,7 +53,7 @@ import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Requests
 import System.Environment (lookupEnv)
-import Turtle (Alternative (..), mktree, rm)
+import Turtle (Alternative (..), mktree, rm, testfile)
 import Turtle.Bytes (shellStrictWithErr)
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
@@ -237,6 +237,9 @@ data Key = Key
   deriving stock (Eq, Generic, Ord)
   deriving anyclass (Hashable)
 
+whenM :: Monad m => m Bool -> m () -> m ()
+whenM cond action = cond >>= (`when` action)
+
 -- | Fetch the extensions given their configurations
 runFetcher :: AppConfig' => FetcherConfig IO -> MyLogger ()
 runFetcher FetcherConfig{..} = do
@@ -247,7 +250,7 @@ runFetcher FetcherConfig{..} = do
   -- just in case these directories don't exist
   forM_ [fetchedTmpDir, failedTmpDir, cacheDir] mktree
   -- if there were target files, remove them
-  forM_ [fetchedTmpDir, failedTmpDir] (rm . mkTargetJSON)
+  forM_ [fetchedTmpDir, failedTmpDir] (\(mkTargetJSON -> f) -> whenM (testfile f) (rm f))
 
   let extensionInfoCachedJSON = mkTargetJSON cacheDir
 
