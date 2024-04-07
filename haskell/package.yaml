@@ -65,6 +65,7 @@ dependencies:
 - lens-aeson
 - megaparsec
 - mtl
+- optparse-generic
 - stm
 - stm-chans
 - string-interpolate

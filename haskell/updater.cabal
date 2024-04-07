@@ -79,6 +79,7 @@ library
     , lens-aeson
     , megaparsec
     , mtl
+    , optparse-generic
     , stm
     , stm-chans
     , string-interpolate
@@ -145,6 +146,7 @@ executable updater
     , lens-aeson
     , megaparsec
     , mtl
+    , optparse-generic
     , stm
     , stm-chans
     , string-interpolate
