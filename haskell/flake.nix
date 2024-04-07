@@ -41,7 +41,7 @@
                 fileset = lib.fileset.unions [
                   ./app
                   ./src
-                  ./nix-managed.cabal
+                  ./updater.cabal
                   ./LICENSE
                   ./README.md
                 ];
@@ -113,12 +113,12 @@
           };
 
           # Default package & app.
-          packages.default = self'.packages.haskell-template;
-          apps.default = self'.apps.haskell-template;
+          packages.default = self'.packages.updater;
+          apps.default = self'.apps.updater;
 
           # Default shell.
           devShells.default = pkgs.mkShell {
-            name = "haskell-template";
+            name = "updater";
             meta.description = "Haskell development environment";
             # See https://community.flake.parts/haskell-flake/devshell#composing-devshells
             inputsFrom = [

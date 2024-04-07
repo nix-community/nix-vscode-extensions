@@ -1,6 +1,6 @@
-name:                nix-managed
+name:                updater
 version:             0.1.0.0
-github:              "value/nix-managed"
+github:              "nix-community/nix-vscode-extensions"
 license:             BSD3
 author:              "value"
 maintainer:          "value"
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/value/nix-managed#readme>
+description:         Please see the README on GitHub at <https://github.com/value/updater#readme>
 
 default-extensions:
 - BangPatterns
@@ -92,7 +92,7 @@ library:
   source-dirs: src
 
 executables:
-  nix-managed:
+  updater:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -100,4 +100,4 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - nix-managed
+    - updater
