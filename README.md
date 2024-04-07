@@ -10,7 +10,8 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 
 - Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
 - NixOS wiki has a [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
-- Extension publishers and names are lowercased.
+- Extension publishers and names are lowercased only in Nix.
+  - They're not lowercased in `.json` cache files.
 - Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
 - If an extension publisher or name aren't valid Nix identifiers, quote them like `<attrset>."4"."2"`.
 - We have a permission from MS to use a crawler on their API in this case (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Please, don't abuse this flake!
