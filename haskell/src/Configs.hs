@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-orphans #-}
 module Configs where
 
 import Colog
@@ -5,7 +6,7 @@ import Control.Lens
 import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withArray, withText)
 import Data.Aeson.Key (toText)
 import Data.Aeson.Lens (members, _String)
-import Data.Aeson.Types (parseMaybe, typeMismatch)
+import Data.Aeson.Types (parseMaybe, typeMismatch, Parser)
 import Data.Default (Default (..))
 import Data.String.Interpolate (i)
 import Data.Text (Text)
@@ -133,6 +134,7 @@ instance FromJSON ReleaseExtensions where
             . traversed
 
 instance FromJSON Severity where
+  parseJSON :: Value -> Data.Aeson.Types.Parser Severity
   parseJSON = withText
     "Severity"
     \case

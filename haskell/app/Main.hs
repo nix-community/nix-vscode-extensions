@@ -231,8 +231,9 @@ data Key = Key
 -- | Fetch the extensions given their configurations
 runFetcher :: AppConfig' => FetcherConfig IO -> MyLogger ()
 runFetcher FetcherConfig{..} = do
-  let fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
-      failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
+  let
+    fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
+    failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
   -- if don't exist, we create the directories for files with fetched, failed, and cached extensions
   traverse_ (\x -> mktree [i|#{x}|]) [fetchedTmpDir, failedTmpDir, cacheDir]
   -- if there were previous files with given names, we remove them
