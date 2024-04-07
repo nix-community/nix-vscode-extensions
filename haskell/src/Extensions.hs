@@ -176,7 +176,7 @@ versions =
 -- | Parse a SemVer-like 'Version'.
 --
 -- Allow leading zeros.
--- 
+--
 -- >>> TM.parseMaybe parseVersion <$> versions
 parseVersion :: Parser Version
 parseVersion = do
@@ -205,7 +205,7 @@ engineVersions =
   ]
 
 -- | Parse 'EngineVersion'
--- 
+--
 -- >>> TM.parseMaybe parseEngineVersion <$> engineVersions
 -- [Just ^0.0.0,Just ^0.10.0,Just ^1.27.0-insider,Just ^0.10.0,Just ^0.10.0,Just ^0.9.0-pre.1,Just 0.1.0,Just 1.57.0-insider,Just 1.0.0,Just ^0.0.0]
 parseEngineVersion :: Parser EngineVersion

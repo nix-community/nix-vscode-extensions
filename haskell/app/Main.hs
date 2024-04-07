@@ -47,6 +47,7 @@ import GHC.Generics (Generic)
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
 import Logger
+import Main.Utf8 (withUtf8)
 import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
@@ -56,7 +57,6 @@ import Turtle (Alternative (..), mktree, rm)
 import Turtle.Bytes (shellStrictWithErr)
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
-import Main.Utf8 (withUtf8)
 
 -- | Select a base API URL depending on the target
 apiUrl :: Target -> String
@@ -540,7 +540,6 @@ getConfigsRelease target = do
           -- if we were unsuccessful, we need to retry
           Left l -> logError [i|#{FAIL} Getting info about extensions from #{target}|] >> error [i|#{l}|]
           Right r -> do
-            -- liftIO $ encodeFile "tmp/release.json" r
             pure $
               r
                 ^.. filteredExtensions
