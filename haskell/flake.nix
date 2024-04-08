@@ -95,8 +95,24 @@
           };
 
           # Default package & app.
-          packages.default = self'.packages.updater.overrideAttrs (final: prev: { dontPatchELF = true; });
-          apps.default = pkgs.haskell.lib.justStaticExecutables self'.apps.updater;
+          packages.default =
+            let
+              updater = pkgs.haskell.lib.justStaticExecutables self'.packages.updater;
+              updaterName = updater.meta.mainProgram;
+            in
+            pkgs.stdenv.mkDerivation {
+              name = updater.name;
+              phases = [ "installPhase" ];
+              installPhase =
+                # https://sandervanderburg.blogspot.com/2015/10/deploying-prebuilt-binary-software-with.html
+                # https://nixos.wiki/wiki/Packaging/Binaries
+                ''
+                  mkdir -p $out/bin
+                  cp -p ${lib.getExe updater} $out/bin
+                  chmod +rw $out/bin/${updaterName}
+                  patchelf --add-needed libgcc_s.so.1 $out/bin/${updaterName}
+                '';
+            };
 
           # Default shell.
           devShells.default = pkgs.mkShell {
