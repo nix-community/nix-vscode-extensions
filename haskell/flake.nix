@@ -95,7 +95,7 @@
           };
 
           # Default package & app.
-          packages.default = pkgs.haskell.lib.justStaticExecutables self'.packages.updater;
+          packages.default = self'.packages.updater.overrideAttrs (final: prev: { dontPatchELF = true; });
           apps.default = pkgs.haskell.lib.justStaticExecutables self'.apps.updater;
 
           # Default shell.
