@@ -12,7 +12,7 @@ vscodeMarketplace:
   release:
     eamodio:
     - gitlens
-    github:
+    GitHub:
     - copilot
     - copilot-chat
     ms-vscode-remote:
