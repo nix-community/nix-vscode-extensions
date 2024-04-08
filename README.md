@@ -11,7 +11,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 - Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
 - NixOS wiki has a [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
 - Extension publishers and names are lowercased only in Nix.
-  - They're not lowercased in `.json` cache files.
+  - They're not lowercased in `.json` cache files such as [data/cache/open-vsx-latest.json](./data/cache/open-vsx-latest.json).
 - Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
 - If an extension publisher or name aren't valid Nix identifiers, quote them like `<attrset>."4"."2"`.
 - We have a permission from MS to use a crawler on their API in this case (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Please, don't abuse this flake!
@@ -230,7 +230,9 @@ Resolve [issues](https://github.com/nix-community/nix-vscode-extensions/issues).
 
 The [config](.github/config.yaml) contains several extensions.
 We cache the information about the latest **release** versions of these extensions (see [Extensions](#extensions)).
-If you'd like to use release versions of an extension, please, add that extension to the config and make a Pull Request.
+
+You can add new extensions to the config and make a Pull Request.
+Use the original extension publisher and name, e.g. `GitHub` and `copilot`.
 
 ### Extra extensions
 
