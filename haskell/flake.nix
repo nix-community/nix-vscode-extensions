@@ -98,7 +98,7 @@
           packages.default =
             let
               updater = pkgs.haskell.lib.justStaticExecutables self'.packages.updater;
-              updaterName = updater.meta.mainProgram;
+              updaterBin = "$out/bin/${updater.meta.mainProgram}";
             in
             pkgs.stdenv.mkDerivation {
               name = updater.name;
@@ -106,11 +106,16 @@
               installPhase =
                 # https://sandervanderburg.blogspot.com/2015/10/deploying-prebuilt-binary-software-with.html
                 # https://nixos.wiki/wiki/Packaging/Binaries
+                # https://github.com/NixOS/patchelf
                 ''
                   mkdir -p $out/bin
                   cp -p ${lib.getExe updater} $out/bin
-                  chmod +rw $out/bin/${updaterName}
-                  patchelf --add-needed libgcc_s.so.1 $out/bin/${updaterName}
+                  chmod +rw ${updaterBin}
+                  patchelf \
+                    --set-interpreter "$(cat $${pkgs.stdenv.cc}/nix-support/dynamic-linker)" \
+                    --add-needed libgcc_s.so.1 ${updaterBin} \
+                    --set-rpath "$(patchelf --print-rpath ${updaterBin})":${lib.makeLibraryPath [ pkgs.gcc.cc.lib ]} \
+                    ${updaterBin}
                 '';
             };
 
