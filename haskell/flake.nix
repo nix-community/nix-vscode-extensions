@@ -95,8 +95,8 @@
           };
 
           # Default package & app.
-          packages.default = self'.packages.updater;
-          apps.default = self'.apps.updater;
+          packages.default = pkgs.haskell.lib.justStaticExecutables self'.packages.updater;
+          apps.default = pkgs.haskell.lib.justStaticExecutables self'.apps.updater;
 
           # Default shell.
           devShells.default = pkgs.mkShell {
