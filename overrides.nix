@@ -1,20 +1,13 @@
 { pkgs }:
 {
-  # https://github.com/nix-community/nix-vscode-extensions/issues/31
-  asf.apache-netbeans-java = _: { sourceRoot = "extension"; };
-  ms-vscode.cmake-tools = _: { sourceRoot = "extension"; };
-
   # C# Related
   ms-dotnettools.vscode-dotnet-runtime = _: {
-    sourceRoot = "extension";
     postPatch = ''
       chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
     '';
   };
-  ms-dotnettools.vscodeintellicode-csharp = _: { sourceRoot = "extension"; };
   # Custom Patch C# Devkit to work, credit to https://github.com/NixOS/nixpkgs/issues/270423#issuecomment-1902482401 for the initial bash script
   ms-dotnettools.csdevkit = _: {
-    sourceRoot = "extension";
     postPatch = with pkgs; ''
       declare -A platform_map=(
         ["x86_64-linux"]="linux-x64"
