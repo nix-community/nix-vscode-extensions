@@ -189,9 +189,6 @@ See [Overlays](https://nixos.wiki/wiki/Overlays#Using_overlays).
 nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
 Added 14 variables.
 
-nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
-Added 14 variables.
-
 nix-repl> pkgs = (legacyPackages.x86_64-linux.extend overlays.default)
 
 nix-repl> pkgs.vscode-marketplace-release.rust-lang.rust-analyzer
