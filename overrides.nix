@@ -1,6 +1,6 @@
 { pkgs }:
 {
-  
+
   vadimcn.vscode-lldb = _: {
     postInstall = ''
       cd "$out/$installPrefix"
@@ -8,7 +8,7 @@
       patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
     '';
   };
-  
+
   # C# Related
   ms-dotnettools.vscode-dotnet-runtime = _: {
     postPatch = ''
