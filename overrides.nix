@@ -2,7 +2,7 @@
 {
 
   vadimcn.vscode-lldb = _: {
-    postInstall = ''
+    postInstall = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
       cd "$out/$installPrefix"
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
       patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
