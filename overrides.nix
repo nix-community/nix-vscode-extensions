@@ -3,9 +3,12 @@
 
   vadimcn.vscode-lldb = _: {
     postInstall = ''
-      cd "$out/$installPrefix"
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-      patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
+      declare isDarwin=${if pkgs.stdenv.isDarwin then "true" else "false"}
+      if [[ $isDarwin == "false" ]]; then
+        cd "$out/$installPrefix"
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
+        patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
+      fi
     '';
   };
 
