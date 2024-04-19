@@ -2,13 +2,10 @@
 {
 
   vadimcn.vscode-lldb = _: {
-    postInstall = ''
-      declare isDarwin=${if pkgs.stdenv.isDarwin then "true" else "false"}
-      if [[ $isDarwin == "false" ]]; then
-        cd "$out/$installPrefix"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-        patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
-      fi
+    postInstall = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+      cd "$out/$installPrefix"
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
+      patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
     '';
   };
 
