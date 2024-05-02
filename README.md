@@ -15,7 +15,10 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 - Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
 - If an extension publisher or name aren't valid Nix identifiers, quote them like `<attrset>."4"."2"`.
 - We have a permission from MS to use a crawler on their API in this case (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Please, don't abuse this flake!
-
+- Some previously available extensions may be unavailable in newer versions of this flake.
+  - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions.
+  - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
+  
 ## Template
 
 This repository has a flake [template](template/flake.nix).
