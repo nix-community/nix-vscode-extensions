@@ -18,6 +18,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 - Some previously available extensions may be unavailable in newer versions of this flake.
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions.
   - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
+- We don't automatically handle extension packs. You should look up extensions in a pack and explicitly write all necessary extensions.
   
 ## Template
 
