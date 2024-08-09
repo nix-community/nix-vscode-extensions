@@ -15,6 +15,7 @@ vscodeMarketplace:
     GitHub:
     - copilot
     - copilot-chat
+    - vscode-pull-request-github
     ms-vscode-remote:
     - remote-ssh
     rust-lang:
