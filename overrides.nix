@@ -1,6 +1,6 @@
 { pkgs }:
 {
-
+  # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
   vadimcn.vscode-lldb = _: {
     postInstall = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
       cd "$out/$installPrefix"
@@ -15,6 +15,7 @@
       chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
     '';
   };
+  
   # Custom Patch C# Devkit to work, credit to https://github.com/NixOS/nixpkgs/issues/270423#issuecomment-1902482401 for the initial bash script
   ms-dotnettools.csdevkit = _: {
     postPatch = with pkgs; ''
