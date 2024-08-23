@@ -138,9 +138,18 @@
                     url,
                     ...
                   }:
+                  let
+                    override =
+                      (
+                        let
+                          overrides = (import ./overrides.nix { inherit pkgs; });
+                        in
+                        overrides.publisher or { }
+                      ).name or (x: x);
+                  in
                   {
                     inherit name;
-                    value = utils.buildVscodeMarketplaceExtension {
+                    value = utils.buildVscodeMarketplaceExtension (override {
                       vsix = prev.fetchurl {
                         inherit url sha256;
                         name = "${name}-${version}.zip";
@@ -148,7 +157,7 @@
                       mktplcRef = {
                         inherit name version publisher;
                       };
-                    };
+                    });
                   }
                 ))
                 # append extra extensions fetched from elsewhere to overwrite site extensions
@@ -156,22 +165,6 @@
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (builtins.mapAttrs (_: builtins.foldl' (k: { name, value }: k // { ${name} = value; }) { }))
-                (lib.pipe (import ./overrides.nix { inherit pkgs; }) [
-                  (lib.mapAttrsToList (
-                    publisher:
-                    lib.mapAttrsToList (
-                      extension: update: {
-                        path = [
-                          publisher
-                          extension
-                        ];
-                        update = x: x.overrideAttrs update;
-                      }
-                    )
-                  ))
-                  lib.flatten
-                  lib.updateManyAttrsByPath
-                ])
               ];
             mkSet =
               attrs@{
