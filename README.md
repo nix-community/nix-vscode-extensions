@@ -245,9 +245,14 @@ Add necessary extensions there, preferrably, for all supported platforms (see [E
 ### Special extensions
 
 Certain extensions require special treatment.
-Provide functions to modify such extensions derivations in [overrides.nix](overrides.nix).
+
+Provide functions to modify such extension in [overrides.nix](overrides.nix).
+
 Optionally, create and link there issues explaining chosen override functions.
-The overrides apply to a whole attrset of extensions, including [Extra extensions](#extra-extensions).
+
+Overrides apply to a whole attrset of extensions, including [Extra extensions](#extra-extensions).
+
+Each override is applied to an argument of the `buildVscodeMarketplaceExtension` function.
 
 #### Build problems
 
