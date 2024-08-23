@@ -109,6 +109,7 @@
                           ;
                       })
                       (
+                        # append extra extensions fetched from elsewhere to overwrite site extensions
                         import ./data/extra-extensions/generated.nix {
                           inherit (pkgs)
                             fetchgit
@@ -160,7 +161,7 @@
                     });
                   }
                 ))
-                # append extra extensions fetched from elsewhere to overwrite site extensions
+                # group by publisher
                 (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
