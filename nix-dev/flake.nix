@@ -83,8 +83,6 @@
                 saveFlakes
                 ;
 
-              saveTemplateFlake = (mkFlakesTools { dirs = [ "template" ]; }).saveFlakes;
-
               writeWorkflows = writeWorkflow "ci" (nixCI {
                 jobArgs = {
                   cacheNixArgs = {
