@@ -47,11 +47,11 @@ jobs:
       - name: Update extensions
         run: |-
           nix profile install nix-dev/#updateExtensions
-          nix run nix-dev/#updateExtensions -- --config .github/config.yaml
+          # nix run nix-dev/#updateExtensions -- --config .github/config.yaml
       - name: Update extra extensions
         run: |-
           nix profile install nix-dev/#updateExtraExtensions
-          nix run nix-dev/#updateExtraExtensions
+          # nix run nix-dev/#updateExtraExtensions
       - name: Commit and push changes
         run: |-
           git pull --rebase --autostash
