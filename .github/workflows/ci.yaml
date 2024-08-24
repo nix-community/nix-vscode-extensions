@@ -110,8 +110,6 @@ jobs:
           purge-primary-key: never
       - name: Remove old cache profiles
         run: rm -rf /nix/var/nix/profiles/cache
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Check template VSCodium
         run: |
           nix profile install template/
