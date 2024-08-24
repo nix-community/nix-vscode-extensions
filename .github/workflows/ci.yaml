@@ -114,10 +114,6 @@ jobs:
         run: |
           nix profile install template/
           nix run template/ -- --list-extensions
-      - name: Save flakes
-        run: |-
-          nix profile install nix-dev/#saveTemplateFlake
-          nix run nix-dev/#saveTemplateFlake
 name: Nix CI
 "on":
   pull_request: {}
