@@ -27,10 +27,15 @@ jobs:
           purge-primary-key: never
       - name: Remove old cache profiles
         run: rm -rf /nix/var/nix/profiles/cache
-      - name: Configure git for github-actions
+      - name: Configure git
+        env:
+          # required for gh
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}.
         run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
+          ${{ github.head_ref && format('gh pr checkout {0}', github.event.pull_request.number) || ''}}
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
       - name: Pull latest changes
         run: git pull --rebase --autostash
       - name: Update flake locks
