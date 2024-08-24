@@ -20,7 +20,7 @@ jobs:
         with:
           primary-key: nix-update-${{ hashfiles('**/flake.nix', 'flake.lock', 'nix-dev/flake.lock', 'haskell/**/*') }}
           restore-prefixes-first-match: nix-update-
-          gc-max-store-size-linux: 4000000000
+          gc-max-store-size-linux: 4500000000
           purge: true
           purge-prefixes: nix-update-
           purge-created: 0
