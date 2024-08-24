@@ -103,7 +103,7 @@ jobs:
         with:
           primary-key: nix-template-${{ hashfiles('template') }}
           restore-prefixes-first-match: nix-template-
-          gc-max-store-size-linux: 4000000000
+          gc-max-store-size-linux: 2000000000
           purge: true
           purge-prefixes: nix-template-
           purge-created: 0
