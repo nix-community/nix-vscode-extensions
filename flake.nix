@@ -169,7 +169,9 @@
                 (
                   x:
                   builtins.foldl'
-                    (acc: y: acc // { "${y.publisher}" = builtins.removeAttrs acc."${y.publisher}" y.extensions; })
+                    (acc: y: if !acc?${y.publisher} then acc else
+                      acc // { "${y.publisher}" = builtins.removeAttrs acc.${y.publisher} y.extensions; }
+                    )
                     x
                     (
                       pkgs.lib.attrsets.mapAttrsToList (publisher: extensions: {
