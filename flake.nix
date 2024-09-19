@@ -169,8 +169,12 @@
                 (
                   x:
                   builtins.foldl'
-                    (acc: y: if !acc?${y.publisher} then acc else
-                      acc // { "${y.publisher}" = builtins.removeAttrs acc.${y.publisher} y.extensions; }
+                    (
+                      acc: y:
+                      if !acc ? ${y.publisher} then
+                        acc
+                      else
+                        acc // { "${y.publisher}" = builtins.removeAttrs acc.${y.publisher} y.extensions; }
                     )
                     x
                     (
