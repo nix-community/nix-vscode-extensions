@@ -9,7 +9,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 ## Note
 
 - Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
-- NixOS wiki has a [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
+- NixOS wiki has a [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
 - Extension publishers and names are lowercased only in Nix.
   - They're not lowercased in `.json` cache files such as [data/cache/open-vsx-latest.json](./data/cache/open-vsx-latest.json).
 - Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
@@ -19,7 +19,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions.
   - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
 - We don't automatically handle extension packs. You should look up extensions in a pack and explicitly write all necessary extensions.
-  
+
 ## Template
 
 This repository has a flake [template](template/flake.nix).
@@ -82,7 +82,7 @@ There are several attrsets:
 
 See [Template](#template).
 
-Add the following to your `flake.nix` (see [Flakes](https://nixos.wiki/wiki/Flakes)).
+Add the following to your `flake.nix` (see [Flakes](https://wiki.nixos.org/wiki/Flakes)).
 
 ```nix
 inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
@@ -91,7 +91,7 @@ inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 ### Without flakes
 
 ```nix
-let 
+let
   system = builtins.currentSystem;
   extensions =
     (import (builtins.fetchGit {
@@ -185,7 +185,7 @@ nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyz
 
 ### Overlay
 
-See [Overlays](https://nixos.wiki/wiki/Overlays#Using_overlays).
+See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
 
 #### Get an overlay with flakes
 
