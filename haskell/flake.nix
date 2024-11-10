@@ -105,7 +105,7 @@
               phases = [ "installPhase" ];
               installPhase =
                 # https://sandervanderburg.blogspot.com/2015/10/deploying-prebuilt-binary-software-with.html
-                # https://nixos.wiki/wiki/Packaging/Binaries
+                # https://wiki.nixos.org/wiki/Packaging/Binaries
                 # https://github.com/NixOS/patchelf
                 ''
                   mkdir -p $out/bin
