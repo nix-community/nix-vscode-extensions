@@ -16,7 +16,7 @@ import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
-import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (<&>), (^.), (^..), (^?), _Just)
+import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (<&>), (^.), (^..), (^?), (.~), _Just)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
@@ -270,7 +270,7 @@ runFetcher FetcherConfig{..} = do
       -- we partition the extension configs depending on if they're present in a cache
       (presentExtensionInfo, extensionConfigsMissing) =
         (partition (isJust . fst) ((\c -> (Map.lookup (mkKeyConfig c) extensionInfoCacheMap, c)) <$> configsSorted))
-          & bimap (fromJust . fst <$>) (snd <$>)
+          & bimap ((\x -> x & #missingTimes .~ 0) . fromJust . fst <$>) (snd <$>)
       -- the extension info that are present according to a response
       extensionInfoPresentMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> presentExtensionInfo)
       -- extension info that are missing according to a response

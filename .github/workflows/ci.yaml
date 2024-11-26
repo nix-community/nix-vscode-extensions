@@ -4,7 +4,10 @@ jobs:
     permissions:
       actions: write
       contents: write
-    runs-on: ubuntu-22.04
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      branch_is_not_master: ${{ github.ref_name != 'master' }}
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
@@ -27,10 +30,16 @@ jobs:
           purge-primary-key: never
       - name: Remove old cache profiles
         run: rm -rf /nix/var/nix/profiles/cache
-      - name: Configure git for github-actions
+      - name: Configure git
+        if: always() && env.branch_is_not_master && runner.os == 'Linux'
+        env:
+          # required for gh
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
+          ${{ github.head_ref && format('gh pr checkout {0}', github.event.pull_request.number) || ''}}
+
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
       - name: Pull latest changes
         run: git pull --rebase --autostash
       - name: Update flake locks
@@ -73,8 +82,9 @@ jobs:
           nix run nix-dev/#saveFlakes
 name: Nix CI
 "on":
-  pull_request: {}
-  push: {}
+  pull_request:
+  push:
+    branches: [master]
   schedule:
     - cron: 0 0 * * *
   workflow_dispatch: {}
