@@ -82,8 +82,9 @@ jobs:
           nix run nix-dev/#saveFlakes
 name: Nix CI
 "on":
-  pull_request: {}
-  push: {}
+  pull_request:
+  push:
+    branches: [master]
   schedule:
     - cron: 0 0 * * *
   workflow_dispatch: {}
