@@ -183,6 +183,10 @@ nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyz
 «derivation /nix/store/jyzab0pdcgj4q9l73zsnyvc1k7qpb381-vscode-extension-rust-lang-rust-analyzer-0.4.1582.drv»
 ```
 
+### Removed extensions
+
+Some extensions are hard to handle correctly ([example](https://github.com/nix-community/nix-vscode-extensions/issues/69)), so they have been removed via [removed.nix](./removed.nix).
+
 ### Overlay
 
 See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).

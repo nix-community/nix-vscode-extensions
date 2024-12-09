@@ -170,11 +170,23 @@
                   x:
                   builtins.foldl'
                     (
-                      acc: y:
-                      if !acc ? ${y.publisher} then
-                        acc
+                      extensions: removedPublisherConfig:
+                      if !(extensions ? ${removedPublisherConfig.publisher}) then
+                        extensions
                       else
-                        acc // { "${y.publisher}" = builtins.removeAttrs acc.${y.publisher} y.extensions; }
+                        extensions
+                        // {
+                          "${removedPublisherConfig.publisher}" = builtins.foldl' (
+                            publisherExtensions: extensionName:
+                            publisherExtensions
+                            // {
+                              "${extensionName}" = builtins.throw ''
+                                The extension '${removedPublisherConfig.publisher}.${extensionName}' was removed.
+                                See '${./removed.nix}' for details.
+                              '';
+                            }
+                          ) extensions.${removedPublisherConfig.publisher} removedPublisherConfig.extensions;
+                        }
                     )
                     x
                     (
