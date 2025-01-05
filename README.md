@@ -76,7 +76,7 @@ There are several attrsets:
 > [!NOTE]
 > In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
 > Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
-> See [With-expressions](https://nixos.org/manual/nix/unstable/language/constructs.html?highlight=langua#with-expressions).
+> See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
 
 ### With flakes
 
