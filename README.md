@@ -8,8 +8,10 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 
 ## Note
 
+> [!NOTE]
+> Check the NixOS wiki [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
+
 - Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
-- NixOS wiki has a [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
 - Extension publishers and names are lowercased only in Nix.
   - They're not lowercased in `.json` cache files such as [data/cache/open-vsx-latest.json](./data/cache/open-vsx-latest.json).
 - Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
@@ -23,6 +25,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 ## Template
 
 This repository has a flake [template](template/flake.nix).
+
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 
 1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-new.html)).
@@ -50,7 +53,8 @@ In case of problems see [Troubleshooting](#troubleshooting).
 
 ## Example
 
-[flake.nix](./flake.nix) provides a default package.
+[flake.nix](./flake.nix) provides a default package using [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/81b9a5f9d1f7f87619df26a4eaf48bf6dec8c82c/pkgs/applications/editors/vscode/with-extensions.nix) from `nixpkgs`.
+
 This package is `VSCodium` with a couple of extensions.
 
 Run `VSCodium` and list installed extensions.
@@ -60,6 +64,9 @@ nix run github:nix-community/nix-vscode-extensions# -- --list-extensions
 ```
 
 ## Usage
+
+> [!NOTE]
+> Check the NixOS wiki [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
 
 ### Extensions
 
@@ -90,6 +97,11 @@ inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
 ### Without flakes
 
+> [!NOTE]
+> The values of `url`, `ref`, `rev` and  in the `fetchGit` argument are for demonstration purposes.
+> The value `cb0aee6840fb29b70439880656ca6a313a6af101` is the full SHA-256 hash of a commit in this repository.
+> Replace it with the hash of the commit you need.
+
 ```nix
 let
   system = builtins.currentSystem;
@@ -97,7 +109,7 @@ let
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/nix-vscode-extensions";
       ref = "refs/heads/master";
-      rev = "c43d9089df96cf8aca157762ed0e2ddca9fcd71e";
+      rev = "cb0aee6840fb29b70439880656ca6a313a6af101";
     })).extensions.${system};
   extensionsList = with extensions.vscode-marketplace; [
       rust-lang.rust-analyzer
@@ -107,19 +119,30 @@ in ...
 
 ## History
 
-You can search for an extension in the repo history:
+You can search for an extension in the repository history:
 
-- get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.json`
-- select a commit: `0910d1e`
-- search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.json`
+- Get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.json`
+- Select a commit, e.g.: `0910d1e`
+- Search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.json`
 
 ## Explore
 
 Explore extensions via `nix repl`.
 
-Use your system instead of `x86_64-linux`.
+> [!NOTE]
+> Press the `Tab` button (denoted as `<TAB>` below) to see attrset attributes.
 
-Press the `Tab` button (denoted as `<TAB>` here) to see attrset attributes.
+### Get your system
+
+```console
+nix-instantiate --eval --expr 'builtins.currentSystem'
+```
+
+Output on my machine:
+
+```console
+"x86_64-linux"
+```
 
 ### Get the `extensions` attrset
 
@@ -128,7 +151,7 @@ Press the `Tab` button (denoted as `<TAB>` here) to see attrset attributes.
 ```console
 $ nix repl
 
-nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
+nix-repl> :lf github:nix-community/nix-vscode-extensions/cb0aee6840fb29b70439880656ca6a313a6af101
 Added 10 variables.
 
 nix-repl> t = extensions.<TAB>
@@ -143,13 +166,18 @@ t.open-vsx                    t.vscode-marketplace
 
 #### Get `extensions` without flakes
 
+> [!NOTE]
+> The values of `url`, `ref`, `rev` and  in the `fetchGit` argument are for demonstration purposes.
+> The value `cb0aee6840fb29b70439880656ca6a313a6af101` is the full SHA-256 hash of a commit in this repository.
+> Replace it with the hash of the commit you need.
+
 ```console
 $ nix repl
 
 nix-repl> t1 = (import (builtins.fetchGit {
                 url = "https://github.com/nix-community/nix-vscode-extensions";
                 ref = "refs/heads/master";
-                rev = "c43d9089df96cf8aca157762ed0e2ddca9fcd71e";
+                rev = "cb0aee6840fb29b70439880656ca6a313a6af101";
               }))
 
 nix-repl> t = t1.extensions.<TAB>
@@ -187,14 +215,20 @@ nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyz
 
 Some extensions are hard to handle correctly ([example](https://github.com/nix-community/nix-vscode-extensions/issues/69)), so they have been removed via [removed.nix](./removed.nix).
 
+They may be available in `nixpkgs`, in `pkgs.vscode-extensions` ([link](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vscode-extensions)).
+
 ### Overlay
 
 See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
 
 #### Get an overlay with flakes
 
+> [!NOTE]
+> The value `cb0aee6840fb29b70439880656ca6a313a6af101` is the full SHA-256 hash of a commit in this repository.
+> Replace it with the hash of the commit you need.
+
 ```console
-nix-repl> :lf github:nix-community/nix-vscode-extensions/c43d9089df96cf8aca157762ed0e2ddca9fcd71e
+nix-repl> :lf github:nix-community/nix-vscode-extensions/cb0aee6840fb29b70439880656ca6a313a6af101
 Added 14 variables.
 
 nix-repl> pkgs = (legacyPackages.x86_64-linux.extend overlays.default)
@@ -205,11 +239,15 @@ nix-repl> pkgs.vscode-marketplace-release.rust-lang.rust-analyzer
 
 #### Get an overlay without flakes
 
+> [!NOTE]
+> The value `cb0aee6840fb29b70439880656ca6a313a6af101` is the full SHA-256 hash of a commit in this repository.
+> Replace it with the hash of the commit you need.
+
 ```console
 nix-repl> t1 = (import (builtins.fetchGit {
                 url = "https://github.com/nix-community/nix-vscode-extensions";
                 ref = "refs/heads/master";
-                rev = "c43d9089df96cf8aca157762ed0e2ddca9fcd71e";
+                rev = "cb0aee6840fb29b70439880656ca6a313a6af101";
               }))
 
 nix-repl> pkgs = import <nixpkgs> { overlays = [ t1.overlays.default ]; system = builtins.currentSystem; }
