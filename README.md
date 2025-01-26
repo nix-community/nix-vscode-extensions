@@ -50,7 +50,8 @@ In case of problems see [Troubleshooting](#troubleshooting).
 
 ## Example
 
-[flake.nix](./flake.nix) provides a default package.
+[flake.nix](./flake.nix) provides a default package using [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/81b9a5f9d1f7f87619df26a4eaf48bf6dec8c82c/pkgs/applications/editors/vscode/with-extensions.nix) from `nixpkgs`.
+
 This package is `VSCodium` with a couple of extensions.
 
 Run `VSCodium` and list installed extensions.
