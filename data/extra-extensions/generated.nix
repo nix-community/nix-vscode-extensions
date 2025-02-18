@@ -3,10 +3,10 @@
 {
   vadimcn--vscode-lldb--darwin-arm64 = {
     pname = "vadimcn--vscode-lldb--darwin-arm64";
-    version = "v1.11.3";
+    version = "v1.11.4";
     src = fetchurl {
-      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.3/codelldb-darwin-arm64.vsix";
-      sha256 = "sha256-0Q2z15yjH1/Kpvv1aRnW9d8HFeg8CdrMhSnBqp+XKVs=";
+      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.4/codelldb-darwin-arm64.vsix";
+      sha256 = "sha256-j3RnOM6TeAjieUO+hDZqT/qM0hgSnDeUDGz9/djgQHQ=";
     };
     publisher = "vadimcn";
     platform = "darwin-arm64";
@@ -15,10 +15,10 @@
   };
   vadimcn--vscode-lldb--darwin-x64 = {
     pname = "vadimcn--vscode-lldb--darwin-x64";
-    version = "v1.11.3";
+    version = "v1.11.4";
     src = fetchurl {
-      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.3/codelldb-darwin-x64.vsix";
-      sha256 = "sha256-vx6URYi7QsgNfjrpEu7ukWCVSzGgCnLNopSe3gcXDYw=";
+      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.4/codelldb-darwin-x64.vsix";
+      sha256 = "sha256-eTHQY1bHHrsQvINmZ7Z44uSqbPy7eD4I1x6I1FTOyR0=";
     };
     publisher = "vadimcn";
     platform = "darwin-x64";
@@ -27,10 +27,10 @@
   };
   vadimcn--vscode-lldb--linux-arm64 = {
     pname = "vadimcn--vscode-lldb--linux-arm64";
-    version = "v1.11.3";
+    version = "v1.11.4";
     src = fetchurl {
-      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.3/codelldb-linux-arm64.vsix";
-      sha256 = "sha256-OIRQe6dCsSCEwlM3REsh9GDusoaUAW1MGLrsjnH14o8=";
+      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.4/codelldb-linux-arm64.vsix";
+      sha256 = "sha256-NOgkTnv+I2EBvwSB9zwcK5gz71MzmbH1GelBvfEf42g=";
     };
     publisher = "vadimcn";
     platform = "linux-arm64";
@@ -39,10 +39,10 @@
   };
   vadimcn--vscode-lldb--linux-x64 = {
     pname = "vadimcn--vscode-lldb--linux-x64";
-    version = "v1.11.3";
+    version = "v1.11.4";
     src = fetchurl {
-      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.3/codelldb-linux-x64.vsix";
-      sha256 = "sha256-7TerFGk4PFuoWIToiKF7yQD9eKkraAC4wBOEfhqhjjI=";
+      url = "https://github.com/vadimcn/codelldb/releases/download/v1.11.4/codelldb-linux-x64.vsix";
+      sha256 = "sha256-mPeWXz205nlvWmCwDW2/JwcG9M8vMnsWd2/bYHnnoy8=";
     };
     publisher = "vadimcn";
     platform = "linux-x64";
