@@ -9,7 +9,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 ## Note
 
 > [!NOTE]
-> Check the NixOS wiki [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
+> Check the NixOS wiki [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
 
 - Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
 - Extension publishers and names are lowercased only in Nix.
@@ -66,7 +66,7 @@ nix run github:nix-community/nix-vscode-extensions# -- --list-extensions
 ## Usage
 
 > [!NOTE]
-> Check the NixOS wiki [page](https://nixos.wiki/wiki/Visual_Studio_Code) about VS Code.
+> Check the NixOS wiki [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
 
 ### Extensions
 
