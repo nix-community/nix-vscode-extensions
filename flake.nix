@@ -40,7 +40,6 @@
           final: prev:
           let
             pkgs = nixpkgs.legacyPackages.${final.system};
-            utils = pkgs.vscode-utils;
             currentPlatform = systemPlatform.${final.system};
             isCompatibleVersion =
               vscodeVersion: engineVersion:
@@ -94,12 +93,12 @@
                 ))
                 (
                   x:
-                  x
+                  builtins.map (ext: ext // { hash = ext.sha256; }) x
                   ++ filterByPlatform { inherit checkVSCodeVersion vscodeVersion; } (
                     pkgs.lib.attrsets.mapAttrsToList
                       (name: value: {
                         url = value.src.url;
-                        sha256 = value.src.outputHash;
+                        hash = value.src.outputHash;
                         inherit (value)
                           publisher
                           name
@@ -130,37 +129,45 @@
                     publisher = lib.toLower publisher;
                   }
                 ))
-                (map (
-                  {
-                    name,
-                    publisher,
-                    version,
-                    sha256,
-                    url,
-                    ...
-                  }:
+                (
                   let
-                    override =
-                      (
-                        let
-                          overrides = (import ./overrides.nix { inherit pkgs; });
-                        in
-                        overrides.publisher or { }
-                      ).name or (x: x);
+                    # keep outside of map to improve performance
+                    mkExtension = import ./mkExtension.nix { inherit pkgs nixpkgs; };
                   in
-                  {
-                    inherit name;
-                    value = utils.buildVscodeMarketplaceExtension (override {
-                      vsix = prev.fetchurl {
-                        inherit url sha256;
-                        name = "${name}-${version}.zip";
+                  map (
+                    {
+                      name,
+                      publisher,
+                      version,
+                      hash,
+                      url,
+                      ...
+                    }:
+                    let
+                      extensionConfig = {
+                        mktplcRef = {
+                          inherit
+                            name
+                            publisher
+                            version
+                            hash
+                            ;
+                        };
+
+                        # We use not only VSCode Markeplace but also Open VSX
+                        # so we need to provide the URL for the extension
+                        vsix = prev.fetchurl {
+                          inherit url hash;
+                          name = "${name}-${version}.zip";
+                        };
                       };
-                      mktplcRef = {
-                        inherit name version publisher;
-                      };
-                    });
-                  }
-                ))
+                    in
+                    {
+                      inherit name;
+                      value = mkExtension extensionConfig;
+                    }
+                  )
+                )
                 # group by publisher
                 (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
                 # platform-specific extensions will overwrite universal extensions
