@@ -6,11 +6,9 @@ This flake provides Nix expressions for the majority of available extensions fro
 
 That said, you can now use a different set of extensions for `VS Code`/`VSCodium` in each of your projects. Moreover, you can share your flakes and cache them so that other people don't need to install these extensions manually!
 
-## Important
+## Note
 
-> [!NOTE]
-> Check the NixOS wiki [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
-
+- Check the NixOS wiki [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
 - Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
 - Extension publishers and names are lowercased only in Nix.
   - They're not lowercased in `.json` cache files such as [data/cache/open-vsx-latest.json](./data/cache/open-vsx-latest.json).
