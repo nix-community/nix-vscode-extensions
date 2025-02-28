@@ -131,7 +131,8 @@
                 ))
                 (
                   let
-                    mkExtension = (import ./overrides.nix { inherit pkgs nixpkgs; });
+                    # keep outside of map to improve performance
+                    mkExtension = import ./mkExtension.nix { inherit pkgs nixpkgs; };
                   in
                   map (
                     {

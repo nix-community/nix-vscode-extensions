@@ -6,7 +6,7 @@ This flake provides Nix expressions for the majority of available extensions fro
 
 That said, you can now use a different set of extensions for `VS Code`/`VSCodium` in each of your projects. Moreover, you can share your flakes and cache them so that other people don't need to install these extensions manually!
 
-## Note
+## Important
 
 > [!NOTE]
 > Check the NixOS wiki [page](https://wiki.nixos.org/wiki/Visual_Studio_Code) about VS Code.
@@ -21,6 +21,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions.
   - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
 - We don't automatically handle extension packs. You should look up extensions in a pack and explicitly write all necessary extensions.
+- Unfree extensions from `nixpkgs` stay unfree here (see [Special extensions](#special-extensions)).
 
 ## Template
 
@@ -288,13 +289,13 @@ Add necessary extensions there, preferrably, for all supported platforms (see [E
 
 Certain extensions require special treatment.
 
-Provide functions to modify such extension in [overrides.nix](overrides.nix).
+Provide functions to build such extension in [mkExtension.nix](mkExtension.nix).
 
-Optionally, create and link there issues explaining chosen override functions.
+Optionally, create and link there issues explaining chosen functions.
 
-Overrides apply to a whole attrset of extensions, including [Extra extensions](#extra-extensions).
+Each extension, including [Extra extensions](#extra-extensions), is built via one of the provided functions.
 
-Each override is applied to an argument of the `buildVscodeMarketplaceExtension` function.
+These functions don't modify `meta` of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
 
 #### Build problems
 

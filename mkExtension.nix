@@ -3,19 +3,18 @@
 { pkgs, nixpkgs }:
 let
   inherit (pkgs) lib;
+  mkExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
   pkgs' = lib.attrsets.recursiveUpdate pkgs {
-    vscode-utils.buildVscodeMarketplaceExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
+    vscode-utils.buildVscodeMarketplaceExtension = mkExtension;
   };
-in
-builtins.foldl' lib.attrsets.recursiveUpdate { } [
-  (
+  mkExtensionNixpkgs =
     # apply fixes from nixpkgs
     let
       # TODO PR to nixpkgs to allow overriding mktplcRef and vsix
       haveFixesNonOverridable = [
         "anweber.vscode-httpyac"
         "chenglou92.rescript-vscode"
-        # https://github.com/NixOS/nixpkgs/pull/383013
+        # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
         "vadimcn.vscode-lldb"
         "rust-lang.rust-analyzer"
       ];
@@ -107,44 +106,40 @@ builtins.foldl' lib.attrsets.recursiveUpdate { } [
         (builtins.foldl' lib.attrsets.recursiveUpdate { })
       ];
     in
-    fixed
-  )
-  (builtins.mapAttrs
-    (
-      publisher:
-      builtins.mapAttrs (
-        name: f:
-        (
-          { mktplcRef, vsix }@extensionConfig:
-          pkgs'.vscode-utils.buildVscodeMarketplaceExtension (extensionConfig // f extensionConfig)
+    fixed;
+  mkExtensionLocal = (
+    builtins.mapAttrs
+      (
+        publisher:
+        builtins.mapAttrs (
+          name: f: ({ mktplcRef, vsix }@extensionConfig: mkExtension (extensionConfig // f extensionConfig))
         )
       )
-    )
-    {
-      # apply custom fixes
-      # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
-      vadimcn.vscode-lldb = _: {
-        postInstall = lib.optionalString pkgs.stdenv.isLinux ''
-          cd "$out/$installPrefix"
-          patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-          patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
-        '';
-      };
+      {
+        # apply custom fixes
+        # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
+        vadimcn.vscode-lldb = _: {
+          postInstall = lib.optionalString pkgs.stdenv.isLinux ''
+            cd "$out/$installPrefix"
+            patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
+            patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
+          '';
+        };
 
-      ms-dotnettools.vscode-dotnet-runtime = _: {
-        postPatch = ''
-          chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
-        '';
-      };
-    }
-  )
-  {
-    __functor =
-      self:
-      { mktplcRef, vsix }@extensionConfig:
-      ((self.${mktplcRef.publisher} or { }).${mktplcRef.name}
-        or pkgs.vscode-utils.buildVscodeMarketplaceExtension
-      )
-        extensionConfig;
-  }
+        ms-dotnettools.vscode-dotnet-runtime = _: {
+          postPatch = ''
+            chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
+          '';
+        };
+      }
+  );
+  chooseMkExtension =
+    self:
+    { mktplcRef, vsix }@extensionConfig:
+    ((self.${mktplcRef.publisher} or { }).${mktplcRef.name} or mkExtension) extensionConfig;
+in
+builtins.foldl' lib.attrsets.recursiveUpdate { } [
+  mkExtensionNixpkgs
+  mkExtensionLocal
+  { __functor = chooseMkExtension; }
 ]
