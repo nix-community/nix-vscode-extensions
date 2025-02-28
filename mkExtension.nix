@@ -18,7 +18,7 @@ let
 
     # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Attrset
     # Each Attrset must be a valid argument of mkExtension (see above)
-    
+
     # Use mkExtensionNixpkgs to override extensions from nixpkgs. 
     # 
     # Example: 
