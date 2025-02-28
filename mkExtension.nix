@@ -1,12 +1,55 @@
 # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Derivation
 # Each Derivation MUST be produced via overridable buildVscodeMarketplaceExtension
+
+# Write custom fixes in mkExtensionLocal
+
 { pkgs, nixpkgs }:
 let
   inherit (pkgs) lib;
+
   mkExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
+
   pkgs' = lib.attrsets.recursiveUpdate pkgs {
     vscode-utils.buildVscodeMarketplaceExtension = mkExtension;
   };
+
+  mkExtensionLocal = applyMkExtension {
+    # Write your fixes here
+
+    # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Attrset
+    # Each Attrset must be a valid argument of mkExtension (see above)
+    
+    # Use mkExtensionNixpkgs to override extensions from nixpkgs. 
+    # 
+    # Example: 
+    # 
+    # ```nix
+    # foo.bar = { mktplcRef, vsix }@arg: (mkExtensionNixpkgs.foo.bar arg).override { postInstall = "..."; };
+    # ```
+
+    # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
+    vadimcn.vscode-lldb = _: {
+      postInstall = lib.optionalString pkgs.stdenv.isLinux ''
+        cd "$out/$installPrefix"
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
+        patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
+      '';
+    };
+
+    ms-dotnettools.vscode-dotnet-runtime = _: {
+      postPatch = ''
+        chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
+      '';
+    };
+  };
+
+  applyMkExtension = builtins.mapAttrs (
+    publisher:
+    builtins.mapAttrs (
+      name: f: ({ mktplcRef, vsix }@extensionConfig: mkExtension (extensionConfig // f extensionConfig))
+    )
+  );
+
   mkExtensionNixpkgs =
     # apply fixes from nixpkgs
     let
@@ -107,32 +150,7 @@ let
       ];
     in
     fixed;
-  mkExtensionLocal = (
-    builtins.mapAttrs
-      (
-        publisher:
-        builtins.mapAttrs (
-          name: f: ({ mktplcRef, vsix }@extensionConfig: mkExtension (extensionConfig // f extensionConfig))
-        )
-      )
-      {
-        # apply custom fixes
-        # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
-        vadimcn.vscode-lldb = _: {
-          postInstall = lib.optionalString pkgs.stdenv.isLinux ''
-            cd "$out/$installPrefix"
-            patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-            patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
-          '';
-        };
 
-        ms-dotnettools.vscode-dotnet-runtime = _: {
-          postPatch = ''
-            chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
-          '';
-        };
-      }
-  );
   chooseMkExtension =
     self:
     { mktplcRef, vsix }@extensionConfig:
