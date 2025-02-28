@@ -1,88 +1,150 @@
-{ pkgs }:
-{
-  # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
-  vadimcn.vscode-lldb = _: {
-    postInstall = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
-      cd "$out/$installPrefix"
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-      patchelf --add-rpath "${pkgs.lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
-    '';
+# Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Derivation
+# Each Derivation MUST be produced via overridable buildVscodeMarketplaceExtension
+{ pkgs, nixpkgs }:
+let
+  inherit (pkgs) lib;
+  pkgs' = lib.attrsets.recursiveUpdate pkgs {
+    vscode-utils.buildVscodeMarketplaceExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
   };
+in
+builtins.foldl' lib.attrsets.recursiveUpdate { } [
+  (
+    # apply fixes from nixpkgs
+    let
+      # TODO PR to nixpkgs to allow overriding mktplcRef and vsix
+      haveFixesNonOverridable = [
+        "anweber.vscode-httpyac"
+        "chenglou92.rescript-vscode"
+        # https://github.com/NixOS/nixpkgs/pull/383013
+        "vadimcn.vscode-lldb"
+        "rust-lang.rust-analyzer"
+      ];
 
-  # C# Related
-  ms-dotnettools.vscode-dotnet-runtime = _: {
-    postPatch = ''
-      chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
-    '';
-  };
+      # extensions with fixes
+      # where mktplcRef and vsix are overridable
+      haveFixesOverridable = [
+        # from the directory https://github.com/NixOS/nixpkgs/tree/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions
+        "asciidoctor.asciidoctor-vscode"
+        "azdavis.millet"
+        "b4dm4n.vscode-nixpkgs-fmt"
+        "betterthantomorrow.calva"
+        "charliermarsh.ruff"
+        "chrischinchilla.vscode-pandoc"
+        "contextmapper.context-mapper-vscode-extension"
+        "eugleo.magic-racket"
+        "foxundermoon.shell-format"
+        "hashicorp.terraform"
+        "jackmacwindows.craftos-pc"
+        "jebbs.plantuml"
+        "kamadorueda.alejandra"
+        "ms-dotnettools.csdevkit"
+        "ms-dotnettools.csharp"
+        "ms-python.python"
+        "ms-python.vscode-pylance"
+        "ms-toolsai.jupyter"
+        "ms-vscode-remote.remote-ssh"
+        "ms-vscode-remote.vscode-remote-extensionpack"
+        "ms-vscode.cpptools"
+        "ms-vsliveshare.vsliveshare"
+        "myriad-dreamin.tinymist"
+        "reditorsupport.r"
+        "sourcery.sourcery"
+        "sumneko.lua"
+        "tekumara.typos-vscode"
+        "timonwong.shellcheck"
+        "visualjj.visualjj"
+        "yzane.markdown-pdf"
 
-  # Custom Patch C# Devkit to work, credit to https://github.com/NixOS/nixpkgs/issues/270423#issuecomment-1902482401 for the initial bash script
-  ms-dotnettools.csdevkit = _: {
-    postPatch = with pkgs; ''
-      declare -A platform_map=(
-        ["x86_64-linux"]="linux-x64"
-        ["aarch64-linux"]="linux-arm64"
-        ["x86_64-darwin"]="darwin-x64"
-        ["aarch64-darwin"]="darwin-arm64"
+        # from https://github.com/NixOS/nixpkgs/blob/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions/default.nix
+        "continue.continue"
+        "devsense.phptools-vscode"
+        "kddejong.vscode-cfn-lint"
+        "ms-dotnettools.vscodeintellicode-csharp"
+        "uloco.theme-bluloco-light"
+        "valentjn.vscode-ltex"
+        "zxh404.vscode-proto3"
+      ];
+
+      extensionsNixpkgsPath = "${nixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix";
+      callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
+      extensionsNixpkgs = callPackage extensionsNixpkgsPath { };
+
+      fixed = lib.trivial.pipe haveFixesOverridable [
+        (builtins.map (
+          fullName:
+          let
+            fullNameList = lib.strings.splitString "." fullName;
+            publisher = lib.lists.head fullNameList;
+            name = lib.lists.last fullNameList;
+          in
+          {
+            inherit publisher name fullName;
+          }
+        ))
+        (builtins.filter (
+          {
+            publisher,
+            name,
+            fullName,
+          }:
+          (extensionsNixpkgs.${publisher} or { }).${name} or { } != { }
+        ))
+        (builtins.map (
+          {
+            publisher,
+            name,
+            fullName,
+          }:
+          let
+            path = "${nixpkgs}/pkgs/applications/editors/vscode/extensions/${fullName}";
+            extension =
+              if builtins.pathExists path then callPackage path { } else extensionsNixpkgs.${publisher}.${name};
+          in
+          {
+            ${publisher}.${name} = { mktplcRef, vsix }@extensionConfig: extension.override extensionConfig;
+          }
+        ))
+        (builtins.foldl' lib.attrsets.recursiveUpdate { })
+      ];
+    in
+    fixed
+  )
+  (builtins.mapAttrs
+    (
+      publisher:
+      builtins.mapAttrs (
+        name: f:
+        (
+          { mktplcRef, vsix }@extensionConfig:
+          pkgs'.vscode-utils.buildVscodeMarketplaceExtension (extensionConfig // f extensionConfig)
+        )
       )
+    )
+    {
+      # apply custom fixes
+      # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
+      vadimcn.vscode-lldb = _: {
+        postInstall = lib.optionalString pkgs.stdenv.isLinux ''
+          cd "$out/$installPrefix"
+          patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
+          patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
+        '';
+      };
 
-      declare patchCommand=${if stdenv.isDarwin then "install_name_tool" else "patchelf"}
-      declare add_rpath_command=${if stdenv.isDarwin then "-add_rpath" else "--set-rpath"}
-
-      patchelf_add_icu_as_needed() {
-        declare elf="''${1?}"
-        declare icu_major_v="${lib.head (lib.splitVersion (lib.getVersion icu.name))}"
-        for icu_lib in icui18n icuuc icudata; do
-          patchelf --add-needed "lib''${icu_lib}.so.$icu_major_v" "$elf"
-        done
-      }
-
-      patchelf_common() {
-        declare elf="''${1?}"
-        chmod +x "$elf"
-        patchelf_add_icu_as_needed "$elf"
-        patchelf --add-needed "libssl.so" "$elf"
-        patchelf --add-needed "libz.so.1" "$elf"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${
-            lib.makeLibraryPath [
-              stdenv.cc.cc
-              openssl
-              zlib
-              icu.out
-            ]
-          }:\$ORIGIN" \
-          "$elf"
-      }
-
-      sed -i -E -e 's/(e.extensionPath,"cache")/require("os").homedir(),".cache","Microsoft", "csdevkit","cache"/g' "$PWD/dist/extension.js"
-      sed -i -E -e 's/o\.chmod/console.log/g' "$PWD/dist/extension.js"
-
-      declare platform="''${platform_map[${stdenv.system}]}"
-      if [[ -z "$platform" ]]; then
-        echo "Unsupported platform: ${stdenv.system}"
-        exit 1
-      fi
-
-      declare new_rpath="${
-        lib.makeLibraryPath [
-          stdenv.cc.cc
-          openssl
-          zlib
-          icu.out
-        ]
-      }:\$ORIGIN"
-      declare base_path="./components/vs-green-server/platforms/$platform/node_modules"
-      declare -a paths=(
-        "@microsoft/visualstudio-server.$platform/Microsoft.VisualStudio.Code.Server"
-        "@microsoft/servicehub-controller-net60.$platform/Microsoft.ServiceHub.Controller"
-        "@microsoft/visualstudio-code-servicehost.$platform/Microsoft.VisualStudio.Code.ServiceHost"
-        "@microsoft/visualstudio-reliability-monitor.$platform/Microsoft.VisualStudio.Reliability.Monitor"
+      ms-dotnettools.vscode-dotnet-runtime = _: {
+        postPatch = ''
+          chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
+        '';
+      };
+    }
+  )
+  {
+    __functor =
+      self:
+      { mktplcRef, vsix }@extensionConfig:
+      ((self.${mktplcRef.publisher} or { }).${mktplcRef.name}
+        or pkgs.vscode-utils.buildVscodeMarketplaceExtension
       )
-
-      for path in "''${paths[@]}"; do
-        $patchCommand $add_rpath_command "$new_rpath" "$base_path/$path"
-      done
-    '';
-  };
-}
+        extensionConfig;
+  }
+]
