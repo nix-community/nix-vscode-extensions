@@ -90,29 +90,29 @@ let
         "jackmacwindows.craftos-pc"
         "jebbs.plantuml"
         "kamadorueda.alejandra"
-        "ms-dotnettools.csdevkit"
+        "ms-dotnettools.csdevkit" # unfree
         "ms-dotnettools.csharp"
         "ms-python.python"
-        "ms-python.vscode-pylance"
+        "ms-python.vscode-pylance" # unfree
         "ms-toolsai.jupyter"
-        "ms-vscode-remote.remote-ssh"
-        "ms-vscode-remote.vscode-remote-extensionpack"
+        "ms-vscode-remote.remote-ssh" # unfree
+        "ms-vscode-remote.vscode-remote-extensionpack" # unfree
         "ms-vscode.cpptools"
         "ms-vsliveshare.vsliveshare"
         "myriad-dreamin.tinymist"
         "reditorsupport.r"
-        "sourcery.sourcery"
+        "sourcery.sourcery" # unfree
         "sumneko.lua"
         "tekumara.typos-vscode"
         "timonwong.shellcheck"
-        "visualjj.visualjj"
+        "visualjj.visualjj" # unfree
         "yzane.markdown-pdf"
 
-        # from https://github.com/NixOS/nixpkgs/blob/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions/default.nix
+        # completely described in https://github.com/NixOS/nixpkgs/blob/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions/default.nix
         "continue.continue"
-        "devsense.phptools-vscode"
+        "devsense.phptools-vscode" # unfree
         "kddejong.vscode-cfn-lint"
-        "ms-dotnettools.vscodeintellicode-csharp"
+        "ms-dotnettools.vscodeintellicode-csharp" # unfree
         "uloco.theme-bluloco-light"
         "valentjn.vscode-ltex"
         "zxh404.vscode-proto3"
