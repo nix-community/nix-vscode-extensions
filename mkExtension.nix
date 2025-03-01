@@ -13,6 +13,13 @@ let
     vscode-utils.buildVscodeMarketplaceExtension = mkExtension;
   };
 
+  applyMkExtension = builtins.mapAttrs (
+    publisher:
+    builtins.mapAttrs (
+      name: f: ({ mktplcRef, vsix }@extensionConfig: mkExtension (extensionConfig // f extensionConfig))
+    )
+  );
+
   mkExtensionLocal = applyMkExtension {
     # Write your fixes here
 
@@ -51,13 +58,7 @@ let
       '';
     };
   };
-
-  applyMkExtension = builtins.mapAttrs (
-    publisher:
-    builtins.mapAttrs (
-      name: f: ({ mktplcRef, vsix }@extensionConfig: mkExtension (extensionConfig // f extensionConfig))
-    )
-  );
+  
 
   mkExtensionNixpkgs =
     # apply fixes from nixpkgs
