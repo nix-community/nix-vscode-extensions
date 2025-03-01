@@ -19,10 +19,10 @@ let
     # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Attrset
     # Each Attrset must be a valid argument of mkExtension (see above)
 
-    # Use mkExtensionNixpkgs to override extensions from nixpkgs. 
-    # 
-    # Example: 
-    # 
+    # Use mkExtensionNixpkgs to override extensions from nixpkgs.
+    #
+    # Example:
+    #
     # ```nix
     # foo.bar = { mktplcRef, vsix }@arg: (mkExtensionNixpkgs.foo.bar arg).override { postInstall = "..."; };
     # ```
