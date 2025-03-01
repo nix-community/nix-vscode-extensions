@@ -19,7 +19,7 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions ([discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
   - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
 - We don't automatically handle extension packs. You should look up extensions in a pack and explicitly write all necessary extensions.
-- Unfree extensions from `nixpkgs` stay unfree here (see [Special extensions](#special-extensions)).
+- [Unfree](https://wiki.nixos.org/wiki/Unfree_software) extensions from `nixpkgs` stay unfree here (see [Special extensions](#special-extensions)).
 
 ## Template
 
@@ -293,7 +293,7 @@ Optionally, create and link there issues explaining chosen functions.
 
 Each extension, including [Extra extensions](#extra-extensions), is built via one of the provided functions.
 
-These functions don't modify `meta` of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
+These functions don't modify the license of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
 
 #### Build problems
 
