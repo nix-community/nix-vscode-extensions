@@ -58,7 +58,8 @@ let
       '';
     };
   };
-  
+
+  extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
 
   mkExtensionNixpkgs =
     # apply fixes from nixpkgs
@@ -75,7 +76,7 @@ let
       # extensions with fixes
       # where mktplcRef and vsix are overridable
       haveFixesOverridable = [
-        # from the directory https://github.com/NixOS/nixpkgs/tree/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions
+        # have own directories in https://github.com/NixOS/nixpkgs/tree/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions
         "asciidoctor.asciidoctor-vscode"
         "azdavis.millet"
         "b4dm4n.vscode-nixpkgs-fmt"
@@ -122,6 +123,7 @@ let
       extensionsNixpkgs = callPackage extensionsNixpkgsPath { };
 
       fixed = lib.trivial.pipe haveFixesOverridable [
+        (builtins.filter (x: !(builtins.elem x extensionsRemoved)))
         (builtins.map (
           fullName:
           let
@@ -164,7 +166,17 @@ let
   chooseMkExtension =
     self:
     { mktplcRef, vsix }@extensionConfig:
-    ((self.${mktplcRef.publisher} or { }).${mktplcRef.name} or mkExtension) extensionConfig;
+    ((self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
+      if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
+        builtins.throw ''
+          The extension '${mktplcRef.publisher}.${mktplcRef.name}' has been removed on ${pkgs.system}.
+          See '${./removed.nix}' for details.
+        ''
+      else
+        mkExtension
+    )
+    )
+      extensionConfig;
 in
 builtins.foldl' lib.attrsets.recursiveUpdate { } [
   mkExtensionNixpkgs

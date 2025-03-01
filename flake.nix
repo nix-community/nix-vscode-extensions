@@ -173,35 +173,6 @@
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
                 (builtins.mapAttrs (_: builtins.foldl' (k: { name, value }: k // { ${name} = value; }) { }))
-                (
-                  x:
-                  builtins.foldl'
-                    (
-                      extensions: removedPublisherConfig:
-                      if !(extensions ? ${removedPublisherConfig.publisher}) then
-                        extensions
-                      else
-                        extensions
-                        // {
-                          "${removedPublisherConfig.publisher}" = builtins.foldl' (
-                            publisherExtensions: extensionName:
-                            publisherExtensions
-                            // {
-                              "${extensionName}" = builtins.throw ''
-                                The extension '${removedPublisherConfig.publisher}.${extensionName}' was removed.
-                                See '${./removed.nix}' for details.
-                              '';
-                            }
-                          ) extensions.${removedPublisherConfig.publisher} removedPublisherConfig.extensions;
-                        }
-                    )
-                    x
-                    (
-                      pkgs.lib.attrsets.mapAttrsToList (publisher: extensions: {
-                        inherit publisher extensions;
-                      }) (import ./removed.nix)
-                    )
-                )
               ];
             mkSet =
               attrs@{
