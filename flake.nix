@@ -39,7 +39,7 @@
         default =
           final: prev:
           let
-            pkgs = nixpkgs.legacyPackages.${final.system};
+            pkgs = prev;
             currentPlatform = systemPlatform.${final.system};
             isCompatibleVersion =
               vscodeVersion: engineVersion:
