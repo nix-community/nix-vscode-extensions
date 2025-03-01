@@ -19,7 +19,9 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions ([discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
   - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
 - We don't automatically handle extension packs. You should look up extensions in a pack and explicitly write all necessary extensions.
-- [Unfree](https://wiki.nixos.org/wiki/Unfree_software) extensions from `nixpkgs` stay unfree here (see [Special extensions](#special-extensions)).
+- Unfree ([wiki](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs` stay unfree here (see [Special extensions](#special-extensions)). If you want to use unfree extensions, try one of the following ways:
+  - Allow unfree packages ([manual](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree)).
+  - Update the license of a particular extension `(<publisher>.<name>.override { meta.license = [ ]; })`.
 
 ## Template
 
