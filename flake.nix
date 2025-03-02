@@ -172,7 +172,24 @@
                 (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
                 # platform-specific extensions will overwrite universal extensions
                 # due to the sorting order of platforms in the Haskell script
-                (builtins.mapAttrs (_: builtins.foldl' (k: { name, value }: k // { ${name} = value; }) { }))
+                (builtins.mapAttrs (
+                  _:
+                  builtins.foldl' (
+                    k:
+                    { name, value }:
+                    k
+                    // {
+                      ${name} =
+                        if !(lib.attrsets.isDerivation value) then
+                          builtins.throw ''
+                            The extension '${value.vscodeExtPublisher}.${name}' has been removed on ${pkgs.system}.
+                            See '${./removed.nix}' for details.
+                          ''
+                        else
+                          value;
+                    }
+                  ) { }
+                ))
               ];
             mkSet =
               attrs@{

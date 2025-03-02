@@ -168,10 +168,7 @@ let
     { mktplcRef, vsix }@extensionConfig:
     ((self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
       if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
-        builtins.throw ''
-          The extension '${mktplcRef.publisher}.${mktplcRef.name}' has been removed on ${pkgs.system}.
-          See '${./removed.nix}' for details.
-        ''
+        _: { vscodeExtPublisher = mktplcRef.publisher; }
       else
         mkExtension
     )
