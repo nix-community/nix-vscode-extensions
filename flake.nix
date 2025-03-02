@@ -238,7 +238,12 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        extensions = self.overlays.default pkgs pkgs;
+        extensions = import nixpkgs {
+          inherit system;
+          # Uncomment to allow unfree extensions
+          # config.allowUnfree = true;
+          overlays = [ self.overlays.default ];
+        };
         packages = {
           default =
             pkgs.lib.trivial.pipe
