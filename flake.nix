@@ -261,12 +261,24 @@
               x.override {
                 vscode = pkgs.vscodium;
 
-                vscodeExtensions = with self.extensions.${system}.vscode-marketplace; [
-                  golang.go
-                  vlanguage.vscode-vlang
-                  rust-lang.rust-analyzer
-                  vadimcn.vscode-lldb
-                ];
+                vscodeExtensions =
+                  with self.extensions.${system}.vscode-marketplace;
+                  [
+                    golang.go
+                    vlanguage.vscode-vlang
+                    rust-lang.rust-analyzer
+                    vadimcn.vscode-lldb
+                  ]
+                  ++ (
+                    # I wanted to tests VSCodium with extensions from removed.nix
+                    # However, it seems like none of the removed extensions can be tested
+                    lib.lists.optionals (builtins.elem system lib.platforms.linux) [
+                      # May not build to not redistribute via packages.default
+                      # (ms-vscode.cpptools.override { meta.license = [ ]; })
+                      # Local build hangs
+                      # yzane.markdown-pdf
+                    ]
+                  );
               }
             )
             (
