@@ -18,6 +18,7 @@
       self,
       nixpkgs,
       flake-utils,
+      flake-compat,
       ...
     }:
     let
@@ -277,7 +278,7 @@
                     This is a sample overridden VSCodium (a FOSS fork of VS Code) with a few extensions.
                     You can override this package and set `vscodeExtensions` to a list of extension
                     derivations, specifically those provided by this flake.
-                    
+
                     The [repository] offers approximately 40,000 extensions from the [Visual Studio Marketplace]
                     and an additional 4,500 from the [Open VSX Registry].
 
@@ -292,6 +293,55 @@
         };
 
         formatter = pkgs.nixfmt-rfc-style;
+
+        checks.default = pkgs.runCommand "tests" { nativeBuildInputs = [ pkgs.nix-unit ]; } ''
+          export HOME="$(realpath .)"
+
+          # The nix derivation must be able to find 
+          # all used inputs in the nix-store 
+          # because it cannot download it during build time.
+
+          nix-unit --eval-store "$HOME" \
+            --extra-experimental-features flakes \
+            --override-input nixpkgs ${nixpkgs} \
+            --override-input flake-utils ${flake-utils} \
+            --override-input flake-compat ${flake-compat} \
+            --override-input flake-utils/systems ${flake-utils.inputs.systems} \
+            --flake ${self}#tests
+
+          touch $out
+        '';
+
+        tests =
+          let
+            inherit (self.extensions.${system}) vscode-marketplace;
+          in
+          {
+            "test: ms-python.vscode-pylance fails if unfree" = {
+              expr =
+                # https://discourse.nixos.org/t/evaluating-possibly-nonfree-derivations/24835/2
+                (builtins.tryEval (builtins.unsafeDiscardStringContext vscode-marketplace.ms-python.vscode-pylance))
+                .success;
+              expected = false;
+            };
+            "test: ms-vscode.cpptools passes only on linux" = {
+              expr = (builtins.tryEval vscode-marketplace.ms-vscode.cpptools).success;
+              expected = builtins.elem system [
+                "x86_64-linux"
+                "aarch64-linux"
+              ];
+            };
+            "test: ms-python.vscode-pylance passes if not unfree" = {
+              expr =
+                (builtins.tryEval (vscode-marketplace.ms-python.vscode-pylance.override { meta.license = [ ]; }))
+                .success;
+              expected = true;
+            };
+            "test: rust-lang.rust-analyzer passes" = {
+              expr = (builtins.tryEval vscode-marketplace.rust-lang.rust-analyzer).success;
+              expected = true;
+            };
+          };
       }
     ));
 }
