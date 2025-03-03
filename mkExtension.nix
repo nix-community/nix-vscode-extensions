@@ -9,10 +9,6 @@ let
 
   mkExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
 
-  pkgs' = lib.attrsets.recursiveUpdate pkgs {
-    vscode-utils.buildVscodeMarketplaceExtension = mkExtension;
-  };
-
   applyMkExtension = builtins.mapAttrs (
     publisher:
     builtins.mapAttrs (
@@ -61,107 +57,62 @@ let
 
   extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
 
-  mkExtensionNixpkgs =
-    # apply fixes from nixpkgs
-    let
-      # TODO PR to nixpkgs to allow overriding mktplcRef and vsix
-      haveFixesNonOverridable = [
-        "anweber.vscode-httpyac"
-        "chenglou92.rescript-vscode"
-        # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
-        "vadimcn.vscode-lldb"
-        "rust-lang.rust-analyzer"
-      ];
+  # We don't modify callPackage because extensions
+  # may use its original version
+  pkgs' = pkgs // {
+    vscode-utils = pkgs.vscode-utils // {
+      buildVscodeMarketplaceExtension = mkExtension;
+    };
+  };
 
-      # extensions with fixes
-      # where mktplcRef and vsix are overridable
-      haveFixesOverridable = [
-        # have own directories in https://github.com/NixOS/nixpkgs/tree/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions
-        "asciidoctor.asciidoctor-vscode"
-        "azdavis.millet"
-        "b4dm4n.vscode-nixpkgs-fmt"
-        "betterthantomorrow.calva"
-        "charliermarsh.ruff"
-        "chrischinchilla.vscode-pandoc"
-        "contextmapper.context-mapper-vscode-extension"
-        "eugleo.magic-racket"
-        "foxundermoon.shell-format"
-        "hashicorp.terraform"
-        "jackmacwindows.craftos-pc"
-        "jebbs.plantuml"
-        "kamadorueda.alejandra"
-        "ms-dotnettools.csdevkit" # unfree
-        "ms-dotnettools.csharp"
-        "ms-python.python"
-        "ms-python.vscode-pylance" # unfree
-        "ms-toolsai.jupyter"
-        "ms-vscode-remote.remote-ssh" # unfree
-        "ms-vscode-remote.vscode-remote-extensionpack" # unfree
-        "ms-vscode.cpptools"
-        "ms-vsliveshare.vsliveshare"
-        "myriad-dreamin.tinymist"
-        "reditorsupport.r"
-        "sourcery.sourcery" # unfree
-        "sumneko.lua"
-        "tekumara.typos-vscode"
-        "timonwong.shellcheck"
-        "visualjj.visualjj" # unfree
-        "yzane.markdown-pdf"
+  callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 
-        # completely described in https://github.com/NixOS/nixpkgs/blob/555702214240ef048370f6c2fe27674ec73da765/pkgs/applications/editors/vscode/extensions/default.nix
-        "continue.continue"
-        "devsense.phptools-vscode" # unfree
-        "kddejong.vscode-cfn-lint"
-        "ms-dotnettools.vscodeintellicode-csharp" # unfree
-        "uloco.theme-bluloco-light"
-        "valentjn.vscode-ltex"
-        "zxh404.vscode-proto3"
-      ];
+  extensionsNixpkgs =
+    callPackage "${nixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix"
+      { config.allowAliases = false; };
 
-      extensionsNixpkgsPath = "${nixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix";
-      callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
-      extensionsNixpkgs = callPackage extensionsNixpkgsPath { };
+  haveFixesNonOverridable = [
+    "anweber.vscode-httpyac"
+    "chenglou92.rescript-vscode"
+    # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
+    "vadimcn.vscode-lldb"
+    "rust-lang.rust-analyzer"
+  ];
 
-      fixed = lib.trivial.pipe haveFixesOverridable [
-        (builtins.filter (x: !(builtins.elem x extensionsRemoved)))
-        (builtins.map (
-          fullName:
-          let
-            fullNameList = lib.strings.splitString "." fullName;
-            publisher = lib.lists.head fullNameList;
-            name = lib.lists.last fullNameList;
-          in
-          {
-            inherit publisher name fullName;
-          }
-        ))
-        (builtins.filter (
-          {
-            publisher,
-            name,
-            fullName,
-          }:
-          (extensionsNixpkgs.${publisher} or { }).${name} or { } != { }
-        ))
-        (builtins.map (
-          {
-            publisher,
-            name,
-            fullName,
-          }:
-          let
-            path = "${nixpkgs}/pkgs/applications/editors/vscode/extensions/${fullName}";
-            extension =
-              if builtins.pathExists path then callPackage path { } else extensionsNixpkgs.${publisher}.${name};
-          in
-          {
-            ${publisher}.${name} = { mktplcRef, vsix }@extensionConfig: extension.override extensionConfig;
-          }
-        ))
-        (builtins.foldl' lib.attrsets.recursiveUpdate { })
-      ];
-    in
-    fixed;
+  mkExtensionNixpkgs = builtins.mapAttrs (
+    publisher:
+    builtins.mapAttrs (
+      name: extension:
+      let
+        extensionId = "${publisher}.${name}";
+      in
+      if builtins.elem extensionId extensionsRemoved then
+        _: { vscodeExtPublisher = publisher; }
+      else
+        let
+          subPath =
+            {
+              ms-ceintl = "language-packs.nix";
+              wakatime = "WakaTime.vscode-wakatime";
+            }
+            .${publisher} or extensionId;
+          path = "${nixpkgs}/pkgs/applications/editors/vscode/extensions/${subPath}";
+          extension' =
+            if builtins.pathExists path then
+              let
+                extension'' = callPackage path { };
+              in
+              if publisher == "ms-ceintl" then extension''.${name} else extension''
+            else
+              extension;
+        in
+        { mktplcRef, vsix }@extensionConfig:
+        if builtins.elem extensionId haveFixesNonOverridable then
+          mkExtension extensionConfig
+        else
+          (extension'.override or (abort "${publisher}.${name}")) extensionConfig
+    )
+  ) extensionsNixpkgs;
 
   chooseMkExtension =
     self:
