@@ -235,50 +235,62 @@
     // (eachDefaultSystem (
       system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
-        extensions = import nixpkgs {
+        pkgs = import nixpkgs {
           inherit system;
           # Uncomment to allow unfree extensions
           # config.allowUnfree = true;
           overlays = [ self.overlays.default ];
         };
+      in
+      {
+        extensions = {
+          inherit (pkgs)
+            vscode-marketplace
+            open-vsx
+            vscode-marketplace-release
+            open-vsx-release
+            forVSCodeVersion
+            ;
+        };
+
         packages = {
-          default =
-            pkgs.lib.trivial.pipe
-              (pkgs.vscode-with-extensions.override {
+          default = lib.trivial.pipe pkgs.vscode-with-extensions [
+            (
+              x:
+              x.override {
                 vscode = pkgs.vscodium;
+
                 vscodeExtensions = with self.extensions.${system}.vscode-marketplace; [
                   golang.go
                   vlanguage.vscode-vlang
                   rust-lang.rust-analyzer
                   vadimcn.vscode-lldb
                 ];
+              }
+            )
+            (
+              x:
+              x.overrideAttrs (prev: {
+                meta = prev.meta // {
+                  description = "VSCodium with a few extensions.";
+                  longDescription = ''
+                    This is a sample overridden VSCodium (a FOSS fork of VS Code) with a few extensions.
+                    You can override this package and set `vscodeExtensions` to a list of extension
+                    derivations, specifically those provided by this flake.
+                    
+                    The [repository] offers approximately 40,000 extensions from the [Visual Studio Marketplace]
+                    and an additional 4,500 from the [Open VSX Registry].
+
+                    [repository]: https://github.com/nix-community/nix-vscode-extensions
+                    [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
+                    [Open VSX Registry]: https://open-vsx.org/
+                  '';
+                };
               })
-              [
-                (
-                  x:
-                  pkgs.lib.attrsets.recursiveUpdate x {
-                    meta = {
-                      longDescription = ''
-                        This is a sample overridden VSCodium (FOSS fork of VS Code) with a couple extensions.
-                        You can override this package and set `vscodeExtensions` to a list of extension
-                        derivations, namely those provided by this flake.
-
-                        The [repository] provides ~40K extensions from [Visual Studio Marketplace]
-                        and another ~3K from [Open VSX Registry].
-
-                        [repository]: https://github.com/nix-community/nix-vscode-extensions
-                        [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
-                        [Open VSX Registry]: https://open-vsx.org/
-                      '';
-                    };
-                  }
-                )
-                (x: x // { meta = builtins.removeAttrs x.meta [ "description" ]; })
-              ];
+            )
+          ];
         };
+
         formatter = pkgs.nixfmt-rfc-style;
       }
     ));
