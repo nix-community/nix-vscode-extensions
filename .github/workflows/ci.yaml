@@ -1,4 +1,38 @@
 jobs:
+  test:
+    name: Test extensions
+    permissions: 
+      actions: write
+    runs-on:
+      - ubuntu-24.04
+      - ubuntu-24.04-arm
+      - macos-13
+      - macos-15
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: nixbuild/nix-quick-install-action@v30
+        with:
+          nix_conf: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://cache.iog.io
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=
+      - name: Restore and cache Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-test-${{ hashfiles('**/flake.nix', '**/flake.lock', '**/*.nix') }}
+          restore-prefixes-first-match: nix-test-
+          gc-max-store-size-linux: 7500000000
+          purge: true
+          purge-prefixes: nix-test-
+          purge-created: 0
+          purge-primary-key: never
+      - name: Build VS Codium with extensions
+        run: nix build
+      - name: Run checks
+        run: nix flake check
+
   nixCI:
     name: Nix CI
     permissions:
