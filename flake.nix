@@ -336,12 +336,9 @@
                 .success;
               expected = false;
             };
-            "test: ms-vscode.cpptools passes only on linux" = {
+            "test: ms-vscode.cpptools passes only on " = {
               expr = (builtins.tryEval vscode-marketplace.ms-vscode.cpptools).success;
-              expected = builtins.elem system [
-                "x86_64-linux"
-                "aarch64-linux"
-              ];
+              expected = builtins.elem system lib.platforms.linux;
             };
             "test: ms-python.vscode-pylance passes if not unfree" = {
               expr =
