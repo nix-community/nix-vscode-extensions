@@ -7,12 +7,17 @@
 let
   inherit (pkgs) lib;
 
-  mkExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
+  buildVscodeMarketplaceExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
+  buildVscodeExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeExtension;
 
   applyMkExtension = builtins.mapAttrs (
     publisher:
     builtins.mapAttrs (
-      name: f: ({ mktplcRef, vsix }@extensionConfig: mkExtension (extensionConfig // f extensionConfig))
+      name: f:
+      (
+        { mktplcRef, vsix }@extensionConfig:
+        buildVscodeMarketplaceExtension (extensionConfig // f extensionConfig)
+      )
     )
   );
 
@@ -20,7 +25,7 @@ let
     # Write your fixes here
 
     # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Attrset
-    # Each Attrset must be a valid argument of mkExtension (see above)
+    # Each Attrset must be a valid argument of buildVscodeMarketplaceExtension (see above)
 
     # Use mkExtensionNixpkgs to override extensions from nixpkgs.
     #
@@ -61,7 +66,7 @@ let
   # may use its original version
   pkgs' = pkgs // {
     vscode-utils = pkgs.vscode-utils // {
-      buildVscodeMarketplaceExtension = mkExtension;
+      inherit buildVscodeMarketplaceExtension buildVscodeExtension;
     };
   };
 
@@ -108,7 +113,7 @@ let
         in
         { mktplcRef, vsix }@extensionConfig:
         if builtins.elem extensionId haveFixesNonOverridable then
-          mkExtension extensionConfig
+          buildVscodeMarketplaceExtension extensionConfig
         else
           (extension'.override or (abort "${publisher}.${name}")) extensionConfig
     )
@@ -121,7 +126,7 @@ let
       if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
         _: { vscodeExtPublisher = mktplcRef.publisher; }
       else
-        mkExtension
+        buildVscodeMarketplaceExtension
     )
     )
       extensionConfig;
