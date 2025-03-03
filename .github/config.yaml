@@ -1,6 +1,8 @@
 collectGarbage: true
 logSeverity: Info
 openVSX:
+  pageCount: 10
+  pageSize: 1000
   release:
     eamodio:
     - gitlens
@@ -9,6 +11,8 @@ openVSX:
     stkb:
     - rewrap
 vscodeMarketplace:
+  pageCount: 100
+  pageSize: 1000
   release:
     eamodio:
     - gitlens
