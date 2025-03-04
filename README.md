@@ -31,24 +31,24 @@ This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a
 
 1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-new.html)).
 
-    ```console
-    nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
-    cd vscodium-project
-    git init && git add .
-    ```
+   ```console
+   nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
+   cd vscodium-project
+   git init && git add .
+   ```
 
 1. Run `VSCodium`.
 
-    ```console
-    nix run .# .
-    ```
+   ```console
+   nix run .# .
+   ```
 
 1. Alternatively, start a devShell and run `VSCodium`. A `shellHook` will print extensions available in the `VSCodium`.
 
-    ```console
-    nix develop
-    codium .
-    ```
+   ```console
+   nix develop
+   codium .
+   ```
 
 In case of problems see [Troubleshooting](#troubleshooting).
 
@@ -99,7 +99,7 @@ inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 ### Without flakes
 
 > [!NOTE]
-> The values of `url`, `ref`, `rev` and  in the `fetchGit` argument are for demonstration purposes.
+> The values of `url`, `ref`, `rev` and in the `fetchGit` argument are for demonstration purposes.
 > The value `7efef14cff53b1eeeb4e590294330e383bbf387f` is the full SHA-256 hash of a commit in this repository.
 > Replace it with the hash of the commit you need.
 
@@ -168,7 +168,7 @@ t.open-vsx                    t.vscode-marketplace
 #### Get `extensions` without flakes
 
 > [!NOTE]
-> The values of `url`, `ref`, `rev` and  in the `fetchGit` argument are for demonstration purposes.
+> The values of `url`, `ref`, `rev` and in the `fetchGit` argument are for demonstration purposes.
 > The value `7efef14cff53b1eeeb4e590294330e383bbf387f` is the full SHA-256 hash of a commit in this repository.
 > Replace it with the hash of the commit you need.
 
@@ -307,16 +307,16 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 
 1. Run a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
 
-    ```console
-    nix develop nix-dev/
-    ```
+   ```console
+   nix develop nix-dev/
+   ```
 
 1. (Optionally) Start `VSCodium` with necessary extensions and tools.
 
-    ```console
-    nix run nix-dev/#writeSettings
-    nix run nix-dev/#codium .
-    ```
+   ```console
+   nix run nix-dev/#writeSettings
+   nix run nix-dev/#codium .
+   ```
 
 ### Haskell script
 
@@ -324,16 +324,16 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 
 1. Set the environment.
 
-    ```console
-    set -a
-    source .env
-    ```
+   ```console
+   set -a
+   source .env
+   ```
 
 1. Run the script.
 
-    ```console
-    nix run haskell/#updateExtensions
-    ```
+   ```console
+   nix run haskell/#updateExtensions
+   ```
 
 ### Pull requests
 

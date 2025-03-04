@@ -5,25 +5,25 @@ openVSX:
   pageSize: 1000
   release:
     eamodio:
-    - gitlens
+      - gitlens
     rust-lang:
-    - rust-analyzer
+      - rust-analyzer
     stkb:
-    - rewrap
+      - rewrap
 vscodeMarketplace:
   pageCount: 100
   pageSize: 1000
   release:
     eamodio:
-    - gitlens
+      - gitlens
     GitHub:
-    - copilot
-    - copilot-chat
-    - vscode-pull-request-github
+      - copilot
+      - copilot-chat
+      - vscode-pull-request-github
     ms-vscode-remote:
-    - remote-ssh
+      - remote-ssh
     rust-lang:
-    - rust-analyzer
+      - rust-analyzer
     stkb:
-    - rewrap
+      - rewrap
 maxMissingTimes: 10
