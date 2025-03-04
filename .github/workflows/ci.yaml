@@ -56,7 +56,6 @@ jobs:
 
   update:
     name: Update data and flakes
-    needs: test
     permissions:
       actions: write
       contents: write
@@ -122,7 +121,9 @@ jobs:
 
   test-template:
     name: Test template works
-    needs: update
+    needs: 
+      - update
+      - test
     permissions:
       actions: write
     strategy:
