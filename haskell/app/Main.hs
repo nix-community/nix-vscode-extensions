@@ -25,7 +25,7 @@ import Data.Aeson.Types (parseMaybe)
 import Data.ByteString qualified as BS
 import Data.Default (def)
 import Data.Either (fromRight)
-import Data.Foldable (Foldable (foldl'), traverse_)
+import Data.Foldable (traverse_)
 import Data.Function (fix, (&))
 import Data.Generics.Labels ()
 import Data.HashMap.Strict qualified as Map
