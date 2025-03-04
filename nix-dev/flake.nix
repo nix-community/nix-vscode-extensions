@@ -3,13 +3,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a";
     cache-nix-action = {
       url = "github:nix-community/cache-nix-action";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.devshell.follows = "devshell";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+      flake = false;
     };
     systems.url = "github:nix-systems/default";
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.url = "github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a?dir=lib";
+    };
     devshell = {
       url = "github:deemp/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
