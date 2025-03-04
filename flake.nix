@@ -373,6 +373,16 @@
               template = (import nix-dev.inputs.flake-compat { src = ./template; }).defaultNix;
             in
             {
+              test =
+                (mkSaveFromGC {
+                  inputs = {
+                    self.inputs = inputsCombined;
+                  };
+                  derivations = [
+                    self'.packages.default
+                  ];
+                }).saveFromGC;
+
               update =
                 (mkSaveFromGC {
                   inputs = {
