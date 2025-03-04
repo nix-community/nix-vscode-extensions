@@ -11,7 +11,8 @@ data Criterion = Criterion
   { filterType :: Int
   , value :: Text
   }
-  deriving (Generic, ToJSON)
+  deriving stock (Generic)
+  deriving anyclass (ToJSON)
 
 data Filter = Filter
   { criteria :: [Criterion]
@@ -20,11 +21,13 @@ data Filter = Filter
   , sortBy :: Int
   , sortOrder :: Int
   }
-  deriving (Generic, ToJSON)
+  deriving stock (Generic)
+  deriving anyclass (ToJSON)
 
 data Req = Req
   { filters :: [Filter]
   , assetTypes :: [String]
   , flags :: Int
   }
-  deriving (Generic, ToJSON)
+  deriving stock (Generic)
+  deriving anyclass (ToJSON)

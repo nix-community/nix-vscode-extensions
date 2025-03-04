@@ -27,7 +27,8 @@ import Text.Megaparsec.Char (asciiChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
 
 -- | Possible targets
-data Target = VSCodeMarketplace | OpenVSX deriving (Eq)
+data Target = VSCodeMarketplace | OpenVSX
+  deriving stock (Eq)
 
 -- | Select an action depending on a target
 targetSelect :: Target -> p -> p -> p
@@ -44,7 +45,13 @@ instance Show Target where
   show :: Target -> String
   show = T.unpack . ppTarget
 
-data Flags = Flags'Validated | Flags'Public | Flags'Preview | Flags'Verified | Flags'Trial deriving (Enum, Bounded)
+data Flags
+  = Flags'Validated
+  | Flags'Public
+  | Flags'Preview
+  | Flags'Verified
+  | Flags'Trial
+  deriving stock (Enum, Bounded)
 
 _Flags :: Prism' Text Flags
 _Flags = prism' embed_ match_
@@ -73,31 +80,34 @@ extFlagsAllowed = enumFrom minBound ^.. traversed . to (_Flags #)
 
 newtype Name = Name {_name :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)
-  deriving (Generic)
+  deriving stock (Generic)
 
 newtype Publisher = Publisher {_publisher :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)
-  deriving (Generic)
+  deriving stock (Generic)
 
 newtype LastUpdated = LastUpdated {_lastUpdated :: UTCTime}
   deriving newtype (Eq, Ord, Hashable, Show)
-  deriving (Generic)
+  deriving stock (Generic)
 
 newtype Version = Version {_version :: SemVer}
   deriving newtype (Eq, Ord, Hashable)
-  deriving (Generic)
+  deriving stock (Generic)
 
 instance Show Version where
   show :: Version -> String
   show v = T.unpack $ prettySemVer v._version
 
-data VersionModifier = Veq | Vgeq deriving (Ord, Eq, Generic, Hashable)
+data VersionModifier = Veq | Vgeq
+  deriving stock (Ord, Eq, Generic)
+  deriving anyclass (Hashable)
 
 data EngineVersion = EngineVersion
   { _modifier :: VersionModifier
   , _version :: SemVer
   }
-  deriving (Eq, Ord, Hashable, Generic)
+  deriving stock (Eq, Ord, Generic)
+  deriving anyclass (Hashable)
 
 -- platform of an extension
 data Platform
@@ -107,7 +117,8 @@ data Platform
   | PLinux_arm64
   | PDarwin_x64
   | PDarwin_arm64
-  deriving (Generic, Eq, Hashable, Ord, Enum, Bounded)
+  deriving stock (Generic, Eq, Ord, Enum, Bounded)
+  deriving anyclass (Hashable)
 
 instance FromJSON Platform where
   parseJSON :: Value -> Data.Aeson.Types.Parser Platform
@@ -273,7 +284,8 @@ data ExtensionConfig = ExtensionConfig
   , missingTimes :: Int
   , engineVersion :: EngineVersion
   }
-  deriving (Generic, FromJSON, ToJSON, Show, Eq, Hashable)
+  deriving stock (Generic, Show, Eq)
+  deriving anyclass (FromJSON, ToJSON, Hashable)
 
 defaultEngineVersion :: EngineVersion
 defaultEngineVersion =
@@ -304,4 +316,5 @@ data ExtensionInfo = ExtensionInfo
   --
   -- See [Visual Studio Code compatibility](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility)
   }
-  deriving (Generic, FromJSON, ToJSON, Show)
+  deriving stock (Generic, Show)
+  deriving anyclass (FromJSON, ToJSON)

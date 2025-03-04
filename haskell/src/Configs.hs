@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
+{-# LANGUAGE DeriveAnyClass #-}
 
 module Configs where
 
@@ -20,9 +21,13 @@ type family HKD f a where
   HKD Identity a = a
   HKD f a = f a
 
-data ReleaseExtension = ReleaseExtension {publisher :: Publisher, name :: Name} deriving (Eq, Show, Generic)
+data ReleaseExtension = ReleaseExtension {publisher :: Publisher, name :: Name}
+  deriving stock (Eq, Show, Generic)
+  deriving anyclass (ToJSON)
 
-newtype ReleaseExtensions = ReleaseExtensions {releaseExtensions :: [ReleaseExtension]} deriving (Eq, Show, Generic)
+newtype ReleaseExtensions = ReleaseExtensions {releaseExtensions :: [ReleaseExtension]}
+  deriving stock (Eq, Show, Generic)
+  deriving anyclass (ToJSON)
 
 data SiteConfig f = SiteConfig
   { pageSize :: HKD f Int
@@ -34,7 +39,7 @@ data SiteConfig f = SiteConfig
   , release :: HKD f ReleaseExtensions
   -- ^ Extensions that require the release version
   }
-  deriving (Generic)
+  deriving stock (Generic)
 
 data AppConfig f = AppConfig
   { runN :: HKD f Int
@@ -66,13 +71,9 @@ data AppConfig f = AppConfig
   , vscodeMarketplace :: HKD f (SiteConfig f)
   -- ^ Config for VSCode Marketplace
   }
-  deriving (Generic)
+  deriving stock (Generic)
 
 deriving instance Generic Severity
-
-instance ToJSON ReleaseExtension
-
-instance ToJSON ReleaseExtensions
 
 instance ToJSON (SiteConfig Identity)
 
