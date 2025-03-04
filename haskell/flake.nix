@@ -1,12 +1,27 @@
 {
   description = "srid/haskell-template: Nix template for Haskell projects";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a";
+    nixpkgs-lib.url = "github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a?dir=lib";
     systems.url = "github:nix-systems/default";
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    };
     haskell-flake.url = "github:srid/haskell-flake";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
-    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
+    devshell = {
+      url = "github:deemp/devshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.inputs.systems.follows = "systems";
+    };
   };
 
   outputs =
@@ -16,6 +31,7 @@
       imports = [
         inputs.haskell-flake.flakeModule
         inputs.treefmt-nix.flakeModule
+        inputs.devshell.flakeModule
       ];
       perSystem =
         {
@@ -26,7 +42,39 @@
           pkgs,
           ...
         }:
-        {
+        let
+          ghcVersion = "9101";
+          haskellPackages = pkgs.haskell.packages."ghc${ghcVersion}";
+          devTools =
+            let
+              wrapTool =
+                pkgsName: pname: flags:
+                let
+                  pkg = pkgs.${pkgsName};
+                in
+                pkgs.symlinkJoin {
+                  name = pname;
+                  paths = [ pkg ];
+                  meta = pkg.meta;
+                  version = pkg.version;
+                  buildInputs = [ pkgs.makeWrapper ];
+                  postBuild = ''
+                    wrapProgram $out/bin/${pname} \
+                      --add-flags "${flags}"
+                  '';
+                };
+            in
+            {
+              cabal = wrapTool "cabal-install" "cabal" "-v0";
+              hpack = pkgs.haskellPackages.hpack_0_37_0;
+              ghc = builtins.head (
+                builtins.filter (
+                  x: pkgs.lib.attrsets.isDerivation x && pkgs.lib.strings.hasPrefix "ghc-" x.name
+                ) config.haskellProjects.default.outputs.devShell.nativeBuildInputs
+              );
+              inherit (haskellPackages) haskell-language-server;
+            };
+
           # Our only Haskell project. You can have multiple projects, but this template
           # has only one.
           # See https://github.com/srid/haskell-flake/blob/master/example/flake.nix
@@ -48,33 +96,66 @@
             );
 
             # The base package set (this value is the default)
-            # basePackages = pkgs.haskellPackages;
-
-            # Packages to add on top of `basePackages`
-            packages = {
-              # Add source or Hackage overrides here
-              # (Local packages are added automatically)
-              /*
-                aeson.source = "1.5.0.0" # Hackage version
-                shower.source = inputs.shower; # Flake input
-              */
+            basePackages = haskellPackages.override {
+              overrides =
+                self: super:
+                let
+                  jailbreakUnbreak =
+                    pkg:
+                    pkgs.haskell.lib.doJailbreak (
+                      pkg.overrideAttrs (_: {
+                        meta = { };
+                      })
+                    );
+                  packageFromHackage =
+                    pkg: ver: sha256:
+                    super.callHackageDirect { inherit pkg ver sha256; } { };
+                in
+                {
+                  co-log =
+                    packageFromHackage "co-log" "0.6.1.2"
+                      "sha256-3drK/5n45xLc2DES0tTAqGvR6DHpgWnWvPjdx987DeE=";
+                  co-log-concurrent = jailbreakUnbreak super.co-log-concurrent;
+                  with-utf8 = super.with-utf8_1_1_0_0;
+                  bytebuild = super.bytebuild_0_3_16_3;
+                  chronos = super.chronos_1_1_6_2;
+                };
             };
 
-            # Add your package overrides here
-            settings = {
-              /*
-                haskell-template = {
+            settings =
+              let
+                default = {
                   haddock = false;
-                };
-                aeson = {
                   check = false;
                 };
-              */
-            };
+              in
+              {
+                co-log = {
+                  check = false;
+                };
+                co-log-concurrent = {
+                  check = false;
+                };
+                with-utf8 = {
+                  check = false;
+                };
+                bytebuild = default;
+                chronos = default;
+                PyF = {
+                  check = false;
+                };
+              };
 
             # Development shell configuration
             devShell = {
               hlsCheck.enable = false;
+              hoogle = false;
+              tools = hp: {
+                cabal-install = null;
+                hlint = null;
+                haskell-language-server = null;
+                ghcid = null;
+              };
             };
 
             # What should haskell-flake add to flake outputs?
@@ -120,16 +201,24 @@
             };
 
           # Default shell.
-          devShells.default = pkgs.mkShell {
-            name = "updater";
-            meta.description = "Haskell development environment";
-            # See https://community.flake.parts/haskell-flake/devshell#composing-devshells
-            inputsFrom = [
-              config.haskellProjects.default.outputs.devShell
-              config.treefmt.build.devShell
-            ];
-            packages = [ pkgs.hpack ];
+          devshells.default = {
+            commands = {
+              tools = [
+                {
+                  expose = true;
+                  packages = devTools;
+                }
+              ];
+            };
           };
+        in
+        {
+          inherit
+            devshells
+            treefmt
+            packages
+            haskellProjects
+            ;
         };
     };
 }
