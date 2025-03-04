@@ -198,6 +198,7 @@
                     --set-rpath "$(patchelf --print-rpath ${updaterBin})":${lib.makeLibraryPath [ pkgs.gcc.cc.lib ]} \
                     ${updaterBin}
                 '';
+              meta.mainProgram = "updater";
             };
 
           # Default shell.

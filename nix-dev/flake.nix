@@ -42,7 +42,7 @@
 
           packages = mkShellApps {
             updateExtensions = {
-              text = "${haskell.outputs.packages.${system}.default} /# $@";
+              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
               meta.description = "Update extensions";
             };
 
