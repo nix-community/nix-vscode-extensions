@@ -35,16 +35,19 @@ jobs:
           nix_conf: ${{ env.nix_conf }}
       - uses: nix-community/cache-nix-action/restore@v6
         with:
-          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('**/flake.nix', '**/flake.lock', '**/*.nix') }}
+          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
           restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
       - name: Build VS Codium with extensions
         run: nix build
       - name: Check flake
         run: nix flake check
+      - name: Save flake attributes from GC
+        if: always()
+        run: nix build .#saveFromGC.ci.jobs.test
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
-          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('**/flake.nix', '**/flake.lock', '**/*.nix') }}
+          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
           gc-max-store-size-linux: 7500000000
           purge: true
           purge-prefixes: nix-test-${{ runner.os }}-${{ runner.arch }}-
@@ -80,16 +83,16 @@ jobs:
           git config --global user.name "github-actions[bot]"
       - name: Pull latest changes
         run: git pull --rebase --autostash
-      - name: Update flake locks
+      - name: Update template flake locks
         run: |
-          (cd nix-dev; nix flake update)
-          (cd template; nix flake update)
+          cd template
+          nix flake update
       - name: Format Nix files
         run: nix fmt
       - name: Update extensions
-        run: nix run nix-dev/#updateExtensions -- --config .github/config.yaml
+        run: nix run .#updateExtensions -- --config .github/config.yaml
       - name: Update extra extensions
-        run: nix run nix-dev/#updateExtraExtensions
+        run: nix run .#updateExtraExtensions
       - name: Commit and push changes
         run: |-
           git pull --rebase --autostash
@@ -104,6 +107,9 @@ jobs:
             || echo "commit failed!"
 
           git push
+      - name: Save flake attributes from GC
+        if: always()
+        run: nix build .#saveFromGC.ci.jobs.update
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
@@ -143,6 +149,9 @@ jobs:
         run: git pull --rebase --autostash
       - name: Check template VSCodium
         run: nix develop template/# -c code --list-extensions
+      - name: Save flake attributes from GC
+        if: always()
+        run: nix build .#saveFromGC.ci.jobs.test-template
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
