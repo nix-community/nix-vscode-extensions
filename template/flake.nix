@@ -3,10 +3,6 @@
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     flake-utils.follows = "nix-vscode-extensions/flake-utils";
     nixpkgs.follows = "nix-vscode-extensions/nixpkgs";
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
   };
 
   outputs =

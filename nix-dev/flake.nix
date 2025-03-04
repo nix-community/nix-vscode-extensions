@@ -19,75 +19,16 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
-  };
-  outputs =
-    inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import inputs.systems;
-      imports = [ inputs.devshell.flakeModule ];
-      perSystem =
-        {
-          self',
-          pkgs,
-          lib,
-          system,
-          ...
-        }:
-        let
-          haskell = import ../haskell;
-
-          mkShellApps = lib.mapAttrs (
-            name: value:
-            if !(lib.isDerivation value) && lib.isAttrs value then
-              pkgs.writeShellApplication (value // { inherit name; })
-            else
-              value
-          );
-
-          packages = mkShellApps {
-            updateExtensions = {
-              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
-              meta.description = "Update extensions";
-            };
-
-            updateExtraExtensions = {
-              text = "${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
-              meta.description = "Update extra extensions";
-            };
-          };
-
-          devshells.default = {
-            commands = {
-              tools = [
-                {
-                  expose = true;
-                  packages = {
-                    inherit (pkgs) nvfetcher;
-                  };
-                }
-                {
-                  prefix = "nix run nix-dev/#";
-                  packages = {
-                    inherit (self'.packages) updateExtensions updateExtraExtensions;
-                  };
-                }
-              ];
-            };
-          };
-        in
-        {
-          inherit packages devshells;
-        };
+    nix-unit = {
+      url = "github:nix-community/nix-unit";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.follows = "treefmt-nix";
     };
-
-  nixConfig = {
-    extra-trusted-substituters = [
-      "https://nix-community.cachix.org"
-      "https://hydra.iohk.io"
-    ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-    ];
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
+  outputs = _: { };
 }
