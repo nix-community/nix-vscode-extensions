@@ -144,7 +144,7 @@
                       let
                         # keep outside of map to improve performance
                         # TODO pass user's nixpkgs
-                        mkExtension = import ./mkExtension.nix { inherit pkgs nixpkgs; };
+                        mkExtension = import ./mkExtension.nix { inherit pkgs; };
                       in
                       map (
                         {

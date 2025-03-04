@@ -3,7 +3,7 @@
 
 # Write custom fixes in mkExtensionLocal
 
-{ pkgs, nixpkgs }:
+{ pkgs }:
 let
   inherit (pkgs) lib;
 
@@ -72,10 +72,25 @@ let
 
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 
+  # TODO find a cleaner way to get the store path of nixpkgs from given pkgs
+  pathNixpkgs = lib.trivial.pipe pkgs.hello.inputDerivation._derivation_original_args [
+    builtins.tail
+    builtins.head
+    builtins.dirOf
+    builtins.dirOf
+    builtins.dirOf
+    builtins.dirOf
+  ];
+
   extensionsNixpkgs =
-    callPackage "${nixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix"
+    callPackage "${pathNixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix"
       { config.allowAliases = false; };
 
+  # For these extensions, some arguments of their function that produces a derivation
+  # are provided in the `let .. in` expression before the call to that function
+  #
+  # TODO override the arguments
+  # Or, make a PR to nixpkgs to simplify overriding derivations
   haveFixesNonOverridable = [
     "anweber.vscode-httpyac"
     "chenglou92.rescript-vscode"
@@ -83,6 +98,11 @@ let
     "vadimcn.vscode-lldb"
     "rust-lang.rust-analyzer"
   ];
+
+  pathSpecial = {
+    ms-ceintl = "language-packs.nix";
+    wakatime = "WakaTime.vscode-wakatime";
+  };
 
   mkExtensionNixpkgs = builtins.mapAttrs (
     publisher:
@@ -95,13 +115,10 @@ let
         _: { vscodeExtPublisher = publisher; }
       else
         let
-          subPath =
-            {
-              ms-ceintl = "language-packs.nix";
-              wakatime = "WakaTime.vscode-wakatime";
-            }
-            .${publisher} or extensionId;
-          path = "${nixpkgs}/pkgs/applications/editors/vscode/extensions/${subPath}";
+          subPath = pathSpecial.${publisher} or extensionId;
+
+          path = "${pathNixpkgs}/pkgs/applications/editors/vscode/extensions/${subPath}";
+
           extension' =
             if builtins.pathExists path then
               let
