@@ -81,7 +81,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
       - name: Pull latest changes
-        run: git pull --rebase --autostash
+        run: git pull --rebase --autostash origin master
       - name: Update template flake locks
         run: |
           cd template
@@ -94,7 +94,7 @@ jobs:
         run: nix run .#updateExtraExtensions
       - name: Commit and push changes
         run: |-
-          git pull --rebase --autostash
+          git pull --rebase --autostash origin master
 
           git add .
 
@@ -147,7 +147,7 @@ jobs:
         with:
           primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
       - name: Pull latest changes
-        run: git pull --rebase --autostash
+        run: git pull --rebase --autostash origin master
       - name: Check template VSCodium
         run: nix develop template/# -c code --list-extensions
       - name: Save flake attributes from GC
