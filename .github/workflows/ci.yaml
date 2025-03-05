@@ -152,7 +152,7 @@ jobs:
       - name: Pull latest changes
         run: git pull --rebase --autostash origin master
       - name: Check template VSCodium
-        run: nix develop template/# -c code --list-extensions
+        run: nix develop template/#
       - name: Save flake attributes from GC
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.test-template
