@@ -124,7 +124,7 @@ jobs:
 
   test-template:
     name: Test template works
-    needs: 
+    needs:
       - update
       - test
     permissions:
