@@ -157,9 +157,10 @@ let
         )
       );
     in
-    (mkExtension extensionConfig).overrideAttrs (prev: {
-      passthru = prev.passthru // extensionConfig;
-    });
+    # (mkExtension extensionConfig).overrideAttrs (prev: {
+    #   passthru = prev.passthru // extensionConfig;
+    # });
+    mkExtension extensionConfig;
 in
 builtins.foldl' lib.attrsets.recursiveUpdate { } [
   mkExtensionNixpkgs
