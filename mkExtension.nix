@@ -147,14 +147,19 @@ let
   chooseMkExtension =
     self:
     { mktplcRef, vsix }@extensionConfig:
-    ((self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
-      if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
-        _: { vscodeExtPublisher = mktplcRef.publisher; }
-      else
-        buildVscodeMarketplaceExtension
-    )
-    )
-      extensionConfig;
+    let
+      mkExtension = (
+        (self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
+          if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
+            _: { vscodeExtPublisher = mktplcRef.publisher; }
+          else
+            buildVscodeMarketplaceExtension
+        )
+      );
+    in
+    (mkExtension extensionConfig).overrideAttrs (prev: {
+      passthru = prev.passthru // extensionConfig;
+    });
 in
 builtins.foldl' lib.attrsets.recursiveUpdate { } [
   mkExtensionNixpkgs
