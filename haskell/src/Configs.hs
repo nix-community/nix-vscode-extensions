@@ -157,8 +157,8 @@ defaultOpenVSXConfig :: SiteConfig Identity
 defaultOpenVSXConfig =
   SiteConfig
     { pageSize = 1_000
-    , pageCount = 5
-    , nThreads = 100
+    , pageCount = 10
+    , nThreads = 30
     , release = ReleaseExtensions []
     }
 
@@ -166,7 +166,7 @@ defaultVSCodeMarketplaceConfig :: SiteConfig Identity
 defaultVSCodeMarketplaceConfig =
   SiteConfig
     { pageSize = 1_000
-    , pageCount = 70
+    , pageCount = 100
     , nThreads = 100
     , release = ReleaseExtensions []
     }
