@@ -361,10 +361,7 @@
                 meta.description = "Update extensions";
               };
               updateExtraExtensions = {
-                text = "
-                  export LD_LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib
-                  ${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions
-                ";
+                text = "${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
                 meta.description = "Update extra extensions";
               };
             };
