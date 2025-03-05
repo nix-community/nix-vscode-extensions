@@ -3,6 +3,7 @@ logSeverity: Info
 openVSX:
   pageCount: 10
   pageSize: 1000
+  nThreads: 50
   release:
     eamodio:
       - gitlens
