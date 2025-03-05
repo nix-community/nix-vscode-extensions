@@ -137,7 +137,7 @@ let
               extension;
         in
         { mktplcRef, vsix }@extensionConfig:
-        if builtins.elem extensionId haveFixesNonOverridable then
+        if builtins.elem extensionId extensionsProblematic then
           buildVscodeMarketplaceExtension extensionConfig
         else
           (extension'.override or (abort "${publisher}.${name}")) extensionConfig
