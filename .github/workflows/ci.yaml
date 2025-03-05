@@ -45,7 +45,7 @@ jobs:
         run: nix flake check
       - name: Save flake attributes from GC
         if: always()
-        run: nix build .#saveFromGC.ci.jobs.test
+        run: nix profile install .#saveFromGC.ci.jobs.test
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
@@ -90,6 +90,10 @@ jobs:
           nix flake update
       - name: Format Nix files
         run: nix fmt
+      - name: Save flake attributes from GC
+        # updateExtensions* run gc
+        if: always()
+        run: nix profile install .#saveFromGC.ci.jobs.update
       - name: Update extensions
         run: nix run .#updateExtensions -- --config .github/config.yaml
       - name: Update extra extensions
@@ -108,9 +112,6 @@ jobs:
             || echo "commit failed!"
 
           git push
-      - name: Save flake attributes from GC
-        if: always()
-        run: nix build .#saveFromGC.ci.jobs.update
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
@@ -154,7 +155,7 @@ jobs:
         run: nix develop template/# -c code --list-extensions
       - name: Save flake attributes from GC
         if: always()
-        run: nix build .#saveFromGC.ci.jobs.test-template
+        run: nix profile install .#saveFromGC.ci.jobs.test-template
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
