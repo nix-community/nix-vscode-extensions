@@ -385,12 +385,12 @@
                 (mkSaveFromGC {
                   inputs = {
                     self.inputs = inputsCombined;
-                    inherit haskell;
+                    # inherit haskell;
                   };
                   derivations = [
-                    self'.packages.updateExtensions
+                    # self'.packages.updateExtensions
                     self'.packages.updateExtraExtensions
-                    self'.formatter
+                    # self'.formatter
                   ];
                 }).saveFromGC;
 
