@@ -383,10 +383,7 @@
 
               update =
                 (mkSaveFromGC {
-                  inputs = {
-                    self.inputs = inputsCombined;
-                    # inherit haskell;
-                  };
+                  inputs = inputsCombined;
                   derivations = [
                     # self'.packages.updateExtensions
                     self'.packages.updateExtraExtensions
