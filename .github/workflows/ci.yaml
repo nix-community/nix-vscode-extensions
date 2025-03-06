@@ -99,7 +99,8 @@ jobs:
       # - name: Save flake attributes from GC
       #   # updateExtensions* run gc
       #   if: always()
-      - run: nix profile install .#saveFromGC.ci.jobs.update
+      - run: nix registry pin github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a
+      # - run: nix profile install 
   #     - name: Update extensions
   #       run: nix run .#updateExtensions -- --config .github/config.yaml
       - run: nix profile install .#nvfetcher
