@@ -40,6 +40,8 @@ jobs:
           nix profile install $(nix flake archive nixpkgs --json | jq -r '.path')
       - run: nix profile install nixpkgs#nvfetcher
       - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - run: nix store gc
       - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
       - uses: nix-community/cache-nix-action/save@main
