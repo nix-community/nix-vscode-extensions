@@ -75,10 +75,10 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v30
         with:
           nix_conf: ${{ env.nix_conf }}
-      # - uses: nix-community/cache-nix-action/restore@v6
-      #   with:
-      #     primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
-      #     restore-prefixes-first-match: nix-update-
+      - uses: nix-community/cache-nix-action/restore@v6
+        with:
+          primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
+          restore-prefixes-first-match: nix-update-
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       # - name: Configure git
@@ -123,16 +123,16 @@ jobs:
   #           || echo "commit failed!"
 
   #         git push
-      # - run: nix store gc
-      # - uses: nix-community/cache-nix-action/save@v6
-      #   if: always()
-      #   with:
-      #     primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
-      #     # gc-max-store-size-linux: 7500000000
-      #     purge: true
-      #     purge-prefixes: nix-update-
-      #     purge-created: 0
-      #     purge-primary-key: never
+      - run: nix store gc
+      - uses: nix-community/cache-nix-action/save@v6
+        if: always()
+        with:
+          primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
+          # gc-max-store-size-linux: 7500000000
+          purge: true
+          purge-prefixes: nix-update-
+          purge-created: 0
+          purge-primary-key: never
 
   # test-template:
   #   name: Test template works
