@@ -30,12 +30,12 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v30
         with:
           nix_conf: ${{ env.nix_conf }}
-      # - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
-      # - uses: nix-community/cache-nix-action/restore@main
-      #   with:
-      #     primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
-      #     restore-prefixes-first-match: nix-update-
-      # - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
+      - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
+      - uses: nix-community/cache-nix-action/restore@main
+        with:
+          primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
+          restore-prefixes-first-match: nix-update-
+      - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
       - run: |
           nix registry pin nixpkgs github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a
           nix profile install $(nix flake archive nixpkgs --json | jq -r '.path')
