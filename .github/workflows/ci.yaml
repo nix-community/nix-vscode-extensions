@@ -14,47 +14,50 @@ env:
     keep-env-derivations = true
     keep-outputs = true
 
+# TODO save from GC
+
 jobs:
-  test:
-    name: Test extensions
-    permissions:
-      actions: write
-    strategy:
-      matrix:
-        os:
-          - ubuntu-24.04
-          - ubuntu-24.04-arm
-          - macos-13
-          - macos-15
-    runs-on: ${{ matrix.os }}
-    continue-on-error: true
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v30
-        with:
-          nix_conf: ${{ env.nix_conf }}
-      - uses: nix-community/cache-nix-action/restore@v6
-        with:
-          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
-          restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
-      - name: Build VS Codium with extensions
-        run: nix build
-      - name: Check flake
-        run: nix flake check
-      - name: Save flake attributes from GC
-        if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.test
-      - uses: nix-community/cache-nix-action/save@v6
-        if: always()
-        with:
-          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
-          gc-max-store-size-linux: 7500000000
-          purge: true
-          purge-prefixes: nix-test-${{ runner.os }}-${{ runner.arch }}-
-          purge-created: 0
-          purge-primary-key: never
+  # test:
+  #   name: Test extensions
+  #   permissions:
+  #     actions: write
+  #   strategy:
+  #     matrix:
+  #       os:
+  #         - ubuntu-24.04
+  #         - ubuntu-24.04-arm
+  #         # too slow
+  #         # - macos-13
+  #         - macos-15
+  #   runs-on: ${{ matrix.os }}
+  #   continue-on-error: true
+  #   steps:
+  #     - name: Checkout this repo
+  #       uses: actions/checkout@v4
+  #     - name: Install Nix
+  #       uses: nixbuild/nix-quick-install-action@v30
+  #       with:
+  #         nix_conf: ${{ env.nix_conf }}
+  #     - uses: nix-community/cache-nix-action/restore@v6
+  #       with:
+  #         primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
+  #         restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
+  #     - name: Build VS Codium with extensions
+  #       run: nix build
+  #     - name: Check flake
+  #       run: nix flake check
+  #     - name: Save flake attributes from GC
+  #       if: always()
+  #       run: nix profile install .#saveFromGC.ci.jobs.test
+  #     - uses: nix-community/cache-nix-action/save@v6
+  #       if: always()
+  #       with:
+  #         primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
+  #         gc-max-store-size-linux: 7500000000
+  #         purge: true
+  #         purge-prefixes: nix-test-${{ runner.os }}-${{ runner.arch }}-
+  #         purge-created: 0
+  #         purge-primary-key: never
 
   update:
     name: Update data and flakes
@@ -73,94 +76,98 @@ jobs:
           nix_conf: ${{ env.nix_conf }}
       - uses: nix-community/cache-nix-action/restore@v6
         with:
-          primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
+          primary-key: nix-update-${{ hashfiles('*.{nix,lock}') }}
           restore-prefixes-first-match: nix-update-
-      - name: Configure git
-        env:
-          # required for gh
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-      - name: Pull latest changes
-        run: git pull --rebase --autostash origin master
-      - name: Update template flake locks
-        run: |
-          cd template
-          nix flake update
-      - name: Format Nix files
-        run: nix fmt
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+      # - name: Configure git
+  #       env:
+  #         # required for gh
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: |
+  #         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+  #         git config --global user.name "github-actions[bot]"
+  #     - name: Pull latest changes
+  #       run: git pull --rebase --autostash origin master
+  #     - name: Update template flake locks
+  #       run: |
+  #         cd template
+  #         nix flake update
+  #     - name: Format Nix files
+  #       run: nix fmt
       - name: Save flake attributes from GC
         # updateExtensions* run gc
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.update
-      - name: Update extensions
-        run: nix run .#updateExtensions -- --config .github/config.yaml
+  #     - name: Update extensions
+  #       run: nix run .#updateExtensions -- --config .github/config.yaml
       - name: Update extra extensions
         run: nix run .#updateExtraExtensions
-      - name: Commit and push changes
-        run: |-
-          git pull --rebase --autostash origin master
+  #     - name: Commit and push changes
+  #       run: |-
+  #         git pull --rebase --autostash origin master
 
-          git add .
+  #         git add .
 
-          git commit \
-            -m "action" \
-            -m "Update flake locks" \
-            -m "Update extensions" \
-            -m "Update extra extensions" \
-            || echo "commit failed!"
+  #         git commit \
+  #           -m "action" \
+  #           -m "Update flake locks" \
+  #           -m "Update extensions" \
+  #           -m "Update extra extensions" \
+  #           || echo "commit failed!"
 
-          git push
+  #         git push
+      - run: nix store gc
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
-          primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
-          gc-max-store-size-linux: 7500000000
+          primary-key: nix-update-${{ hashfiles('*.{nix,lock}') }}
+          # gc-max-store-size-linux: 7500000000
           purge: true
           purge-prefixes: nix-update-
           purge-created: 0
           purge-primary-key: never
 
-  test-template:
-    name: Test template works
-    needs:
-      - update
-      - test
-    permissions:
-      actions: write
-    strategy:
-      matrix:
-        os:
-          - ubuntu-24.04
-          - ubuntu-24.04-arm
-          - macos-13
-          - macos-15
-    runs-on: ${{ matrix.os }}
-    continue-on-error: true
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v30
-        with:
-          nix_conf: ${{env.nix_conf}}
-      - name: Restore and cache Nix store
-        uses: nix-community/cache-nix-action/restore@v6
-        with:
-          primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
-      - name: Pull latest changes
-        run: git pull --rebase --autostash origin master
-      - name: Check template VSCodium
-        run: nix develop template/#
-      - name: Save flake attributes from GC
-        if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.test-template
-      - uses: nix-community/cache-nix-action/save@v6
-        if: always()
-        with:
-          primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
-          purge: true
-          purge-prefixes: nix-template-${{ runner.os }}-${{ runner.arch }}-
-          purge-created: 0
-          purge-primary-key: never
+  # test-template:
+  #   name: Test template works
+  #   needs:
+  #     - update
+  #     - test
+  #   permissions:
+  #     actions: write
+  #   strategy:
+  #     matrix:
+  #       os:
+  #         - ubuntu-24.04
+  #         - ubuntu-24.04-arm
+  #         # too slow
+  #         # - macos-13
+  #         - macos-15
+  #   runs-on: ${{ matrix.os }}
+  #   continue-on-error: true
+  #   steps:
+  #     - name: Checkout this repo
+  #       uses: actions/checkout@v4
+  #     - name: Install Nix
+  #       uses: nixbuild/nix-quick-install-action@v30
+  #       with:
+  #         nix_conf: ${{env.nix_conf}}
+  #     - name: Restore and cache Nix store
+  #       uses: nix-community/cache-nix-action/restore@v6
+  #       with:
+  #         primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
+  #     - name: Pull latest changes
+  #       run: git pull --rebase --autostash origin master
+  #     - name: Check template VSCodium
+  #       run: nix develop template/#
+  #     - name: Save flake attributes from GC
+  #       if: always()
+  #       run: nix profile install .#saveFromGC.ci.jobs.test-template
+  #     - uses: nix-community/cache-nix-action/save@v6
+  #       if: always()
+  #       with:
+  #         primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
+  #         purge: true
+  #         purge-prefixes: nix-template-${{ runner.os }}-${{ runner.arch }}-
+  #         purge-created: 0
+  #         purge-primary-key: never
