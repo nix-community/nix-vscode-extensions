@@ -79,8 +79,8 @@ jobs:
         with:
           primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
           restore-prefixes-first-match: nix-update-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       # - name: Configure git
   #       env:
   #         # required for gh
