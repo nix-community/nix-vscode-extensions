@@ -109,7 +109,7 @@ jobs:
       - name: Run GC
         run: nix store gc
       - name: Update extra extensions
-        run: nix run nixpkgs#nvfetcher -- --help
+        run: nix run nixpkgs#nvfetcher -- --config .github/config.yaml
   #     - name: Commit and push changes
   #       run: |-
   #         git pull --rebase --autostash origin master
