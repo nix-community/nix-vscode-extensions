@@ -366,6 +366,9 @@
               };
             };
 
+          legacyPackages = {
+            inherit (pkgs) nvfetcher;
+          };
           legacyPackages.saveFromGC.ci.jobs =
             let
               mkSaveFromGC =
@@ -386,7 +389,8 @@
                   inputs = inputsCombined;
                   derivations = [
                     # self'.packages.updateExtensions
-                    self'.packages.updateExtraExtensions
+                    pkgs.nvfetcher
+                    # self'.packages.updateExtraExtensions
                     # self'.formatter
                   ];
                 }).saveFromGC;
