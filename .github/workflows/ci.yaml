@@ -22,11 +22,6 @@ jobs:
       actions: write
       contents: write
       pull-requests: write
-    strategy:
-      matrix:
-        idx:
-          - 1
-          - 2
     runs-on: ubuntu-latest
     # if: github.ref_name == 'master'
     steps:
@@ -38,27 +33,23 @@ jobs:
           nix_conf: ${{ env.nix_conf }}
       - uses: nix-community/cache-nix-action/restore@main
         with:
-          primary-key: nix-update-${{ matrix.idx }}-${{ hashfiles('*.nix', '*.lock') }}
-          restore-prefixes-first-match: nix-update-${{ matrix.idx }}-
+          primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
+          restore-prefixes-first-match: nix-update-
       - run: |
           nix registry pin nixpkgs github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a
           nix profile install $(nix flake archive nixpkgs --json | jq -r '.path')
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-      # - run: nix profile install nixpkgs#nvfetcher
-      # - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
-      # - run: find /nix/store -maxdepth 1 -mindepth 1 -type d > before-gc
-      - run: nix path-info nixpkgs#nvfetcher --recursive
-      # - run: nix store gc
-      # - run: find /nix/store -maxdepth 1 -mindepth 1 -type d > after-gc
-      # - run: git diff --no-index before-gc after-gc
-      # - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+      - run: nix profile install nixpkgs#nvfetcher
+      - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
+      - run: nix store gc
+      - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
       - uses: nix-community/cache-nix-action/save@main
         if: always()
         with:
-          primary-key: nix-update-${{ matrix.idx }}-${{ hashfiles('*.nix', '*.lock') }}
-          gc-max-store-size-linux: 10000000000
+          primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
+          gc-max-store-size-linux: 0
           purge: true
-          purge-prefixes: nix-update-${{ matrix.idx }}-
+          purge-prefixes: nix-update-
           purge-created: 0
           purge-primary-key: never
