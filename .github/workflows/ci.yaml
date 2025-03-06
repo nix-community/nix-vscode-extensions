@@ -103,12 +103,11 @@ jobs:
   #     - name: Update extensions
   #       run: nix run .#updateExtensions -- --config .github/config.yaml
       - name: Update extra extensions
-        run: 
-          nix run .#updateExtraExtensions
-          nix profile install .#updateExtraExtensions
-      - run: nix store gc
+        run: nix run .#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
+      - name: Run GC
+        run: nix store gc
       - name: Update extra extensions
-        run: nix run .#updateExtraExtensions
+        run: nix run .#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
   #     - name: Commit and push changes
   #       run: |-
   #         git pull --rebase --autostash origin master
