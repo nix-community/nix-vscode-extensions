@@ -44,7 +44,8 @@ jobs:
       - run: ls /nix/store | grep libgcc
       - run: nix build nixpkgs#nvfetcher
       - run: nix path-info --recursive nixpkgs#nvfetcher | grep libgcc
-      - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - run: nix store gc -vv
       - run: ls /nix/store | grep libgcc
       - uses: nix-community/cache-nix-action/save@main
