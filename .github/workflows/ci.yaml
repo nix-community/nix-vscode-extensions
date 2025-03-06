@@ -99,17 +99,14 @@ jobs:
       # - name: Save flake attributes from GC
       #   # updateExtensions* run gc
       #   if: always()
-      #   run: nix profile install .#saveFromGC.ci.jobs.update
+      - run: nix profile install .#saveFromGC.ci.jobs.update
   #     - name: Update extensions
   #       run: nix run .#updateExtensions -- --config .github/config.yaml
-      - name: install nvfetcher
-        run: nix profile install nixpkgs#nvfetcher
+      - run: nix profile install .#nvfetcher
       # - name: Update extra extensions
       #   run: nix run .#nvfetcher -- --help
-      - name: Run GC
-        run: nix store gc
-      - name: Update extra extensions
-        run: nix run nixpkgs#nvfetcher -- --config .github/config.yaml
+      - run: nix store gc
+      - run: nix run .#nvfetcher -- -c extra-extensions.toml  -o data/extra-extensions
   #     - name: Commit and push changes
   #       run: |-
   #         git pull --rebase --autostash origin master
