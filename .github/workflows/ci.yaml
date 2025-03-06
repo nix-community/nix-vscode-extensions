@@ -43,7 +43,7 @@ jobs:
       - run: nix profile install nixpkgs#nvfetcher
       - run: ls /nix/store | grep libgcc
       - run: nix build nixpkgs#nvfetcher
-      - run: nix path-info nixpkgs#nvfetcher | grep libgcc
+      - run: nix path-info --recursive nixpkgs#nvfetcher | grep libgcc
       - run: nix store gc -vv
       - run: ls /nix/store | grep libgcc
       - uses: nix-community/cache-nix-action/save@main
