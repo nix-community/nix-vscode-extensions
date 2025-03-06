@@ -23,7 +23,6 @@ jobs:
       contents: write
       pull-requests: write
     runs-on: ubuntu-latest
-    # if: github.ref_name == 'master'
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
@@ -31,19 +30,21 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v30
         with:
           nix_conf: ${{ env.nix_conf }}
-      - uses: nix-community/cache-nix-action/restore@main
-        with:
-          primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
-          restore-prefixes-first-match: nix-update-
+      # - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
+      # - uses: nix-community/cache-nix-action/restore@main
+      #   with:
+      #     primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
+      #     restore-prefixes-first-match: nix-update-
+      # - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
       - run: |
           nix registry pin nixpkgs github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a
           nix profile install $(nix flake archive nixpkgs --json | jq -r '.path')
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      - run: ls /nix/store | grep libgcc
       - run: nix profile install nixpkgs#nvfetcher
-      - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
-      - run: nix store gc
-      - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml -o data/extra-extensions
+      - run: ls /nix/store | grep libgcc
+      - run: nix path-info nixpkgs#nvfetcher | grep libgcc
+      - run: nix store gc -vv
+      - run: ls /nix/store | grep libgcc
       - uses: nix-community/cache-nix-action/save@main
         if: always()
         with:
