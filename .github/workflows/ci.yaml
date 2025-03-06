@@ -102,6 +102,8 @@ jobs:
         run: nix profile install .#saveFromGC.ci.jobs.update
   #     - name: Update extensions
   #       run: nix run .#updateExtensions -- --config .github/config.yaml
+      - name: Update extra extensions
+        run: nix run .#updateExtraExtensions
       - run: nix store gc
       - name: Update extra extensions
         run: nix run .#updateExtraExtensions
