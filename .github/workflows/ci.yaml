@@ -42,6 +42,7 @@ jobs:
       - run: ls /nix/store | grep libgcc
       - run: nix profile install nixpkgs#nvfetcher
       - run: ls /nix/store | grep libgcc
+      - run: nix path-info --recursive nixpkgs#nvfetcher | grep libgcc || printf "error!"
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       - run: nix store gc -vv
