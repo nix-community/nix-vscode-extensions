@@ -31,7 +31,7 @@ jobs:
         with:
           nix_conf: ${{ env.nix_conf }}
       # - run: curl bashupload.com -T /nix/var/nix/db/db.sqlite
-      - uses: nix-community/cache-nix-action/restore@2cd4784f94ac72d01a69524988f97fb4debe8115
+      - uses: nix-community/cache-nix-action/restore@49b5f39844a494c821792a6d7995c9c1083aff21
         with:
           primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
           restore-prefixes-first-match: nix-update-
@@ -49,7 +49,7 @@ jobs:
       - run: ls /nix/store | grep libgcc
       - run: nix run nixpkgs#nvfetcher -- -c extra-extensions.toml || printf "error"
       - run: nix path-info --recursive nixpkgs#nvfetcher | grep libgcc || printf "error!"
-      - uses: nix-community/cache-nix-action/save@2cd4784f94ac72d01a69524988f97fb4debe8115
+      - uses: nix-community/cache-nix-action/save@49b5f39844a494c821792a6d7995c9c1083aff21
         # if: always()
         with:
           primary-key: nix-update-${{ hashfiles('*.nix', '*.lock') }}
