@@ -366,6 +366,9 @@
               };
             };
 
+          legacyPackages = {
+            inherit (pkgs) nvfetcher;
+          };
           legacyPackages.saveFromGC.ci.jobs =
             let
               mkSaveFromGC =
@@ -383,14 +386,12 @@
 
               update =
                 (mkSaveFromGC {
-                  inputs = {
-                    self.inputs = inputsCombined;
-                    inherit haskell;
-                  };
+                  inputs = inputsCombined;
                   derivations = [
-                    self'.packages.updateExtensions
-                    self'.packages.updateExtraExtensions
-                    self'.formatter
+                    # self'.packages.updateExtensions
+                    pkgs.nvfetcher
+                    # self'.packages.updateExtraExtensions
+                    # self'.formatter
                   ];
                 }).saveFromGC;
 

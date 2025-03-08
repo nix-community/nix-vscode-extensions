@@ -2,18 +2,3 @@
 src.github = "vadimcn/codelldb"
 fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-linux-x64.vsix"
 passthru = { platform = "linux-x64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
-
-[vadimcn--vscode-lldb--linux-arm64]
-src.github = "vadimcn/codelldb"
-fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-linux-arm64.vsix"
-passthru = { platform = "linux-arm64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
-
-[vadimcn--vscode-lldb--darwin-x64]
-src.github = "vadimcn/codelldb"
-fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-darwin-x64.vsix"
-passthru = { platform = "darwin-x64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
-
-[vadimcn--vscode-lldb--darwin-arm64]
-src.github = "vadimcn/codelldb"
-fetch.url = "https://github.com/vadimcn/codelldb/releases/download/$ver/codelldb-darwin-arm64.vsix"
-passthru = { platform = "darwin-arm64", publisher = "vadimcn", name = "vscode-lldb", engineVersion = "^1.60.0" }
