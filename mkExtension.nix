@@ -58,7 +58,7 @@ let
           --replace-fail '"xsel"' '"${pkgs.xsel}/bin/xsel"'
       '';
     };
-    
+
     # Fixed variant of https://github.com/NixOS/nixpkgs/blob/4f48368f11e7329735ab76d890f18f8d4be3f60f/pkgs/applications/editors/vscode/extensions/sumneko.lua/default.nix
     sumneko.lua = _: {
       patches = [ ./extensions/sumneko.lua/remove-chmod.patch ];
