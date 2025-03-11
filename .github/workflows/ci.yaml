@@ -85,13 +85,13 @@ jobs:
         run: |
           cd template
           nix flake update
-      - name: Format Nix files
-        run: nix fmt
-      - name: Save flake attributes from GC
-        # Need this to run before updateExtensions*
-        # because the following steps run GC
-        if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.update
+      # - name: Format Nix files
+      #   run: nix fmt
+      # - name: Save flake attributes from GC
+      #   # Need this to run before updateExtensions*
+      #   # because the following steps run GC
+      #   if: always()
+      #   run: nix profile install .#saveFromGC.ci.jobs.update
       # - name: Update extensions
       #   run: nix run .#updateExtensions -- --config .github/config.yaml
       # - name: Update extra extensions
@@ -121,7 +121,7 @@ jobs:
         if: always()
         with:
           primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
-          gc-max-store-size: 3G
+          # gc-max-store-size: 3G
           purge: true
           purge-prefixes: nix-update-
           purge-created: 0
