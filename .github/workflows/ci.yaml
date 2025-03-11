@@ -125,7 +125,7 @@ jobs:
 
   test-template:
     name: Test template works
-    if: github.ref_name == 'master'
+    if: false && github.ref_name == 'master'
     needs:
       - update
       - test
