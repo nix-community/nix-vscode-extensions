@@ -15,120 +15,120 @@ env:
     keep-outputs = true
 
 jobs:
-  test:
-    name: Test extensions
-    permissions:
-      actions: write
-    strategy:
-      matrix:
-        os:
-          - ubuntu-24.04
-          - ubuntu-24.04-arm
-          - macos-13
-          - macos-15
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v30
-        with:
-          nix_conf: ${{ env.nix_conf }}
-      - uses: nix-community/cache-nix-action/restore@v6
-        with:
-          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
-          restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
-      - name: Build VS Codium with extensions
-        run: nix build
-      - name: Check flake
-        # --impure is necessary for checking the updater
-        run: nix flake check --impure
-      - name: Save flake attributes from GC
-        if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.test
-      - uses: nix-community/cache-nix-action/save@v6
-        if: always()
-        with:
-          primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
-          gc-max-store-size-linux: 7500000000
-          purge: true
-          purge-prefixes: nix-test-${{ runner.os }}-${{ runner.arch }}-
-          purge-created: 0
-          purge-primary-key: never
+  # test:
+  #   name: Test extensions
+  #   permissions:
+  #     actions: write
+  #   strategy:
+  #     matrix:
+  #       os:
+  #         - ubuntu-24.04
+  #         - ubuntu-24.04-arm
+  #         - macos-13
+  #         - macos-15
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: Checkout this repo
+  #       uses: actions/checkout@v4
+  #     - name: Install Nix
+  #       uses: nixbuild/nix-quick-install-action@v30
+  #       with:
+  #         nix_conf: ${{ env.nix_conf }}
+  #     - uses: nix-community/cache-nix-action/restore@v6
+  #       with:
+  #         primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
+  #         restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
+  #     - name: Build VS Codium with extensions
+  #       run: nix build
+  #     - name: Check flake
+  #       # --impure is necessary for checking the updater
+  #       run: nix flake check --impure
+  #     - name: Save flake attributes from GC
+  #       if: always()
+  #       run: nix profile install .#saveFromGC.ci.jobs.test
+  #     - uses: nix-community/cache-nix-action/save@v6
+  #       if: always()
+  #       with:
+  #         primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
+  #         gc-max-store-size-linux: 7500000000
+  #         purge: true
+  #         purge-prefixes: nix-test-${{ runner.os }}-${{ runner.arch }}-
+  #         purge-created: 0
+  #         purge-primary-key: never
 
-  update:
-    name: Update data and flakes
-    if: github.ref_name == 'master'
-    permissions:
-      actions: write
-      contents: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v30
-        with:
-          nix_conf: ${{ env.nix_conf }}
-      - uses: nix-community/cache-nix-action/restore@v6
-        with:
-          primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
-          restore-prefixes-first-match: nix-update-
-      - name: Configure git
-        env:
-          # required for gh
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-      - name: Pull latest changes
-        run: git pull --rebase --autostash origin master
-      - name: Update template flake locks
-        run: |
-          cd template
-          nix flake update
-      - name: Format Nix files
-        run: nix fmt
-      - name: Save flake attributes from GC
-        # Need this to run before updateExtensions*
-        # because the following steps run GC
-        if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.update
-      - name: Update extensions
-        run: nix run .#updateExtensions -- --config .github/config.yaml
-      - name: Update extra extensions
-        run: nix run .#updateExtraExtensions
-      - name: Commit and push changes
-        run: |-
-          git pull --rebase --autostash origin master
+  # update:
+  #   name: Update data and flakes
+  #   if: github.ref_name == 'master'
+  #   permissions:
+  #     actions: write
+  #     contents: write
+  #     pull-requests: write
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout this repo
+  #       uses: actions/checkout@v4
+  #     - name: Install Nix
+  #       uses: nixbuild/nix-quick-install-action@v30
+  #       with:
+  #         nix_conf: ${{ env.nix_conf }}
+  #     - uses: nix-community/cache-nix-action/restore@v6
+  #       with:
+  #         primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
+  #         restore-prefixes-first-match: nix-update-
+  #     - name: Configure git
+  #       env:
+  #         # required for gh
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: |
+  #         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+  #         git config --global user.name "github-actions[bot]"
+  #     - name: Pull latest changes
+  #       run: git pull --rebase --autostash origin master
+  #     - name: Update template flake locks
+  #       run: |
+  #         cd template
+  #         nix flake update
+  #     - name: Format Nix files
+  #       run: nix fmt
+  #     - name: Save flake attributes from GC
+  #       # Need this to run before updateExtensions*
+  #       # because the following steps run GC
+  #       if: always()
+  #       run: nix profile install .#saveFromGC.ci.jobs.update
+  #     - name: Update extensions
+  #       run: nix run .#updateExtensions -- --config .github/config.yaml
+  #     - name: Update extra extensions
+  #       run: nix run .#updateExtraExtensions
+  #     - name: Commit and push changes
+  #       run: |-
+  #         git pull --rebase --autostash origin master
 
-          git add .
+  #         git add .
 
-          git commit \
-            -m "action" \
-            -m "Update flake locks" \
-            -m "Update extensions" \
-            -m "Update extra extensions" \
-            || echo "commit failed!"
+  #         git commit \
+  #           -m "action" \
+  #           -m "Update flake locks" \
+  #           -m "Update extensions" \
+  #           -m "Update extra extensions" \
+  #           || echo "commit failed!"
 
-          git push
-      - uses: nix-community/cache-nix-action/save@v6
-        if: always()
-        with:
-          primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
-          gc-max-store-size: 3G
-          purge: true
-          purge-prefixes: nix-update-
-          purge-created: 0
-          purge-primary-key: never
+  #         git push
+  #     - uses: nix-community/cache-nix-action/save@v6
+  #       if: always()
+  #       with:
+  #         primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
+  #         gc-max-store-size: 3G
+  #         purge: true
+  #         purge-prefixes: nix-update-
+  #         purge-created: 0
+  #         purge-primary-key: never
 
   test-template:
     name: Test template works
     if: github.ref_name == 'master'
-    needs:
-      - update
-      - test
+    # needs:
+      # - update
+      # - test
     permissions:
       actions: write
     strategy:
