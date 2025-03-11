@@ -27,7 +27,6 @@ jobs:
           - macos-13
           - macos-15
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
@@ -42,7 +41,8 @@ jobs:
       - name: Build VS Codium with extensions
         run: nix build
       - name: Check flake
-        run: nix flake check
+        # --impure is necessary for checking the updater
+        run: nix flake check --impure
       - name: Save flake attributes from GC
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.test
@@ -137,7 +137,6 @@ jobs:
           - macos-13
           - macos-15
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
