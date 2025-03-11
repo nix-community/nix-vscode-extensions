@@ -10,15 +10,21 @@
     inputs.flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = inputs.nixpkgs.legacyPackages.${system};
-        extensions = inputs.nix-vscode-extensions.extensions.${system};
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+        };
+
         inherit (pkgs) vscode-with-extensions vscodium;
 
         packages.default = vscode-with-extensions.override {
           vscode = vscodium;
           vscodeExtensions = [
-            extensions.vscode-marketplace.golang.go
-            extensions.open-vsx-release.rust-lang.rust-analyzer
+            pkgs.vscode-marketplace.golang.go
+            pkgs.open-vsx-release.rust-lang.rust-analyzer
+            # unfree
+            pkgs.vscode-marketplace.ms-python.vscode-pylance
           ];
         };
 
