@@ -88,13 +88,26 @@ There are several attrsets:
 
 ### With flakes
 
+See [Flakes](https://wiki.nixos.org/wiki/Flakes).
+
+#### Overlay
+
+See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
+
+If you use NixOS, Home Manager, or similar:
+
+1. Add `nix-vscode-extensions` to the flake inputs ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L16)).
+
+1. (Optional) Allow unfree packages ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L45)).
+    - See [Note](#note) for other ways to use unfree extensions.
+
+1. Add the default overlay from the `nix-vscode-extensions` flake to `nixpkgs.overlays` ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L48)).
+
+1. Get extensions from `pkgs.vscode-marketplace` and/or `pkgs.open-vsx` ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
+
+#### Standalone flake
+
 See [Template](#template).
-
-Add the following to your `flake.nix` (see [Flakes](https://wiki.nixos.org/wiki/Flakes)).
-
-```nix
-inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-```
 
 ### Without flakes
 
@@ -218,41 +231,39 @@ Some extensions are hard to handle correctly ([example](https://github.com/nix-c
 
 They may be available in `nixpkgs`, in `pkgs.vscode-extensions` ([link](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vscode-extensions)).
 
-### Overlay
+### Apply the overlay
 
-See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
-
-See [Note](#note) for other ways to use unfree extensions.
+See [Overlay](#overlay).
 
 > [!NOTE]
 > The value `9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346` is the full SHA-256 hash of a commit in this repository.
 > Replace it with the hash of the commit you need.
 
-#### Get an overlay with flakes
+#### Apply the overlay with flakes
 
 ```console
 nix-repl> :lf github:nix-community/nix-vscode-extensions/9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346
 Added 14 variables.
 
-nix-repl> pkgs = import inputs.nixpkgs { system = "x86_64-linux"; config.allowUnfree = true; overlays = [ overlays.default ]; }
+nix-repl> extensions = import inputs.nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ overlays.default ]; }
 ```
 
-#### Get an overlay without flakes
+#### Apply the overlay without flakes
 
 ```console
-nix-repl> t1 = (import (builtins.fetchGit {
+nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
                 url = "https://github.com/nix-community/nix-vscode-extensions";
                 ref = "refs/heads/master";
                 rev = "9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346";
               }))
 
-nix-repl> pkgs = import <nixpkgs> { system = builtins.currentSystem; overlays = [ t1.overlays.default ]; }
+nix-repl> extensions = import <nixpkgs> { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }
 ```
 
-#### Get an extension
+#### Get an unfree extension
 
 ```console
-nix-repl> pkgs.vscode-marketplace.ms-python.vscode-pylance
+nix-repl> extensions.vscode-marketplace.ms-python.vscode-pylance
 «derivation /nix/store/dn9kklr6vq8qfmq2bp32l3av4n5500li-vscode-extension-ms-python-vscode-pylance-2025.2.102.drv»
 ```
 
