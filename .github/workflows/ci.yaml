@@ -91,7 +91,8 @@ jobs:
       - name: Format Nix files
         run: nix fmt
       - name: Save flake attributes from GC
-        # updateExtensions* run gc
+        # Need this to run before updateExtensions*
+        # because the following steps run GC
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.update
       - name: Update extensions
