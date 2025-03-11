@@ -164,3 +164,4 @@ jobs:
           purge-prefixes: nix-template-${{ runner.os }}-${{ runner.arch }}-
           purge-created: 0
           purge-primary-key: never
+          gc-max-store-size: 1G
