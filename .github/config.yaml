@@ -1,30 +1,31 @@
 collectGarbage: true
 logSeverity: Info
 openVSX:
-  pageCount: 10
-  pageSize: 1000
-  nThreads: 50
-  release:
-    eamodio:
-      - gitlens
-    rust-lang:
-      - rust-analyzer
-    stkb:
-      - rewrap
+  pageCount: 1
+  pageSize: 5
+  nThreads: 5
+  # release:
+  #   eamodio:
+  #     - gitlens
+  #   rust-lang:
+  #     - rust-analyzer
+  #   stkb:
+  #     - rewrap
 vscodeMarketplace:
-  pageCount: 100
-  pageSize: 1000
-  release:
-    eamodio:
-      - gitlens
-    GitHub:
-      - copilot
-      - copilot-chat
-      - vscode-pull-request-github
-    ms-vscode-remote:
-      - remote-ssh
-    rust-lang:
-      - rust-analyzer
-    stkb:
-      - rewrap
+  pageCount: 0
+  pageSize: 0
+  # nThreads: 5
+  # release:
+  #   eamodio:
+  #     - gitlens
+  #   GitHub:
+  #     - copilot
+  #     - copilot-chat
+  #     - vscode-pull-request-github
+  #   ms-vscode-remote:
+  #     - remote-ssh
+  #   rust-lang:
+  #     - rust-analyzer
+  #   stkb:
+  #     - rewrap
 maxMissingTimes: 10
