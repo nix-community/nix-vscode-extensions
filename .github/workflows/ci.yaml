@@ -146,8 +146,8 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v30
         with:
           nix_conf: ${{env.nix_conf}}
-      - name: Pull latest changes
-        run: git pull --rebase --autostash origin master
+      # - name: Pull latest changes
+      #   run: git pull --rebase --autostash origin master
       - name: Restore and cache Nix store
         uses: nix-community/cache-nix-action/restore@v6
         with:
