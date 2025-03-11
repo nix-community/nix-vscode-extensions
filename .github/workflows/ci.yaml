@@ -27,7 +27,6 @@ jobs:
           - macos-13
           - macos-15
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
@@ -137,7 +136,6 @@ jobs:
           - macos-13
           - macos-15
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
