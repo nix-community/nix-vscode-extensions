@@ -99,7 +99,8 @@ If you use NixOS, Home Manager, or similar:
 1. Add `nix-vscode-extensions` to the flake inputs ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L16)).
 
 1. (Optional) Allow unfree packages ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L45)).
-    - See [Note](#note) for other ways to use unfree extensions.
+
+   - See [Note](#note) for other ways to use unfree extensions.
 
 1. Add the default overlay from the `nix-vscode-extensions` flake to `nixpkgs.overlays` ([example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L48)).
 
