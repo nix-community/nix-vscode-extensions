@@ -76,9 +76,6 @@ jobs:
           primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
           restore-prefixes-first-match: nix-update-
       - name: Configure git
-        env:
-          # required for gh
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
@@ -100,6 +97,9 @@ jobs:
       # - name: Update extra extensions
       #   run: nix run .#updateExtraExtensions
       - name: Commit and push changes
+        env:
+          # required for gh
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |-
           ${{
             github.head_ref
