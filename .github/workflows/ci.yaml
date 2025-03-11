@@ -58,12 +58,12 @@ jobs:
 
   update:
     name: Update data and flakes
+    if: github.ref_name == 'master'
     permissions:
       actions: write
       contents: write
       pull-requests: write
     runs-on: ubuntu-latest
-    if: github.ref_name == 'master'
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
@@ -125,6 +125,7 @@ jobs:
 
   test-template:
     name: Test template works
+    if: github.ref_name == 'master'
     needs:
       - update
       - test
