@@ -151,6 +151,9 @@ jobs:
         with:
           nix_conf: ${{env.nix_conf}}
       - name: Pull latest changes
+        env:
+          # required for gh
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ${{
             github.head_ref
