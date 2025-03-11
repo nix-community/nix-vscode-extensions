@@ -146,12 +146,12 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v30
         with:
           nix_conf: ${{env.nix_conf}}
+      - name: Pull latest changes
+        run: git pull --rebase --autostash origin master
       - name: Restore and cache Nix store
         uses: nix-community/cache-nix-action/restore@v6
         with:
-          primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
-      - name: Pull latest changes
-        run: git pull --rebase --autostash origin master
+          primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.*') }}
       - name: Check template VSCodium
         run: nix develop template/#
       - name: Save flake attributes from GC
@@ -160,7 +160,7 @@ jobs:
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
-          primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.nix', 'template/flake.lock') }}
+          primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.*') }}
           purge: true
           purge-prefixes: nix-template-${{ runner.os }}-${{ runner.arch }}-
           purge-created: 0
