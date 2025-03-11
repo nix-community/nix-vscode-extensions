@@ -95,10 +95,10 @@ jobs:
         # because the following steps run GC
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.update
-      - name: Update extensions
-        run: nix run .#updateExtensions -- --config .github/config.yaml
-      - name: Update extra extensions
-        run: nix run .#updateExtraExtensions
+      # - name: Update extensions
+      #   run: nix run .#updateExtensions -- --config .github/config.yaml
+      # - name: Update extra extensions
+      #   run: nix run .#updateExtraExtensions
       - name: Commit and push changes
         run: |-
           # git pull --rebase --autostash origin master
