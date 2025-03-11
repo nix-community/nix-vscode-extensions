@@ -101,7 +101,11 @@ jobs:
       #   run: nix run .#updateExtraExtensions
       - name: Commit and push changes
         run: |-
-          # git pull --rebase --autostash origin master
+          ${{
+            github.head_ref
+              && format('gh pr checkout {0}', github.event.pull_request.number) 
+              || format('git pull --rebase origin {0}', github.ref_name) 
+          }}
 
           git add .
 
