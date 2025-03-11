@@ -100,7 +100,7 @@ inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
 > [!NOTE]
 > The values of `url`, `ref`, `rev` and in the `fetchGit` argument are for demonstration purposes.
-> The value `7efef14cff53b1eeeb4e590294330e383bbf387f` is the full SHA-256 hash of a commit in this repository.
+> The value `9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346` is the full SHA-256 hash of a commit in this repository.
 > Replace it with the hash of the commit you need.
 
 ```nix
@@ -110,7 +110,7 @@ let
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/nix-vscode-extensions";
       ref = "refs/heads/master";
-      rev = "7efef14cff53b1eeeb4e590294330e383bbf387f";
+      rev = "9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346";
     })).extensions.${system};
   extensionsList = with extensions.vscode-marketplace; [
       rust-lang.rust-analyzer
@@ -152,7 +152,7 @@ Output on my machine:
 ```console
 $ nix repl
 
-nix-repl> :lf github:nix-community/nix-vscode-extensions/7efef14cff53b1eeeb4e590294330e383bbf387f
+nix-repl> :lf github:nix-community/nix-vscode-extensions/9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346
 Added 10 variables.
 
 nix-repl> t = extensions.<TAB>
@@ -169,7 +169,7 @@ t.open-vsx                    t.vscode-marketplace
 
 > [!NOTE]
 > The values of `url`, `ref`, `rev` and in the `fetchGit` argument are for demonstration purposes.
-> The value `7efef14cff53b1eeeb4e590294330e383bbf387f` is the full SHA-256 hash of a commit in this repository.
+> The value `9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346` is the full SHA-256 hash of a commit in this repository.
 > Replace it with the hash of the commit you need.
 
 ```console
@@ -178,7 +178,7 @@ $ nix repl
 nix-repl> t1 = (import (builtins.fetchGit {
                 url = "https://github.com/nix-community/nix-vscode-extensions";
                 ref = "refs/heads/master";
-                rev = "7efef14cff53b1eeeb4e590294330e383bbf387f";
+                rev = "9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346";
               }))
 
 nix-repl> t = t1.extensions.<TAB>
@@ -225,13 +225,13 @@ See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
 See [Note](#note) for other ways to use unfree extensions.
 
 > [!NOTE]
-> The value `7efef14cff53b1eeeb4e590294330e383bbf387f` is the full SHA-256 hash of a commit in this repository.
+> The value `9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346` is the full SHA-256 hash of a commit in this repository.
 > Replace it with the hash of the commit you need.
 
 #### Get an overlay with flakes
 
 ```console
-nix-repl> :lf github:nix-community/nix-vscode-extensions/7efef14cff53b1eeeb4e590294330e383bbf387f
+nix-repl> :lf github:nix-community/nix-vscode-extensions/9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346
 Added 14 variables.
 
 nix-repl> pkgs = import inputs.nixpkgs { system = "x86_64-linux"; config.allowUnfree = true; overlays = [ overlays.default ]; }
@@ -243,7 +243,7 @@ nix-repl> pkgs = import inputs.nixpkgs { system = "x86_64-linux"; config.allowUn
 nix-repl> t1 = (import (builtins.fetchGit {
                 url = "https://github.com/nix-community/nix-vscode-extensions";
                 ref = "refs/heads/master";
-                rev = "7efef14cff53b1eeeb4e590294330e383bbf387f";
+                rev = "9edbf5d1c9c9b5c5dd1fa6d6fc0c3cd01ec09346";
               }))
 
 nix-repl> pkgs = import <nixpkgs> { system = builtins.currentSystem; overlays = [ t1.overlays.default ]; }
