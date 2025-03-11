@@ -153,7 +153,7 @@ jobs:
         with:
           primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.*') }}
       - name: Check template VSCodium
-        run: nix develop template/#
+        run: nix develop -vvv template/#
       - name: Save flake attributes from GC
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.test-template
