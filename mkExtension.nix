@@ -16,7 +16,7 @@ let
       name: f:
       (
         { mktplcRef, vsix }@extensionConfig:
-        buildVscodeMarketplaceExtension (extensionConfig // f extensionConfig)
+        buildVscodeMarketplaceExtension (extensionConfig // f (extensionConfig // { inherit pkgs; }))
       )
     )
   );
@@ -60,14 +60,7 @@ let
     };
 
     # Fixed variant of https://github.com/NixOS/nixpkgs/blob/4f48368f11e7329735ab76d890f18f8d4be3f60f/pkgs/applications/editors/vscode/extensions/sumneko.lua/default.nix
-    sumneko.lua = _: {
-      patches = [ ./extensions/sumneko.lua/latest/remove-chmod.patch ];
-
-      postInstall = ''
-        ln -sf ${pkgs.lua-language-server}/bin/lua-language-server \
-          $out/$installPrefix/server/bin/lua-language-server
-      '';
-    };
+    sumneko.lua = import ./extensions/sumneko.lua/latest;
   };
 
   extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
