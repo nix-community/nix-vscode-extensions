@@ -44,11 +44,7 @@ let
       '';
     };
 
-    ms-dotnettools.vscode-dotnet-runtime = _: {
-      postPatch = ''
-        chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
-      '';
-    };
+    ms-dotnettools.vscode-dotnet-runtime = import ./extensions/ms-dotnettools/vscode-dotnet-runtime/latest;
 
     ms-vsliveshare.vsliveshare = _: {
       # Similar to https://github.com/NixOS/nixpkgs/blob/6f5808c6534d514751d6de0e20aae83f45d9f798/pkgs/applications/editors/vscode/extensions/ms-vsliveshare.vsliveshare/default.nix#L15-L18
