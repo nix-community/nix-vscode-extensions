@@ -17,42 +17,13 @@ let
       (
         { mktplcRef, vsix }@extensionConfig:
         buildVscodeMarketplaceExtension (
-          extensionConfig
-          // f (
-            extensionConfig
-            // {
-              inherit pkgs;
-              inherit (pkgs) lib;
-            }
-          )
+          extensionConfig // f (extensionConfig // { inherit pkgs lib mkExtensionNixpkgs; })
         )
       )
     )
   );
 
-  mkExtensionLocal = applyMkExtension {
-    # Write your fixes here
-
-    # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Attrset
-    # Each Attrset must be a valid argument of buildVscodeMarketplaceExtension (see above)
-
-    # Use mkExtensionNixpkgs to override extensions from nixpkgs.
-    #
-    # Example:
-    #
-    # ```nix
-    # foo.bar = { mktplcRef, vsix }@arg: (mkExtensionNixpkgs.foo.bar arg).override { postInstall = "..."; };
-    # ```
-
-    vadimcn.vscode-lldb = import ./extensions/vadimcn/vscode-lldb/latest;
-
-    ms-dotnettools.vscode-dotnet-runtime = import ./extensions/ms-dotnettools/vscode-dotnet-runtime/latest;
-
-    ms-vsliveshare.vsliveshare = import ./extensions/ms-vsliveshare/vsliveshare/latest;
-
-    # Fixed variant of https://github.com/NixOS/nixpkgs/blob/4f48368f11e7329735ab76d890f18f8d4be3f60f/pkgs/applications/editors/vscode/extensions/sumneko.lua/default.nix
-    sumneko.lua = import ./extensions/sumneko/lua/latest;
-  };
+  mkExtensionLocal = applyMkExtension (import ./extensions);
 
   extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
 
