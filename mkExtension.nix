@@ -16,7 +16,16 @@ let
       name: f:
       (
         { mktplcRef, vsix }@extensionConfig:
-        buildVscodeMarketplaceExtension (extensionConfig // f (extensionConfig // { inherit pkgs; }))
+        buildVscodeMarketplaceExtension (
+          extensionConfig
+          // f (
+            extensionConfig
+            // {
+              inherit pkgs;
+              inherit (pkgs) lib;
+            }
+          )
+        )
       )
     )
   );
@@ -35,14 +44,7 @@ let
     # foo.bar = { mktplcRef, vsix }@arg: (mkExtensionNixpkgs.foo.bar arg).override { postInstall = "..."; };
     # ```
 
-    # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
-    vadimcn.vscode-lldb = _: {
-      postInstall = lib.optionalString pkgs.stdenv.isLinux ''
-        cd "$out/$installPrefix"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-        patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
-      '';
-    };
+    vadimcn.vscode-lldb = import ./extensions/vadimcn/vscode-lldb/latest;
 
     ms-dotnettools.vscode-dotnet-runtime = import ./extensions/ms-dotnettools/vscode-dotnet-runtime/latest;
 
