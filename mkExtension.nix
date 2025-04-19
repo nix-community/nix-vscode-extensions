@@ -46,14 +46,7 @@ let
 
     ms-dotnettools.vscode-dotnet-runtime = import ./extensions/ms-dotnettools/vscode-dotnet-runtime/latest;
 
-    ms-vsliveshare.vsliveshare = _: {
-      # Similar to https://github.com/NixOS/nixpkgs/blob/6f5808c6534d514751d6de0e20aae83f45d9f798/pkgs/applications/editors/vscode/extensions/ms-vsliveshare.vsliveshare/default.nix#L15-L18
-      # Not sure it's necessary
-      postPatch = ''
-        substituteInPlace vendor.js \
-          --replace-fail '"xsel"' '"${pkgs.xsel}/bin/xsel"'
-      '';
-    };
+    ms-vsliveshare.vsliveshare = import ./extensions/ms-vsliveshare/vsliveshare/latest;
 
     # Fixed variant of https://github.com/NixOS/nixpkgs/blob/4f48368f11e7329735ab76d890f18f8d4be3f60f/pkgs/applications/editors/vscode/extensions/sumneko.lua/default.nix
     sumneko.lua = import ./extensions/sumneko/lua/latest;
