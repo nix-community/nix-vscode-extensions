@@ -10,23 +10,6 @@ let
   buildVscodeMarketplaceExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
   buildVscodeExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeExtension;
 
-  applyMkExtension = builtins.mapAttrs (
-    publisher:
-    builtins.mapAttrs (
-      name: f:
-      (
-        { mktplcRef, vsix }@extensionConfig:
-        buildVscodeMarketplaceExtension (
-          extensionConfig // f (extensionConfig // { inherit pkgs lib mkExtensionNixpkgs; })
-        )
-      )
-    )
-  );
-
-  mkExtensionLocal = applyMkExtension (import ./extensions);
-
-  extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
-
   # We don't modify callPackage because extensions
   # may use its original version
   pkgs' = pkgs // {
@@ -34,6 +17,26 @@ let
       inherit buildVscodeMarketplaceExtension buildVscodeExtension;
     };
   };
+
+  applyMkExtension = builtins.mapAttrs (
+    publisher:
+    builtins.mapAttrs (
+      name: f:
+      { mktplcRef, vsix }@extensionConfig:
+      f (
+        extensionConfig
+        // {
+          pkgs = pkgs';
+          inherit lib;
+          inherit (pkgs'.vscode-utils) buildVscodeMarketplaceExtension;
+        }
+      )
+    )
+  );
+
+  mkExtensionLocal = applyMkExtension (import ./extensions);
+
+  extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
 
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 

@@ -7,27 +7,31 @@
   # of the extension `<name>` published by `<publisher>` 
   # MUST be in the directory `./extensions/<publisher>/<name>/<version>`
   # 
-  # You may create a `default.nix` in that directory for convenience.
-  # 
-  # Each `${publisher}.${name}` in this file (`default.nix`) MUST provide a function .
+  # Each `${publisher}.${name}` in this file (`extensions/default.nix`) MUST provide 
+  # a function that produces an extension derivation.
   # 
   # ```
-  # { pkgs, lib, mkExtensionNixpkgs, mkExtensionNixpkgs, mktplcRef, vsix, ... } -> Attrset
+  # { pkgs, lib, mktplcRef, vsix, buildVscodeMarketplaceExtension } -> Derivation
   # ```
   # 
-  # You may omit unused fields and provide `{ ... } -> Attrset`.
+  # You may use less available attributes available in the function argument attrset.
   # 
-  # Each `Attrset` MUST be a valid argument of `buildVscodeMarketplaceExtension` (see the `mkExtension.nix` file).
-  # 
-  # Use `mkExtensionNixpkgs` to override extensions from `nixpkgs`.
-  #
-  # Example of a fix:
-  #
-  # ```nix
-  # { mktplcRef, vsix, ... }@arg: (mkExtensionNixpkgs.foo.bar { inherit mktplcRef vsix; } ).override { postInstall = "..."; };
+  # ```
+  # { mktplcRef, ... } -> Derivation
   # ```
 
-  vadimcn.vscode-lldb = import ./vadimcn/vscode-lldb/latest;
+  vadimcn.vscode-lldb =
+    config@{
+      mktplcRef,
+      pkgs,
+      lib,
+      ...
+    }:
+    if lib.versionAtLeast mktplcRef.version "1.11.0" then
+      # https://github.com/NixOS/nixpkgs/pull/383013
+      pkgs.callPackage ./vadimcn/vscode-lldb/latest config
+    else
+      import ./vadimcn/vscode-lldb/1.10.0 config;
 
   ms-dotnettools.vscode-dotnet-runtime = import ./ms-dotnettools/vscode-dotnet-runtime/latest;
 

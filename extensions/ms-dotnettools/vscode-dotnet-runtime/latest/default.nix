@@ -1,11 +1,19 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  mktplcRef,
+  vsix,
+  buildVscodeMarketplaceExtension,
+  ...
+}:
 let
   dotnetInstall = pkgs.fetchurl {
     url = "https://dot.net/v1/dotnet-install.sh";
     hash = "sha256-GbCniQw3EgG5RL8PjNu2Rg0FPWPdvqGM/tPkGZdpzhc=";
   };
 in
-{
+buildVscodeMarketplaceExtension {
+  inherit mktplcRef vsix;
+
   postPatch = ''
     DOTNET_INSTALL="$PWD/dist/install scripts/dotnet-install.sh"
     ln -s ${dotnetInstall} "$DOTNET_INSTALL"
