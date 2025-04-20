@@ -8,12 +8,14 @@
   pname,
   src,
   version,
+  
+  npmDepsHash
 }:
 buildNpmPackage {
   pname = "${pname}-node-deps";
   inherit version src;
 
-  npmDepsHash = "sha256-Efeun7AFMAnoNXLbTGH7OWHaBHT2tO9CodfjKrIYw40=";
+  inherit npmDepsHash;
 
   nativeBuildInputs = [
     python3

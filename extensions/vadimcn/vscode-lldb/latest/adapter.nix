@@ -8,6 +8,8 @@
   pname,
   src,
   version,
+  
+  cargoHash,
 }:
 let
   # debugservers on macOS require the 'com.apple.security.cs.debugger'
@@ -25,8 +27,8 @@ rustPlatform.buildRustPackage {
   inherit version src;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
-
+  inherit cargoHash;
+  
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>
   # The LLDB_* variables are used in adapter/lldb/build.rs.
   "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
