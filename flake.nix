@@ -326,6 +326,7 @@
                         vlanguage.vscode-vlang
                         rust-lang.rust-analyzer
                         vadimcn.vscode-lldb
+                        ms-dotnettools.vscode-dotnet-runtime
                       ]
                       ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
                         # Exclusively for testing purpose
