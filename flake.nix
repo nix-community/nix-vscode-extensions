@@ -351,7 +351,12 @@
                 (
                   x:
                   x.override {
-                    vscode = pkgs.vscodium;
+                    # vscode = pkgs.vscodium;
+                    vscode = pkgs.vscode.overrideAttrs (prev: {
+                      meta = prev.meta // {
+                        license = [ ];
+                      };
+                    });
                     vscodeExtensions =
                       with self.extensions.${system}.vscode-marketplace;
                       [
