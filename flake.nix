@@ -298,6 +298,7 @@
                 vscode-marketplace-release
                 open-vsx-release
                 forVSCodeVersion
+                usingFixesFrom
                 ;
             };
           in
