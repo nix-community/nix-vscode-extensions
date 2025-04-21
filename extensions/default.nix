@@ -36,4 +36,6 @@
   ms-vsliveshare.vsliveshare = import ./ms-vsliveshare/vsliveshare/latest;
 
   sumneko.lua = import ./sumneko/lua/latest;
+
+  rust-lang.rust-analyzer = config@{ pkgs, ... }: pkgs.callPackage ./rust-lang/rust-analyzer/latest config;
 }
