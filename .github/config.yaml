@@ -21,6 +21,8 @@ vscodeMarketplace:
       - copilot
       - copilot-chat
       - vscode-pull-request-github
+    ms-toolsai:
+      - jupyter
     ms-vscode-remote:
       - remote-ssh
     rust-lang:
