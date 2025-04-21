@@ -1,7 +1,7 @@
-# Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Derivation
-# Each Derivation MUST be produced via overridable buildVscodeMarketplaceExtension
+# Each `${publisher}.${name}` MUST provide a function `{ mktplcRef, vsix } -> Derivation`
+# Each Derivation MUST be produced via overridable `buildVscodeMarketplaceExtension` (see below)
 
-# Write custom fixes in mkExtensionLocal
+# Custom fixes are loaded via `mkExtensionLocal`
 
 { pkgs, pkgsWithFixes }:
 let
@@ -123,6 +123,7 @@ let
       mkExtension = (
         (self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
           if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
+            # In `flake.nix`, there is a check whether the result is a derivation.
             _: { vscodeExtPublisher = mktplcRef.publisher; }
           else
             buildVscodeMarketplaceExtension
