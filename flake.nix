@@ -5,7 +5,7 @@
   ";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/3a05eebede89661660945da1f151959900903b6a";
+    nixpkgs.url = "github:NixOS/nixpkgs/18dd725c29603f582cf1900e0d25f9f1063dbf11";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -326,6 +326,10 @@
                         vlanguage.vscode-vlang
                         rust-lang.rust-analyzer
                         vadimcn.vscode-lldb
+                        ms-dotnettools.vscode-dotnet-runtime
+                        mkhl.direnv
+                        jnoortheen.nix-ide
+                        tamasfe.even-better-toml
                       ]
                       ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
                         # Exclusively for testing purpose

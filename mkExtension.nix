@@ -10,68 +10,6 @@ let
   buildVscodeMarketplaceExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
   buildVscodeExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeExtension;
 
-  applyMkExtension = builtins.mapAttrs (
-    publisher:
-    builtins.mapAttrs (
-      name: f:
-      (
-        { mktplcRef, vsix }@extensionConfig:
-        buildVscodeMarketplaceExtension (extensionConfig // f extensionConfig)
-      )
-    )
-  );
-
-  mkExtensionLocal = applyMkExtension {
-    # Write your fixes here
-
-    # Each ${publisher}.${name} MUST provide a function { mktplcRef, vsix } -> Attrset
-    # Each Attrset must be a valid argument of buildVscodeMarketplaceExtension (see above)
-
-    # Use mkExtensionNixpkgs to override extensions from nixpkgs.
-    #
-    # Example:
-    #
-    # ```nix
-    # foo.bar = { mktplcRef, vsix }@arg: (mkExtensionNixpkgs.foo.bar arg).override { postInstall = "..."; };
-    # ```
-
-    # Credit to https://github.com/nix-community/nix-vscode-extensions/issues/52#issue-2129112776
-    vadimcn.vscode-lldb = _: {
-      postInstall = lib.optionalString pkgs.stdenv.isLinux ''
-        cd "$out/$installPrefix"
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./adapter/codelldb
-        patchelf --add-rpath "${lib.makeLibraryPath [ pkgs.zlib ]}" ./lldb/lib/liblldb.so
-      '';
-    };
-
-    ms-dotnettools.vscode-dotnet-runtime = _: {
-      postPatch = ''
-        chmod +x "$PWD/dist/install scripts/dotnet-install.sh"
-      '';
-    };
-
-    ms-vsliveshare.vsliveshare = _: {
-      # Similar to https://github.com/NixOS/nixpkgs/blob/6f5808c6534d514751d6de0e20aae83f45d9f798/pkgs/applications/editors/vscode/extensions/ms-vsliveshare.vsliveshare/default.nix#L15-L18
-      # Not sure it's necessary
-      postPatch = ''
-        substituteInPlace vendor.js \
-          --replace-fail '"xsel"' '"${pkgs.xsel}/bin/xsel"'
-      '';
-    };
-
-    # Fixed variant of https://github.com/NixOS/nixpkgs/blob/4f48368f11e7329735ab76d890f18f8d4be3f60f/pkgs/applications/editors/vscode/extensions/sumneko.lua/default.nix
-    sumneko.lua = _: {
-      patches = [ ./extensions/sumneko.lua/remove-chmod.patch ];
-
-      postInstall = ''
-        ln -sf ${pkgs.lua-language-server}/bin/lua-language-server \
-          $out/$installPrefix/server/bin/lua-language-server
-      '';
-    };
-  };
-
-  extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
-
   # We don't modify callPackage because extensions
   # may use its original version
   pkgs' = pkgs // {
@@ -79,6 +17,26 @@ let
       inherit buildVscodeMarketplaceExtension buildVscodeExtension;
     };
   };
+
+  applyMkExtension = builtins.mapAttrs (
+    publisher:
+    builtins.mapAttrs (
+      name: f:
+      { mktplcRef, vsix }@extensionConfig:
+      f (
+        extensionConfig
+        // {
+          pkgs = pkgs';
+          inherit lib;
+          inherit (pkgs'.vscode-utils) buildVscodeMarketplaceExtension;
+        }
+      )
+    )
+  );
+
+  mkExtensionLocal = applyMkExtension (import ./extensions);
+
+  extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
 
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 
