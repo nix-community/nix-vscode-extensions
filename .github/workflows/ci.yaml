@@ -50,7 +50,7 @@ jobs:
         if: always()
         with:
           primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
-          gc-max-store-size-linux: 7500000000
+          gc-max-store-size-linux: 0
           purge: true
           purge-prefixes: nix-test-${{ runner.os }}-${{ runner.arch }}-
           purge-created: 0
