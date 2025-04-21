@@ -153,6 +153,7 @@
                           version,
                           hash,
                           url,
+                          engineVersion,
                           ...
                         }:
                         let
@@ -172,6 +173,8 @@
                               inherit url hash;
                               name = "${name}-${version}.zip";
                             };
+
+                            inherit engineVersion;
                           };
                         in
                         {

@@ -114,7 +114,11 @@ let
 
   chooseMkExtension =
     self:
-    { mktplcRef, vsix }@extensionConfig:
+    {
+      mktplcRef,
+      vsix,
+      engineVersion,
+    }@extensionConfig:
     let
       mkExtension = (
         (self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
