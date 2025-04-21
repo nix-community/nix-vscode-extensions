@@ -1,3 +1,4 @@
+# Original implementation: https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/editors/vscode/extensions/ms-vsliveshare.vsliveshare
 {
   pkgs,
   mktplcRef,

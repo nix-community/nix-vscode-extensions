@@ -1,3 +1,5 @@
+# Original implementation: https://github.com/NixOS/nixpkgs/pull/383013
+# After merging should be in https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/editors/vscode/extensions/vadimcn.vscode-lldb
 {
   mktplcRef,
 
