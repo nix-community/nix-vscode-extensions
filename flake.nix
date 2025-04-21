@@ -327,6 +327,9 @@
                         rust-lang.rust-analyzer
                         vadimcn.vscode-lldb
                         ms-dotnettools.vscode-dotnet-runtime
+                        mkhl.direnv
+                        jnoortheen.nix-ide
+                        tamasfe.even-better-toml
                       ]
                       ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
                         # Exclusively for testing purpose
