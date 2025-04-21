@@ -129,10 +129,9 @@ let
         )
       );
     in
-    # (mkExtension extensionConfig).overrideAttrs (prev: {
-    #   passthru = prev.passthru // extensionConfig;
-    # });
-    mkExtension extensionConfig;
+    (mkExtension { inherit mktplcRef vsix; }).overrideAttrs (prev: {
+      passthru = prev.passthru // extensionConfig;
+    });
 in
 builtins.foldl' lib.attrsets.recursiveUpdate { } [
   mkExtensionNixpkgs
