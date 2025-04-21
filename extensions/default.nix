@@ -33,8 +33,6 @@
     else
       import ./vadimcn/vscode-lldb/1.10.0 config;
 
-  ms-dotnettools.vscode-dotnet-runtime = import ./ms-dotnettools/vscode-dotnet-runtime/latest;
-
   ms-vsliveshare.vsliveshare = import ./ms-vsliveshare/vsliveshare/latest;
 
   sumneko.lua = import ./sumneko/lua/latest;
