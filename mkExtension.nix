@@ -3,7 +3,7 @@
 
 # Write custom fixes in mkExtensionLocal
 
-{ pkgs }:
+{ pkgs, pkgsWithFixes }:
 let
   inherit (pkgs) lib;
 
@@ -41,7 +41,7 @@ let
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 
   # TODO find a cleaner way to get the store path of nixpkgs from given pkgs
-  pathNixpkgs = lib.trivial.pipe pkgs.hello.inputDerivation._derivation_original_args [
+  pathNixpkgs = lib.trivial.pipe pkgsWithFixes.hello.inputDerivation._derivation_original_args [
     builtins.tail
     builtins.head
     builtins.dirOf

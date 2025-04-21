@@ -72,6 +72,7 @@
                     checkVSCodeVersion ? false,
                     vscodeVersion ? "*",
                     site,
+                    pkgsWithFixes ? pkgs,
                   }:
                   lib.pipe site [
                     (x: ./data/cache/${site}${if needLatest then "-latest" else "-release"}.json)
@@ -144,7 +145,7 @@
                       let
                         # keep outside of map to improve performance
                         # TODO pass user's nixpkgs
-                        mkExtension = import ./mkExtension.nix { inherit pkgs; };
+                        mkExtension = import ./mkExtension.nix { inherit pkgs pkgsWithFixes; };
                       in
                       map (
                         {
@@ -210,6 +211,7 @@
                   attrs@{
                     checkVSCodeVersion ? false,
                     vscodeVersion ? "*",
+                    pkgsWithFixes ? pkgs,
                   }:
                   {
                     vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });
@@ -229,14 +231,42 @@
                       }
                     );
                   };
-                res = (mkSet { }) // {
-                  forVSCodeVersion =
-                    vscodeVersion:
-                    mkSet {
-                      checkVSCodeVersion = true;
-                      inherit vscodeVersion;
-                    };
-                };
+
+                res =
+                  (mkSet { })
+                  // (
+                    let
+                      mkFun = closure@{ ... }: args: (mkSet (args // closure)) // { __argsCombined = args // closure; };
+                      forVSCodeVersion =
+                        vscodeVersion:
+                        mkFun {
+                          checkVSCodeVersion = true;
+                          inherit vscodeVersion;
+                        };
+                      usingFixesFrom = pkgsWithFixes: mkFun { inherit pkgsWithFixes; };
+                    in
+                    {
+                      forVSCodeVersion =
+                        vscodeVersion:
+                        let
+                          attrPrev = forVSCodeVersion vscodeVersion { };
+                        in
+                        attrPrev
+                        // {
+                          usingFixesFrom = pkgsWithFixes: usingFixesFrom pkgsWithFixes attrPrev.__argsCombined;
+                        };
+
+                      usingFixesFrom =
+                        pkgsWithFixes:
+                        let
+                          attrPrev = usingFixesFrom pkgsWithFixes { };
+                        in
+                        attrPrev
+                        // {
+                          forVSCodeVersion = vscodeVersion: forVSCodeVersion vscodeVersion attrPrev.__argsCombined;
+                        };
+                    }
+                  );
               in
               res;
           };
