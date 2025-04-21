@@ -39,7 +39,7 @@ jobs:
           primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-release.json') }}
           restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
       - name: Build VS Codium with extensions
-        run: nix build
+        run: nix run .# -- --list-extensions
       - name: Check flake
         # --impure is necessary for checking the updater
         run: nix flake check --impure
