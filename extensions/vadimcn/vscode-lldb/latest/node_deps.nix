@@ -8,8 +8,8 @@
   pname,
   src,
   version,
-  
-  npmDepsHash
+
+  npmDepsHash,
 }:
 buildNpmPackage {
   pname = "${pname}-node-deps";

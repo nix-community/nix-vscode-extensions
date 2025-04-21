@@ -1,21 +1,21 @@
 {
   # Each extension may have several fixes that depend on the extension version.
-  # 
+  #
   # Fixes MUST be provided in the subdirectories of the ./extensions directory.
-  # 
-  # A fix that works for versions up to `<version>` 
-  # of the extension `<name>` published by `<publisher>` 
+  #
+  # A fix that works for versions up to `<version>`
+  # of the extension `<name>` published by `<publisher>`
   # MUST be in the directory `./extensions/<publisher>/<name>/<version>`
-  # 
-  # Each `${publisher}.${name}` in this file (`extensions/default.nix`) MUST provide 
+  #
+  # Each `${publisher}.${name}` in this file (`extensions/default.nix`) MUST provide
   # a function that produces an extension derivation.
-  # 
+  #
   # ```
   # { pkgs, lib, mktplcRef, vsix, buildVscodeMarketplaceExtension } -> Derivation
   # ```
-  # 
+  #
   # You may use less available attributes available in the function argument attrset.
-  # 
+  #
   # ```
   # { mktplcRef, ... } -> Derivation
   # ```
@@ -37,5 +37,6 @@
 
   sumneko.lua = import ./sumneko/lua/latest;
 
-  rust-lang.rust-analyzer = config@{ pkgs, ... }: pkgs.callPackage ./rust-lang/rust-analyzer/latest config;
+  rust-lang.rust-analyzer =
+    config@{ pkgs, ... }: pkgs.callPackage ./rust-lang/rust-analyzer/latest config;
 }

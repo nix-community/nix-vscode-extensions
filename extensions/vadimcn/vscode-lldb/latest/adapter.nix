@@ -8,7 +8,7 @@
   pname,
   src,
   version,
-  
+
   cargoHash,
 }:
 let
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
 
   useFetchCargoVendor = true;
   inherit cargoHash;
-  
+
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>
   # The LLDB_* variables are used in adapter/lldb/build.rs.
   "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
