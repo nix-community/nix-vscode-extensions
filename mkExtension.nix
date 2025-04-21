@@ -132,7 +132,7 @@ let
     in
     # (mkExtension { inherit mktplcRef vsix; }).overrideAttrs (prev: {
     #   passthru = prev.passthru // extensionConfig;
-    # }) 
+    # })
     mkExtension { inherit mktplcRef vsix; };
 in
 builtins.foldl' lib.attrsets.recursiveUpdate { } [
