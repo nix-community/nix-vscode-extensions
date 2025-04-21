@@ -80,6 +80,9 @@ There are several attrsets:
 - `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions (see [Release extensions](#release-extensions)).
 - `forVSCodeVersion "4.228.1"` allows to leave only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"4.228.1"` version of `VS Code`.
   - You may supply the actual version of your `VS Code` instead of `"4.228.1"`.
+- `usingFixesFrom pkgs` allows to use extension fixes (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
+  - The supplied `pkgs` is used only to look up the fixes and is independent of `nixpkgs` that you apply the [overlay](#overlay) to.
+  - The supplied `pkgs` must be something like `nixpkgs.legacyPackages.x86_64-linux` and not just `nixpkgs`.
 
 > [!NOTE]
 > In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
@@ -175,8 +178,8 @@ extensions.aarch64-darwin  extensions.aarch64-linux   extensions.x86_64-darwin  
 nix-repl> t = extensions.x86_64-linux
 
 nix-repl> t.<TAB>
-t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace-release
-t.open-vsx                    t.vscode-marketplace
+t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace
+t.open-vsx                    t.usingFixesFrom              t.vscode-marketplace-release
 ```
 
 #### Get `extensions` without flakes
@@ -201,11 +204,11 @@ t1.extensions.aarch64-darwin  t1.extensions.aarch64-linux   t1.extensions.x86_64
 nix-repl> t = t1.extensions.x86_64-linux
 
 nix-repl> t.<TAB>
-t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace-release
-t.open-vsx                    t.vscode-marketplace
+t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace
+t.open-vsx                    t.usingFixesFrom              t.vscode-marketplace-release
 ```
 
-### Pre-release versions
+### Latest versions
 
 ```console
 nix-repl> t.vscode-marketplace.rust-lang.rust-analyzer
@@ -219,18 +222,67 @@ nix-repl> t.vscode-marketplace-release.rust-lang.rust-analyzer
 «derivation /nix/store/1l2q4iy939n975cmwnzg44dbhwkb2509-vscode-extension-rust-lang-rust-analyzer-0.3.2319.drv»
 ```
 
-### Pre-release versions compatible with a given version of VS Code
+### Latest versions compatible with a given version of VS Code
 
 ```console
 nix-repl> (t.forVSCodeVersion "1.78.2").vscode-marketplace.rust-lang.rust-analyzer
 «derivation /nix/store/iag019w3v7jbypj9d6qz03bh0xmaf248-vscode-extension-rust-lang-rust-analyzer-0.4.1067.drv»
 ```
 
+You can use `usingFixesFrom` after applying `forVSCodeVersion` (See [Extensions](#extensions), [Use extension fixes from particular `nixpkgs`](#use-extension-fixes-from-particular-nixpkgs)).
+
+```console
+nix-repl> t2.using<TAB>
+nix-repl> t2.usingFixesFrom
+```
+
+### Use extension fixes from particular `nixpkgs`
+
+> [!NOTE]
+> The value `ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c` is the full SHA-256 hash of a commit in the `NixOS/nixpkgs` repository.
+> Replace it with the hash of the commit you need.
+
+Some extensions require non-trivial fixes ([example](https://github.com/nix-community/nix-vscode-extensions/issues/69)).
+
+These fixes may be available in a particular version of `nixpkgs`.
+
+These fixes are read from the sources of these `nixpkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
+
+Get `nixpkgs` with flakes.
+
+```console
+nix-repl> nixpkgs = builtins.getFlake github:nixos/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c
+```
+
+Alternatively, get `nixpkgs` without flakes.
+
+```console
+nix-repl> nixpkgs = (import (builtins.fetchGit {
+                url = "https://github.com/NixOS/nixpkgs";
+                ref = "refs/heads/master";
+                rev = "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
+              }))
+```
+
+Use fixes from `nixpkgs`.
+
+```console
+nix-repl> t2 = t.usingFixesFrom nixpkgs.legacyPackages.x86_64-linux
+nix-repl> t2.vscode-marketplace.charliermarsh.ruff.postInstall
+"test -x \"$out/$installPrefix/bundled/libs/bin/ruff\" || {\n  echo \"Replacing the bundled ruff binary failed, because 'bundled/libs/bin/ruff' is missing.\"\n  echo \"Update the package to the match the new path/behavior.\"\n  exit 1\n}\nln -sf /nix/store/3k6rk26d7iz66s6ils1gx1iwvh387kja-ruff-0.11.5/bin/ruff \"$out/$installPrefix/bundled/libs/bin/ruff\"\n"
+```
+
+You can use `forVSCodeVersion` after applying `usingFixesFrom` (See [Extensions](#extensions), [Latest versions compatible with a given version of VS Code](#latest-versions-compatible-with-a-given-version-of-vs-code)).
+
+```console
+nix-repl> t2.for<TAB>
+nix-repl> t2.forVSCodeVersion
+```
+
 ### Removed extensions
 
-Some extensions are hard to handle correctly ([example](https://github.com/nix-community/nix-vscode-extensions/issues/69)), so they have been removed via [removed.nix](./removed.nix).
-
-They may be available in `nixpkgs`, in `pkgs.vscode-extensions` ([link](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vscode-extensions)).
+Some extensions are unavailable or don't work on particular platforms.
+Therefore, these extensions are disabled via [removed.nix](./removed.nix).
 
 ### Apply the overlay
 
@@ -300,11 +352,11 @@ Add necessary extensions there, preferrably, for all supported platforms (see [E
 
 Certain extensions require special treatment.
 
-Provide functions to build such extension in [mkExtension.nix](mkExtension.nix).
+Provide functions to build such extension in the [extensions](extensions) directory (see [extensions/default.nix](./extensions/default.nix)).
 
-Optionally, create and link there issues explaining chosen functions.
+Optionally, create and link issues explaining chosen functions.
 
-Each extension, including [Extra extensions](#extra-extensions), is built via one of the provided functions.
+Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [mkExtension.nix](mkExtension.nix).
 
 These functions don't modify the license of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
 
