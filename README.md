@@ -352,7 +352,7 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 
 ### Main flake
 
-1. (Optionally) Install [direnv](https://direnv.net/), e.g., via `nix profile install nixpkgs#direnv`.
+1. (Optionally) [Install](https://direnv.net/#basic-installation), e.g., via `nix profile install nixpkgs#direnv`.
 
 1. Run a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
 
@@ -363,7 +363,6 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 1. (Optionally) Start `VSCodium` with necessary extensions and tools.
 
    ```console
-   nix run nix-dev/#writeSettings
    nix run nix-dev/#codium .
    ```
 

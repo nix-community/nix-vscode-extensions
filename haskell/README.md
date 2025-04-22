@@ -32,7 +32,6 @@
 1. (Optionally) Run `VSCodium`.
 
     ```console
-    nix run .#writeSettings
     nix run .#codium .
     ```
 
