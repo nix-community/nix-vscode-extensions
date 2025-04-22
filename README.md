@@ -61,6 +61,48 @@ If you use NixOS, Home Manager, or similar:
    >
    > Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
 
+## Apply the overlay in REPL
+
+### Start REPL
+
+See [nix repl](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html).
+
+```console
+nix repl
+```
+
+### Get `nixpkgs` and `nix-vscode-extensions`
+
+#### Get `nixpkgs` and `nix-vscode-extensions` with flakes
+
+```console
+nix-repl> nixpkgs = builtins.getFlake github:nixos/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c
+
+nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea
+```
+
+#### Get `nixpkgs` and `nix-vscode-extensions` without flakes
+
+```console
+nix-repl> nixpkgs = (import (builtins.fetchGit {
+            url = "https://github.com/NixOS/nixpkgs";
+            ref = "refs/heads/master";
+            rev = "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
+          }))
+
+nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
+            url = "https://github.com/nix-community/nix-vscode-extensions";
+            ref = "refs/heads/master";
+            rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
+          }))
+```
+
+### Apply the overlay
+
+```console
+nix-repl> extensions = import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }
+```
+
 ## Extensions
 
 ### Extension attrsets
@@ -69,7 +111,7 @@ We provide attrsets that contain both universal and platform-specific extensions
 
 We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see the [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20) and `systemPlatform` in [flake.nix](./flake.nix)).
 
-The [Apply the overlay](#apply-the-overlay) section shows how to apply the default overlay to a copy of `nixpkgs` and produces the `extensions` attrset.
+The [Apply the overlay](#apply-the-overlay) and [Get `extensions`](#get-extensions) sections show how to get the `extensions` attrset.
 
 That attrset contains the following attributes.
 
@@ -77,7 +119,7 @@ That attrset contains the following attributes.
 - `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions (see [Release extensions](#release-extensions)).
 - `forVSCodeVersion` - `forVSCodeVersion "1.78.2"` produces an attrset containing only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"1.78.2"` version of `VS Code` (see [Versions compatible with a given version of VS Code](#versions-compatible-with-a-given-version-of-vs-code)).
   - You may supply the actual version of your `VS Code` instead of `"1.78.2"`.
-- `usingFixesFrom` - `usingFixesFrom pkgs` produces an attrset where particular extensions have fixes specified in the supplied `pkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Use extension fixes from particular `nixpkgs`](#use-extension-fixes-from-particular-nixpkgs)).
+- `usingFixesFrom` - `usingFixesFrom pkgs` produces an attrset where particular extensions have fixes specified in the supplied `pkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
   - The supplied `pkgs` is used only to look up the fixes and is independent of `nixpkgs` that you apply the overlay to.
   - The supplied `pkgs` must be something like `nixpkgs.legacyPackages.x86_64-linux` and not just `nixpkgs`.
 - The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to and without usage of either `forVSCodeVersion` or `usingFixesFrom`.
@@ -101,7 +143,7 @@ That attrset contains the following attributes.
 
 ### Unfree extensions
 
-- We use derivations from `nixpkgs` for some extensions (see [Use extension fixes from particular `nixpkgs`](#use-extension-fixes-from-particular-nixpkgs)).
+- We use derivations and code from `nixpkgs` for some extensions (see [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
 - Unfree extensions from `nixpkgs` stay unfree here (see [Unfree software](https://wiki.nixos.org/wiki/Unfree_software), [Special extensions](#special-extensions)).
 - If you want to use unfree extensions, try one of the following ways:
 
@@ -117,7 +159,20 @@ That attrset contains the following attributes.
     }
     ```
 
-  - Override the license of a particular extension `(<publisher>.<name>.override { meta.license = [ ]; })`.
+  - Override the license of a particular extension.
+
+      ```nix
+      let
+        resetLicense =
+          drv:
+          drv.overrideAttrs (prev: {
+            meta = prev.meta // {
+              license = [ ];
+            };
+          });
+      in
+      resetLicense <publisher>.<name>
+      ```
 
 ## Example
 
@@ -137,7 +192,7 @@ This repository has a flake [template](template/flake.nix).
 
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 
-1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake-new.html)).
+1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/latest/command-ref/new-cli/nix3-flake-new.html)).
 
    ```console
    nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
@@ -187,165 +242,68 @@ Output on my machine:
 "x86_64-linux"
 ```
 
-### Get the `extensions` attrset
+### Get `extensions`
 
-#### Get the `extensions` attrset with flakes
+[Get `nixpkgs` and `nix-vscode-extensions`](#get-nixpkgs-and-nix-vscode-extensions).
 
 ```console
-$ nix repl
-
-nix-repl> :lf github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea
-Added 10 variables.
-
-nix-repl> t = extensions.<TAB>
-extensions.aarch64-darwin  extensions.aarch64-linux   extensions.x86_64-darwin   extensions.x86_64-linux
-
-nix-repl> t = extensions.x86_64-linux
-
-nix-repl> t.<TAB>
-t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace
-t.open-vsx                    t.usingFixesFrom              t.vscode-marketplace-release
+nix-repl> extensions = nix-vscode-extensions.extensions.${builtins.currentSystem}
 ```
 
-#### Get the `extensions` attrset without flakes
+### Explore `extensions`
 
 ```console
-$ nix repl
-
-nix-repl> t1 = (import (builtins.fetchGit {
-                url = "https://github.com/nix-community/nix-vscode-extensions";
-                ref = "refs/heads/master";
-                rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
-              }))
-
-nix-repl> t = t1.extensions.<TAB>
-t1.extensions.aarch64-darwin  t1.extensions.aarch64-linux   t1.extensions.x86_64-darwin   t1.extensions.x86_64-linux
-
-nix-repl> t = t1.extensions.x86_64-linux
-
-nix-repl> t.<TAB>
-t.forVSCodeVersion            t.open-vsx-release            t.vscode-marketplace
-t.open-vsx                    t.usingFixesFrom              t.vscode-marketplace-release
+nix-repl> extensions.<TAB>
+extensions.forVSCodeVersion            extensions.usingFixesFrom
+extensions.open-vsx                    extensions.vscode-marketplace
+extensions.open-vsx-release            extensions.vscode-marketplace-release
 ```
 
 ### Latest versions
 
 ```console
-nix-repl> t.vscode-marketplace.rust-lang.rust-analyzer
+nix-repl> extensions.vscode-marketplace.rust-lang.rust-analyzer
 «derivation /nix/store/v2dyb61zg6faalpcz4faf6dd0ckgbcsp-vscode-extension-rust-lang-rust-analyzer-0.4.2434.drv»
 ```
 
 ### Release versions
 
 ```console
-nix-repl> t.vscode-marketplace-release.rust-lang.rust-analyzer
+nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer
 «derivation /nix/store/5xhr4a3j62awpnsd9l0llq2yn9q4gb6r-vscode-extension-rust-lang-rust-analyzer-0.3.2433.drv»
 ```
 
 ### Versions compatible with a given version of VS Code
 
 ```console
-nix-repl> t2 = t.forVSCodeVersion "1.78.2"
+nix-repl> extensionsCompatible = extensions.forVSCodeVersion "1.78.2"
 ```
 
-You can access [Extension attrsets](#extension-attrsets) after applying `forVSCodeVersion`.
+The `extensionsCompatible` attrset contains some of the [Extension attrsets](#extension-attrsets).
 
-```console
-nix-repl> t2.<TAB>
-t2.__argsCombined              t2.usingFixesFrom
-t2.open-vsx                    t2.vscode-marketplace
-t2.open-vsx-release            t2.vscode-marketplace-release
-```
-
-```console
-nix-repl> t2.vscode-marketplace.rust-lang.rust-analyzer
-«derivation /nix/store/v194jp1hpwssn37rqv8n68nlzsrp5v2h-vscode-extension-rust-lang-rust-analyzer-0.4.1067.drv»
-```
-
-### Use extension fixes from particular `nixpkgs`
+### Versions with fixes from particular `nixpkgs`
 
 Some extensions require non-trivial fixes ([example](https://github.com/nix-community/nix-vscode-extensions/issues/69)).
 
 These fixes may be available in a particular version of `nixpkgs`.
 
-They are read from (the sources of) these `nixpkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
-
-#### Get `nixpkgs` with flakes
-
-```console
-nix-repl> nixpkgs = builtins.getFlake github:nixos/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c
-```
-
-#### Get `nixpkgs` without flakes
-
-```console
-nix-repl> nixpkgs = (import (builtins.fetchGit {
-                url = "https://github.com/NixOS/nixpkgs";
-                ref = "refs/heads/master";
-                rev = "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
-              }))
-```
-
-#### Get the extensions attrset
-
-Get `t` - see [Get the `extensions` attrset](#get-the-extensions-attrset).
+They are read from (the files in) these `nixpkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
 
 #### Use fixes from `nixpkgs`
 
-```console
-nix-repl> t2 = t.usingFixesFrom nixpkgs.legacyPackages.x86_64-linux
-```
-
-You can access [Extension attrsets](#extension-attrsets) after applying `usingFixesFrom`.
+[Get `nixpkgs` and `nix-vscode-extensions`](#get-nixpkgs-and-nix-vscode-extensions).
 
 ```console
-nix-repl> t2.<TAB>
-t2.__argsCombined              t2.open-vsx-release
-t2.forVSCodeVersion            t2.vscode-marketplace
-t2.open-vsx                    t2.vscode-marketplace-release
+nix-repl> extensionsFixed = nix-vscode-extensions.usingFixesFrom nixpkgs.legacyPackages.x86_64-linux
 ```
 
-```console
-nix-repl> t2.vscode-marketplace.charliermarsh.ruff.postInstall
-"test -x \"$out/$installPrefix/bundled/libs/bin/ruff\" || {\n  echo \"Replacing the bundled ruff binary failed, because 'bundled/libs/bin/ruff' is missing.\"\n  echo \"Update the package to the match the new path/behavior.\"\n  exit 1\n}\nln -sf /nix/store/3k6rk26d7iz66s6ils1gx1iwvh387kja-ruff-0.11.5/bin/ruff \"$out/$installPrefix/bundled/libs/bin/ruff\"\n"
-```
+The `extensionsFixed` attrset contains some of the [Extension attrsets](#extension-attrsets).
 
 ### Removed extensions
 
 Some extensions are unavailable or don't work on particular platforms.
 
 These extensions are disabled via [removed.nix](./removed.nix).
-
-### Apply the overlay
-
-See [Overlay](#overlay).
-
-#### Apply the overlay with flakes
-
-```console
-nix-repl> :lf github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea
-
-nix-repl> extensions = import inputs.nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ overlays.default ]; }
-```
-
-#### Apply the overlay without flakes
-
-```console
-nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
-                url = "https://github.com/nix-community/nix-vscode-extensions";
-                ref = "refs/heads/master";
-                rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
-              }))
-
-nix-repl> extensions = import <nixpkgs> { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }
-```
-
-#### Get an unfree extension
-
-```console
-nix-repl> extensions.vscode-marketplace.ms-python.vscode-pylance
-«derivation /nix/store/513kbkcp75pwv1zy9xc02yf93lkgfx6b-vscode-extension-ms-python-vscode-pylance-2025.4.100.drv»
-```
 
 ## Contribute
 
