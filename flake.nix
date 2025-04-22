@@ -348,39 +348,38 @@
 
           packages =
             {
-              default = lib.trivial.pipe pkgs.vscode-with-extensions [
-                (
-                  x:
-                  x.override {
-                    # vscode = pkgs.vscodium;
-                    vscode = pkgs.vscode.overrideAttrs (prev: {
-                      meta = prev.meta // {
-                        license = [ ];
+              default =
+                (pkgs.vscode-with-extensions.override {
+                  # vscode = pkgs.vscodium;
+                  vscode = pkgs.vscode.overrideAttrs { meta.license = [ ]; };
+                  vscodeExtensions =
+                    let
+                      extensions = import inputs.nixpkgs {
+                        inherit system;
+                        # Uncomment to allow unfree extensions
+                        # config.allowUnfree = true;
+                        overlays = [ self.overlays.default ];
                       };
-                    });
-                    vscodeExtensions =
-                      with self.extensions.${system}.vscode-marketplace;
-                      [
-                        golang.go
-                        vlanguage.vscode-vlang
-                        rust-lang.rust-analyzer
-                        vadimcn.vscode-lldb
-                        ms-dotnettools.vscode-dotnet-runtime
-                        mkhl.direnv
-                        jnoortheen.nix-ide
-                        tamasfe.even-better-toml
-                      ]
-                      ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
-                        # Exclusively for testing purpose
-                        (ms-vscode.cpptools.override { meta.license = [ ]; })
-                        # Local build hangs
-                        # yzane.markdown-pdf
-                      ]);
-                  }
-                )
-                (
-                  x:
-                  x.overrideAttrs (prev: {
+                    in
+                    with extensions.vscode-marketplace;
+                    [
+                      golang.go
+                      vlanguage.vscode-vlang
+                      rust-lang.rust-analyzer
+                      vadimcn.vscode-lldb
+                      ms-dotnettools.vscode-dotnet-runtime
+                      mkhl.direnv
+                      jnoortheen.nix-ide
+                      tamasfe.even-better-toml
+                    ]
+                    ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
+                      # Exclusively for testing purpose
+                      (ms-vscode.cpptools.overrideAttrs { meta.license = [ ]; })
+                      # Local build hangs
+                      # yzane.markdown-pdf
+                    ]);
+                }).overrideAttrs
+                  (prev: {
                     meta = prev.meta // {
                       description = "VSCodium with a few extensions.";
                       longDescription = ''
@@ -394,9 +393,7 @@
                         [Open VSX Registry]: https://open-vsx.org/
                       '';
                     };
-                  })
-                )
-              ];
+                  });
             }
             // mkShellApps {
               updateExtensions = {
