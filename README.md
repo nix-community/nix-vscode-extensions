@@ -29,24 +29,24 @@ If you use NixOS, Home Manager, or similar:
 
 1. If you use flakes, add `nix-vscode-extensions` to your flake inputs (see [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L16)).
 
-    ```nix
-    inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea";
-    outputs = inputs@{ nix-vscode-extensions, ... }: ...
-    ```
+   ```nix
+   inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea";
+   outputs = inputs@{ nix-vscode-extensions, ... }: ...
+   ```
 
 1. If you don't use flakes, get the `nix-vscode-extensions` repository using the necessary `rev`.
 
-    ```nix
-    let
-      nix-vscode-extensions = import (
-        builtins.fetchGit {
-          url = "https://github.com/nix-community/nix-vscode-extensions";
-          ref = "refs/heads/master";
-          rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
-        }
-      );
-    in
-    ```
+   ```nix
+   let
+     nix-vscode-extensions = import (
+       builtins.fetchGit {
+         url = "https://github.com/nix-community/nix-vscode-extensions";
+         ref = "refs/heads/master";
+         rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
+       }
+     );
+   in
+   ```
 
 1. Add the `nix-vscode-extensions.overlays.default` to `nixpkgs` overlays (see [Apply the overlay](#apply-the-overlay), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L48)).
 
@@ -54,12 +54,12 @@ If you use NixOS, Home Manager, or similar:
 
 1. Use `pkgs.vscode-marketplace`, `pkgs.open-vsx` and others (see [Extension attrsets](#extension-attrsets), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
-    > [!NOTE]
-    > See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
-    >
-    > In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
-    >
-    > Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
+   > [!NOTE]
+   > See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
+   >
+   > In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
+   >
+   > Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
 
 ## Extensions
 
@@ -94,7 +94,7 @@ That attrset contains the following attributes.
 - Some previously available extensions may be unavailable in newer versions of this flake.
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions ([discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
   - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
-  
+
 ### Extension packs
 
 - We don't automatically handle extension packs. You should look up extensions in a pack and explicitly write all necessary extensions.
@@ -104,6 +104,7 @@ That attrset contains the following attributes.
 - We use derivations from `nixpkgs` for some extensions (see [Use extension fixes from particular `nixpkgs`](#use-extension-fixes-from-particular-nixpkgs)).
 - Unfree extensions from `nixpkgs` stay unfree here (see [Unfree software](https://wiki.nixos.org/wiki/Unfree_software), [Special extensions](#special-extensions)).
 - If you want to use unfree extensions, try one of the following ways:
+
   - [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree).
   - [Global configuration](https://nixos.org/manual/nixpkgs/stable/#chap-packageconfig) - [Example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L45).
   - Set `config.allowUnfree = true` when constructing `pkgs`.

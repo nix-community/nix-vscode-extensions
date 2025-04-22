@@ -38,7 +38,7 @@
 
         # In some projects, people may use the same default devShell,
         # but different code editors.
-        # 
+        #
         # Then, it's better to provide `VSCodium`
         # not in the default devShell.
         devShells.vscodium = pkgs.mkShell {
