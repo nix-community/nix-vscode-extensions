@@ -346,12 +346,20 @@
 
           haskell = import ./haskell;
 
+          resetLicense =
+            drv:
+            drv.overrideAttrs (prev: {
+              meta = prev.meta // {
+                license = [ ];
+              };
+            });
+
           packages =
             {
               default =
                 (pkgs.vscode-with-extensions.override {
                   # vscode = pkgs.vscodium;
-                  vscode = pkgs.vscode.overrideAttrs { meta.license = [ ]; };
+                  vscode = resetLicense pkgs.vscode;
                   vscodeExtensions =
                     let
                       extensions = import inputs.nixpkgs {
@@ -374,7 +382,7 @@
                     ]
                     ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
                       # Exclusively for testing purpose
-                      (ms-vscode.cpptools.overrideAttrs { meta.license = [ ]; })
+                      (resetLicense ms-vscode.cpptools)
                       # Local build hangs
                       # yzane.markdown-pdf
                     ]);
@@ -473,9 +481,7 @@
                   expected = builtins.elem system lib.platforms.linux;
                 };
                 "test: ms-python.vscode-pylance passes if not unfree" = {
-                  expr =
-                    (builtins.tryEval (vscode-marketplace.ms-python.vscode-pylance.override { meta.license = [ ]; }))
-                    .success;
+                  expr = (builtins.tryEval (resetLicense vscode-marketplace.ms-python.vscode-pylance)).success;
                   expected = true;
                 };
                 "test: rust-lang.rust-analyzer passes" = {
