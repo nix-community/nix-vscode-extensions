@@ -161,18 +161,18 @@ That attrset contains the following attributes.
 
   - Override the license of a particular extension.
 
-      ```nix
-      let
-        resetLicense =
-          drv:
-          drv.overrideAttrs (prev: {
-            meta = prev.meta // {
-              license = [ ];
-            };
-          });
-      in
-      resetLicense <publisher>.<name>
-      ```
+    ```nix
+    let
+      resetLicense =
+        drv:
+        drv.overrideAttrs (prev: {
+          meta = prev.meta // {
+            license = [ ];
+          };
+        });
+    in
+    resetLicense <publisher>.<name>
+    ```
 
 ## Example
 
