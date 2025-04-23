@@ -30,8 +30,6 @@ in
 
   sumneko.lua = callPackage ./sumneko/lua/latest;
 
-  tecosaur.latex-utilities = callPackage ./tecosaur/latex-utilities/latest;
-
   vadimcn.vscode-lldb =
     config@{ mktplcRef, ... }:
     if lib.versionAtLeast mktplcRef.version "1.11.0" then
