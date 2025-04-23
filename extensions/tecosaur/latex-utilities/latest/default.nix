@@ -5,7 +5,7 @@
   moreutils,
   texlivePackages,
   vscode-utils,
-  
+
   mktplcRef,
   vsix,
   ...
