@@ -21,6 +21,55 @@ That said, you can now use a different set of extensions for `VS Code`/`VSCodium
 - [VS Code](https://wiki.nixos.org/wiki/Visual_Studio_Code) page on the NixOS wiki.
 - (Optional) [Flakes](https://wiki.nixos.org/wiki/Flakes).
 
+## History
+
+You can search for an extension in the repository history:
+
+- Get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.json`
+- Select a commit, e.g.: `0910d1e`
+- Search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.json`
+
+## Example
+
+The [flake.nix](./flake.nix) provides an example (`packages.${builtins.currentSystem}.default`) of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/81b9a5f9d1f7f87619df26a4eaf48bf6dec8c82c/pkgs/applications/editors/vscode/with-extensions.nix).
+
+This package is `VS Code` with a couple of extensions.
+
+Run `VS Code` and list installed extensions.
+
+```console
+nix run github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea# -- --list-extensions
+```
+
+## Template
+
+This repository has a flake [template](template/flake.nix).
+
+This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
+
+1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/latest/command-ref/new-cli/nix3-flake-new.html)).
+
+   ```console
+   nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
+   cd vscodium-project
+   git init && git add .
+   ```
+
+1. Run `VSCodium`.
+
+   ```console
+   nix run .# .
+   ```
+
+1. Alternatively, start a devShell and run `VSCodium`. A `shellHook` will print extensions available in the `VSCodium`.
+
+   ```console
+   nix develop .#vscodium
+   codium .
+   ```
+
+In case of problems see [Troubleshooting](#troubleshooting).
+
 ## Overlay
 
 See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
@@ -34,7 +83,7 @@ If you use NixOS, Home Manager, or similar:
    outputs = inputs@{ nix-vscode-extensions, ... }: ...
    ```
 
-1. If you don't use flakes, get the `nix-vscode-extensions` repository using the necessary `rev`.
+1. If you don't use flakes, import the `nix-vscode-extensions` repository.
 
    ```nix
    let
@@ -48,7 +97,7 @@ If you use NixOS, Home Manager, or similar:
    in
    ```
 
-1. Add the `nix-vscode-extensions.overlays.default` to `nixpkgs` overlays (see [Apply the overlay](#apply-the-overlay), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L48)).
+1. Add the `nix-vscode-extensions.overlays.default` to `nixpkgs` overlays (see [Get `extensions` via the overlay](#get-extensions-via-the-overlay), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L48)).
 
 1. (Optional) Allow unfree packages (see [Unfree extensions](#unfree-extensions)).
 
@@ -61,7 +110,7 @@ If you use NixOS, Home Manager, or similar:
    >
    > Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
 
-## Apply the overlay in REPL
+## Get `extensions`
 
 ### Start REPL
 
@@ -71,17 +120,27 @@ See [nix repl](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.h
 nix repl
 ```
 
-### Get `nixpkgs` and `nix-vscode-extensions`
+### Get your system
 
-#### Get `nixpkgs` and `nix-vscode-extensions` with flakes
+```console
+nix-repl> builtins.currentSystem
+```
+
+Output on my machine:
+
+```console
+x86_64-linux
+```
+
+### Get `nixpkgs`
+
+#### Get `nixpkgs` with flakes
 
 ```console
 nix-repl> nixpkgs = builtins.getFlake github:nixos/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c
-
-nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea
 ```
 
-#### Get `nixpkgs` and `nix-vscode-extensions` without flakes
+#### Get `nixpkgs` without flakes
 
 ```console
 nix-repl> nixpkgs = (import (builtins.fetchGit {
@@ -89,7 +148,19 @@ nix-repl> nixpkgs = (import (builtins.fetchGit {
             ref = "refs/heads/master";
             rev = "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
           }))
+```
 
+### Get `nix-vscode-extensions`
+
+#### Get `nix-vscode-extensions` with flakes
+
+```console
+nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea
+```
+
+#### Get `nix-vscode-extensions` without flakes
+
+```console
 nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
             url = "https://github.com/nix-community/nix-vscode-extensions";
             ref = "refs/heads/master";
@@ -97,10 +168,22 @@ nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
           }))
 ```
 
-### Apply the overlay
+### Get `extensions` via the overlay
 
 ```console
 nix-repl> extensions = import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }
+```
+
+If you want `extensions` to have only [Extension attrsets](#extension-attrsets), get `extensions` as follows:
+
+```console
+nix-repl> extensions = (import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }).nix-vscode-extensions
+```
+
+### Get `extensions` from `nix-vscode-extensions`
+
+```console
+nix-repl> extensions = nix-vscode-extensions.extensions.x86_64-linux
 ```
 
 ## Extensions
@@ -109,19 +192,19 @@ nix-repl> extensions = import nixpkgs { system = builtins.currentSystem; config.
 
 We provide attrsets that contain both universal and platform-specific extensions.
 
-We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see the [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20) and `systemPlatform` in [flake.nix](./flake.nix)).
+We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [flake.nix](./flake.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
 
-The [Apply the overlay](#apply-the-overlay) and [Get `extensions`](#get-extensions) sections show how to get the `extensions` attrset.
+The [Get `extensions`](#get-extensions) section explains how to get the `extensions` attrset.
 
-That attrset contains the following attributes.
+This attrset contains the following attributes:
 
-- `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `-release` attrsets.
+- `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `*-release` attrsets.
 - `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions (see [Release extensions](#release-extensions)).
 - `forVSCodeVersion` - `forVSCodeVersion "1.78.2"` produces an attrset containing only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"1.78.2"` version of `VS Code` (see [Versions compatible with a given version of VS Code](#versions-compatible-with-a-given-version-of-vs-code)).
   - You may supply the actual version of your `VS Code` instead of `"1.78.2"`.
-- `usingFixesFrom` - `usingFixesFrom pkgs` produces an attrset where particular extensions have fixes specified in the supplied `pkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
-  - The supplied `pkgs` is used only to look up the fixes and is independent of `nixpkgs` that you apply the overlay to.
-  - The supplied `pkgs` must be something like `nixpkgs.legacyPackages.x86_64-linux` and not just `nixpkgs`.
+- `usingFixesFrom` - `usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
+  - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
+  - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
 - The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to and without usage of either `forVSCodeVersion` or `usingFixesFrom`.
 
 ### Extension identifiers
@@ -174,81 +257,12 @@ That attrset contains the following attributes.
     resetLicense <publisher>.<name>
     ```
 
-## Example
-
-The [flake.nix](./flake.nix) provides an example (`packages.x86_64-linux.default`) of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/81b9a5f9d1f7f87619df26a4eaf48bf6dec8c82c/pkgs/applications/editors/vscode/with-extensions.nix).
-
-This package is `VS Code` with a couple of extensions.
-
-Run `VS Code` and list installed extensions.
-
-```console
-nix run github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea# -- --list-extensions
-```
-
-## Template
-
-This repository has a flake [template](template/flake.nix).
-
-This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
-
-1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/latest/command-ref/new-cli/nix3-flake-new.html)).
-
-   ```console
-   nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
-   cd vscodium-project
-   git init && git add .
-   ```
-
-1. Run `VSCodium`.
-
-   ```console
-   nix run .# .
-   ```
-
-1. Alternatively, start a devShell and run `VSCodium`. A `shellHook` will print extensions available in the `VSCodium`.
-
-   ```console
-   nix develop .#vscodium
-   codium .
-   ```
-
-In case of problems see [Troubleshooting](#troubleshooting).
-
-## History
-
-You can search for an extension in the repository history:
-
-- Get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.json`
-- Select a commit, e.g.: `0910d1e`
-- Search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.json`
-
 ## Explore
 
-Explore extensions via `nix repl`.
+[Start REPL](#start-repl).
 
 > [!NOTE]
 > Press the `Tab` button (denoted as `<TAB>` below) to see attrset attributes.
-
-### Get your system
-
-```console
-nix-instantiate --eval --expr 'builtins.currentSystem'
-```
-
-Output on my machine:
-
-```console
-"x86_64-linux"
-```
-
-### Get `extensions`
-
-[Get `nixpkgs` and `nix-vscode-extensions`](#get-nixpkgs-and-nix-vscode-extensions).
-
-```console
-nix-repl> extensions = nix-vscode-extensions.extensions.${builtins.currentSystem}
-```
 
 ### Explore `extensions`
 
@@ -287,14 +301,17 @@ Some extensions require non-trivial fixes ([example](https://github.com/nix-comm
 
 These fixes may be available in a particular version of `nixpkgs`.
 
-They are read from (the files in) these `nixpkgs` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
+These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
 
 #### Use fixes from `nixpkgs`
 
-[Get `nixpkgs` and `nix-vscode-extensions`](#get-nixpkgs-and-nix-vscode-extensions).
+[Get `extensions`](#get-extensions).
+
+In this case, we use the same version of `nixpkgs` that was used to get `extensions`.
+You can use any other version instead.
 
 ```console
-nix-repl> extensionsFixed = nix-vscode-extensions.usingFixesFrom nixpkgs.legacyPackages.x86_64-linux
+nix-repl> extensionsFixed = extensions.usingFixesFrom nixpkgs
 ```
 
 The `extensionsFixed` attrset contains some of the [Extension attrsets](#extension-attrsets).
