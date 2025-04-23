@@ -7,8 +7,23 @@
 let
   inherit (pkgs) lib;
 
-  buildVscodeMarketplaceExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
-  buildVscodeExtension = lib.customisation.makeOverridable pkgs.vscode-utils.buildVscodeExtension;
+  makeOverridable =
+    f: args:
+    lib.customisation.makeOverridable f (
+      if builtins.isFunction args then
+        (
+          let
+            x = args (f x);
+          in
+          x
+        )
+      else
+        args
+    );
+
+  buildVscodeMarketplaceExtension = makeOverridable pkgs.vscode-utils.buildVscodeMarketplaceExtension;
+
+  buildVscodeExtension = makeOverridable pkgs.vscode-utils.buildVscodeExtension;
 
   # We don't modify callPackage because extensions
   # may use its original version
