@@ -108,7 +108,10 @@ let
         if builtins.elem extensionId extensionsProblematic then
           buildVscodeMarketplaceExtension extensionConfig
         else
-          (extension'.override or (abort "${publisher}.${name}")) extensionConfig
+          (extension'.override
+            or (abort "The extension '${publisher}.${name}' doesn't have an 'override' attribute.")
+          )
+            extensionConfig
     )
   ) extensionsNixpkgs;
 
