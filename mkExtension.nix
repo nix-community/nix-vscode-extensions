@@ -136,7 +136,8 @@ let
         )
       );
     in
-    # (mkExtension { inherit mktplcRef vsix; }).overrideAttrs (prev: {
+    # TODO fix on macOS after enabling
+    # (mkExtension { inherit mktplcRef vsix engineVersion; }).overrideAttrs (prev: {
     #   passthru = prev.passthru // extensionConfig;
     # })
     mkExtension { inherit mktplcRef vsix; };
