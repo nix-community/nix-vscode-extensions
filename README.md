@@ -101,7 +101,7 @@ If you use NixOS, Home Manager, or similar:
 
 1. (Optional) Allow unfree packages (see [Unfree extensions](#unfree-extensions)).
 
-1. Use `pkgs.vscode-marketplace`, `pkgs.open-vsx` and others (see [Extension attrsets](#extension-attrsets), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
+1. Use `pkgs.vscode-marketplace`, `pkgs.open-vsx` and others (see [`extensions` attrsets](#extensions-attrsets), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
    > [!NOTE]
    > See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
@@ -174,7 +174,7 @@ nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
 nix-repl> extensions = import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }
 ```
 
-If you want `extensions` to have only [Extension attrsets](#extension-attrsets), get `extensions` as follows:
+If you want `extensions` to have only [`extensions` attrsets](#extensions-attrsets), get `extensions` as follows:
 
 ```console
 nix-repl> extensions = (import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }).nix-vscode-extensions
@@ -188,11 +188,13 @@ nix-repl> extensions = nix-vscode-extensions.extensions.x86_64-linux
 
 ## Extensions
 
-### Extension attrsets
+### Platforms
 
 We provide attrsets that contain both universal and platform-specific extensions.
 
 We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [flake.nix](./flake.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
+
+### `extensions` attrsets
 
 The [Get `extensions`](#get-extensions) section explains how to get the `extensions` attrset.
 
@@ -205,7 +207,7 @@ This attrset contains the following attributes:
 - `usingFixesFrom` - `usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
   - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
   - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
-- The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to and without usage of either `forVSCodeVersion` or `usingFixesFrom`.
+- The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to or `nixpkgs` from the `nix-vscode-extensions` repository and without usage of either `forVSCodeVersion` or `usingFixesFrom`.
 
 ### Extension identifiers
 
@@ -293,7 +295,7 @@ nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer
 nix-repl> extensionsCompatible = extensions.forVSCodeVersion "1.78.2"
 ```
 
-The `extensionsCompatible` attrset contains some of the [Extension attrsets](#extension-attrsets).
+The `extensionsCompatible` attrset contains some of the [`extensions` attrsets](#extensions-attrsets).
 
 ### Versions with fixes from particular `nixpkgs`
 
@@ -314,7 +316,7 @@ You can use any other version instead.
 nix-repl> extensionsFixed = extensions.usingFixesFrom nixpkgs
 ```
 
-The `extensionsFixed` attrset contains some of the [Extension attrsets](#extension-attrsets).
+The `extensionsFixed` attrset contains some of the [`extensions` attrsets](#extensions-attrsets).
 
 ### Removed extensions
 
