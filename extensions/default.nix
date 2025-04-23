@@ -29,6 +29,8 @@ in
   rust-lang.rust-analyzer = callPackage ./rust-lang/rust-analyzer/latest;
 
   sumneko.lua = callPackage ./sumneko/lua/latest;
+  
+  tecosaur.latex-utilities = callPackage ./tecosaur/latex-utilities/latest;
 
   vadimcn.vscode-lldb =
     config@{ mktplcRef, ... }:
