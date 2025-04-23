@@ -38,7 +38,7 @@ This package is `VS Code` with a couple of extensions.
 Run `VS Code` and list installed extensions.
 
 ```console
-nix run github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea# -- --list-extensions
+nix run github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d# -- --list-extensions
 ```
 
 ## Template
@@ -79,7 +79,7 @@ If you use NixOS, Home Manager, or similar:
 1. If you use flakes, add `nix-vscode-extensions` to your flake inputs (see [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L16)).
 
    ```nix
-   inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea";
+   inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d";
    outputs = inputs@{ nix-vscode-extensions, ... }: ...
    ```
 
@@ -91,7 +91,7 @@ If you use NixOS, Home Manager, or similar:
        builtins.fetchGit {
          url = "https://github.com/nix-community/nix-vscode-extensions";
          ref = "refs/heads/master";
-         rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
+         rev = "00e11463876a04a77fb97ba50c015ab9e5bee90d";
        }
      );
    in
@@ -155,7 +155,7 @@ nix-repl> nixpkgs = (import (builtins.fetchGit {
 #### Get `nix-vscode-extensions` with flakes
 
 ```console
-nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/d9a8347b94253cafebb2c423466026694ec7c6ea
+nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d
 ```
 
 #### Get `nix-vscode-extensions` without flakes
@@ -164,7 +164,7 @@ nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vsc
 nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
             url = "https://github.com/nix-community/nix-vscode-extensions";
             ref = "refs/heads/master";
-            rev = "d9a8347b94253cafebb2c423466026694ec7c6ea";
+            rev = "00e11463876a04a77fb97ba50c015ab9e5bee90d";
           }))
 ```
 
