@@ -1,3 +1,7 @@
+{ pkgs }:
+let
+  inherit (pkgs) callPackage lib;
+in
 {
   # Each extension may have several fixes that depend on the extension version.
   #
@@ -20,23 +24,17 @@
   # { mktplcRef, ... } -> Derivation
   # ```
 
-  ms-vsliveshare.vsliveshare = import ./ms-vsliveshare/vsliveshare/latest;
+  ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare/vsliveshare/latest;
 
-  rust-lang.rust-analyzer =
-    config@{ pkgs, ... }: pkgs.callPackage ./rust-lang/rust-analyzer/latest config;
+  rust-lang.rust-analyzer = callPackage ./rust-lang/rust-analyzer/latest;
 
-  sumneko.lua = import ./sumneko/lua/latest;
+  sumneko.lua = callPackage ./sumneko/lua/latest;
 
   vadimcn.vscode-lldb =
-    config@{
-      mktplcRef,
-      pkgs,
-      lib,
-      ...
-    }:
+    config@{ mktplcRef, ... }:
     if lib.versionAtLeast mktplcRef.version "1.11.0" then
       # https://github.com/NixOS/nixpkgs/pull/383013
-      pkgs.callPackage ./vadimcn/vscode-lldb/latest config
+      callPackage ./vadimcn/vscode-lldb/latest config
     else
-      import ./vadimcn/vscode-lldb/1.10.0 config;
+      callPackage ./vadimcn/vscode-lldb/1.10.0 config;
 }

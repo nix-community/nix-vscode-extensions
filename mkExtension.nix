@@ -19,22 +19,10 @@ let
   };
 
   applyMkExtension = builtins.mapAttrs (
-    publisher:
-    builtins.mapAttrs (
-      name: f:
-      { mktplcRef, vsix }@extensionConfig:
-      f (
-        extensionConfig
-        // {
-          pkgs = pkgs';
-          inherit lib;
-          inherit (pkgs'.vscode-utils) buildVscodeMarketplaceExtension;
-        }
-      )
-    )
+    publisher: builtins.mapAttrs (name: f: { mktplcRef, vsix }@extensionConfig: f (extensionConfig))
   );
 
-  mkExtensionLocal = applyMkExtension (import ./extensions);
+  mkExtensionLocal = applyMkExtension (import ./extensions { pkgs = pkgs'; });
 
   extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
 

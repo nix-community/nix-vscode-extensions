@@ -1,8 +1,6 @@
 # Original implementation: https://github.com/NixOS/nixpkgs/pull/383013
 # After merging should be in https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/editors/vscode/extensions/vadimcn.vscode-lldb
 {
-  mktplcRef,
-
   callPackage,
   cargo,
   cmake,
@@ -16,6 +14,9 @@
   rustc,
   stdenv,
   unzip,
+  
+  mktplcRef,
+  
   ...
 }:
 assert lib.versionAtLeast python3.version "3.5";

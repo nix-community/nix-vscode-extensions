@@ -5,13 +5,14 @@
   rust-analyzer,
   moreutils,
   setDefaultServerPath ? true,
+  vscode-utils,
 
   mktplcRef,
   vsix,
-  buildVscodeMarketplaceExtension,
+
   ...
 }:
-buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension {
   inherit mktplcRef vsix;
 
   nativeBuildInputs = lib.optionals setDefaultServerPath [
