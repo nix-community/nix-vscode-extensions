@@ -72,12 +72,15 @@ EOF
 
 mkdir -p tmp
 
-getReleaseVersions "github.copilot" "tmp/copilot.versions.json"
-jq -M . tmp/copilot.versions.json > tmp/formatted
-cat tmp/formatted > tmp/copilot.versions.json
+publisher="AdaCore"
+name="ada"
 
-getLatestVersion "github.copilot" "tmp/copilot.latest.json"
-jq -M . tmp/copilot.latest.json > tmp/formatted
-cat tmp/formatted > tmp/copilot.latest.json
+getReleaseVersions "${publisher}.${name}" "tmp/${name}.versions.json"
+jq -M . tmp/${name}.versions.json > tmp/formatted
+cat tmp/formatted > tmp/${name}.versions.json
+
+getLatestVersion "${publisher}.${name}" "tmp/${name}.latest.json"
+jq -M . tmp/${name}.latest.json > tmp/formatted
+cat tmp/formatted > tmp/${name}.latest.json
 
 rm tmp/formatted
