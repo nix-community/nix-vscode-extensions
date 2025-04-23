@@ -232,7 +232,7 @@
                     );
                   };
 
-                res =
+                nix-vscode-extensions =
                   (mkSet { })
                   // (
                     let
@@ -268,7 +268,7 @@
                     }
                   );
               in
-              res;
+              nix-vscode-extensions // { inherit nix-vscode-extensions; };
           };
 
           templates = {
