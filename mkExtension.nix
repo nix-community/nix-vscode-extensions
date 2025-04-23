@@ -11,12 +11,10 @@ let
     f: args:
     lib.customisation.makeOverridable f (
       if builtins.isFunction args then
-        (
-          let
-            x = args (f x);
-          in
-          x
-        )
+        let
+          x = args (f x);
+        in
+        x
       else
         args
     );
