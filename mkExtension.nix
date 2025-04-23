@@ -44,14 +44,18 @@ let
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 
   # TODO find a cleaner way to get the store path of nixpkgs from given pkgs
-  pathNixpkgs = lib.trivial.pipe pkgsWithFixes.hello.inputDerivation._derivation_original_args [
-    builtins.tail
-    builtins.head
-    builtins.dirOf
-    builtins.dirOf
-    builtins.dirOf
-    builtins.dirOf
-  ];
+  pathNixpkgs =
+    if pkgsWithFixes ? outPath then
+      pkgsWithFixes.outPath
+    else
+      lib.trivial.pipe pkgsWithFixes.hello.inputDerivation._derivation_original_args [
+        builtins.tail
+        builtins.head
+        builtins.dirOf
+        builtins.dirOf
+        builtins.dirOf
+        builtins.dirOf
+      ];
 
   extensionsNixpkgs =
     callPackage "${pathNixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix"
