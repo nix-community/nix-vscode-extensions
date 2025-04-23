@@ -20,6 +20,13 @@
   # { mktplcRef, ... } -> Derivation
   # ```
 
+  ms-vsliveshare.vsliveshare = import ./ms-vsliveshare/vsliveshare/latest;
+
+  rust-lang.rust-analyzer =
+    config@{ pkgs, ... }: pkgs.callPackage ./rust-lang/rust-analyzer/latest config;
+
+  sumneko.lua = import ./sumneko/lua/latest;
+
   vadimcn.vscode-lldb =
     config@{
       mktplcRef,
@@ -32,11 +39,4 @@
       pkgs.callPackage ./vadimcn/vscode-lldb/latest config
     else
       import ./vadimcn/vscode-lldb/1.10.0 config;
-
-  ms-vsliveshare.vsliveshare = import ./ms-vsliveshare/vsliveshare/latest;
-
-  sumneko.lua = import ./sumneko/lua/latest;
-
-  rust-lang.rust-analyzer =
-    config@{ pkgs, ... }: pkgs.callPackage ./rust-lang/rust-analyzer/latest config;
 }
