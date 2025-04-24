@@ -16,7 +16,7 @@ import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
-import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (<&>), (^.), (^..), (^?), (.~), _Just)
+import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (.~), (<&>), (^.), (^..), (^?), _Just)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
@@ -684,7 +684,5 @@ main = withUtf8 do
                           )
                       )
                 )
-                [ VSCodeMarketplace
-                , OpenVSX
-                ]
+                ([VSCodeMarketplace | ?config.vscodeMarketplace.enable] <> [OpenVSX | ?config.openVSX.enable])
               logInfo [i|#{FINISH} Updating extensions|]

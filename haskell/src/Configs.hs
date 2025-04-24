@@ -1,5 +1,5 @@
-{-# OPTIONS_GHC -Wno-orphans #-}
 {-# LANGUAGE DeriveAnyClass #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
 module Configs where
 
@@ -38,6 +38,7 @@ data SiteConfig f = SiteConfig
   -- ^ Number of threads to use for fetching
   , release :: HKD f ReleaseExtensions
   -- ^ Extensions that require the release version
+  , enable :: HKD f Bool
   }
   deriving stock (Generic)
 
@@ -160,6 +161,7 @@ defaultOpenVSXConfig =
     , pageCount = 10
     , nThreads = 30
     , release = ReleaseExtensions []
+    , enable = True
     }
 
 defaultVSCodeMarketplaceConfig :: SiteConfig Identity
@@ -169,6 +171,7 @@ defaultVSCodeMarketplaceConfig =
     , pageCount = 100
     , nThreads = 100
     , release = ReleaseExtensions []
+    , enable = True
     }
 
 mkDefaultConfig :: SiteConfig Identity -> SiteConfig Maybe -> SiteConfig Identity
@@ -178,6 +181,7 @@ mkDefaultConfig config SiteConfig{..} =
     , pageCount = pageCount ^. non config.pageCount
     , nThreads = nThreads ^. non config.nThreads
     , release = release ^. non config.release
+    , enable = enable ^. non config.enable
     }
 
 mkDefaultAppConfig :: AppConfig Maybe -> AppConfig Identity
@@ -214,8 +218,9 @@ instance Show Pretty where
 -- maxMissingTimes: 5
 -- nRetry: 3
 -- openVSX:
---   nThreads: 100
---   pageCount: 5
+--   enable: true
+--   nThreads: 30
+--   pageCount: 10
 --   pageSize: 1000
 --   release:
 --     releaseExtensions:
@@ -232,8 +237,9 @@ instance Show Pretty where
 -- retryDelay: 20
 -- runN: 1
 -- vscodeMarketplace:
+--   enable: true
 --   nThreads: 100
---   pageCount: 70
+--   pageCount: 100
 --   pageSize: 1000
 --   release:
 --     releaseExtensions:
