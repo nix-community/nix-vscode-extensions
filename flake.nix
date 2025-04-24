@@ -181,18 +181,19 @@
                         {
                           inherit name;
                           value = mkExtension extensionConfig;
+                          inherit (extensionConfig.mktplcRef) publisher;
                         }
                       )
                     )
                     # group by publisher
-                    (builtins.groupBy ({ value, ... }: value.vscodeExtPublisher))
+                    (builtins.groupBy ({ publisher, ... }: publisher))
                     # platform-specific extensions will overwrite universal extensions
                     # due to the sorting order of platforms in the Haskell script
                     (builtins.mapAttrs (
                       _:
                       builtins.foldl' (
                         k:
-                        { name, value }:
+                        { name, value, ... }:
                         k
                         // {
                           ${name} =
