@@ -2,7 +2,7 @@ collectGarbage: true
 garbageCollectorDelay: 10
 logSeverity: Info
 openVSX:
-  enable: false
+  enable: true
   pageCount: 10
   pageSize: 1000
   nThreads: 50
