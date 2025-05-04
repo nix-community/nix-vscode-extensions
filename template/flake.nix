@@ -22,8 +22,7 @@
           vscode = vscodium;
           vscodeExtensions = [
             pkgs.vscode-marketplace.golang.go
-            # TODO enable after resolving https://github.com/nix-community/nix-vscode-extensions/issues/122
-            # pkgs.open-vsx-release.rust-lang.rust-analyzer
+            pkgs.open-vsx-release.rust-lang.rust-analyzer
             # unfree
             pkgs.vscode-marketplace.ms-python.vscode-pylance
           ];
