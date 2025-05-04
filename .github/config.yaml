@@ -1,4 +1,5 @@
 collectGarbage: true
+garbageCollectorDelay: 10
 logSeverity: Info
 openVSX:
   enable: false
