@@ -103,12 +103,12 @@ If you use NixOS, Home Manager, or similar:
 
 1. Use `pkgs.vscode-marketplace`, `pkgs.open-vsx` and others (see [`extensions` attrsets](#extensions-attrsets), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
-   > [!NOTE]
-   > See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
-   >
-   > In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
-   >
-   > Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
+> [!NOTE]
+> See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
+>
+> In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
+>
+> Keep in mind this property of `with` when writing `with vscode-marketplace; with vscode-marketplace-release;`.
 
 ## Get `extensions`
 
