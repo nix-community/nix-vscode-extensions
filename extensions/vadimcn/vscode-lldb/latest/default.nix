@@ -28,7 +28,17 @@ let
   vscodeExtPublisher = publisher;
   vscodeExtName = pname;
 
-  # Hashes of releases (https://github.com/vadimcn/codelldb/releases)
+  # If you want to add a new version and a hash, run `nix repl` and load the `nixpkgs` flake.
+  
+  # nix-repl> :lf nixpkgs
+  # nix-repl> pkgs = legacyPackages.${builtins.currentSystem}
+  
+  # - Build `f` with the version and the hash of the `src` of the new version.
+  # - Use the `got:` hash.
+
+  # Hashes of the source code in releases (https://github.com/vadimcn/codelldb/releases)
+  # nix-repl> f = rev: pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
+  # nix-repl> :b f "1.11.4"
   hash =
     {
       "1.11.0" = "sha256-BzLKRs1fbLN4XSltnxPsgUG7ZJSMz/yJ/jQDZ9OTVxY=";
@@ -39,11 +49,6 @@ let
       "1.11.5" = "sha256-mp50QmYmqMjIUfGKAt8fWcov4Bn9ruya+SwXGT3T/zk=";
     }
     .${version};
-
-  # If you want to add a new version and a hash to `cargoHash` or `npmDepsHash`:
-  # - Open `nix-repl` (e.g., via the `nix repl` command).
-  # - Build `f` with the version and the hash of the `src` of the new version.
-  # - Use the `got:` hash.
 
   # nix-repl> f = rev: hash: pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = rev; hash = hash; }; useFetchCargoVendor = true; }
   # nix-repl> :b f "1.11.4" "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI="
