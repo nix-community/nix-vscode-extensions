@@ -29,10 +29,10 @@ let
   vscodeExtName = pname;
 
   # If you want to add a new version and a hash, run `nix repl` and load the `nixpkgs` flake.
-  
+
   # nix-repl> :lf nixpkgs
   # nix-repl> pkgs = legacyPackages.${builtins.currentSystem}
-  
+
   # - Build `f` with the version and the hash of the `src` of the new version.
   # - Use the `got:` hash.
 
