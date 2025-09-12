@@ -21,12 +21,7 @@ let
     else
       "${lib.getBin lldb}/bin/lldb-server";
   LLVM_TRIPLE = stdenv.buildPlatform.rust.rustcTarget;
-  DYLIB_SUFFIX =
-    if stdenv.hostPlatform.isDarwin then
-      ".dylib"
-    else
-      ".so"
-    ;
+  DYLIB_SUFFIX = if stdenv.hostPlatform.isDarwin then ".dylib" else ".so";
 in
 rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
