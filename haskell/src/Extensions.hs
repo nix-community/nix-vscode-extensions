@@ -30,21 +30,6 @@ import Text.Megaparsec.Char.Lexer (decimal)
 data Target = VSCodeMarketplace | OpenVSX
   deriving stock (Eq)
 
--- | Select an action depending on a target
-targetSelect :: Target -> p -> p -> p
-targetSelect target f g =
-  case target of
-    VSCodeMarketplace -> f
-    OpenVSX -> g
-
--- | Possible action statuses
-ppTarget :: Target -> Text
-ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
-
-instance Show Target where
-  show :: Target -> String
-  show = T.unpack . ppTarget
-
 data Flags
   = Flags'Validated
   | Flags'Public
@@ -52,31 +37,6 @@ data Flags
   | Flags'Verified
   | Flags'Trial
   deriving stock (Enum, Bounded)
-
-_Flags :: Prism' Text Flags
-_Flags = prism' embed_ match_
- where
-  embed_ = \case
-    Flags'Validated -> "validated"
-    Flags'Public -> "public"
-    Flags'Preview -> "preview"
-    Flags'Verified -> "verified"
-    Flags'Trial -> "trial"
-  match_ :: Text -> Maybe Flags
-  match_ x
-    | x == embed_ Flags'Validated = Just Flags'Validated
-    | x == embed_ Flags'Public = Just Flags'Public
-    | x == embed_ Flags'Preview = Just Flags'Preview
-    | x == embed_ Flags'Verified = Just Flags'Verified
-    | x == embed_ Flags'Trial = Just Flags'Trial
-    | otherwise = Nothing
-
-instance Show Flags where
-  show :: Flags -> String
-  show = Text.unpack . (_Flags #)
-
-extFlagsAllowed :: [Text]
-extFlagsAllowed = enumFrom minBound ^.. traversed . to (_Flags #)
 
 newtype Name = Name {_name :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)
@@ -94,10 +54,6 @@ newtype LastUpdated = LastUpdated {_lastUpdated :: UTCTime}
 newtype Version = Version {_version :: SemVer}
   deriving newtype (Eq, Ord, Hashable)
   deriving stock (Generic)
-
-instance Show Version where
-  show :: Version -> String
-  show v = T.unpack $ prettySemVer v._version
 
 data VersionModifier = Veq | Vgeq
   deriving stock (Ord, Eq, Generic)
@@ -121,17 +77,54 @@ data Platform
   deriving stock (Generic, Eq, Ord, Enum, Bounded)
   deriving anyclass (Hashable)
 
-instance FromJSON Platform where
-  parseJSON :: Value -> Data.Aeson.Types.Parser Platform
-  parseJSON (String s) =
-    case s ^? _Platform of
-      Just s' -> pure s'
-      Nothing -> parseFail "Could not parse platform"
-  parseJSON _ = parseFail "Expected a string"
+-- | A simple config that is enough to fetch an extension
+data ExtensionConfig = ExtensionConfig
+  { name :: Name
+  , publisher :: Publisher
+  , lastUpdated :: LastUpdated
+  , version :: Version
+  , platform :: Platform
+  , missingTimes :: Int
+  , engineVersion :: EngineVersion
+  }
+  deriving stock (Generic, Show, Eq)
+  deriving anyclass (FromJSON, ToJSON, Hashable)
 
-instance ToJSON Platform where
-  toJSON :: Platform -> Value
-  toJSON = String . review _Platform
+-- | Full necessary info about an extension
+data ExtensionInfo = ExtensionInfo
+  { name :: Name
+  , publisher :: Publisher
+  , lastUpdated :: LastUpdated
+  , version :: Version
+  , sha256 :: Text
+  , platform :: Platform
+  , missingTimes :: Int
+  -- ^ how many times the extension could not be fetched
+  , engineVersion :: EngineVersion
+  -- ^ engine version that's required to run this extension
+  --
+  -- See [Visual Studio Code compatibility](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility)
+  }
+  deriving stock (Generic, Show)
+  deriving anyclass (FromJSON, ToJSON)
+
+_Flags :: Prism' Text Flags
+_Flags = prism' embed_ match_
+ where
+  embed_ = \case
+    Flags'Validated -> "validated"
+    Flags'Public -> "public"
+    Flags'Preview -> "preview"
+    Flags'Verified -> "verified"
+    Flags'Trial -> "trial"
+  match_ :: Text -> Maybe Flags
+  match_ x
+    | x == embed_ Flags'Validated = Just Flags'Validated
+    | x == embed_ Flags'Public = Just Flags'Public
+    | x == embed_ Flags'Preview = Just Flags'Preview
+    | x == embed_ Flags'Verified = Just Flags'Verified
+    | x == embed_ Flags'Trial = Just Flags'Trial
+    | otherwise = Nothing
 
 _Platform :: Prism' Text Platform
 _Platform = prism' embed_ match_
@@ -152,10 +145,6 @@ _Platform = prism' embed_ match_
     | x == embed_ PDarwin_arm64 = Just PDarwin_arm64
     | otherwise = Nothing
 
-instance Show Platform where
-  show :: Platform -> String
-  show = unpack . review _Platform
-
 _VersionModifier :: Prism' Text VersionModifier
 _VersionModifier = prism' embed_ match_
  where
@@ -168,22 +157,15 @@ _VersionModifier = prism' embed_ match_
     | x == ">=" = Just Vgeq
     | otherwise = Nothing
 
-instance Show VersionModifier where
-  show = unpack . (_VersionModifier #)
-
-instance Show EngineVersion where
-  show = unpack . (_EngineVersion #)
+_EngineVersion :: Prism' Text EngineVersion
+_EngineVersion = prism' embed_ match_
+ where
+  -- TODO use OverloadedRecordDot
+  embed_ EngineVersion{_version, _modifier} =
+    [i|#{review _VersionModifier _modifier}#{prettySemVer _version}|]
+  match_ = TM.parseMaybe parseEngineVersion
 
 type Parser = Parsec Void Text
-
-versions :: [Text]
-versions =
-  [ "2022.09.290700"
-  , "23.3.0-canary-open-0313-1900"
-  , "1.0.0-beta.1"
-  , "1.13.1712347770"
-  , "0.1.8+vizcar"
-  ]
 
 -- | Parse a SemVer-like 'Version'.
 --
@@ -208,19 +190,13 @@ parseVersion = do
           }
   pure $ Version $ fromMaybe semVer (TM.parseMaybe semver' (prettySemVer semVer <> T.pack rest))
 
--- | Examples of versions for VSCode engine used in extensions
-engineVersions :: [Text]
-engineVersions =
-  [ "^0.0.0"
-  , "^0.10.x"
-  , "^1.27.0-insider"
-  , ">=0.10.0"
-  , ">=0.10.x"
-  , ">=0.9.0-pre.1"
-  , "0.1.x"
-  , "1.57.0-insider"
-  , "1.x.x"
-  , "*"
+versions :: [Text]
+versions =
+  [ "2022.09.290700"
+  , "23.3.0-canary-open-0313-1900"
+  , "1.0.0-beta.1"
+  , "1.13.1712347770"
+  , "0.1.8+vizcar"
   ]
 
 -- | Parse 'EngineVersion'
@@ -262,57 +238,20 @@ parseEngineVersion =
           , _modifier
           }
 
-_EngineVersion :: Prism' Text EngineVersion
-_EngineVersion = prism' embed_ match_
- where
-  -- TODO use OverloadedRecordDot
-  embed_ EngineVersion{_version, _modifier} =
-    [i|#{review _VersionModifier _modifier}#{prettySemVer _version}|]
-  match_ = TM.parseMaybe parseEngineVersion
-
-aesonOptions :: Options
-aesonOptions = defaultOptions{unwrapUnaryRecords = True}
-
-instance Show Name where show = Text.unpack . _name
-instance FromJSON Name where parseJSON = genericParseJSON aesonOptions
-instance ToJSON Name where toJSON = genericToJSON aesonOptions
-instance Show Publisher where show = Text.unpack . _publisher
-instance FromJSON Publisher where parseJSON = genericParseJSON aesonOptions
-instance ToJSON Publisher where toJSON = genericToJSON aesonOptions
-instance FromJSON LastUpdated where parseJSON = genericParseJSON aesonOptions
-instance ToJSON LastUpdated where toJSON = genericToJSON aesonOptions
-
-instance FromJSON Version where
-  parseJSON :: Value -> Data.Aeson.Types.Parser Version
-  parseJSON = withText "SemVer" $ either (parseFail . show) pure . TM.parse parseVersion "SemVer"
-
-instance ToJSON Version where
-  toJSON :: Version -> Value
-  toJSON v = String $ prettySemVer v._version
-
-instance FromJSON EngineVersion where
-  parseJSON :: Value -> Data.Aeson.Types.Parser EngineVersion
-  parseJSON = withText "Engine version" $ \engineVersion -> do
-    let t' = engineVersion ^? _EngineVersion
-    guard (has _Just t')
-    pure (fromJust t')
-
-instance ToJSON EngineVersion where
-  toJSON :: EngineVersion -> Value
-  toJSON = (_String #) . (_EngineVersion #)
-
--- | A simple config that is enough to fetch an extension
-data ExtensionConfig = ExtensionConfig
-  { name :: Name
-  , publisher :: Publisher
-  , lastUpdated :: LastUpdated
-  , version :: Version
-  , platform :: Platform
-  , missingTimes :: Int
-  , engineVersion :: EngineVersion
-  }
-  deriving stock (Generic, Show, Eq)
-  deriving anyclass (FromJSON, ToJSON, Hashable)
+-- | Examples of versions for VSCode engine used in extensions
+engineVersions :: [Text]
+engineVersions =
+  [ "^0.0.0"
+  , "^0.10.x"
+  , "^1.27.0-insider"
+  , ">=0.10.0"
+  , ">=0.10.x"
+  , ">=0.9.0-pre.1"
+  , "0.1.x"
+  , "1.57.0-insider"
+  , "1.x.x"
+  , "*"
+  ]
 
 defaultEngineVersion :: EngineVersion
 defaultEngineVersion =
@@ -328,20 +267,91 @@ defaultEngineVersion =
           }
     }
 
--- | Full necessary info about an extension
-data ExtensionInfo = ExtensionInfo
-  { name :: Name
-  , publisher :: Publisher
-  , lastUpdated :: LastUpdated
-  , version :: Version
-  , sha256 :: Text
-  , platform :: Platform
-  , missingTimes :: Int
-  -- ^ how many times the extension could not be fetched
-  , engineVersion :: EngineVersion
-  -- ^ engine version that's required to run this extension
-  --
-  -- See [Visual Studio Code compatibility](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility)
-  }
-  deriving stock (Generic, Show)
-  deriving anyclass (FromJSON, ToJSON)
+extFlagsAllowed :: [Text]
+extFlagsAllowed = enumFrom minBound ^.. traversed . to (_Flags #)
+
+-- | Select an action depending on a target
+targetSelect :: Target -> p -> p -> p
+targetSelect target f g =
+  case target of
+    VSCodeMarketplace -> f
+    OpenVSX -> g
+
+-- | Possible action statuses
+ppTarget :: Target -> Text
+ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
+
+instance Show Target where
+  show :: Target -> String
+  show = T.unpack . ppTarget
+
+instance Show Flags where
+  show :: Flags -> String
+  show = Text.unpack . (_Flags #)
+
+instance Show Version where
+  show :: Version -> String
+  show v = T.unpack $ prettySemVer v._version
+
+instance FromJSON Version where
+  parseJSON :: Value -> Data.Aeson.Types.Parser Version
+  parseJSON = withText "SemVer" $ either (parseFail . show) pure . TM.parse parseVersion "SemVer"
+
+instance ToJSON Version where
+  toJSON :: Version -> Value
+  toJSON v = String $ prettySemVer v._version
+
+instance FromJSON Platform where
+  parseJSON :: Value -> Data.Aeson.Types.Parser Platform
+  parseJSON (String s) =
+    case s ^? _Platform of
+      Just s' -> pure s'
+      Nothing -> parseFail "Could not parse platform"
+  parseJSON _ = parseFail "Expected a string"
+
+instance ToJSON Platform where
+  toJSON :: Platform -> Value
+  toJSON = String . review _Platform
+
+instance Show Platform where
+  show :: Platform -> String
+  show = unpack . review _Platform
+
+instance Show VersionModifier where
+  show = unpack . (_VersionModifier #)
+
+instance Show EngineVersion where
+  show = unpack . (_EngineVersion #)
+
+instance FromJSON EngineVersion where
+  parseJSON :: Value -> Data.Aeson.Types.Parser EngineVersion
+  parseJSON = withText "Engine version" $ \engineVersion -> do
+    let t' = engineVersion ^? _EngineVersion
+    guard (has _Just t')
+    pure (fromJust t')
+
+instance ToJSON EngineVersion where
+  toJSON :: EngineVersion -> Value
+  toJSON = (_String #) . (_EngineVersion #)
+
+aesonOptions :: Options
+aesonOptions = defaultOptions{unwrapUnaryRecords = True}
+
+instance Show Name where
+  show = Text.unpack . _name
+instance FromJSON Name where
+  parseJSON = genericParseJSON aesonOptions
+instance ToJSON Name where
+  toJSON = genericToJSON aesonOptions
+
+instance Show Publisher where
+  show = Text.unpack . _publisher
+instance FromJSON Publisher where
+  parseJSON = genericParseJSON aesonOptions
+instance ToJSON Publisher where
+  toJSON = genericToJSON aesonOptions
+
+instance FromJSON LastUpdated where
+  parseJSON = genericParseJSON aesonOptions
+instance ToJSON LastUpdated where
+  toJSON = genericToJSON aesonOptions
