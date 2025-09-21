@@ -65,9 +65,9 @@ dependencies:
 - megaparsec
 - mtl
 - optparse-generic
+- PyF
 - stm
 - stm-chans
-- string-interpolate
 - text
 - time
 - turtle
