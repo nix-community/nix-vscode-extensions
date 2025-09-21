@@ -40,7 +40,6 @@ default-extensions:
 - OverloadedStrings
 - QuasiQuotes
 - RankNTypes
-- RecordWildCards
 - ScopedTypeVariables
 - StandaloneDeriving
 - TypeApplications
