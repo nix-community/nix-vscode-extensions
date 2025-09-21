@@ -213,7 +213,19 @@ getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN e
           logInfo [i|#{FINISH} Fetching extension #{extName} from #{url}|]
           -- when everything is ok, we write the extension info into a queue
           -- this is to let other threads read from it
-          liftIO $ atomically $ writeTBMQueue extInfoQueue $ ExtensionInfo{..}
+          liftIO $
+            atomically $
+              writeTBMQueue extInfoQueue $
+                ExtensionInfo
+                  { name
+                  , publisher
+                  , lastUpdated
+                  , version
+                  , platform
+                  , missingTimes
+                  , engineVersion
+                  , sha256
+                  }
           pure False
   -- if at some point we failed to obtain an extension info,
   -- we write its config into a queue for failed configs
@@ -240,147 +252,205 @@ whenM cond action = cond >>= (`when` action)
 
 -- | Fetch the extensions given their configurations
 runFetcher :: AppConfig' => FetcherConfig IO -> MyLogger ()
-runFetcher FetcherConfig{..} = do
-  let
-    fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
-    failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
-  -- create directories for files with fetched, failed, and cached extensions
-  -- just in case these directories don't exist
-  forM_ [fetchedTmpDir, failedTmpDir, cacheDir] mktree
-  -- if there were target files, remove them
-  forM_ [fetchedTmpDir, failedTmpDir] (\(mkTargetJSON -> f) -> whenM (testfile f) (rm f))
+runFetcher
+  -- TODO use OverloadedRecordDot
+  FetcherConfig
+    { target
+    , queueCapacity
+    , nThreads
+    , cacheDir
+    , mkTargetJSON
+    , extConfigs
+    , tmpDir
+    } = do
+    let
+      fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
+      failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
+    -- create directories for files with fetched, failed, and cached extensions
+    -- just in case these directories don't exist
+    forM_ [fetchedTmpDir, failedTmpDir, cacheDir] mktree
+    -- if there were target files, remove them
+    forM_ [fetchedTmpDir, failedTmpDir] (\(mkTargetJSON -> f) -> whenM (testfile f) (rm f))
 
-  let extensionInfoCachedJSON = mkTargetJSON cacheDir
+    let extensionInfoCachedJSON = mkTargetJSON cacheDir
 
-  -- if there is a file with cached info, we read it into a list
-  extensionInfoCached <- withRunInIO $ \runInIO ->
-    ( eitherDecodeFileStrict' extensionInfoCachedJSON
-        >>= \case
-          Left err -> runInIO $ logError (pack $ show err) >> pure []
-          Right v -> pure v
-    )
-      `catchAny` (\err -> runInIO $ logError (pack $ show err) >> pure [])
+    -- if there is a file with cached info, we read it into a list
+    extensionInfoCached <- withRunInIO $ \runInIO ->
+      ( eitherDecodeFileStrict' extensionInfoCachedJSON
+          >>= \case
+            Left err -> runInIO $ logError (pack $ show err) >> pure []
+            Right v -> pure v
+      )
+        `catchAny` (\err -> runInIO $ logError (pack $ show err) >> pure [])
 
-  let mkKeyInfo ExtensionInfo{..} = Key{..}
-      mkKeyConfig ExtensionConfig{..} = Key{..}
-      -- we load the cached info into a map for quicker access
-      extensionInfoCacheMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoCached)
-      -- also, we filter out the duplicates among the extension configs
-      configsSorted = Set.toList . Set.fromList $ extConfigs
-      -- we partition the extension configs depending on if they're present in a cache
-      (presentExtensionInfo, extensionConfigsMissing) =
-        (partition (isJust . fst) ((\c -> (Map.lookup (mkKeyConfig c) extensionInfoCacheMap, c)) <$> configsSorted))
-          & bimap ((\x -> x & #missingTimes .~ 0) . fromJust . fst <$>) (snd <$>)
-      -- the extension info that are present according to a response
-      extensionInfoPresentMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> presentExtensionInfo)
-      -- extension info that are missing according to a response
-      -- the missing counter is incremented
-      extensionInfoMissing =
-        (partition (\c -> isNothing $ Map.lookup (mkKeyInfo c) extensionInfoPresentMap) extensionInfoCached)
-          ^.. _1 . traversed . filtered (\c -> c.missingTimes + 1 < ?config.maxMissingTimes)
-          & traversed . #missingTimes +~ 1
-      -- these missing info are turned into configs so that they can be fetched again
-      -- this conversion preserves the missing times counter
-      extensionInfoMissingConfigs = extensionInfoMissing <&> (\ExtensionInfo{..} -> ExtensionConfig{..})
-      -- combine new and old missing configs
-      extensionConfigsMissing' = extensionConfigsMissing <> extensionInfoMissingConfigs
-      -- and calculate the number of the configs of extensions that are missing
-      numberExtensionConfigsMissing = length extensionConfigsMissing'
-  -- collect extensions from cache that are not present
-  traverse_
-    logInfo
-    [ [i|#{START} Running a fetcher on #{target}|]
-    , [i|#{INFO} From #{target} have #{length extensionInfoCached} cached extensions|]
-    , [i|#{INFO} There are #{length extensionConfigsMissing} new extension configs.|]
-    , [i|#{INFO} From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{target}.|]
-    , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{target}|]
-    ]
-
-  -- we prepare shared queues and variables
-  extInfoQueue <- liftIO $ newTBMQueueIO queueCapacity
-  extFailedConfigQueue <- liftIO $ newTBMQueueIO queueCapacity
-  -- this is a counter of processed extensions
-  -- it should become empty when all extensions are processed
-  extProcessedN <- newTMVarIO 0
-  extProcessedNFinal <- newTVarIO 0
-  extFailedN <- newTVarIO 0
-  -- flag for garbage collector
-  collectGarbage <- newTMVarIO ()
-
-  unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
-
-  -- we prepare file names where threads will write to
-  let fetchedExtensionInfoFile = mkTargetJSON fetchedTmpDir
-      failedExtensionConfigFile = mkTargetJSON failedTmpDir
-
-  -- and run together
-  ( mapConcurrently_
-      id
-      [ -- a logger of info about the number of successfully processed extensions
-        processedLogger numberExtensionConfigsMissing extProcessedN
-          `logAndForwardError` [i|in "processed" logger thread|]
-      , -- a logger that writes the info about successfully fetched extensions into a file
-        extLogger fetchedExtensionInfoFile extInfoQueue
-          `logAndForwardError` [i|in "fetched" logger thread|]
-      , -- a logger that writes the info about failed extensions into a file
-        extLogger failedExtensionConfigFile extFailedConfigQueue
-          `logAndForwardError` [i|in "failed" logger thread|]
-      , -- a garbage collector
-        garbageCollector collectGarbage
-          `logAndForwardError` [i|in "garbage collector" thread|]
-      , -- and an action that uses a thread pool to fetch the extensions
-        -- it's more efficient than spawning a thread per each element of a list with extensions' configs
-        withRunInIO
-          ( \runInIO ->
-              withTaskGroup nThreads $ \g -> do
-                void
-                  ( mapConcurrently
-                      g
-                      (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
-                      extensionConfigsMissing'
-                  )
-          )
-          `logAndForwardError` [i|in "worker" threads|]
-          `finally` do
-            -- when all configs are processed, we need to close both queues
-            -- this will let loggers know that they should quit
-            atomically $ closeTBMQueue extInfoQueue
-            atomically $ closeTBMQueue extFailedConfigQueue
-            -- make this var empty to notify the threads reading from it
-            -- clone its value
-            atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
-            -- also, stop the garbage collector
-            when ?config.collectGarbage do
-              atomically $ takeTMVar collectGarbage
-              collectGarbageOnce
+    let mkKeyInfo
+          ExtensionInfo
+            { publisher
+            , name
+            , version
+            , platform
+            , lastUpdated
+            } =
+            Key
+              { publisher
+              , name
+              , version
+              , platform
+              , lastUpdated
+              }
+        mkKeyConfig
+          ExtensionConfig
+            { publisher
+            , name
+            , version
+            , platform
+            , lastUpdated
+            } =
+            Key
+              { publisher
+              , name
+              , version
+              , platform
+              , lastUpdated
+              }
+        -- we load the cached info into a map for quicker access
+        extensionInfoCacheMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoCached)
+        -- also, we filter out the duplicates among the extension configs
+        configsSorted = Set.toList . Set.fromList $ extConfigs
+        -- we partition the extension configs depending on if they're present in a cache
+        (presentExtensionInfo, extensionConfigsMissing) =
+          (partition (isJust . fst) ((\c -> (Map.lookup (mkKeyConfig c) extensionInfoCacheMap, c)) <$> configsSorted))
+            & bimap ((\x -> x & #missingTimes .~ 0) . fromJust . fst <$>) (snd <$>)
+        -- the extension info that are present according to a response
+        extensionInfoPresentMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> presentExtensionInfo)
+        -- extension info that are missing according to a response
+        -- the missing counter is incremented
+        extensionInfoMissing =
+          (partition (\c -> isNothing $ Map.lookup (mkKeyInfo c) extensionInfoPresentMap) extensionInfoCached)
+            ^.. _1 . traversed . filtered (\c -> c.missingTimes + 1 < ?config.maxMissingTimes)
+            & traversed . #missingTimes +~ 1
+        -- these missing info are turned into configs so that they can be fetched again
+        -- this conversion preserves the missing times counter
+        extensionInfoMissingConfigs =
+          extensionInfoMissing
+            <&> ( \ExtensionInfo
+                    { name
+                    , publisher
+                    , lastUpdated
+                    , version
+                    , platform
+                    , missingTimes
+                    , engineVersion
+                    } ->
+                      ExtensionConfig
+                        { name
+                        , publisher
+                        , lastUpdated
+                        , version
+                        , platform
+                        , missingTimes
+                        , engineVersion
+                        }
+                )
+        -- combine new and old missing configs
+        extensionConfigsMissing' = extensionConfigsMissing <> extensionInfoMissingConfigs
+        -- and calculate the number of the configs of extensions that are missing
+        numberExtensionConfigsMissing = length extensionConfigsMissing'
+    -- collect extensions from cache that are not present
+    traverse_
+      logInfo
+      [ [i|#{START} Running a fetcher on #{target}|]
+      , [i|#{INFO} From #{target} have #{length extensionInfoCached} cached extensions|]
+      , [i|#{INFO} There are #{length extensionConfigsMissing} new extension configs.|]
+      , [i|#{INFO} From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{target}.|]
+      , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{target}|]
       ]
-    )
-    -- even if there are some errors
-    -- we want to finally append the info about the newly fetched extensions to the cache
-    `finally` do
-      logInfo [i|#{START} Caching updated info about extensions from #{target}|]
-      -- we combine into a sorted list the cached info and the new info that we read from a file
-      extSorted <-
-        DL.sortBy (\x y -> compare (mkKeyInfo x) (mkKeyInfo y))
-          . (<> presentExtensionInfo)
-          . fromRight []
-          <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
-      -- after that, we compactly write the extensions info
 
-      liftIO
-        ( withFile extensionInfoCachedJSON WriteMode $ \h -> do
-            BS.hPutStr h "[ "
-            case extSorted of
-              [] -> pure ()
-              xs -> encodeFirstList h xs
-            BS.hPutStr h "]"
-        )
-        `logAndForwardError` "when writing extensions to file"
-      logInfo [i|#{FINISH} Caching updated info about extensions from #{target}|]
-      extProcessedNFinal' <- readTVarIO extProcessedNFinal
-      extFailedN' <- readTVarIO extFailedN
-      logInfo [i|#{INFO} Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
-      logInfo [i|#{FINISH} Running a fetcher on #{target}|]
+    -- we prepare shared queues and variables
+    extInfoQueue <- liftIO $ newTBMQueueIO queueCapacity
+    extFailedConfigQueue <- liftIO $ newTBMQueueIO queueCapacity
+    -- this is a counter of processed extensions
+    -- it should become empty when all extensions are processed
+    extProcessedN <- newTMVarIO 0
+    extProcessedNFinal <- newTVarIO 0
+    extFailedN <- newTVarIO 0
+    -- flag for garbage collector
+    collectGarbage <- newTMVarIO ()
+
+    unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
+
+    -- we prepare file names where threads will write to
+    let fetchedExtensionInfoFile = mkTargetJSON fetchedTmpDir
+        failedExtensionConfigFile = mkTargetJSON failedTmpDir
+
+    -- and run together
+    ( mapConcurrently_
+        id
+        [ -- a logger of info about the number of successfully processed extensions
+          processedLogger numberExtensionConfigsMissing extProcessedN
+            `logAndForwardError` [i|in "processed" logger thread|]
+        , -- a logger that writes the info about successfully fetched extensions into a file
+          extLogger fetchedExtensionInfoFile extInfoQueue
+            `logAndForwardError` [i|in "fetched" logger thread|]
+        , -- a logger that writes the info about failed extensions into a file
+          extLogger failedExtensionConfigFile extFailedConfigQueue
+            `logAndForwardError` [i|in "failed" logger thread|]
+        , -- a garbage collector
+          garbageCollector collectGarbage
+            `logAndForwardError` [i|in "garbage collector" thread|]
+        , -- and an action that uses a thread pool to fetch the extensions
+          -- it's more efficient than spawning a thread per each element of a list with extensions' configs
+          withRunInIO
+            ( \runInIO ->
+                withTaskGroup nThreads $ \g -> do
+                  void
+                    ( mapConcurrently
+                        g
+                        (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
+                        extensionConfigsMissing'
+                    )
+            )
+            `logAndForwardError` [i|in "worker" threads|]
+            `finally` do
+              -- when all configs are processed, we need to close both queues
+              -- this will let loggers know that they should quit
+              atomically $ closeTBMQueue extInfoQueue
+              atomically $ closeTBMQueue extFailedConfigQueue
+              -- make this var empty to notify the threads reading from it
+              -- clone its value
+              atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
+              -- also, stop the garbage collector
+              when ?config.collectGarbage do
+                atomically $ takeTMVar collectGarbage
+                collectGarbageOnce
+        ]
+      )
+      -- even if there are some errors
+      -- we want to finally append the info about the newly fetched extensions to the cache
+      `finally` do
+        logInfo [i|#{START} Caching updated info about extensions from #{target}|]
+        -- we combine into a sorted list the cached info and the new info that we read from a file
+        extSorted <-
+          DL.sortBy (\x y -> compare (mkKeyInfo x) (mkKeyInfo y))
+            . (<> presentExtensionInfo)
+            . fromRight []
+            <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
+        -- after that, we compactly write the extensions info
+
+        liftIO
+          ( withFile extensionInfoCachedJSON WriteMode $ \h -> do
+              BS.hPutStr h "[ "
+              case extSorted of
+                [] -> pure ()
+                xs -> encodeFirstList h xs
+              BS.hPutStr h "]"
+          )
+          `logAndForwardError` "when writing extensions to file"
+        logInfo [i|#{FINISH} Caching updated info about extensions from #{target}|]
+        extProcessedNFinal' <- readTVarIO extProcessedNFinal
+        extFailedN' <- readTVarIO extFailedN
+        logInfo [i|#{INFO} Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
+        logInfo [i|#{FINISH} Running a fetcher on #{target}|]
 
 -- | Retry an action a given number of times with a given delay and log about its status
 retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, AppConfig') => Int -> Text -> m b -> m b
@@ -457,7 +527,8 @@ getConfigs target =
                           ]
                       , sortBy = 4
                       , sortOrder = 2
-                      , ..
+                      , pageNumber
+                      , pageSize
                       }
                   ]
               , assetTypes = []
@@ -500,7 +571,16 @@ getConfigs target =
                                                       . _EngineVersion
                                                 missingTimes = 0
                                             guard (isJust engineVersion)
-                                            pure ExtensionConfig{engineVersion = fromJust engineVersion, ..}
+                                            pure
+                                              ExtensionConfig
+                                                { engineVersion = fromJust engineVersion
+                                                , name
+                                                , publisher
+                                                , lastUpdated
+                                                , version
+                                                , platform
+                                                , missingTimes
+                                                }
                                         )
                                     )
                                   . _Just
@@ -519,17 +599,33 @@ getConfigsRelease target = do
         let
           extensionCriteria =
             siteConfig.release.releaseExtensions
-              ^.. traversed . to (\ReleaseExtension{..} -> Criterion{filterType = 7, value = [i|#{publisher}.#{name}|]})
+              ^.. traversed
+                . to
+                  ( \ReleaseExtension
+                      { publisher
+                      , name
+                      } ->
+                        Criterion
+                          { filterType = 7
+                          , value = [i|#{publisher}.#{name}|]
+                          }
+                  )
           pageSize = length extensionCriteria
           requestExtensionsList =
             Req
               { filters =
                   [ Filter
-                      { criteria = [Criterion{filterType = 8, value = "Microsoft.VisualStudio.Code"}] <> extensionCriteria
+                      { criteria =
+                          [ Criterion
+                              { filterType = 8
+                              , value = "Microsoft.VisualStudio.Code"
+                              }
+                          ]
+                            <> extensionCriteria
                       , sortBy = 0
                       , sortOrder = 0
                       , pageNumber = 1
-                      , ..
+                      , pageSize
                       }
                   ]
               , assetTypes = []
@@ -573,7 +669,16 @@ getConfigsRelease target = do
                                                         ^? traversed
                                                           . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
                                                 guard (isNothing preRelease && isJust engineVersion)
-                                                pure ExtensionConfig{engineVersion = fromJust engineVersion, ..}
+                                                pure
+                                                  ExtensionConfig
+                                                    { engineVersion = fromJust engineVersion
+                                                    , missingTimes
+                                                    , name
+                                                    , publisher
+                                                    , lastUpdated
+                                                    , version
+                                                    , platform
+                                                    }
                                             )
                                         )
                                       . _Just
@@ -594,7 +699,7 @@ getConfigsRelease target = do
 
 -- | Run a crawler depending on the target site to (hopefully) get the extension configs
 runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger ([ExtensionConfig], [ExtensionConfig])
-runCrawler CrawlerConfig{..} =
+runCrawler CrawlerConfig{target} =
   do
     logInfo [i|#{START} Updating info about extensions from #{target}.|]
     -- we select the target crawler and run it
@@ -612,30 +717,63 @@ runCrawler CrawlerConfig{..} =
     pure (configs, configsRelease)
 
 processTarget :: AppConfig' => ProcessTargetConfig IO -> MyLogger ()
-processTarget ProcessTargetConfig{..} =
-  do
-    let
-      cacheDir :: FilePath = [i|#{dataDir}/cache|]
-      tmpDir :: FilePath = [i|#{dataDir}/tmp|]
+processTarget
+  -- TODO use OverloadedRecordDot
+  ProcessTargetConfig
+    { target
+    , dataDir
+    , logger
+    , nThreads
+    , queueCapacity
+    } =
+    do
+      let
+        cacheDir :: FilePath = [i|#{dataDir}/cache|]
+        tmpDir :: FilePath = [i|#{dataDir}/tmp|]
 
-      mkTargetJSON :: FilePath -> FilePath
-      mkTargetJSON x = [i|#{x}/#{showTarget target}-latest.json|]
-      mkTargetReleaseJSON :: FilePath -> FilePath
-      mkTargetReleaseJSON x = [i|#{x}/#{showTarget target}-release.json|]
-      nRetry = ?config.nRetry
+        mkTargetJSON :: FilePath -> FilePath
+        mkTargetJSON x = [i|#{x}/#{showTarget target}-latest.json|]
+        mkTargetReleaseJSON :: FilePath -> FilePath
+        mkTargetReleaseJSON x = [i|#{x}/#{showTarget target}-release.json|]
+        nRetry = ?config.nRetry
 
-    -- we first run a crawler to get the extension configs
-    (configs, configsRelease) <-
-      runCrawler CrawlerConfig{..}
-        `logAndForwardError` "when running crawler"
+      -- we first run a crawler to get the extension configs
+      (configs, configsRelease) <-
+        runCrawler
+          CrawlerConfig
+            { target
+            , nRetry
+            , logger
+            }
+          `logAndForwardError` "when running crawler"
 
-    -- then, we run a fetcher
-    runFetcher FetcherConfig{extConfigs = configsRelease, mkTargetJSON = mkTargetReleaseJSON, ..}
-      `logAndForwardError` "when running fetcher for release extensions"
-    runFetcher FetcherConfig{extConfigs = configs, ..}
-      `logAndForwardError` "when running fetcher for latest extensions"
-    -- in case of errors, rethrow an exception
-    `logAndForwardError` [i|when requesting #{target}|]
+      -- then, we run a fetcher
+      runFetcher
+        FetcherConfig
+          { extConfigs = configsRelease
+          , mkTargetJSON = mkTargetReleaseJSON
+          , nThreads
+          , queueCapacity
+          , target
+          , cacheDir
+          , logger
+          , tmpDir
+          }
+        `logAndForwardError` "when running fetcher for release extensions"
+      runFetcher
+        FetcherConfig
+          { extConfigs = configs
+          , target
+          , nThreads
+          , queueCapacity
+          , cacheDir
+          , mkTargetJSON
+          , logger
+          , tmpDir
+          }
+        `logAndForwardError` "when running fetcher for latest extensions"
+      -- in case of errors, rethrow an exception
+      `logAndForwardError` [i|when requesting #{target}|]
 
 newtype ConfigOptions w = ConfigOptions
   { config :: w ::: Maybe FilePath <?> "Path to a config file"
@@ -663,7 +801,14 @@ main = withUtf8 do
     timeout (config_.programTimeout * _MICROSECONDS) $
       let ?config = config_
        in do
-            let AppConfig{..} = config_
+            -- TODO use OverloadedRecordDot
+            let AppConfig
+                  { dataDir
+                  , queueCapacity
+                  , logSeverity
+                  , vscodeMarketplace
+                  , openVSX
+                  } = config_
             withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
               logInfo [i|#{START} Updating extensions|]
               logInfo [i|#{START} Config:\n#{encodePretty defConfig config_}|]
@@ -679,7 +824,8 @@ main = withUtf8 do
                                 { dataDir = dataDir
                                 , nThreads = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
                                 , queueCapacity = queueCapacity
-                                , ..
+                                , target
+                                , logger
                                 }
                           )
                       )

@@ -86,6 +86,7 @@ newtype Publisher = Publisher {_publisher :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)
   deriving stock (Generic)
 
+-- TODO remove since it's unused
 newtype LastUpdated = LastUpdated {_lastUpdated :: UTCTime}
   deriving newtype (Eq, Ord, Hashable, Show)
   deriving stock (Generic)
@@ -197,7 +198,14 @@ parseVersion = do
   void $ string "."
   _svPatch <- decimal
   rest <- many asciiChar
-  let semVer = SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}
+  let semVer =
+        SemVer
+          { _svPreRel = Nothing
+          , _svMeta = Nothing
+          , _svMajor
+          , _svMinor
+          , _svPatch
+          }
   pure $ Version $ fromMaybe semVer (TM.parseMaybe semver' (prettySemVer semVer <> T.pack rest))
 
 -- | Examples of versions for VSCode engine used in extensions
@@ -234,13 +242,32 @@ parseEngineVersion =
       void $ string "."
       _svPatch <- decimal <|> (0 <$ string "x")
       rest <- many asciiChar
-      let semVer = SemVer{_svPreRel = Nothing, _svMeta = Nothing, ..}
-      pure EngineVersion{_version = fromMaybe semVer (TM.parseMaybe semver' (prettySemVer semVer <> T.pack rest)), ..}
+      let semVer =
+            SemVer
+              { _svPreRel = Nothing
+              , _svMeta = Nothing
+              , _svMajor
+              , _svMinor
+              , _svPatch
+              }
+      pure
+        EngineVersion
+          { _version =
+              fromMaybe
+                semVer
+                ( TM.parseMaybe
+                    semver'
+                    (prettySemVer semVer <> T.pack rest)
+                )
+          , _modifier
+          }
 
 _EngineVersion :: Prism' Text EngineVersion
 _EngineVersion = prism' embed_ match_
  where
-  embed_ EngineVersion{..} = [i|#{review _VersionModifier _modifier}#{prettySemVer _version}|]
+  -- TODO use OverloadedRecordDot
+  embed_ EngineVersion{_version, _modifier} =
+    [i|#{review _VersionModifier _modifier}#{prettySemVer _version}|]
   match_ = TM.parseMaybe parseEngineVersion
 
 aesonOptions :: Options

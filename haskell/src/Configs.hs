@@ -128,7 +128,17 @@ instance FromJSON ReleaseExtensions where
                   let publisher = Publisher (toText k)
                    in parseMaybe
                         ( withArray "Names" $ \a ->
-                            pure $ a ^.. traversed . _String . to (\name -> ReleaseExtension{name = Name name, ..})
+                            pure $
+                              a
+                                ^.. traversed
+                                  . _String
+                                  . to
+                                    ( \name ->
+                                        ReleaseExtension
+                                          { name = Name name
+                                          , publisher
+                                          }
+                                    )
                         )
                         v
               )
@@ -175,32 +185,32 @@ defaultVSCodeMarketplaceConfig =
     }
 
 mkDefaultConfig :: SiteConfig Identity -> SiteConfig Maybe -> SiteConfig Identity
-mkDefaultConfig config SiteConfig{..} =
+mkDefaultConfig config sc =
   SiteConfig
-    { pageSize = pageSize ^. non config.pageSize
-    , pageCount = pageCount ^. non config.pageCount
-    , nThreads = nThreads ^. non config.nThreads
-    , release = release ^. non config.release
-    , enable = enable ^. non config.enable
+    { pageSize = sc.pageSize ^. non config.pageSize
+    , pageCount = sc.pageCount ^. non config.pageCount
+    , nThreads = sc.nThreads ^. non config.nThreads
+    , release = sc.release ^. non config.release
+    , enable = sc.enable ^. non config.enable
     }
 
 mkDefaultAppConfig :: AppConfig Maybe -> AppConfig Identity
-mkDefaultAppConfig AppConfig{..} =
+mkDefaultAppConfig ac =
   AppConfig
-    { runN = runN ^. non 1
-    , processedLoggerDelay = processedLoggerDelay ^. non 2
-    , garbageCollectorDelay = garbageCollectorDelay ^. non 30
-    , collectGarbage = collectGarbage ^. non False
-    , programTimeout = programTimeout ^. non 900
-    , retryDelay = retryDelay ^. non 20
-    , nRetry = nRetry ^. non 3
-    , logSeverity = logSeverity ^. non Info
-    , dataDir = dataDir ^. non "data"
-    , queueCapacity = queueCapacity ^. non 200
-    , maxMissingTimes = maxMissingTimes ^. non 5
-    , requestResponseTimeout = requestResponseTimeout ^. non 100
-    , openVSX = openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
-    , vscodeMarketplace = vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
+    { runN = ac.runN ^. non 1
+    , processedLoggerDelay = ac.processedLoggerDelay ^. non 2
+    , garbageCollectorDelay = ac.garbageCollectorDelay ^. non 30
+    , collectGarbage = ac.collectGarbage ^. non False
+    , programTimeout = ac.programTimeout ^. non 900
+    , retryDelay = ac.retryDelay ^. non 20
+    , nRetry = ac.nRetry ^. non 3
+    , logSeverity = ac.logSeverity ^. non Info
+    , dataDir = ac.dataDir ^. non "data"
+    , queueCapacity = ac.queueCapacity ^. non 200
+    , maxMissingTimes = ac.maxMissingTimes ^. non 5
+    , requestResponseTimeout = ac.requestResponseTimeout ^. non 100
+    , openVSX = ac.openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
+    , vscodeMarketplace = ac.vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
     }
 
 -- | A type for printing multiline stuff when using HLS
