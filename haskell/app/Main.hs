@@ -35,7 +35,6 @@ import Data.List (partition)
 import Data.List qualified as DL
 import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
-import Data.String.Interpolate (i)
 import Data.Text (pack)
 import Data.Text qualified as Text
 import Data.Text.Encoding (decodeUtf8)
@@ -50,6 +49,8 @@ import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Options.Generic
+import Prettyprinter (pretty)
+import PyF
 import Requests
 import Turtle (Alternative (..), mktree, rm, testfile)
 import Turtle.Bytes (shellStrictWithErr)
@@ -70,7 +71,7 @@ showTarget target = targetSelect target "vscode-marketplace" "open-vsx"
 
 -- | Handle the case when we need to write the first list of extensions' info into a file
 encodeFirstList :: ToJSON a => Handle -> [a] -> IO ()
-encodeFirstList h (x : xs) = BS.hPutStr h ([i|#{encode x}\n|]) >> traverse_ (\y -> BS.hPutStr h ([i|, #{encode y}\n|])) xs
+encodeFirstList h (x : xs) = BS.hPutStr h ([fmt|{encode x}\n|]) >> traverse_ (\y -> BS.hPutStr h ([fmt|, {encode y}\n|])) xs
 encodeFirstList _ _ = error "Please, check the pattern matching at where you call this function"
 
 -- | Read everything from a queue into a list
@@ -115,7 +116,7 @@ extLogger file queue = liftIO $
                 )
                 extData
             else -- next time, we can write all values from the list in the same way
-              traverse_ (traverse_ (\x -> BS.hPutStr h [i|, #{encode x}\n|])) extData
+              traverse_ (traverse_ (\x -> BS.hPutStr h [fmt|, {encode x}\n|])) extData
           -- this type of queue may become `closed`
           -- in this case, values that we read from it will be `Nothing`
           -- unless such a situation happens, we need to repeat our loop
@@ -127,11 +128,11 @@ extLogger file queue = liftIO $
 
 collectGarbageOnce :: MyLogger ()
 collectGarbageOnce = do
-  logInfo [i|#{START} Collecting garbage in /nix/store.|]
-  (_, infoText, errText) <- shellStrictWithErr [i|nix store gc |] empty
-  logInfo [i|#{infoText}|]
-  logDebug [i|#{errText}|]
-  logInfo [i|#{FINISH} Collecting garbage in /nix/store.|]
+  logInfo [fmt|{START} Collecting garbage in /nix/store.|]
+  (_, infoText, errText) <- shellStrictWithErr [fmt|nix store gc |] empty
+  logInfo [fmt|{infoText}|]
+  logDebug [fmt|{errText}|]
+  logInfo [fmt|{FINISH} Collecting garbage in /nix/store.|]
 
 garbageCollector :: AppConfig' => TMVar () -> MyLogger ()
 garbageCollector t = do
@@ -151,91 +152,106 @@ processedLogger total processed = flip fix 0 $ \ret n -> do
   p <- liftIO $ atomically $ tryReadTMVar processed
   traverse_
     ( \cnt -> do
-        when (cnt /= n) $ logInfo [i|#{INFO} Processed (#{cnt}/#{total}) extensions|]
+        when (cnt /= n) $ logInfo [fmt|{INFO} Processed ({cnt}/{total}) extensions|]
         liftIO $ threadDelay (?config.processedLoggerDelay * _MICROSECONDS)
         ret cnt
     )
     p
 
 logAndForwardError :: MyLogger a -> String -> MyLogger a
-logAndForwardError action message = action `catchAny` \error' -> logError [i|Error #{message}:\n#{error'}|] >> throw error'
+logAndForwardError action message =
+  action
+    `catchAny` \error' -> do
+      logError [fmt|Error {message}:\n{show error'}|]
+      throw error'
 
 -- | Get an extension from a target site and pass info about it to other threads
 --
 -- We do this by using the thread-safe data structures like special queues and vars
 getExtension :: AppConfig' => Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> MyLogger ()
-getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN extConfig@ExtensionConfig{platform, lastUpdated, missingTimes, engineVersion, version} = do
-  let
-    -- select an action for a target
-    publisher = extConfig.publisher
-    name = extConfig.name
-    select :: a -> a -> a
-    select = targetSelect target
-    extName = [i|#{publisher}.#{name}|] :: Text
-  logDebug [i|#{START} Requesting info about #{extName} from #{target}|]
-  isFailed <- do
+getExtension
+  target
+  extInfoQueue
+  extFailedConfigQueue
+  extProcessedN
+  extFailedN
+  extConfig@ExtensionConfig
+    { publisher
+    , name
+    , version
+    , platform
+    , lastUpdated
+    , missingTimes
+    , engineVersion
+    } = do
     let
-      -- and prepare a url for a target site
-      platformInfix :: Text =
-        ( case platform of
-            PUniversal -> ""
-            x -> [i|/#{x}|]
-        )
-      platformSuffix :: Text =
-        ( case platform of
-            PUniversal -> ""
-            x -> select [i|targetPlatform=#{x}|] [i|@#{x}|]
-        )
-      url :: Text
-      url =
-        select
-          [i|https://#{publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/#{publisher}/extension/#{name}/#{version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?#{platformSuffix}|]
-          [i|https://open-vsx.org/api/#{publisher}/#{name}#{platformInfix}/#{version}/file/#{extName}-#{version}#{platformSuffix}.vsix|]
+      select :: a -> a -> a
+      select = targetSelect target
+      extName = [fmt|{publisher}.{name}|] :: Text
+    logDebug [fmt|{START} Requesting info about {extName} from {target}|]
+    isFailed <- do
+      let
+        -- and prepare a url for a target site
+        platformInfix :: Text =
+          ( case platform of
+              PUniversal -> ""
+              x -> [fmt|/{x}|]
+          )
+        platformSuffix :: Text =
+          ( case platform of
+              PUniversal -> ""
+              x -> select [fmt|targetPlatform={x}|] [fmt|@{x}|]
+          )
+        url :: Text
+        url =
+          select
+            [fmt|https://{publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/{publisher}/extension/{name}/{version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?{platformSuffix}|]
+            [fmt|https://open-vsx.org/api/{publisher}/{name}{platformInfix}/{version}/file/{extName}-{version}{platformSuffix}.vsix|]
 
-    logDebug [i|#{START} Fetching #{extName} from #{url}|]
-    -- let nix fetch a file from that url
-    let timeout' = ?config.requestResponseTimeout
-    (_, decodeUtf8 -> stdout', errText) <-
-      let command = [i|nix store prefetch-file --timeout #{timeout'} --json #{url} --name #{extName}-#{version}-#{platform}|]
-       in shellStrictWithErr command empty
-            `logAndForwardError` [i|during prefetch-file: #{command}|]
-    let sha256Maybe = stdout' ^? key "hash" . _String
-    -- if stderr was non-empty, there was an error
-    if not (BS.null errText)
-      then do
-        logInfo [i|#{FAIL} Fetching #{extName} from #{url}. The stderr:\n#{errText}|]
-        pure True
-      else case sha256Maybe of
-        Nothing -> do
-          logInfo [i|#{FAIL} Fetching #{extName} from #{url}. Could not parse JSON: #{stdout'}|]
+      logDebug [fmt|{START} Fetching {extName} from {url}|]
+      -- let nix fetch a file from that url
+      let timeout' = ?config.requestResponseTimeout
+      (_, decodeUtf8 -> stdout', errText) <-
+        let command = [fmt|nix store prefetch-file --timeout {timeout'} --json {url} --name {extName}-{version}-{platform}|]
+         in shellStrictWithErr command empty
+              `logAndForwardError` [fmt|during prefetch-file: {command}|]
+      let sha256Maybe = stdout' ^? key "hash" . _String
+      -- if stderr was non-empty, there was an error
+      if not (BS.null errText)
+        then do
+          logInfo [fmt|{FAIL} Fetching {extName} from {url}. The stderr:\n{errText}|]
           pure True
-        Just sha256 -> do
-          logInfo [i|#{FINISH} Fetching extension #{extName} from #{url}|]
-          -- when everything is ok, we write the extension info into a queue
-          -- this is to let other threads read from it
-          liftIO $
-            atomically $
-              writeTBMQueue extInfoQueue $
-                ExtensionInfo
-                  { name
-                  , publisher
-                  , lastUpdated
-                  , version
-                  , platform
-                  , missingTimes
-                  , engineVersion
-                  , sha256
-                  }
-          pure False
-  -- if at some point we failed to obtain an extension info,
-  -- we write its config into a queue for failed configs
-  when
-    isFailed
-    do
-      liftIO $ atomically $ writeTBMQueue extFailedConfigQueue extConfig
-      liftIO $ atomically $ readTVar extFailedN >>= \x -> writeTVar extFailedN (x + 1)
-  -- when finished, we update a shared counter
-  liftIO $ atomically $ takeTMVar extProcessedN >>= \x -> putTMVar extProcessedN (x + 1)
+        else case sha256Maybe of
+          Nothing -> do
+            logInfo [fmt|{FAIL} Fetching {extName} from {url}. Could not parse JSON: {stdout'}|]
+            pure True
+          Just sha256 -> do
+            logInfo [fmt|{FINISH} Fetching extension {extName} from {url}|]
+            -- when everything is ok, we write the extension info into a queue
+            -- this is to let other threads read from it
+            liftIO $
+              atomically $
+                writeTBMQueue extInfoQueue $
+                  ExtensionInfo
+                    { name
+                    , publisher
+                    , lastUpdated
+                    , version
+                    , platform
+                    , missingTimes
+                    , engineVersion
+                    , sha256
+                    }
+            pure False
+    -- if at some point we failed to obtain an extension info,
+    -- we write its config into a queue for failed configs
+    when
+      isFailed
+      do
+        liftIO $ atomically $ writeTBMQueue extFailedConfigQueue extConfig
+        liftIO $ atomically $ readTVar extFailedN >>= \x -> writeTVar extFailedN (x + 1)
+    -- when finished, we update a shared counter
+    liftIO $ atomically $ takeTMVar extProcessedN >>= \x -> putTMVar extProcessedN (x + 1)
 
 data Key = Key
   { publisher :: Publisher
@@ -264,8 +280,8 @@ runFetcher
     , tmpDir
     } = do
     let
-      fetchedTmpDir :: FilePath = [i|#{tmpDir}/fetched|]
-      failedTmpDir :: FilePath = [i|#{tmpDir}/failed|]
+      fetchedTmpDir :: FilePath = [fmt|{tmpDir}/fetched|]
+      failedTmpDir :: FilePath = [fmt|{tmpDir}/failed|]
     -- create directories for files with fetched, failed, and cached extensions
     -- just in case these directories don't exist
     forM_ [fetchedTmpDir, failedTmpDir, cacheDir] mktree
@@ -359,11 +375,11 @@ runFetcher
     -- collect extensions from cache that are not present
     traverse_
       logInfo
-      [ [i|#{START} Running a fetcher on #{target}|]
-      , [i|#{INFO} From #{target} have #{length extensionInfoCached} cached extensions|]
-      , [i|#{INFO} There are #{length extensionConfigsMissing} new extension configs.|]
-      , [i|#{INFO} From #{length extensionInfoCached} cached extensions, #{length extensionInfoMissing} are not among the extensions available at #{target}.|]
-      , [i|#{START} Updating cached info about #{numberExtensionConfigsMissing} extension(s) from #{target}|]
+      [ [fmt|{START} Running a fetcher on {target}|]
+      , [fmt|{INFO} From {target} have {length extensionInfoCached} cached extensions|]
+      , [fmt|{INFO} There are {length extensionConfigsMissing} new extension configs.|]
+      , [fmt|{INFO} From {length extensionInfoCached} cached extensions, {length extensionInfoMissing} are not among the extensions available at {target}.|]
+      , [fmt|{START} Updating cached info about {numberExtensionConfigsMissing} extension(s) from {target}|]
       ]
 
     -- we prepare shared queues and variables
@@ -388,16 +404,16 @@ runFetcher
         id
         [ -- a logger of info about the number of successfully processed extensions
           processedLogger numberExtensionConfigsMissing extProcessedN
-            `logAndForwardError` [i|in "processed" logger thread|]
+            `logAndForwardError` [fmt|in "processed" logger thread|]
         , -- a logger that writes the info about successfully fetched extensions into a file
           extLogger fetchedExtensionInfoFile extInfoQueue
-            `logAndForwardError` [i|in "fetched" logger thread|]
+            `logAndForwardError` [fmt|in "fetched" logger thread|]
         , -- a logger that writes the info about failed extensions into a file
           extLogger failedExtensionConfigFile extFailedConfigQueue
-            `logAndForwardError` [i|in "failed" logger thread|]
+            `logAndForwardError` [fmt|in "failed" logger thread|]
         , -- a garbage collector
           garbageCollector collectGarbage
-            `logAndForwardError` [i|in "garbage collector" thread|]
+            `logAndForwardError` [fmt|in "garbage collector" thread|]
         , -- and an action that uses a thread pool to fetch the extensions
           -- it's more efficient than spawning a thread per each element of a list with extensions' configs
           withRunInIO
@@ -410,7 +426,7 @@ runFetcher
                         extensionConfigsMissing'
                     )
             )
-            `logAndForwardError` [i|in "worker" threads|]
+            `logAndForwardError` [fmt|in "worker" threads|]
             `finally` do
               -- when all configs are processed, we need to close both queues
               -- this will let loggers know that they should quit
@@ -428,7 +444,7 @@ runFetcher
       -- even if there are some errors
       -- we want to finally append the info about the newly fetched extensions to the cache
       `finally` do
-        logInfo [i|#{START} Caching updated info about extensions from #{target}|]
+        logInfo [fmt|{START} Caching updated info about extensions from {target}|]
         -- we combine into a sorted list the cached info and the new info that we read from a file
         extSorted <-
           DL.sortBy (\x y -> compare (mkKeyInfo x) (mkKeyInfo y))
@@ -446,11 +462,11 @@ runFetcher
               BS.hPutStr h "]"
           )
           `logAndForwardError` "when writing extensions to file"
-        logInfo [i|#{FINISH} Caching updated info about extensions from #{target}|]
+        logInfo [fmt|{FINISH} Caching updated info about extensions from {target}|]
         extProcessedNFinal' <- readTVarIO extProcessedNFinal
         extFailedN' <- readTVarIO extFailedN
-        logInfo [i|#{INFO} Processed #{extProcessedNFinal'}, failed #{extFailedN'} extensions|]
-        logInfo [i|#{FINISH} Running a fetcher on #{target}|]
+        logInfo [fmt|{INFO} Processed {extProcessedNFinal'}, failed {extFailedN'} extensions|]
+        logInfo [fmt|{FINISH} Running a fetcher on {target}|]
 
 -- | Retry an action a given number of times with a given delay and log about its status
 retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, AppConfig') => Int -> Text -> m b -> m b
@@ -459,19 +475,19 @@ retry_ nAttempts msg action
       let retryDelay = ?config.retryDelay
           action_ n = do
             let n_ = nAttempts - n + 1
-            res <- try (action >>= \res -> logDebug [i|#{INFO} Attempt (#{n_}/#{nAttempts}) succeeded. Continuing.|] >> pure res)
+            res <- try (action >>= \res -> logDebug [fmt|{INFO} Attempt ({n_}/{nAttempts}) succeeded. Continuing.|] >> pure res)
             case res of
               Left (err :: SomeException)
                 | n >= 1 -> do
-                    logError [i|#{FAIL} (#{n_}/#{nAttempts}) #{msg}.\nError:\n#{err}\nRetrying in #{retryDelay} seconds.|]
+                    logError [fmt|{FAIL} ({n_}/{nAttempts}) {msg}.\nError:\n{show err}\nRetrying in {retryDelay} seconds.|]
                     liftIO (threadDelay (?config.retryDelay * _MICROSECONDS))
                     action_ (n - 1)
                 | otherwise -> do
-                    logError [i|#{ABORT} All #{nAttempts} attempts have failed. #{msg}|]
+                    logError [fmt|{ABORT} All {nAttempts} attempts have failed. {msg}|]
                     throw err
               Right r -> pure r
        in action_ nAttempts
-  | nAttempts < 0 = error [i|retry_: count must be 0 or more.\nCount: #{nAttempts}|]
+  | nAttempts < 0 = error [fmt|retry_: count must be 0 or more.\nCount: {nAttempts}|]
 retry_ _ _ _ = error "retry_: count must be 0 or more."
 
 filteredByFlags :: Traversal' Value Value
@@ -513,7 +529,7 @@ getConfigs :: AppConfig' => Target -> MyLogger [ExtensionConfig]
 getConfigs target =
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
-   in retry_ nRetry [i|Collecting the extension configs from #{target}|] do
+   in retry_ nRetry [fmt|Collecting the extension configs from {target}|] do
         let
           pageCount = siteConfig.pageCount
           pageSize = siteConfig.pageSize
@@ -534,13 +550,13 @@ getConfigs target =
               , assetTypes = []
               , flags = 946
               }
-        logInfo [i|#{START} Collecting the latest versions of extensions|]
-        logInfo [i|#{START} Collecting #{pageCount} page(s) of size #{pageSize}.|]
+        logInfo [fmt|{START} Collecting the latest versions of extensions|]
+        logInfo [fmt|{START} Collecting {pageCount} page(s) of size {pageSize}.|]
         -- we request the pages of extensions from VSCode Marketplace concurrently
         pages <- traverse responseBody <$> liftIO (forConcurrently [1 .. pageCount] (mkEitherRequest target . requestExtensionsList))
         case pages of
           -- if we were unsuccessful, we need to retry
-          Left l -> logError [i|#{FAIL} Getting info about extensions from #{target}|] >> error [i|#{l}|]
+          Left l -> logError [fmt|{FAIL} Getting info about extensions from {target}|] >> error (show l)
           Right r -> do
             pure $
               r
@@ -548,7 +564,7 @@ getConfigs target =
                   . filteredExtensions
                   . to
                     ( parseMaybe
-                        ( withObject [i|Extension|] $ \o -> do
+                        ( withObject [fmt|Extension|] $ \o -> do
                             name :: Name <- o .: "extensionName"
                             publisher :: Publisher <- o .: "publisher" >>= \x -> x .: "publisherName"
                             versions_ :: [Value] <- o .: "versions"
@@ -557,7 +573,7 @@ getConfigs target =
                                 ^.. traversed
                                   . to
                                     ( parseMaybe
-                                        ( withObject [i|Version|] $ \o1 -> do
+                                        ( withObject [fmt|Version|] $ \o1 -> do
                                             lastUpdated <- o1 .: "lastUpdated"
                                             version <- o1 .: "version"
                                             platform <- o1 .:? "targetPlatform" <&> (^. non PUniversal)
@@ -592,10 +608,10 @@ getConfigs target =
 -- | Get a list of extension configs from VSCode Marketplace
 getConfigsRelease :: AppConfig' => Target -> MyLogger [ExtensionConfig]
 getConfigsRelease target = do
-  logInfo [i|#{START} Collecting the release versions of extensions|]
+  logInfo [fmt|{START} Collecting the release versions of extensions|]
   let nRetry = ?config.nRetry
       siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
-   in retry_ nRetry [i|Collecting the release extension configs from #{target}|] do
+   in retry_ nRetry [fmt|Collecting the release extension configs from {target}|] do
         let
           extensionCriteria =
             siteConfig.release.releaseExtensions
@@ -607,7 +623,7 @@ getConfigsRelease target = do
                       } ->
                         Criterion
                           { filterType = 7
-                          , value = [i|#{publisher}.#{name}|]
+                          , value = [fmt|{publisher}.{name}|]
                           }
                   )
           pageSize = length extensionCriteria
@@ -631,18 +647,18 @@ getConfigsRelease target = do
               , assetTypes = []
               , flags = 1073
               }
-        logInfo [i|#{START} Collecting release extension pages.|]
+        logInfo [fmt|{START} Collecting release extension pages.|]
         pages <- responseBody <$> liftIO (mkEitherRequest target requestExtensionsList)
         case pages of
           -- if we were unsuccessful, we need to retry
-          Left l -> logError [i|#{FAIL} Getting info about extensions from #{target}|] >> error [i|#{l}|]
+          Left l -> logError [fmt|{FAIL} Getting info about extensions from {target}|] >> error (show l)
           Right r -> do
             pure $
               r
                 ^.. filteredExtensions
                   . to
                     ( parseMaybe
-                        ( withObject [i|Extension|] $ \o -> do
+                        ( withObject [fmt|Extension|] $ \o -> do
                             name :: Name <- o .: "extensionName"
                             publisher :: Publisher <- o .: "publisher" >>= \x -> x .: "publisherName"
                             versions_ :: [Value] <- o .: "versions"
@@ -651,7 +667,7 @@ getConfigsRelease target = do
                                     ^.. traversed
                                       . to
                                         ( parseMaybe
-                                            ( withObject [i|Version|] $ \o1 -> do
+                                            ( withObject [fmt|Version|] $ \o1 -> do
                                                 lastUpdated <- o1 .: "lastUpdated"
                                                 version <- o1 .: "version"
                                                 platform <- o1 .:? "targetPlatform" <&> (^. non PUniversal)
@@ -701,18 +717,19 @@ getConfigsRelease target = do
 runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger ([ExtensionConfig], [ExtensionConfig])
 runCrawler CrawlerConfig{target} =
   do
-    logInfo [i|#{START} Updating info about extensions from #{target}.|]
+    logInfo [fmt|{START} Updating info about extensions from {target}.|]
     -- we select the target crawler and run it
     -- on release configs
     configsRelease <- getConfigsRelease target
 
+    -- TODO check that this looks good
     -- print the obtained release configs
-    logDebug [i|#{configsRelease}|]
+    logDebug [fmt|{show $ pretty configsRelease}|]
 
     -- on all configs
     configs <- getConfigs target
 
-    logInfo [i|#{FINISH} Updating info about extensions from #{target}.|]
+    logInfo [fmt|{FINISH} Updating info about extensions from {target}.|]
     -- finally, we return the configs
     pure (configs, configsRelease)
 
@@ -728,13 +745,13 @@ processTarget
     } =
     do
       let
-        cacheDir :: FilePath = [i|#{dataDir}/cache|]
-        tmpDir :: FilePath = [i|#{dataDir}/tmp|]
+        cacheDir :: FilePath = [fmt|{dataDir}/cache|]
+        tmpDir :: FilePath = [fmt|{dataDir}/tmp|]
 
         mkTargetJSON :: FilePath -> FilePath
-        mkTargetJSON x = [i|#{x}/#{showTarget target}-latest.json|]
+        mkTargetJSON x = [fmt|{x}/{showTarget target}-latest.json|]
         mkTargetReleaseJSON :: FilePath -> FilePath
-        mkTargetReleaseJSON x = [i|#{x}/#{showTarget target}-release.json|]
+        mkTargetReleaseJSON x = [fmt|{x}/{showTarget target}-release.json|]
         nRetry = ?config.nRetry
 
       -- we first run a crawler to get the extension configs
@@ -773,7 +790,7 @@ processTarget
           }
         `logAndForwardError` "when running fetcher for latest extensions"
       -- in case of errors, rethrow an exception
-      `logAndForwardError` [i|when requesting #{target}|]
+      `logAndForwardError` [fmt|when requesting {target}|]
 
 newtype ConfigOptions w = ConfigOptions
   { config :: w ::: Maybe FilePath <?> "Path to a config file"
@@ -790,11 +807,11 @@ main = withUtf8 do
   hSetBuffering stdout NoBuffering
   config_ <-
     case configOptions.config of
-      Nothing -> putStrLn [i|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
+      Nothing -> putStrLn [fmt|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
       Just s -> do
         appConfig <- decodeFileEither s
         case appConfig of
-          Left err -> error [i|Could not decode the config file\n\n#{err}. Aborting.|]
+          Left err -> error [fmt|Could not decode the config file\n\n{show err}. Aborting.|]
           Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
 
   void $
@@ -810,15 +827,15 @@ main = withUtf8 do
                   , openVSX
                   } = config_
             withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
-              logInfo [i|#{START} Updating extensions|]
-              logInfo [i|#{START} Config:\n#{encodePretty defConfig config_}|]
+              logInfo [fmt|{START} Updating extensions|]
+              logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
               -- we'll run the extension crawler and a fetcher a given number of times on both target sites
               traverse_
                 ( \target ->
                     _myLoggerT
                       ( retry_
                           ?config.runN
-                          [i|Processing #{target}|]
+                          [fmt|Processing {target}|]
                           ( processTarget
                               ProcessTargetConfig
                                 { dataDir = dataDir
@@ -831,4 +848,4 @@ main = withUtf8 do
                       )
                 )
                 ([VSCodeMarketplace | ?config.vscodeMarketplace.enable] <> [OpenVSX | ?config.openVSX.enable])
-              logInfo [i|#{FINISH} Updating extensions|]
+              logInfo [fmt|{FINISH} Updating extensions|]

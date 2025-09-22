@@ -1,3 +1,4 @@
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveAnyClass #-}
 
 module Extensions where
@@ -13,7 +14,6 @@ import Data.Generics.Labels ()
 import Data.Hashable (Hashable)
 import Data.Maybe (fromJust, fromMaybe)
 import Data.String (IsString)
-import Data.String.Interpolate (i)
 import Data.Text (Text, unpack)
 import Data.Text qualified as T
 import Data.Text qualified as Text
@@ -21,6 +21,8 @@ import Data.Time (UTCTime)
 import Data.Versions (SemVer (..), prettySemVer, semver')
 import Data.Void (Void)
 import GHC.Generics (Generic)
+import Prettyprinter (Pretty (..), viaShow)
+import PyF (PyFCategory (PyFString), PyFClassify, fmt)
 import Text.Megaparsec (Parsec, choice, many, (<|>))
 import Text.Megaparsec qualified as TM (parse, parseMaybe)
 import Text.Megaparsec.Char (asciiChar, string)
@@ -162,7 +164,7 @@ _EngineVersion = prism' embed_ match_
  where
   -- TODO use OverloadedRecordDot
   embed_ EngineVersion{_version, _modifier} =
-    [i|#{review _VersionModifier _modifier}#{prettySemVer _version}|]
+    [fmt|{review _VersionModifier _modifier}{prettySemVer _version}|]
   match_ = TM.parseMaybe parseEngineVersion
 
 type Parser = Parsec Void Text
@@ -281,6 +283,12 @@ targetSelect target f g =
 ppTarget :: Target -> Text
 ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
 
+type instance PyFClassify Target = 'PyFString
+type instance PyFClassify Version = 'PyFString
+type instance PyFClassify Platform = 'PyFString
+type instance PyFClassify Name = 'PyFString
+type instance PyFClassify Publisher = 'PyFString
+
 instance Show Target where
   show :: Target -> String
   show = T.unpack . ppTarget
@@ -355,3 +363,6 @@ instance FromJSON LastUpdated where
   parseJSON = genericParseJSON aesonOptions
 instance ToJSON LastUpdated where
   toJSON = genericToJSON aesonOptions
+
+instance Pretty ExtensionConfig where
+  pretty = viaShow
