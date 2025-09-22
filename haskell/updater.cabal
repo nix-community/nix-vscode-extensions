@@ -80,6 +80,7 @@ library
     , megaparsec
     , mtl
     , optparse-generic
+    , prettyprinter
     , stm
     , stm-chans
     , text
@@ -146,6 +147,7 @@ executable updater
     , megaparsec
     , mtl
     , optparse-generic
+    , prettyprinter
     , stm
     , stm-chans
     , text

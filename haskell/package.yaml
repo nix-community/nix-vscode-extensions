@@ -65,6 +65,7 @@ dependencies:
 - megaparsec
 - mtl
 - optparse-generic
+- prettyprinter
 - PyF
 - stm
 - stm-chans
