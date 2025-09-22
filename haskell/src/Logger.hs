@@ -4,11 +4,11 @@
 module Logger where
 
 import Colog (LogAction (..), LoggerT (..), Message)
+import Control.Applicative (Alternative (..))
 import Control.Monad.IO.Class (MonadIO (..))
 import Control.Monad.Reader (ReaderT (..))
 import Control.Monad.Reader.Class (MonadReader (ask, local))
-import PyF
-import Turtle (Alternative (..))
+import PyF (PyFCategory (PyFString), PyFClassify, PyFToString (..), fmt)
 import UnliftIO (MonadUnliftIO (withRunInIO))
 
 newtype MyLoggerT msg m a = MyLoggerT {_myLoggerT :: LoggerT msg m a}

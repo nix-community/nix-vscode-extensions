@@ -55,6 +55,7 @@ dependencies:
 - co-log
 - co-log-concurrent
 - data-default
+- directory
 - generic-lens
 - hashable
 - http-client
@@ -71,7 +72,6 @@ dependencies:
 - stm-chans
 - text
 - time
-- turtle
 - unliftio
 - unordered-containers
 - vector

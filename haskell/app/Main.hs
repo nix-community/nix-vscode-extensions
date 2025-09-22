@@ -12,6 +12,7 @@ module Main (main) where
 import Colog (LogAction (..), Message, Msg (..), WithLog, cfilter, fmtMessage, formatWith, logDebug, logError, logInfo, logTextStdout, usingLoggerT)
 import Colog.Concurrent (defCapacity, withBackgroundLogger)
 import Configs
+import Control.Applicative (Alternative)
 import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
@@ -37,7 +38,6 @@ import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
 import Data.Text (pack)
 import Data.Text qualified as Text
-import Data.Text.Encoding (decodeUtf8)
 import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
@@ -52,10 +52,10 @@ import Options.Generic
 import Prettyprinter (pretty)
 import PyF
 import Requests
-import Turtle (Alternative (..), mktree, rm, testfile)
-import Turtle.Bytes (shellStrictWithErr)
+import System.Directory as Directory
 import UnliftIO (MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, forConcurrently, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, timeout, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
+import UnliftIO.Process (readCreateProcessWithExitCode, shell)
 
 -- | Select a base API URL depending on the target
 apiUrl :: Target -> String
@@ -129,7 +129,8 @@ extLogger file queue = liftIO $
 collectGarbageOnce :: MyLogger ()
 collectGarbageOnce = do
   logInfo [fmt|{START} Collecting garbage in /nix/store.|]
-  (_, infoText, errText) <- shellStrictWithErr [fmt|nix store gc |] empty
+  (_, infoText, errText) <-
+    readCreateProcessWithExitCode (shell [fmt|nix store gc |]) ""
   logInfo [fmt|{infoText}|]
   logDebug [fmt|{errText}|]
   logInfo [fmt|{FINISH} Collecting garbage in /nix/store.|]
@@ -211,19 +212,19 @@ getExtension
       logDebug [fmt|{START} Fetching {extName} from {url}|]
       -- let nix fetch a file from that url
       let timeout' = ?config.requestResponseTimeout
-      (_, decodeUtf8 -> stdout', errText) <-
+      (_, stdoutStr, stderrStr) <-
         let command = [fmt|nix store prefetch-file --timeout {timeout'} --json {url} --name {extName}-{version}-{platform}|]
-         in shellStrictWithErr command empty
+         in readCreateProcessWithExitCode (shell command) ""
               `logAndForwardError` [fmt|during prefetch-file: {command}|]
-      let sha256Maybe = stdout' ^? key "hash" . _String
+      let sha256Maybe = stdoutStr ^? key "hash" . _String
       -- if stderr was non-empty, there was an error
-      if not (BS.null errText)
+      if not (null stderrStr)
         then do
-          logInfo [fmt|{FAIL} Fetching {extName} from {url}. The stderr:\n{errText}|]
+          logInfo [fmt|{FAIL} Fetching {extName} from {url}. The stderr:\n{stderrStr}|]
           pure True
         else case sha256Maybe of
           Nothing -> do
-            logInfo [fmt|{FAIL} Fetching {extName} from {url}. Could not parse JSON: {stdout'}|]
+            logInfo [fmt|{FAIL} Fetching {extName} from {url}. Could not parse JSON: {stdoutStr}|]
             pure True
           Just sha256 -> do
             logInfo [fmt|{FINISH} Fetching extension {extName} from {url}|]
@@ -284,9 +285,15 @@ runFetcher
       failedTmpDir :: FilePath = [fmt|{tmpDir}/failed|]
     -- create directories for files with fetched, failed, and cached extensions
     -- just in case these directories don't exist
-    forM_ [fetchedTmpDir, failedTmpDir, cacheDir] mktree
+    forM_
+      [fetchedTmpDir, failedTmpDir, cacheDir]
+      (liftIO . Directory.createDirectoryIfMissing True)
     -- if there were target files, remove them
-    forM_ [fetchedTmpDir, failedTmpDir] (\(mkTargetJSON -> f) -> whenM (testfile f) (rm f))
+    forM_
+      [fetchedTmpDir, failedTmpDir]
+      ( \(mkTargetJSON -> f) ->
+          whenM (liftIO (Directory.doesFileExist f)) (liftIO (Directory.removeFile f))
+      )
 
     let extensionInfoCachedJSON = mkTargetJSON cacheDir
 
@@ -838,7 +845,7 @@ main = withUtf8 do
                           [fmt|Processing {target}|]
                           ( processTarget
                               ProcessTargetConfig
-                                { dataDir = dataDir
+                                { dataDir
                                 , nThreads = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
                                 , queueCapacity = queueCapacity
                                 , target

@@ -70,6 +70,7 @@ library
     , co-log
     , co-log-concurrent
     , data-default
+    , directory
     , generic-lens
     , hashable
     , http-client
@@ -85,7 +86,6 @@ library
     , stm-chans
     , text
     , time
-    , turtle
     , unliftio
     , unordered-containers
     , vector
@@ -137,6 +137,7 @@ executable updater
     , co-log
     , co-log-concurrent
     , data-default
+    , directory
     , generic-lens
     , hashable
     , http-client
@@ -152,7 +153,6 @@ executable updater
     , stm-chans
     , text
     , time
-    , turtle
     , unliftio
     , unordered-containers
     , updater
