@@ -1,6 +1,3 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module Logger where
 
 import Colog (LogAction (..), LoggerT (..), Message)

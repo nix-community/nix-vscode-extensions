@@ -19,30 +19,17 @@ extra-source-files:
 # common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/value/updater#readme>
 
+language: GHC2024
+
 default-extensions:
-- BangPatterns
 - BlockArguments
-- ConstraintKinds
-- DeriveGeneric
-- DerivingStrategies
 - DuplicateRecordFields
-- FlexibleContexts
-- FlexibleInstances
 - GeneralizedNewtypeDeriving
 - ImplicitParams
-- ImportQualifiedPost
-- InstanceSigs
-- LambdaCase
-- NamedFieldPuns
-- NumericUnderscores
 - OverloadedLabels
 - OverloadedRecordDot
 - OverloadedStrings
 - QuasiQuotes
-- RankNTypes
-- ScopedTypeVariables
-- StandaloneDeriving
-- TypeApplications
 - TypeFamilies
 - ViewPatterns
 
