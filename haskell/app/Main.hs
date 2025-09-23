@@ -174,7 +174,6 @@ getExtension
     , name
     , version
     , platform
-    , lastUpdated
     , missingTimes
     , engineVersion
     } = do
@@ -229,7 +228,6 @@ getExtension
                   ExtensionInfo
                     { name
                     , publisher
-                    , lastUpdated
                     , version
                     , platform
                     , missingTimes
@@ -252,7 +250,6 @@ data Key = Key
   , name :: Name
   , version :: Version
   , platform :: Platform
-  , lastUpdated :: LastUpdated
   }
   deriving stock (Eq, Generic, Ord)
   deriving anyclass (Hashable)
@@ -305,14 +302,12 @@ runFetcher
             , name
             , version
             , platform
-            , lastUpdated
             } =
             Key
               { publisher
               , name
               , version
               , platform
-              , lastUpdated
               }
         mkKeyConfig
           ExtensionConfig
@@ -320,14 +315,12 @@ runFetcher
             , name
             , version
             , platform
-            , lastUpdated
             } =
             Key
               { publisher
               , name
               , version
               , platform
-              , lastUpdated
               }
         -- we load the cached info into a map for quicker access
         extensionInfoCacheMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoCached)
@@ -352,7 +345,6 @@ runFetcher
             <&> ( \ExtensionInfo
                     { name
                     , publisher
-                    , lastUpdated
                     , version
                     , platform
                     , missingTimes
@@ -361,7 +353,6 @@ runFetcher
                       ExtensionConfig
                         { name
                         , publisher
-                        , lastUpdated
                         , version
                         , platform
                         , missingTimes
@@ -574,7 +565,6 @@ getConfigs target =
                                   . to
                                     ( parseMaybe
                                         ( withObject [fmt|Version|] $ \o1 -> do
-                                            lastUpdated <- o1 .: "lastUpdated"
                                             version <- o1 .: "version"
                                             platform <- o1 .:? "targetPlatform" <&> (^. non PUniversal)
                                             properties :: [Value] <- o1 .: "properties"
@@ -592,7 +582,6 @@ getConfigs target =
                                                 { engineVersion = fromJust engineVersion
                                                 , name
                                                 , publisher
-                                                , lastUpdated
                                                 , version
                                                 , platform
                                                 , missingTimes
@@ -668,7 +657,6 @@ getConfigsRelease target = do
                                       . to
                                         ( parseMaybe
                                             ( withObject [fmt|Version|] $ \o1 -> do
-                                                lastUpdated <- o1 .: "lastUpdated"
                                                 version <- o1 .: "version"
                                                 platform <- o1 .:? "targetPlatform" <&> (^. non PUniversal)
                                                 properties :: [Value] <- o1 .: "properties"
@@ -691,7 +679,6 @@ getConfigsRelease target = do
                                                     , missingTimes
                                                     , name
                                                     , publisher
-                                                    , lastUpdated
                                                     , version
                                                     , platform
                                                     }

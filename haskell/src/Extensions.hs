@@ -47,11 +47,6 @@ newtype Publisher = Publisher {_publisher :: Text}
   deriving newtype (IsString, Eq, Ord, Hashable)
   deriving stock (Generic)
 
--- TODO remove since it's unused
-newtype LastUpdated = LastUpdated {_lastUpdated :: UTCTime}
-  deriving newtype (Eq, Ord, Hashable, Show)
-  deriving stock (Generic)
-
 newtype Version = Version {_version :: SemVer}
   deriving newtype (Eq, Ord, Hashable)
   deriving stock (Generic)
@@ -82,7 +77,6 @@ data Platform
 data ExtensionConfig = ExtensionConfig
   { name :: Name
   , publisher :: Publisher
-  , lastUpdated :: LastUpdated
   , version :: Version
   , platform :: Platform
   , missingTimes :: Int
@@ -95,7 +89,6 @@ data ExtensionConfig = ExtensionConfig
 data ExtensionInfo = ExtensionInfo
   { name :: Name
   , publisher :: Publisher
-  , lastUpdated :: LastUpdated
   , version :: Version
   , sha256 :: Text
   , platform :: Platform
@@ -356,11 +349,6 @@ instance Show Publisher where
 instance FromJSON Publisher where
   parseJSON = genericParseJSON aesonOptions
 instance ToJSON Publisher where
-  toJSON = genericToJSON aesonOptions
-
-instance FromJSON LastUpdated where
-  parseJSON = genericParseJSON aesonOptions
-instance ToJSON LastUpdated where
   toJSON = genericToJSON aesonOptions
 
 instance Pretty ExtensionConfig where
