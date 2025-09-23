@@ -2,9 +2,9 @@
 
 module Extensions where
 
-import Control.Lens
+import Control.Lens (Prism', has, prism', review, to, traversed, (#), (^..), (^?), _Just)
 import Control.Monad (guard)
-import Data.Aeson (FromJSON (..), Options (unwrapUnaryRecords), ToJSON (toJSON), Value (..), defaultOptions, genericParseJSON, genericToJSON, withText)
+import Data.Aeson (FromJSON (..), Options (..), ToJSON (toJSON), Value (..), defaultOptions, genericParseJSON, genericToJSON, withText)
 import Data.Aeson.Lens (_String)
 import Data.Aeson.Types (parseFail)
 import Data.Aeson.Types qualified
@@ -12,11 +12,11 @@ import Data.Functor (void)
 import Data.Generics.Labels ()
 import Data.Hashable (Hashable)
 import Data.Maybe (fromJust, fromMaybe)
+import Data.Scientific (toBoundedInteger)
 import Data.String (IsString)
 import Data.Text (Text, unpack)
 import Data.Text qualified as T
 import Data.Text qualified as Text
-import Data.Time (UTCTime)
 import Data.Versions (SemVer (..), prettySemVer, semver')
 import Data.Void (Void)
 import GHC.Generics (Generic)
@@ -73,6 +73,10 @@ data Platform
   deriving stock (Generic, Eq, Ord, Enum, Bounded)
   deriving anyclass (Hashable)
 
+newtype IsRelease = IsRelease Bool
+  deriving stock (Generic, Eq, Ord, Show)
+  deriving newtype (Hashable)
+
 -- | A simple config that is enough to fetch an extension
 data ExtensionConfig = ExtensionConfig
   { name :: Name
@@ -81,9 +85,10 @@ data ExtensionConfig = ExtensionConfig
   , platform :: Platform
   , missingTimes :: Int
   , engineVersion :: EngineVersion
+  , release :: IsRelease
   }
   deriving stock (Generic, Show, Eq)
-  deriving anyclass (FromJSON, ToJSON, Hashable)
+  deriving anyclass (Hashable)
 
 -- | Full necessary info about an extension
 data ExtensionInfo = ExtensionInfo
@@ -98,9 +103,9 @@ data ExtensionInfo = ExtensionInfo
   -- ^ engine version that's required to run this extension
   --
   -- See [Visual Studio Code compatibility](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility)
+  , release :: IsRelease
   }
   deriving stock (Generic, Show)
-  deriving anyclass (FromJSON, ToJSON)
 
 _Flags :: Prism' Text Flags
 _Flags = prism' embed_ match_
@@ -139,6 +144,25 @@ _Platform = prism' embed_ match_
     | x == embed_ PDarwin_arm64 = Just PDarwin_arm64
     | otherwise = Nothing
 
+_PlatformNumeric :: Prism' Int Platform
+_PlatformNumeric = prism' embed_ match_
+ where
+  embed_ :: Platform -> Int
+  embed_ = \case
+    PUniversal -> 0
+    PLinux_x64 -> 1
+    PLinux_arm64 -> 2
+    PDarwin_x64 -> 3
+    PDarwin_arm64 -> 4
+  match_ :: Int -> Maybe Platform
+  match_ x
+    | x == embed_ PUniversal = Just PUniversal
+    | x == embed_ PLinux_x64 = Just PLinux_x64
+    | x == embed_ PLinux_arm64 = Just PLinux_arm64
+    | x == embed_ PDarwin_x64 = Just PDarwin_x64
+    | x == embed_ PDarwin_arm64 = Just PDarwin_arm64
+    | otherwise = Nothing
+
 _VersionModifier :: Prism' Text VersionModifier
 _VersionModifier = prism' embed_ match_
  where
@@ -158,6 +182,19 @@ _EngineVersion = prism' embed_ match_
   embed_ EngineVersion{_version, _modifier} =
     [fmt|{review _VersionModifier _modifier}{prettySemVer _version}|]
   match_ = TM.parseMaybe parseEngineVersion
+
+_IsReleaseNumeric :: Prism' Int IsRelease
+_IsReleaseNumeric = prism' embed_ match_
+ where
+  embed_ (IsRelease t)
+    | t = 1
+    | otherwise = 0
+  match_ x =
+    IsRelease
+      <$> case x of
+        0 -> Just False
+        1 -> Just True
+        _ -> Nothing
 
 type Parser = Parsec Void Text
 
@@ -280,6 +317,44 @@ type instance PyFClassify Version = 'PyFString
 type instance PyFClassify Platform = 'PyFString
 type instance PyFClassify Name = 'PyFString
 type instance PyFClassify Publisher = 'PyFString
+type instance PyFClassify EngineVersion = 'PyFString
+
+optionsExtensionInfo :: Options
+optionsExtensionInfo =
+  defaultOptions
+    { fieldLabelModifier = \case
+        "publisher" -> "p"
+        "name" -> "n"
+        "version" -> "v"
+        "sha256" -> "h"
+        "platform" -> "s"
+        "missingTimes" -> "m"
+        "engineVersion" -> "e"
+        "release" -> "r"
+        x -> x
+    }
+
+instance FromJSON ExtensionInfo where
+  parseJSON = genericParseJSON optionsExtensionInfo
+
+instance ToJSON ExtensionInfo where
+  toJSON = genericToJSON optionsExtensionInfo
+
+instance FromJSON ExtensionConfig where
+  parseJSON = genericParseJSON optionsExtensionInfo
+
+instance ToJSON ExtensionConfig where
+  toJSON = genericToJSON optionsExtensionInfo
+
+instance FromJSON IsRelease where
+  parseJSON (Number n) =
+    case n ^? to toBoundedInteger . _Just . _IsReleaseNumeric of
+      Just x -> pure x
+      Nothing -> parseFail "Could not parse release."
+  parseJSON _ = parseFail "Could not parse release. Expected a number."
+
+instance ToJSON IsRelease where
+  toJSON = Number . fromIntegral . (_IsReleaseNumeric #)
 
 instance Show Target where
   show :: Target -> String
@@ -303,15 +378,15 @@ instance ToJSON Version where
 
 instance FromJSON Platform where
   parseJSON :: Value -> Data.Aeson.Types.Parser Platform
-  parseJSON (String s) =
-    case s ^? _Platform of
-      Just s' -> pure s'
+  parseJSON (Number n) =
+    case n ^? to toBoundedInteger . _Just . _PlatformNumeric of
+      Just n' -> pure n'
       Nothing -> parseFail "Could not parse platform"
   parseJSON _ = parseFail "Expected a string"
 
 instance ToJSON Platform where
   toJSON :: Platform -> Value
-  toJSON = String . review _Platform
+  toJSON = Number . fromIntegral . (_PlatformNumeric #)
 
 instance Show Platform where
   show :: Platform -> String

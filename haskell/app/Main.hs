@@ -10,7 +10,8 @@ import Control.Concurrent (threadDelay)
 import Control.Concurrent.Async.Pool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Exception (throw)
-import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (.~), (<&>), (^.), (^..), (^?), _Just)
+import Control.Lens (Bifunctor (bimap), Field1 (_1), Traversal', filtered, has, non, only, to, traversed, (+~), (.~), (<&>), (^.), (^..), (^?), _Empty, _Just)
+import Control.Lens.Extras (is)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
 import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', encode, withObject, (.:), (.:?))
@@ -176,6 +177,7 @@ getExtension
     , platform
     , missingTimes
     , engineVersion
+    , release
     } = do
     let
       select :: a -> a -> a
@@ -233,6 +235,7 @@ getExtension
                     , missingTimes
                     , engineVersion
                     , sha256
+                    , release
                     }
             pure False
     -- if at some point we failed to obtain an extension info,
@@ -349,6 +352,7 @@ runFetcher
                     , platform
                     , missingTimes
                     , engineVersion
+                    , release
                     } ->
                       ExtensionConfig
                         { name
@@ -357,6 +361,7 @@ runFetcher
                         , platform
                         , missingTimes
                         , engineVersion
+                        , release
                         }
                 )
         -- combine new and old missing configs
@@ -575,6 +580,11 @@ getConfigs target =
                                                       . key "value"
                                                       . _String
                                                       . _EngineVersion
+                                                release =
+                                                  properties
+                                                    ^? traversed
+                                                      . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
+                                                    & is _Empty
                                                 missingTimes = 0
                                             guard (isJust engineVersion)
                                             pure
@@ -585,6 +595,7 @@ getConfigs target =
                                                 , version
                                                 , platform
                                                 , missingTimes
+                                                , release = IsRelease release
                                                 }
                                         )
                                     )
@@ -668,11 +679,12 @@ getConfigsRelease target = do
                                                           . _String
                                                           . _EngineVersion
                                                     missingTimes = 0
-                                                    preRelease =
+                                                    release =
                                                       properties
                                                         ^? traversed
                                                           . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
-                                                guard (isNothing preRelease && isJust engineVersion)
+                                                        & is _Empty
+                                                guard (release && isJust engineVersion)
                                                 pure
                                                   ExtensionConfig
                                                     { engineVersion = fromJust engineVersion
@@ -681,6 +693,7 @@ getConfigsRelease target = do
                                                     , publisher
                                                     , version
                                                     , platform
+                                                    , release = IsRelease True
                                                     }
                                             )
                                         )
