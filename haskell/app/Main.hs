@@ -815,37 +815,37 @@ main = withUtf8 do
           Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
 
   void $
-    timeout (config_.programTimeout * _MICROSECONDS) $
-      let ?config = config_
-       in do
-            -- TODO use OverloadedRecordDot
-            let AppConfig
-                  { dataDir
-                  , queueCapacity
-                  , logSeverity
-                  , vscodeMarketplace
-                  , openVSX
-                  } = config_
-            withBackgroundLogger @IO defCapacity (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout) (pure ()) $ \logger -> usingLoggerT logger do
-              logInfo [fmt|{START} Updating extensions|]
-              logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
-              -- we'll run the extension crawler and a fetcher a given number of times on both target sites
-              traverse_
-                ( \target ->
-                    _myLoggerT
-                      ( retry_
-                          ?config.runN
-                          [fmt|Processing {target}|]
-                          ( processTarget
-                              ProcessTargetConfig
-                                { dataDir
-                                , nThreads = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
-                                , queueCapacity = queueCapacity
-                                , target
-                                , logger
-                                }
-                          )
-                      )
-                )
-                ([VSCodeMarketplace | ?config.vscodeMarketplace.enable] <> [OpenVSX | ?config.openVSX.enable])
-              logInfo [fmt|{FINISH} Updating extensions|]
+    timeout (config_.programTimeout * _MICROSECONDS) do
+      let AppConfig
+            { dataDir
+            , queueCapacity
+            , logSeverity
+            , vscodeMarketplace
+            , openVSX
+            , runN
+            } = config_
+      withBackgroundLogger @IO
+        defCapacity
+        (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout)
+        (pure ())
+        $ \logger -> usingLoggerT logger do
+          logInfo [fmt|{START} Updating extensions|]
+          logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
+          -- we'll run the extension crawler and a fetcher a given number of times on both target sites
+          let ?config = config_
+          forM_ ([VSCodeMarketplace | vscodeMarketplace.enable] <> [OpenVSX | openVSX.enable]) $
+            \target ->
+              _myLoggerT $
+                retry_
+                  runN
+                  [fmt|Processing {target}|]
+                  ( processTarget
+                      ProcessTargetConfig
+                        { dataDir
+                        , nThreads = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
+                        , queueCapacity = queueCapacity
+                        , target
+                        , logger
+                        }
+                  )
+          logInfo [fmt|{FINISH} Updating extensions|]
