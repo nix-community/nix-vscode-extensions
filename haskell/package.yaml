@@ -55,6 +55,7 @@ dependencies:
 - optparse-generic
 - prettyprinter
 - PyF
+- scientific
 - stm
 - stm-chans
 - text

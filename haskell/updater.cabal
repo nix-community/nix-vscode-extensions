@@ -67,6 +67,7 @@ library
     , mtl
     , optparse-generic
     , prettyprinter
+    , scientific
     , stm
     , stm-chans
     , text
@@ -119,6 +120,7 @@ executable updater
     , mtl
     , optparse-generic
     , prettyprinter
+    , scientific
     , stm
     , stm-chans
     , text
