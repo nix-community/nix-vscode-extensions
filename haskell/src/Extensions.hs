@@ -202,7 +202,8 @@ type Parser = Parsec Void Text
 --
 -- Allow leading zeros.
 --
--- >>> TM.parseMaybe parseVersion <$> versions
+-- >>> TM.parseMaybe parseVersion <$> exampleExtensionVersions
+-- [Just 2022.9.290700,Just 23.3.0-canary-open-0313-1900,Just 1.0.0-beta.1,Just 1.13.1712347770,Just 0.1.8+vizcar]
 parseVersion :: Parser Version
 parseVersion = do
   _svMajor <- decimal
@@ -221,8 +222,8 @@ parseVersion = do
           }
   pure $ Version $ fromMaybe semVer (TM.parseMaybe semver' (prettySemVer semVer <> T.pack rest))
 
-versions :: [Text]
-versions =
+exampleExtensionVersions :: [Text]
+exampleExtensionVersions =
   [ "2022.09.290700"
   , "23.3.0-canary-open-0313-1900"
   , "1.0.0-beta.1"
@@ -232,7 +233,7 @@ versions =
 
 -- | Parse 'EngineVersion'
 --
--- >>> TM.parseMaybe parseEngineVersion <$> engineVersions
+-- >>> TM.parseMaybe parseEngineVersion <$> exampleEngineVersions
 -- [Just ^0.0.0,Just ^0.10.0,Just ^1.27.0-insider,Just ^0.10.0,Just ^0.10.0,Just ^0.9.0-pre.1,Just 0.1.0,Just 1.57.0-insider,Just 1.0.0,Just ^0.0.0]
 parseEngineVersion :: Parser EngineVersion
 parseEngineVersion =
@@ -270,8 +271,8 @@ parseEngineVersion =
           }
 
 -- | Examples of versions for VSCode engine used in extensions
-engineVersions :: [Text]
-engineVersions =
+exampleEngineVersions :: [Text]
+exampleEngineVersions =
   [ "^0.0.0"
   , "^0.10.x"
   , "^1.27.0-insider"
