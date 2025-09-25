@@ -1,18 +1,4 @@
 collectGarbage: false
 logSeverity: Info
 openVSX:
-  release:
-    eamodio:
-    - gitlens
-    rust-lang:
-    - rust-analyzer
-    stkb:
-    - rewrap
 vscodeMarketplace:
-  release:
-    eamodio:
-    - gitlens
-    rust-lang:
-    - rust-analyzer
-    stkb:
-    - rewrap
