@@ -339,13 +339,13 @@ fieldLabelModifier' :: String -> String
 fieldLabelModifier' = \case
   "publisher" -> "p"
   "name" -> "n"
-  "release" -> "r"
+  "isRelease" -> "r"
   "platform" -> "s"
   "version" -> "v"
   "engineVersion" -> "e"
   "sha256" -> "h"
   "missingTimes" -> "m"
-  x -> x
+  x -> error [fmt|Field not found: {x}|]
 
 optionsExtensionInfo :: Options
 optionsExtensionInfo =
