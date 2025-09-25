@@ -5,14 +5,12 @@ module Configs where
 
 import Colog
 import Control.Lens
-import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withArray, withText)
-import Data.Aeson.Key (toText)
-import Data.Aeson.Lens (members, _String)
+import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withText)
 import Data.Aeson.Types (Parser, typeMismatch)
 import Data.Default (Default (..))
 import Data.Text qualified as T
 import Data.Text.Encoding (decodeUtf8)
-import Data.Yaml (decodeFileEither, parseMaybe)
+import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.Generics (Generic)
@@ -25,10 +23,6 @@ data ReleaseExtension = ReleaseExtension {publisher :: Publisher, name :: Name}
   deriving stock (Eq, Show, Generic)
   deriving anyclass (ToJSON)
 
-newtype ReleaseExtensions = ReleaseExtensions {releaseExtensions :: [ReleaseExtension]}
-  deriving stock (Eq, Show, Generic)
-  deriving anyclass (ToJSON)
-
 data SiteConfig f = SiteConfig
   { pageSize :: HKD f Int
   -- ^ Number of extensions per page in a request
@@ -36,9 +30,8 @@ data SiteConfig f = SiteConfig
   -- ^ Number of extension pages to request
   , nThreads :: HKD f Int
   -- ^ Number of threads to use for fetching
-  , release :: HKD f ReleaseExtensions
-  -- ^ Extensions that require the release version
   , enable :: HKD f Bool
+  -- ^ Whether to enable functionality for this site
   }
   deriving stock (Generic)
 
@@ -99,6 +92,7 @@ data CrawlerConfig a = CrawlerConfig
   { target :: Target
   , nRetry :: Int
   , logger :: LogAction a Message
+  , extensionInfoCached :: [ExtensionInfo]
   }
 
 -- | Config of a fetcher
@@ -106,7 +100,9 @@ data FetcherConfig a = FetcherConfig
   { target :: Target
   , nThreads :: Int
   , queueCapacity :: Int
-  , extConfigs :: [ExtensionConfig]
+  , extensionConfigs :: [ExtensionConfig]
+  , extensionInfoCached :: [ExtensionInfo]
+  , extensionInfoCachePath :: FilePath
   , cacheDir :: FilePath
   , mkTargetJSON :: FilePath -> FilePath
   , logger :: LogAction a Message
@@ -117,33 +113,6 @@ instance FromJSON (SiteConfig Identity)
 instance FromJSON (SiteConfig Maybe)
 deriving instance Eq (SiteConfig Maybe)
 
-instance FromJSON ReleaseExtensions where
-  parseJSON obj =
-    pure $
-      ReleaseExtensions $
-        (obj ^@.. members)
-          ^.. traversed
-            . to
-              ( \(k, v) ->
-                  let publisher = Publisher (toText k)
-                   in parseMaybe
-                        ( withArray "Names" $ \a ->
-                            pure $
-                              a
-                                ^.. traversed
-                                  . _String
-                                  . to
-                                    ( \name ->
-                                        ReleaseExtension
-                                          { name = Name name
-                                          , publisher
-                                          }
-                                    )
-                        )
-                        v
-              )
-            . _Just
-            . traversed
 
 instance FromJSON Severity where
   parseJSON :: Value -> Data.Aeson.Types.Parser Severity
@@ -170,7 +139,6 @@ defaultOpenVSXConfig =
     { pageSize = 1_000
     , pageCount = 10
     , nThreads = 30
-    , release = ReleaseExtensions []
     , enable = True
     }
 
@@ -180,7 +148,6 @@ defaultVSCodeMarketplaceConfig =
     { pageSize = 1_000
     , pageCount = 100
     , nThreads = 100
-    , release = ReleaseExtensions []
     , enable = True
     }
 
@@ -190,7 +157,6 @@ mkDefaultConfig config sc =
     { pageSize = sc.pageSize ^. non config.pageSize
     , pageCount = sc.pageCount ^. non config.pageCount
     , nThreads = sc.nThreads ^. non config.nThreads
-    , release = sc.release ^. non config.release
     , enable = sc.enable ^. non config.enable
     }
 
@@ -232,14 +198,6 @@ instance Show Pretty where
 --   nThreads: 30
 --   pageCount: 10
 --   pageSize: 1000
---   release:
---     releaseExtensions:
---     - name: gitlens
---       publisher: eamodio
---     - name: rust-analyzer
---       publisher: rust-lang
---     - name: rewrap
---       publisher: stkb
 -- processedLoggerDelay: 2
 -- programTimeout: 900
 -- queueCapacity: 200
@@ -251,13 +209,5 @@ instance Show Pretty where
 --   nThreads: 100
 --   pageCount: 100
 --   pageSize: 1000
---   release:
---     releaseExtensions:
---     - name: gitlens
---       publisher: eamodio
---     - name: rust-analyzer
---       publisher: rust-lang
---     - name: rewrap
---       publisher: stkb
 prettyConfig :: IO Pretty
 prettyConfig = Pretty . either show (T.unpack . decodeUtf8 . encodePretty defConfig . mkDefaultAppConfig) <$> decodeFileEither @(AppConfig Maybe) "config.yaml"

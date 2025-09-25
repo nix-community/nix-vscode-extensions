@@ -2,12 +2,15 @@
 
 module Extensions where
 
-import Control.Lens (Prism', has, prism', review, to, traversed, (#), (^..), (^?), _Just)
+import Control.Lens (Prism', has, prism', review, traversed, (#), (%~), (^..), (^?), _1, _Just)
+import Control.Lens qualified as Lens
 import Control.Monad (guard)
-import Data.Aeson (FromJSON (..), Options (..), ToJSON (toJSON), Value (..), defaultOptions, genericParseJSON, genericToJSON, withText)
+import Data.Aeson (FromJSON (..), Options (..), ToJSON (toJSON), Value (..), defaultOptions, encode, genericParseJSON, genericToJSON, withText)
 import Data.Aeson.Lens (_String)
 import Data.Aeson.Types (parseFail)
 import Data.Aeson.Types qualified
+import Data.ByteString qualified as BS
+import Data.Function ((&))
 import Data.Functor (void)
 import Data.Generics.Labels ()
 import Data.Hashable (Hashable)
@@ -19,7 +22,7 @@ import Data.Text qualified as T
 import Data.Text qualified as Text
 import Data.Versions (SemVer (..), prettySemVer, semver')
 import Data.Void (Void)
-import GHC.Generics (Generic)
+import GHC.Generics (C, D, Generic (..), K1 (..), M1 (..), S, Selector (..), U1 (..), (:*:) (..))
 import Prettyprinter (Pretty (..), viaShow)
 import PyF (PyFCategory (PyFString), PyFClassify, fmt)
 import Text.Megaparsec (Parsec, choice, many, (<|>))
@@ -73,39 +76,46 @@ data Platform
   deriving stock (Generic, Eq, Ord, Enum, Bounded)
   deriving anyclass (Hashable)
 
-newtype IsRelease = IsRelease Bool
+newtype PlatformHumanReadable
+  = PlatformHumanReadable {platform :: Platform}
+  deriving newtype (Show, Eq, Ord)
+  deriving stock (Generic)
+  deriving anyclass (Hashable)
+
+newtype IsRelease = IsRelease {isRelease :: Bool}
   deriving stock (Generic, Eq, Ord, Show)
   deriving newtype (Hashable)
 
 -- | A simple config that is enough to fetch an extension
 data ExtensionConfig = ExtensionConfig
-  { name :: Name
-  , publisher :: Publisher
-  , version :: Version
+  { publisher :: Publisher
+  , name :: Name
+  , isRelease :: IsRelease
   , platform :: Platform
-  , missingTimes :: Int
+  , version :: Version
   , engineVersion :: EngineVersion
-  , release :: IsRelease
+  , missingTimes :: Int
   }
-  deriving stock (Generic, Show, Eq)
-  deriving anyclass (Hashable)
+  deriving stock (Generic, Show, Eq, Ord)
+  deriving anyclass (Hashable, GToOrderedKeysJsonBs)
 
 -- | Full necessary info about an extension
 data ExtensionInfo = ExtensionInfo
-  { name :: Name
-  , publisher :: Publisher
-  , version :: Version
-  , sha256 :: Text
-  , platform :: Platform
-  , missingTimes :: Int
-  -- ^ how many times the extension could not be fetched
-  , engineVersion :: EngineVersion
+  { publisher :: Publisher
+  , name :: Name
   -- ^ engine version that's required to run this extension
   --
   -- See [Visual Studio Code compatibility](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility)
-  , release :: IsRelease
+  , isRelease :: IsRelease
+  , platform :: Platform
+  , version :: Version
+  , engineVersion :: EngineVersion
+  , sha256 :: Text
+  , missingTimes :: Int
+  -- ^ how many times the extension could not be fetched
   }
-  deriving stock (Generic, Show)
+  deriving stock (Generic, Show, Eq, Ord)
+  deriving anyclass (Hashable, GToOrderedKeysJsonBs)
 
 _Flags :: Prism' Text Flags
 _Flags = prism' embed_ match_
@@ -125,8 +135,8 @@ _Flags = prism' embed_ match_
     | x == embed_ Flags'Trial = Just Flags'Trial
     | otherwise = Nothing
 
-_Platform :: Prism' Text Platform
-_Platform = prism' embed_ match_
+_PlatformHumanReadable :: Prism' Text Platform
+_PlatformHumanReadable = prism' embed_ match_
  where
   embed_ :: Platform -> Text
   embed_ = \case
@@ -231,6 +241,9 @@ exampleExtensionVersions =
   , "0.1.8+vizcar"
   ]
 
+-- TODO
+-- disallow -insiders suffix?
+
 -- | Parse 'EngineVersion'
 --
 -- >>> TM.parseMaybe parseEngineVersion <$> exampleEngineVersions
@@ -300,10 +313,12 @@ defaultEngineVersion =
     }
 
 extFlagsAllowed :: [Text]
-extFlagsAllowed = enumFrom minBound ^.. traversed . to (_Flags #)
+extFlagsAllowed = enumFrom minBound ^.. traversed . Lens.to (_Flags #)
+
+type a # b = a
 
 -- | Select an action depending on a target
-targetSelect :: Target -> p -> p -> p
+targetSelect :: Target -> p # "VSCodeMarketplace" -> p # "OpenVSX" -> p
 targetSelect target f g =
   case target of
     VSCodeMarketplace -> f
@@ -320,26 +335,57 @@ type instance PyFClassify Name = 'PyFString
 type instance PyFClassify Publisher = 'PyFString
 type instance PyFClassify EngineVersion = 'PyFString
 
+fieldLabelModifier' :: String -> String
+fieldLabelModifier' = \case
+  "publisher" -> "p"
+  "name" -> "n"
+  "release" -> "r"
+  "platform" -> "s"
+  "version" -> "v"
+  "engineVersion" -> "e"
+  "sha256" -> "h"
+  "missingTimes" -> "m"
+  x -> x
+
 optionsExtensionInfo :: Options
 optionsExtensionInfo =
   defaultOptions
-    { fieldLabelModifier = \case
-        "publisher" -> "p"
-        "name" -> "n"
-        "version" -> "v"
-        "sha256" -> "h"
-        "platform" -> "s"
-        "missingTimes" -> "m"
-        "engineVersion" -> "e"
-        "release" -> "r"
-        x -> x
+    { fieldLabelModifier = fieldLabelModifier'
     }
+
+class GFields f where
+  gFields :: f p -> [(String, Value)]
+
+instance GFields f => GFields (M1 D c f) where
+  gFields (M1 x) = gFields x
+
+instance GFields f => GFields (M1 C c f) where
+  gFields (M1 x) = gFields x
+
+instance (GFields f, GFields g) => GFields (f :*: g) where
+  gFields (f :*: g) = gFields f ++ gFields g
+
+instance GFields U1 where
+  gFields U1 = []
+
+instance (Selector s, ToJSON c) => GFields (M1 S s (K1 i c)) where
+  gFields s@(M1 (K1 val)) = [(selName s, toJSON val)]
+
+class (Generic f, GFields (Rep f)) => GToOrderedKeysJsonBs f where
+  gToJsonOrderedKeys :: Options -> f -> BS.ByteString
+  gToJsonOrderedKeys opts x = result
+   where
+    fieldValues = x & from & gFields & traversed . _1 %~ opts.fieldLabelModifier
+    result = "{" <> BS.intercalate "," [[fmt|"{k}":{encode v}|] | (k, v) <- fieldValues] <> "}"
+
+class GToOrderedKeysJsonBs f => ToOrderedKeysJsonBs f where
+  toJsonOrderedKeys :: f -> BS.ByteString
+
+instance ToOrderedKeysJsonBs ExtensionInfo where
+  toJsonOrderedKeys = gToJsonOrderedKeys optionsExtensionInfo
 
 instance FromJSON ExtensionInfo where
   parseJSON = genericParseJSON optionsExtensionInfo
-
-instance ToJSON ExtensionInfo where
-  toJSON = genericToJSON optionsExtensionInfo
 
 instance FromJSON ExtensionConfig where
   parseJSON = genericParseJSON optionsExtensionInfo
@@ -347,9 +393,12 @@ instance FromJSON ExtensionConfig where
 instance ToJSON ExtensionConfig where
   toJSON = genericToJSON optionsExtensionInfo
 
+instance ToOrderedKeysJsonBs ExtensionConfig where
+  toJsonOrderedKeys = gToJsonOrderedKeys optionsExtensionInfo
+
 instance FromJSON IsRelease where
   parseJSON (Number n) =
-    case n ^? to toBoundedInteger . _Just . _IsReleaseNumeric of
+    case n ^? Lens.to toBoundedInteger . _Just . _IsReleaseNumeric of
       Just x -> pure x
       Nothing -> parseFail "Could not parse release."
   parseJSON _ = parseFail "Could not parse release. Expected a number."
@@ -380,7 +429,15 @@ instance ToJSON Version where
 instance FromJSON Platform where
   parseJSON :: Value -> Data.Aeson.Types.Parser Platform
   parseJSON (Number n) =
-    case n ^? to toBoundedInteger . _Just . _PlatformNumeric of
+    case n ^? Lens.to toBoundedInteger . _Just . _PlatformNumeric of
+      Just n' -> pure n'
+      Nothing -> parseFail "Could not parse platform"
+  parseJSON _ = parseFail "Expected a string"
+
+instance FromJSON PlatformHumanReadable where
+  parseJSON :: Value -> Data.Aeson.Types.Parser PlatformHumanReadable
+  parseJSON (String s) =
+    case s ^? _PlatformHumanReadable . Lens.to PlatformHumanReadable of
       Just n' -> pure n'
       Nothing -> parseFail "Could not parse platform"
   parseJSON _ = parseFail "Expected a string"
@@ -391,7 +448,7 @@ instance ToJSON Platform where
 
 instance Show Platform where
   show :: Platform -> String
-  show = unpack . review _Platform
+  show = unpack . (_PlatformHumanReadable #)
 
 instance Show VersionModifier where
   show = unpack . (_VersionModifier #)
@@ -415,15 +472,19 @@ aesonOptions = defaultOptions{unwrapUnaryRecords = True}
 
 instance Show Name where
   show = Text.unpack . _name
+
 instance FromJSON Name where
   parseJSON = genericParseJSON aesonOptions
+
 instance ToJSON Name where
   toJSON = genericToJSON aesonOptions
 
 instance Show Publisher where
   show = Text.unpack . _publisher
+
 instance FromJSON Publisher where
   parseJSON = genericParseJSON aesonOptions
+
 instance ToJSON Publisher where
   toJSON = genericToJSON aesonOptions
 
