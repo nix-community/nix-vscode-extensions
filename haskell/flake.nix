@@ -114,6 +114,7 @@
                 {
                   # co-log-concurrent = jailbreakUnbreak super.co-log-concurrent;
                   # with-utf8 = super.with-utf8_1_1_0_0;
+                  tls = packageFromHackage "tls" "1.9.0" "sha256-WpzhvGh6AUdWEKMit2PcpmCo1R28wyTlJY/r5503zL8=";
                 };
             };
 
@@ -126,9 +127,8 @@
               in
               {
                 crypton = default;
-                # co-log = {
-                #   check = false;
-                # };
+                tls = default;
+                http-client-tls = default;
               };
 
             # Development shell configuration
