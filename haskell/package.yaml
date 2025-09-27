@@ -62,6 +62,7 @@ dependencies:
 - time
 - unliftio
 - unordered-containers
+- unbounded-delays
 - vector
 - versions
 - with-utf8

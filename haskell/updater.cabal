@@ -72,6 +72,7 @@ library
     , stm-chans
     , text
     , time
+    , unbounded-delays
     , unliftio
     , unordered-containers
     , vector
@@ -125,6 +126,7 @@ executable updater
     , stm-chans
     , text
     , time
+    , unbounded-delays
     , unliftio
     , unordered-containers
     , updater

@@ -38,15 +38,15 @@ data SiteConfig f = SiteConfig
 data AppConfig f = AppConfig
   { runN :: HKD f Int
   -- ^ Times to process a target site
-  , processedLoggerDelay :: HKD f Int
+  , processedLoggerDelay :: HKD f Integer
   -- ^ Period in seconds till the next logging about processed extensions
-  , garbageCollectorDelay :: HKD f Int
+  , garbageCollectorDelay :: HKD f Integer
   -- ^ Period in seconds till the next garbage collection
   , collectGarbage :: HKD f Bool
   -- ^ Whether to collect garbage in /nix/store
-  , programTimeout :: HKD f Int
+  , programTimeout :: HKD f Integer
   -- ^ Total time a program may run
-  , retryDelay :: HKD f Int
+  , retryDelay :: HKD f Integer
   -- ^ Seconds to wait before retrying
   , nRetry :: HKD f Int
   -- ^ Number of times to retry an action
@@ -130,7 +130,7 @@ instance FromJSON (AppConfig Maybe)
 
 instance Default (AppConfig Maybe)
 
-_MICROSECONDS :: Int
+_MICROSECONDS :: Integer
 _MICROSECONDS = 1_000_000
 
 defaultOpenVSXConfig :: SiteConfig Identity
