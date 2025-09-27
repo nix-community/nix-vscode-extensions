@@ -1,4 +1,3 @@
-collectGarbage: false
+collectGarbage: true
+programTimeout: 3600
 logSeverity: Info
-openVSX:
-vscodeMarketplace:
