@@ -297,11 +297,11 @@ mkKeyConfig
       , platform
       }
 
--- | Fetch the extensions given their configurations
-runFetcher :: AppConfig' => FetcherConfig IO -> MyLogger ()
-runFetcher
+-- | Fetch the extension info given their configs
+runInfoFetcher :: AppConfig' => InfoFetcherSettings IO -> MyLogger ()
+runInfoFetcher
   -- TODO use OverloadedRecordDot
-  FetcherConfig
+  InfoFetcherSettings
     { target
     , queueCapacity
     , nThreads
@@ -917,9 +917,10 @@ getExtensionConfigsReleaseFromResponse response =
       . _Just
       . traversed
 
--- | Run a crawler depending on the target site to (hopefully) get the extension configs
-runCrawler :: AppConfig' => CrawlerConfig IO -> MyLogger [ExtensionConfig]
-runCrawler CrawlerConfig{target, extensionInfoCached} = do
+-- | Run a config fetcher depending on the target site
+-- to (hopefully) get the extension configs
+runConfigFetcher :: AppConfig' => ConfigFetcherSettings IO -> MyLogger [ExtensionConfig]
+runConfigFetcher ConfigFetcherSettings{target, extensionInfoCached} = do
   let message :: Text = [fmt|Collecting the latest pre-release and release extension configs from {target}.|]
 
   logInfo [fmt|{START} {message}|]
@@ -978,8 +979,8 @@ processTarget
 
       -- We first run a crawler to get the extension configs.
       extensionConfigs <-
-        runCrawler
-          CrawlerConfig
+        runConfigFetcher
+          ConfigFetcherSettings
             { target
             , nRetry
             , logger
@@ -988,8 +989,8 @@ processTarget
           `logAndForwardError` "when running crawler"
 
       -- Then, we run a fetcher to get hashes.
-      runFetcher
-        FetcherConfig
+      runInfoFetcher
+        InfoFetcherSettings
           { extensionConfigs
           , extensionInfoCached
           , extensionInfoCachePath

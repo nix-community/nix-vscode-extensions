@@ -87,16 +87,16 @@ data ProcessTargetConfig a = ProcessTargetConfig
   , logger :: LogAction a Message
   }
 
--- | Config for a crawler
-data CrawlerConfig a = CrawlerConfig
+-- | Config for an extension config fetcher
+data ConfigFetcherSettings a = ConfigFetcherSettings
   { target :: Target
   , nRetry :: Int
   , logger :: LogAction a Message
   , extensionInfoCached :: [ExtensionInfo]
   }
 
--- | Config of a fetcher
-data FetcherConfig a = FetcherConfig
+-- | Config of an info fetcher
+data InfoFetcherSettings a = InfoFetcherSettings
   { target :: Target
   , nThreads :: Int
   , queueCapacity :: Int
