@@ -306,7 +306,7 @@ runInfoFetcher
     , queueCapacity
     , nThreads
     , cacheDir
-    , mkTargetJSON
+    , mkTargetJson
     , extensionConfigs
     , extensionInfoCached
     , extensionInfoCachePath
@@ -323,7 +323,7 @@ runInfoFetcher
     -- if there were target files, remove them
     forM_
       [fetchedTmpDir, failedTmpDir]
-      ( \(mkTargetJSON -> f) ->
+      ( \(mkTargetJson -> f) ->
           whenM (liftIO (Directory.doesFileExist f)) (liftIO (Directory.removeFile f))
       )
 
@@ -412,8 +412,8 @@ runInfoFetcher
     unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
 
     -- we prepare file names where threads will write to
-    let fetchedExtensionInfoFile = mkTargetJSON fetchedTmpDir
-        failedExtensionConfigFile = mkTargetJSON failedTmpDir
+    let fetchedExtensionInfoFile = mkTargetJson fetchedTmpDir
+        failedExtensionConfigFile = mkTargetJson failedTmpDir
 
     -- and run together
     ( mapConcurrently_
@@ -945,6 +945,9 @@ runConfigFetcher ConfigFetcherSettings{target, extensionInfoCached} = do
   -- finally, we return the configs
   pure extensionConfigs
 
+mkTargetJson' :: Target -> FilePath -> FilePath -> FilePath
+mkTargetJson' target prefix suffix = [fmt|{prefix}/{showTarget target}-{suffix}.json|]
+
 processTarget :: AppConfig' => ProcessTargetConfig IO -> MyLogger ()
 processTarget
   ProcessTargetConfig
@@ -961,11 +964,12 @@ processTarget
         tmpDir :: FilePath
         tmpDir = [fmt|{dataDir}/tmp|]
 
-        mkTargetJSON :: FilePath -> FilePath
-        mkTargetJSON x = [fmt|{x}/{showTarget target}-latest.json|]
+        mkTargetJson :: String -> FilePath
+        mkTargetJson prefix = mkTargetJson' target prefix "latest"
+
         nRetry = ?config.nRetry
 
-      let extensionInfoCachePath = mkTargetJSON cacheDir
+      let extensionInfoCachePath = mkTargetJson cacheDir
 
       -- If there's a file with cached info, we read it.
       extensionInfoCached <- do
@@ -998,7 +1002,7 @@ processTarget
           , nThreads
           , queueCapacity
           , cacheDir
-          , mkTargetJSON
+          , mkTargetJson
           , logger
           , tmpDir
           }

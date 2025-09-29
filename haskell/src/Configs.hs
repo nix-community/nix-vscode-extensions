@@ -104,7 +104,7 @@ data InfoFetcherSettings a = InfoFetcherSettings
   , extensionInfoCached :: [ExtensionInfo]
   , extensionInfoCachePath :: FilePath
   , cacheDir :: FilePath
-  , mkTargetJSON :: FilePath -> FilePath
+  , mkTargetJson :: FilePath -> FilePath
   , logger :: LogAction a Message
   , tmpDir :: FilePath
   }
