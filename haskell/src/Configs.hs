@@ -35,18 +35,21 @@ data SiteConfig f = SiteConfig
   }
   deriving stock (Generic)
 
+-- | Application configuration.
+--
+-- We use HKD because we need to allow optional fields when parsing
 data AppConfig f = AppConfig
   { runN :: HKD f Int
   -- ^ Times to process a target site
-  , processedLoggerDelay :: HKD f Integer
+  , processedLoggerDelay :: HKD f Int
   -- ^ Period in seconds till the next logging about processed extensions
-  , garbageCollectorDelay :: HKD f Integer
+  , garbageCollectorDelay :: HKD f Int
   -- ^ Period in seconds till the next garbage collection
   , collectGarbage :: HKD f Bool
   -- ^ Whether to collect garbage in /nix/store
-  , programTimeout :: HKD f Integer
+  , programTimeout :: HKD f Int
   -- ^ Total time a program may run
-  , retryDelay :: HKD f Integer
+  , retryDelay :: HKD f Int
   -- ^ Seconds to wait before retrying
   , nRetry :: HKD f Int
   -- ^ Number of times to retry an action
@@ -77,37 +80,32 @@ instance ToJSON (AppConfig Identity)
 
 instance Default (SiteConfig Maybe)
 
-type AppConfig' = (?config :: AppConfig Identity)
+type TargetSettings =
+  ( ?target :: Target
+  , ?threadNumber :: Int
+  , Settings
+  )
 
-data ProcessTargetConfig a = ProcessTargetConfig
-  { target :: Target
-  , nThreads :: Int
-  , queueCapacity :: Int
-  , dataDir :: FilePath
-  , logger :: LogAction a Message
-  }
-
--- | Config for an extension config fetcher
-data ConfigFetcherSettings a = ConfigFetcherSettings
-  { target :: Target
-  , nRetry :: Int
-  , logger :: LogAction a Message
-  , extensionInfoCached :: [ExtensionInfo]
-  }
-
--- | Config of an info fetcher
-data InfoFetcherSettings a = InfoFetcherSettings
-  { target :: Target
-  , nThreads :: Int
-  , queueCapacity :: Int
-  , extensionConfigs :: [ExtensionConfig]
-  , extensionInfoCached :: [ExtensionInfo]
-  , extensionInfoCachePath :: FilePath
-  , cacheDir :: FilePath
-  , mkTargetJson :: FilePath -> FilePath
-  , logger :: LogAction a Message
-  , tmpDir :: FilePath
-  }
+-- | Settings that don't change.
+--
+-- @target@ was included because it's ubiquitous.
+type Settings =
+  ( ?queueCapacity :: Int
+  , ?dataDir :: FilePath
+  , ?debugDir :: FilePath
+  , ?cacheDir :: FilePath
+  , ?nRetry :: Int
+  , ?tmpDir :: FilePath
+  , ?maxMissingTimes :: Int
+  , ?collectGarbage :: Bool
+  , ?processedLoggerDelay :: Int
+  , ?garbageCollectorDelay :: Int
+  , ?requestResponseTimeout :: Int
+  , ?openVSX :: SiteConfig Identity
+  , ?vscodeMarketplace :: SiteConfig Identity
+  , ?retryDelay :: Int
+  , ?programTimeout :: Int
+  )
 
 instance FromJSON (SiteConfig Identity)
 instance FromJSON (SiteConfig Maybe)

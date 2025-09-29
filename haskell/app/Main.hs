@@ -5,13 +5,13 @@ module Main (main) where
 
 import Colog (LogAction (..), Message, Msg (..), WithLog, cfilter, fmtMessage, formatWith, logDebug, logError, logInfo, logTextStdout, usingLoggerT)
 import Colog.Concurrent (defCapacity, withBackgroundLogger)
-import Configs
+import Configs ( Settings, TargetSettings, SiteConfig(..), AppConfig(..), _MICROSECONDS, mkDefaultAppConfig )
 import Control.Applicative (Alternative)
 import Control.Concurrent.Async.Pool qualified as AsyncPool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Concurrent.Thread.Delay (delay)
 import Control.Concurrent.Timeout (Timeout, timeout)
-import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to, traversed, (+~), (.~), (<&>), (^.), (^..), (^?), _1, _2, _Empty, _Just, _Right)
+import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (.~), (<&>), (^.), (^..), (^?), _1, _2, _Empty, _Just, _Left, _Right)
 import Control.Lens.Extras (is)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
@@ -21,17 +21,17 @@ import Data.Aeson.Lens (key, nth, _Array, _String)
 import Data.Aeson.Types (parseMaybe)
 import Data.Bits (Bits (..))
 import Data.ByteString qualified as BS
-import Data.Coerce
+import Data.Coerce ( coerce )
 import Data.Default (def)
-import Data.Either (fromRight, isLeft, partitionEithers)
-import Data.Foldable (traverse_)
+import Data.Either (fromRight)
+import Data.Foldable (foldr', traverse_)
 import Data.Function (fix, (&))
 import Data.Generics.Labels ()
 import Data.HashMap.Strict (HashMap)
 import Data.HashMap.Strict qualified as Map
 import Data.HashSet qualified as HashSet
 import Data.Hashable
-import Data.List (intercalate, intersect, partition, sortOn)
+import Data.List (intersect, partition, sortOn)
 import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
 import Data.Text qualified as T
@@ -41,17 +41,17 @@ import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
-import Logger
+import Logger ( MyLogger,MyLoggerT(_myLoggerT),ActionStatus(FINISH, INFO, ABORT, FAIL, START) )
 import Main.Utf8 (withUtf8)
 import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Options.Generic
 import Prettyprinter (Pretty (..))
-import PyF
-import Requests
-import System.Directory as Directory
-import UnliftIO (Exception (fromException), MonadUnliftIO (withRunInIO), STM, SomeAsyncException, SomeException, TMVar, TVar, atomically, catch, isAsyncException, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, throwIO, try, tryReadTMVar, withFile, writeTVar)
+import PyF ( fmt )
+import Requests ( Req(..),Filter(..),Criterion(..) )
+import System.Directory as Directory ( createDirectoryIfMissing, doesFileExist, removeFile )
+import UnliftIO (Exception (fromException), MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, throwIO, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 import UnliftIO.Process (readCreateProcessWithExitCode, shell)
 
@@ -135,26 +135,26 @@ collectGarbageOnce = do
   logDebug [fmt|{errText}|]
   logInfo [fmt|{FINISH} Collecting garbage in /nix/store.|]
 
-garbageCollector :: AppConfig' => TMVar () -> MyLogger ()
+garbageCollector :: (?garbageCollectorDelay :: Int) => TMVar () -> MyLogger ()
 garbageCollector t = do
   t_ <- liftIO $ atomically $ tryReadTMVar t
   maybe
     (pure ())
     ( const $ do
         collectGarbageOnce
-        liftIO $ delay (?config.garbageCollectorDelay * _MICROSECONDS)
+        liftIO $ delay (fromIntegral ?garbageCollectorDelay * _MICROSECONDS)
         garbageCollector t
     )
     t_
 
 -- | Log info about the number of processed extensions
-processedLogger :: AppConfig' => Int -> TMVar Int -> MyLogger ()
+processedLogger :: (?processedLoggerDelay :: Int) => Int -> TMVar Int -> MyLogger ()
 processedLogger total processed = flip fix 0 $ \ret n -> do
   p <- liftIO $ atomically $ tryReadTMVar processed
   traverse_
     ( \cnt -> do
         when (cnt /= n) $ logInfo [fmt|{INFO} Processed ({cnt}/{total}) extensions|]
-        liftIO $ delay (?config.processedLoggerDelay * _MICROSECONDS)
+        liftIO $ delay (fromIntegral ?processedLoggerDelay * _MICROSECONDS)
         ret cnt
     )
     p
@@ -170,7 +170,8 @@ logAndForwardError action message =
 -- | Get an extension from a target site and pass info about it to other threads
 --
 -- We do this by using the thread-safe data structures like special queues and vars
-getExtension :: AppConfig' => Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> MyLogger ()
+getExtension :: (?requestResponseTimeout :: Int) => 
+  Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> MyLogger ()
 getExtension
   target
   extInfoQueue
@@ -212,7 +213,7 @@ getExtension
 
       logDebug [fmt|{START} Fetching {extName} from {url}|]
       -- let nix fetch a file from that url
-      let timeout' = ?config.requestResponseTimeout
+      let timeout' = ?requestResponseTimeout
       (_, stdoutStr, stderrStr) <-
         let command = [fmt|nix store prefetch-file --timeout {timeout'} --json {url} --name {extName}-{version}-{platform}|]
          in readCreateProcessWithExitCode (shell command) ""
@@ -297,28 +298,37 @@ mkKeyConfig
       , platform
       }
 
+writeJsonCompact :: ToOrderedKeysJsonBs a => FilePath -> [a] -> IO ()
+writeJsonCompact path vals = 
+  withFile path WriteMode $ \h -> 
+    do
+      BS.hPutStr h "[ "
+      case vals of
+        [] -> pure ()
+        xs -> encodeFirstList h xs
+      BS.hPutStr h "]"
+
 -- | Fetch the extension info given their configs
-runInfoFetcher :: AppConfig' => InfoFetcherSettings IO -> MyLogger ()
-runInfoFetcher
-  -- TODO use OverloadedRecordDot
-  InfoFetcherSettings
-    { target
-    , queueCapacity
-    , nThreads
-    , cacheDir
-    , mkTargetJson
-    , extensionConfigs
-    , extensionInfoCached
-    , extensionInfoCachePath
-    , tmpDir
-    } = do
+runInfoFetcher :: (TargetSettings, ?mkTargetJson :: FilePath -> FilePath, ?extensionInfoCachePath :: FilePath) => [ExtensionInfo] -> [ExtensionConfig] -> MyLogger ()
+runInfoFetcher extensionInfoCached extensionConfigs =
+  do
     let
-      fetchedTmpDir :: FilePath = [fmt|{tmpDir}/fetched|]
-      failedTmpDir :: FilePath = [fmt|{tmpDir}/failed|]
+      target = ?target
+      tmpDir = ?tmpDir
+      cacheDir = ?cacheDir
+      debugDir = ?debugDir
+      mkTargetJson = ?mkTargetJson
+
+      fetchedTmpDir :: FilePath
+      fetchedTmpDir = [fmt|{tmpDir}/fetched|]
+
+      failedTmpDir :: FilePath
+      failedTmpDir = [fmt|{tmpDir}/failed|]
+
     -- create directories for files with fetched, failed, and cached extensions
     -- just in case these directories don't exist
     forM_
-      [fetchedTmpDir, failedTmpDir, cacheDir]
+      [fetchedTmpDir, failedTmpDir, cacheDir, debugDir]
       (liftIO . Directory.createDirectoryIfMissing True)
     -- if there were target files, remove them
     forM_
@@ -345,15 +355,15 @@ runInfoFetcher
           & bimap ((\x -> x & #missingTimes .~ 0) . fromJust . fst <$>) (snd <$>)
       -- Info about extensions that were present both in the cache and the response
       extensionInfoPresentMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoPresent)
-      -- info about extensions that were missing (not in the response)
+      -- info about cached extensions that were missing (not in the response)
       -- the missing counter is incremented
       extensionInfoMissing =
         (partition (\c -> isNothing $ Map.lookup (mkKeyInfo c) extensionInfoPresentMap) extensionInfoCached)
-          ^.. _1 . traversed . filtered (\c -> c.missingTimes + 1 < ?config.maxMissingTimes)
+          ^.. _1 . traversed . filtered (\c -> c.missingTimes + 1 < ?maxMissingTimes)
           & traversed . #missingTimes +~ 1
       -- these missing info are turned into configs so that they can be fetched again
       -- this conversion preserves the missing times counter
-      extensionInfoMissingConfigs =
+      extensionInfoConfigsMissing =
         extensionInfoMissing
           <&> ( \ExtensionInfo
                   { name
@@ -375,14 +385,15 @@ runInfoFetcher
                       }
               )
       -- combine new and old missing configs
-      extensionConfigsMissing' = extensionConfigsMissing <> extensionInfoMissingConfigs
+      extensionConfigsMissing' = extensionConfigsMissing <> extensionInfoConfigsMissing
       -- and calculate the number of the configs of extensions that are missing
       numberExtensionConfigsMissing = length extensionConfigsMissing'
 
-    logDebug [fmt|Cached\n{show extensionInfoCached}|]
-    logDebug [fmt|Present\n{show extensionInfoPresent}|]
-    logDebug [fmt|Missing in the cache, present in the response\n{show extensionConfigsMissing}|]
-    logDebug [fmt|Present in the cache, missing in the response\n{show extensionInfoMissingConfigs}|]
+    liftIO do
+      writeJsonCompact (mkTargetJson "info-present") extensionInfoPresent
+      writeJsonCompact (mkTargetJson "configs-not-in-cache") extensionConfigsMissing
+      writeJsonCompact (mkTargetJson "info-not-in-response") extensionInfoConfigsMissing
+      writeJsonCompact (mkTargetJson "configs-missing-all") extensionConfigsMissing'
 
     -- collect extensions from cache that are not present
     traverse_
@@ -390,7 +401,7 @@ runInfoFetcher
       [ [fmt|{INFO} We have {length extensionInfoCached} cached extensions.|]
       , [fmt|{START} Analyzing extension configs from {target}.|]
       , [fmt|{INFO} {length extensionConfigsMissing} collected extension config(s) aren't cached yet.|]
-      , [fmt|{INFO} {length extensionInfoMissingConfigs} cached extension config(s) are not among collected extension configs.|]
+      , [fmt|{INFO} {length extensionInfoConfigsMissing} cached extension config(s) are not among collected extension configs.|]
       , [fmt|{INFO} We need to update cached info about {numberExtensionConfigsMissing} extension(s).|]
       , [fmt|{FINISH} Analyzing extension configs from {target}.|]
       ]
@@ -399,8 +410,8 @@ runInfoFetcher
 
 
     -- we prepare shared queues and variables
-    extInfoQueue <- liftIO $ newTBMQueueIO queueCapacity
-    extFailedConfigQueue <- liftIO $ newTBMQueueIO queueCapacity
+    extInfoQueue <- liftIO $ newTBMQueueIO ?queueCapacity
+    extFailedConfigQueue <- liftIO $ newTBMQueueIO ?queueCapacity
     -- this is a counter of processed extensions
     -- it should become empty when all extensions are processed
     extProcessedN <- newTMVarIO 0
@@ -409,7 +420,7 @@ runInfoFetcher
     -- flag for garbage collector
     collectGarbage <- newTMVarIO ()
 
-    unless ?config.collectGarbage (atomically $ takeTMVar collectGarbage)
+    unless ?collectGarbage (atomically $ takeTMVar collectGarbage)
 
     -- we prepare file names where threads will write to
     let fetchedExtensionInfoFile = mkTargetJson fetchedTmpDir
@@ -434,7 +445,7 @@ runInfoFetcher
           -- it's more efficient than spawning a thread per each element of a list with extensions' configs
           withRunInIO
             ( \runInIO ->
-                AsyncPool.withTaskGroup nThreads $ \g -> do
+                AsyncPool.withTaskGroup ?threadNumber $ \g -> do
                   void
                     ( AsyncPool.mapConcurrently
                         g
@@ -452,7 +463,7 @@ runInfoFetcher
               -- clone its value
               atomically $ takeTMVar extProcessedN >>= writeTVar extProcessedNFinal
               -- also, stop the garbage collector
-              when ?config.collectGarbage do
+              when ?collectGarbage do
                 atomically $ takeTMVar collectGarbage
                 collectGarbageOnce
         ]
@@ -476,15 +487,9 @@ runInfoFetcher
               sortOn mkKeyInfo extensionInfoUpdated
 
         -- after that, we compactly write the extensions info
-        liftIO
-          ( withFile extensionInfoCachePath WriteMode $ \h -> do
-              BS.hPutStr h "[ "
-              case extensionInfoSorted of
-                [] -> pure ()
-                xs -> encodeFirstList h xs
-              BS.hPutStr h "]"
-          )
-          `logAndForwardError` "when writing extensions to file"
+        liftIO 
+          (writeJsonCompact ?extensionInfoCachePath extensionInfoSorted)
+            `logAndForwardError` "when writing extensions to file"
         logInfo [fmt|{FINISH} Caching updated info about extensions from {target}.|]
         extProcessedNFinal' <- readTVarIO extProcessedNFinal
         extFailedN' <- readTVarIO extFailedN
@@ -498,10 +503,10 @@ isTimeout e =
     _ -> False
 
 -- | Retry an action a given number of times with a given delay and logs about its status
-retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, AppConfig') => Int -> Text -> m b -> m b
+retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, (?retryDelay :: Int, ?programTimeout :: Int)) => Int -> Text -> m b -> m b
 retry_ nAttempts msg action
   | nAttempts >= 0 =
-      let retryDelay = ?config.retryDelay
+      let retryDelay = ?retryDelay
           action_ n = do
             let n_ = nAttempts - n + 1
             res <- try @_ @SomeException do
@@ -511,13 +516,14 @@ retry_ nAttempts msg action
             case res of
               Left err ->
                 if
-                  | -- For some reason, this branch doesn't handle keyboard interrupts (Ctrl + C)
-                    isTimeout err || isAsyncException err -> do
-                      logError [fmt|{ABORT} Attempt {n_} of {nAttempts}. Got an asynchronous exception:\n{show err}|]
+                  | -- Handle the asynchronous Timeout exception.
+                    isTimeout err -> do
+                      let seconds = ?programTimeout
+                      logError [fmt|{ABORT} Attempt {n_} of {nAttempts}. Timed out in {seconds} seconds.|]
                       throwIO err
                   | n >= 1 -> do
                       logError [fmt|{FAIL} Attempt {n_} of {nAttempts}. {msg}.\nError:\n{show err}\nRetrying in {retryDelay} seconds.|]
-                      liftIO (delay (retryDelay * _MICROSECONDS))
+                      liftIO (delay (fromIntegral retryDelay * _MICROSECONDS))
                       action_ (n - 1)
                   | otherwise -> do
                       logError [fmt|{ABORT} All {nAttempts} attempts have failed. {msg}|]
@@ -584,11 +590,27 @@ flag'Unpublished = 0x1000
 orFlags :: [Int] -> Int
 orFlags = foldr (.|.) 0
 
+partitionEithersOn :: (f (Either a b) -> Maybe (f a)) -> (f (Either a b) -> Maybe (f b)) -> [f (Either a b)] -> ([f a], [f b])
+partitionEithersOn pl pr =
+  foldr'
+    ( \x (ls, rs) ->
+        case pl x of
+          Nothing ->
+            case pr x of
+              Nothing -> error "Impossible"
+              Just x' -> (ls, x' : rs)
+          Just x' -> (x' : ls, rs)
+    )
+    ([], [])
+
 -- | Get a list of extension configs from the target marketplace.
-getExtensionConfigs :: AppConfig' => Target -> MyLogger [ExtensionConfig]
-getExtensionConfigs target = do
-  let nRetry = ?config.nRetry
-      siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
+getExtensionConfigs :: TargetSettings => MyLogger [ExtensionConfig]
+getExtensionConfigs = do
+  let target = ?target
+      nRetry = ?nRetry
+      siteConfig = targetSelect target ?vscodeMarketplace ?openVSX
+      mkDebugJson suffix = mkTargetJson' target ?debugDir suffix
+
   retry_ nRetry [fmt|Collecting the extension configs from {target}|] do
     let
       pageCount = siteConfig.pageCount
@@ -655,29 +677,44 @@ getExtensionConfigs target = do
     logInfo [fmt|{START} Collecting {pageCount} page(s) of size {pageSize}.|]
 
     -- We request pages of extensions from VSCode Marketplace concurrently.
-    pages <- do
-      responses <-
-        liftIO $
-          AsyncPool.withTaskGroup siteConfig.nThreads $ \g -> do
-            AsyncPool.mapConcurrently
-              g
-              (requestJsonEither target . requestExtensionsList)
-              [1 .. pageCount]
+    (pagesFailed, pagesFetched) <- do
+      responses <- withRunInIO $ \runInIO ->
+        AsyncPool.withTaskGroup siteConfig.nThreads $ \g -> do
+          AsyncPool.mapConcurrently
+            g
+            ( \pageNumber -> do
+                page' <-
+                  runInIO $
+                    retry_ nRetry [fmt|{FAIL} Getting configs at {pageNumber}|] $
+                      requestJsonEither target $
+                        requestExtensionsList pageNumber
+                pure (pageNumber, responseBody page')
+            )
+            [1 .. pageCount]
 
-      pure $ partitionEithers (responseBody <$> responses)
-    case pages of
-      -- if we were unsuccessful, we need to retry
-      (x : xs, _) -> do
-        logError [fmt|{FAIL} Getting info about extensions from {target}|]
-        error (intercalate "\n\n" (show <$> x : xs))
-      ([], r) -> do
-        logDebug [fmt|Pages:\n\n{Aeson.encode r}|]
+      pure $
+        partitionEithersOn
+          (\(k, v) -> (k,) <$> v ^? _Left)
+          (\(k, v) -> (k,) <$> v ^? _Right)
+          responses
 
-        let extensionConfigs = r ^.. traversed . to getExtensionConfigsFromResponse . traversed
+    -- TODO if all fetched pages failed, we probably shouldn't proceed
 
-        logDebug [fmt|Extension configs:\n\n{Aeson.encode extensionConfigs}|]
+    liftIO $
+      Aeson.encodeFile
+        (mkDebugJson "pages-failed")
+        (pagesFailed & traversed . _2 %~ show)
 
-        pure extensionConfigs
+    liftIO $
+      Aeson.encodeFile
+        (mkDebugJson "pages-fetched")
+        pagesFetched
+
+    let extensionConfigs =
+          pagesFetched
+            ^.. traversed . _2 . to getExtensionConfigsFromResponse . traversed
+
+    pure extensionConfigs
 
 getExtensionConfigsFromResponse :: Value -> [ExtensionConfig]
 getExtensionConfigsFromResponse response =
@@ -734,7 +771,7 @@ getExtensionConfigsFromResponse response =
       . traversed
 
 -- | Get a list of extension configs from VSCode Marketplace
-getExtensionConfigsRelease :: AppConfig' => Target -> [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
+getExtensionConfigsRelease :: Settings => Target -> [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
 getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
   logInfo [fmt|{START} Identifying pre-release extensions that may have release versions|]
 
@@ -769,8 +806,8 @@ getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
 
   logInfo [fmt|{FINISH} Identifying pre-release extensions that may have release versions|]
 
-  let nRetry = ?config.nRetry
-      siteConfig = targetSelect target ?config.vscodeMarketplace ?config.openVSX
+  let nRetry = ?nRetry
+      siteConfig = targetSelect target ?vscodeMarketplace ?openVSX
 
   retry_ nRetry [fmt|Collecting the release extension configs from {target}|] do
     let
@@ -820,14 +857,18 @@ getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
         )
         extensionIdsPreRelease
 
-    let (errors, pages) = partition (isLeft . snd) responses
+    let (errors, pages) =
+          partitionEithersOn
+            (\(k, v) -> (k,) <$> v ^? _Left)
+            (\(k, v) -> (k,) <$> v ^? _Right)
+            responses
 
     when
       (not (null errors))
       (logInfo [fmt|Could not find info about these extensions:\n\n{show $ errors}|])
 
     let extensionConfigsRelease =
-          pages ^.. traversed . _2 . _Right . to getExtensionConfigsReleaseFromResponse . traversed
+          pages ^.. traversed . _2 . to getExtensionConfigsReleaseFromResponse . traversed
 
     logDebug [fmt|Release extension configs:\n\n{show $ pretty extensionConfigsRelease}|]
 
@@ -919,13 +960,16 @@ getExtensionConfigsReleaseFromResponse response =
 
 -- | Run a config fetcher depending on the target site
 -- to (hopefully) get the extension configs
-runConfigFetcher :: AppConfig' => ConfigFetcherSettings IO -> MyLogger [ExtensionConfig]
-runConfigFetcher ConfigFetcherSettings{target, extensionInfoCached} = do
-  let message :: Text = [fmt|Collecting the latest pre-release and release extension configs from {target}.|]
+runConfigFetcher :: (TargetSettings) => [ExtensionInfo] -> MyLogger [ExtensionConfig]
+runConfigFetcher extensionInfoCached = do
+  let
+    target = ?target
+    message :: Text
+    message = [fmt|Collecting the latest pre-release and release extension configs from {target}.|]
 
   logInfo [fmt|{START} {message}|]
 
-  extensionConfigsLatest <- getExtensionConfigs target
+  extensionConfigsLatest <- getExtensionConfigs
 
   extensionConfigsRelease <-
     targetSelect
@@ -948,67 +992,38 @@ runConfigFetcher ConfigFetcherSettings{target, extensionInfoCached} = do
 mkTargetJson' :: Target -> FilePath -> FilePath -> FilePath
 mkTargetJson' target prefix suffix = [fmt|{prefix}/{showTarget target}-{suffix}.json|]
 
-processTarget :: AppConfig' => ProcessTargetConfig IO -> MyLogger ()
-processTarget
-  ProcessTargetConfig
-    { target
-    , dataDir
-    , logger
-    , nThreads
-    , queueCapacity
-    } =
-    do
-      let
-        cacheDir :: FilePath
-        cacheDir = [fmt|{dataDir}/cache|]
-        tmpDir :: FilePath
-        tmpDir = [fmt|{dataDir}/tmp|]
+processTarget :: (TargetSettings) => MyLogger ()
+processTarget =
+  do
+    let
+      mkTargetJson :: String -> FilePath
+      mkTargetJson prefix = mkTargetJson' ?target prefix "latest"
+  
+    let
+      ?extensionInfoCachePath = mkTargetJson ?cacheDir
+      ?mkTargetJson = mkTargetJson
 
-        mkTargetJson :: String -> FilePath
-        mkTargetJson prefix = mkTargetJson' target prefix "latest"
+    -- If there's a file with cached info, we read it.
+    extensionInfoCached <- do
+      extensionInfoCached <- liftIO $ eitherDecodeFileStrict' ?extensionInfoCachePath
+      case extensionInfoCached of
+        Left err -> do
+          logError [fmt|Could not decode the file with cached extension info:\n\n{show err}|]
+          pure []
+        Right v -> do
+          pure v
 
-        nRetry = ?config.nRetry
+    -- We first run a crawler to get the extension configs.
+    extensionConfigs <-
+      runConfigFetcher extensionInfoCached
+        `logAndForwardError` "when running crawler"
 
-      let extensionInfoCachePath = mkTargetJson cacheDir
+    -- Then, we run a fetcher to get hashes.
+    runInfoFetcher extensionInfoCached extensionConfigs
+      `logAndForwardError` "when running fetcher for latest extensions"
+    -- in case of errors, rethrow an exception
+    `logAndForwardError` (let target = ?target in [fmt|when requesting {target}|])
 
-      -- If there's a file with cached info, we read it.
-      extensionInfoCached <- do
-        extensionInfoCached <- liftIO $ eitherDecodeFileStrict' extensionInfoCachePath
-        case extensionInfoCached of
-          Left err -> do
-            logError [fmt|Could not decode the file with cached extension info:\n\n{show err}|]
-            pure []
-          Right v -> do
-            pure v
-
-      -- We first run a crawler to get the extension configs.
-      extensionConfigs <-
-        runConfigFetcher
-          ConfigFetcherSettings
-            { target
-            , nRetry
-            , logger
-            , extensionInfoCached
-            }
-          `logAndForwardError` "when running crawler"
-
-      -- Then, we run a fetcher to get hashes.
-      runInfoFetcher
-        InfoFetcherSettings
-          { extensionConfigs
-          , extensionInfoCached
-          , extensionInfoCachePath
-          , target
-          , nThreads
-          , queueCapacity
-          , cacheDir
-          , mkTargetJson
-          , logger
-          , tmpDir
-          }
-        `logAndForwardError` "when running fetcher for latest extensions"
-      -- in case of errors, rethrow an exception
-      `logAndForwardError` [fmt|when requesting {target}|]
 
 newtype ConfigOptions w = ConfigOptions
   { config :: w ::: Maybe FilePath <?> "Path to a config file"
@@ -1019,60 +1034,78 @@ instance ParseRecord (ConfigOptions Wrapped)
 deriving anyclass instance ParseRecord (ConfigOptions Unwrapped)
 
 main :: IO ()
-main = withUtf8 do
-  configOptions :: (ConfigOptions Unwrapped) <- unwrapRecord "Updater"
-  -- we'll let logs be written to stdout as soon as they come
-  hSetBuffering stdout NoBuffering
-  config_ <-
-    case configOptions.config of
-      Nothing -> putStrLn [fmt|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
-      Just s -> do
-        appConfig <- decodeFileEither s
-        case appConfig of
-          Left err -> error [fmt|Could not decode the config file\n\n{show err}. Aborting.|]
-          Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
+main =
+  -- An asynchronous exception is one that was thrown to this thread from another thread.
+  -- In a handler like try, an asynchronous appears like any other exception.
+  --
+  -- TODO Consider catching asynchronous exceptions coming from outside the program separately.
+  -- https://neilmitchell.blogspot.com/2015/05/handling-control-c-in-haskell.html
 
-  let AppConfig
-        { dataDir
-        , queueCapacity
-        , logSeverity
-        , vscodeMarketplace
-        , openVSX
-        , runN
-        } = config_
+  withUtf8 do
+    configOptions :: (ConfigOptions Unwrapped) <- unwrapRecord "Updater"
+    -- we'll let logs be written to stdout as soon as they come
+    hSetBuffering stdout NoBuffering
+    config_ <-
+      case configOptions.config of
+        Nothing -> putStrLn [fmt|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
+        Just s -> do
+          appConfig <- decodeFileEither s
+          case appConfig of
+            Left err -> error [fmt|Could not decode the config file\n\n{show err}. Aborting.|]
+            Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
 
-  createDirectoryIfMissing True dataDir
+    let AppConfig
+          { dataDir
+          , queueCapacity
+          , logSeverity
+          , vscodeMarketplace
+          , openVSX
+          , runN
+          } = config_
 
-  let timeoutSeconds = config_.programTimeout * _MICROSECONDS
+    createDirectoryIfMissing True dataDir
 
-  -- We have to use `timeout` from unbounded-delays
-  -- because the timeout can be more than 36 minutes
-  -- https://hackage-content.haskell.org/package/base-4.18.1.0/docs/System-Timeout.html#v:timeout
-  void $ timeout timeoutSeconds do
-    withBackgroundLogger @IO
-      defCapacity
-      (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout)
-      (pure ())
-      $ \logger -> usingLoggerT logger do
-        logInfo [fmt|{START} Updating extensions|]
-        logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
-        -- we'll run the extension crawler and a fetcher a given number of times on both target sites
-        let ?config = config_
-        forM_ ([VSCodeMarketplace | vscodeMarketplace.enable] <> [OpenVSX | openVSX.enable]) $
-          \target ->
-            _myLoggerT do
-              ( retry_
-                  runN
-                  [fmt|Processing {target}|]
-                  ( processTarget
-                      ProcessTargetConfig
-                        { dataDir
-                        , nThreads = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
-                        , queueCapacity
-                        , target
-                        , logger
-                        }
+    let timeoutMicroseconds = fromIntegral config_.programTimeout * _MICROSECONDS
+
+    -- We have to use `timeout` from unbounded-delays
+    -- because the timeout can be more than 36 minutes
+    -- https://hackage-content.haskell.org/package/base-4.18.1.0/docs/System-Timeout.html#v:timeout
+    void $ timeout timeoutMicroseconds do
+      withBackgroundLogger @IO
+        defCapacity
+        (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout)
+        (pure ())
+        $ \logger -> usingLoggerT logger do
+          logInfo [fmt|{START} Updating extensions|]
+          logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
+          -- we'll run the extension fetcher and info fetcher 
+          -- a given number of times on both target sites
+          let ?config = config_
+              ?cacheDir = [fmt|{dataDir}/cache|]
+              ?debugDir = [fmt|{dataDir}/debug|]
+              ?tmpDir = [fmt|{dataDir}/tmp|]
+              ?programTimeout = config_.programTimeout
+              ?retryDelay = config_.retryDelay
+              ?dataDir = dataDir
+              ?queueCapacity = queueCapacity                          
+              ?nRetry = config_.nRetry
+              ?collectGarbage = config_.collectGarbage
+              ?garbageCollectorDelay = config_.garbageCollectorDelay
+              ?openVSX = config_.openVSX
+              ?processedLoggerDelay = config_.processedLoggerDelay
+              ?vscodeMarketplace = config_.vscodeMarketplace
+              ?maxMissingTimes = config_.maxMissingTimes
+              ?requestResponseTimeout = config_.requestResponseTimeout
+          forM_ ([VSCodeMarketplace | vscodeMarketplace.enable] <> [OpenVSX | openVSX.enable]) $
+            \target ->
+              _myLoggerT do
+                ( retry_
+                    runN
+                    [fmt|Processing {target}|]
+                    ( let ?target = target
+                          ?threadNumber = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
+                       in processTarget
+                    )
                   )
-                )
-                `logAndForwardError` [fmt|when processing {target}|]
-        logInfo [fmt|{FINISH} Updating extensions|]
+                  `logAndForwardError` [fmt|when processing {target}|]
+          logInfo [fmt|{FINISH} Updating extensions|]
