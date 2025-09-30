@@ -247,7 +247,7 @@ getExtension
                     , publisher
                     , version
                     , platform
-                    , missingTimes
+                    , missingTimes = 0
                     , engineVersion
                     , hash
                     , isRelease
