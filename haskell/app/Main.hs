@@ -479,12 +479,16 @@ runInfoFetcher extensionInfoCached extensionConfigs =
       -- we want to finally append the info about the newly fetched extensions to the cache
       `finally` do
         logInfo [fmt|{START} Caching updated info about extensions from {target}.|]
-        -- we combine into a sorted list the cached info and the new info that we read from a file
+
         extensionInfoFetched <- fromRight [] <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
-        let extensionInfoUpdated =
+
+        let mkKeyInfo' x = (x.publisher, x.name, x.platform)
+
+            extensionInfoUpdated =
               Map.elems $
                 Map.unions $
-                  Map.fromList . ((\x -> (mkKeyInfo x, x)) <$>)
+                  Map.fromList
+                    . ((\x -> (mkKeyInfo' x, x)) <$>)
                     <$> [ extensionInfoFetched
                         , extensionInfoMissing
                         , extensionInfoPresent
