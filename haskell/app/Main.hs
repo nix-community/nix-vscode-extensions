@@ -66,10 +66,10 @@ showTarget :: Target -> String
 showTarget target = targetSelect target "vscode-marketplace" "open-vsx"
 
 -- | Handle the case when we need to write the first list of extensions' info into a file
-encodeFirstList :: (ToOrderedKeysJsonBs a) => Handle -> [a] -> IO ()
+encodeFirstList :: (ToJsonBs a) => Handle -> [a] -> IO ()
 encodeFirstList h (x : xs) = do
-  BS.hPutStr h ([fmt|{toJsonOrderedKeys x}\n|])
-  traverse_ (\y -> BS.hPutStr h ([fmt|, {toJsonOrderedKeys y}\n|])) xs
+  BS.hPutStr h ([fmt|{toJsonBs x}\n|])
+  traverse_ (\y -> BS.hPutStr h ([fmt|, {toJsonBs y}\n|])) xs
 encodeFirstList _ [] = pure ()
 
 -- | Read everything from a queue into a list
@@ -85,7 +85,7 @@ flushTBMQueue q = flip fix [] $ \ret contents -> do
     _ -> pure $ pure contents
 
 -- | Log info about extensions from a queue into a file
-extLogger :: forall a. (ToOrderedKeysJsonBs a) => FilePath -> TBMQueue a -> MyLogger ()
+extLogger :: forall a. (ToJsonBs a) => FilePath -> TBMQueue a -> MyLogger ()
 extLogger file queue = liftIO $
   withFile file AppendMode $ \h ->
     do
@@ -114,7 +114,7 @@ extLogger file queue = liftIO $
                 )
                 extData
             else -- next time, we can write all values from the list in the same way
-              traverse_ (traverse_ (\x -> BS.hPutStr h [fmt|, {toJsonOrderedKeys x}\n|])) extData
+              traverse_ (traverse_ (\x -> BS.hPutStr h [fmt|, {toJsonBs x}\n|])) extData
           -- this type of queue may become `closed`
           -- in this case, values that we read from it will be `Nothing`
           -- unless such a situation happens, we need to repeat our loop
@@ -263,7 +263,7 @@ getExtension
       extProcessedN' <- takeTMVar extProcessedN
       putTMVar extProcessedN (extProcessedN' + 1)
 
-writeJsonCompact :: (ToOrderedKeysJsonBs a) => FilePath -> [a] -> IO ()
+writeJsonCompact :: (ToJsonBs a) => FilePath -> [a] -> IO ()
 writeJsonCompact path vals =
   withFile path WriteMode $ \h ->
     do
@@ -273,7 +273,7 @@ writeJsonCompact path vals =
         xs -> encodeFirstList h xs
       BS.hPutStr h "]"
 
-writeDebugJsonCompact :: (ToOrderedKeysJsonBs a, ?target :: Target, ?debugDir :: FilePath) => FilePath -> [a] -> IO ()
+writeDebugJsonCompact :: (ToJsonBs a, ?target :: Target, ?debugDir :: FilePath) => FilePath -> [a] -> IO ()
 writeDebugJsonCompact suffix = writeJsonCompact (mkTargetJson ?target ?debugDir suffix)
 
 -- | Fetch the extension info given their configs

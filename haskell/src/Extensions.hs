@@ -29,6 +29,7 @@ import Text.Megaparsec (Parsec, choice, many, (<|>))
 import Text.Megaparsec qualified as TM (parse, parseMaybe)
 import Text.Megaparsec.Char (asciiChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
+import qualified Data.ByteString.Lazy as BSL
 
 -- | Possible targets
 data Target = VSCodeMarketplace | OpenVSX
@@ -383,11 +384,17 @@ class (Generic f, GFields (Rep f)) => GToOrderedKeysJsonBs f where
     fieldValues = x & from & gFields & traversed . _1 %~ opts.fieldLabelModifier
     result = fieldValuesToJson fieldValues
 
-class ToOrderedKeysJsonBs f where
-  toJsonOrderedKeys :: f -> BS.ByteString
+class ToJsonBs f where
+  toJsonBs :: f -> BS.ByteString
 
-instance ToOrderedKeysJsonBs ExtensionInfo where
-  toJsonOrderedKeys = gToJsonOrderedKeys optionsExtensionInfo
+instance ToJsonBs BS.ByteString where
+  toJsonBs = id
+
+instance ToJsonBs BSL.ByteString where
+  toJsonBs = BS.toStrict
+
+instance ToJsonBs ExtensionInfo where
+  toJsonBs = gToJsonOrderedKeys optionsExtensionInfo
 
 instance FromJSON ExtensionInfo where
   parseJSON = genericParseJSON optionsExtensionInfo
@@ -398,8 +405,8 @@ instance FromJSON ExtensionConfig where
 instance ToJSON ExtensionConfig where
   toJSON = genericToJSON optionsExtensionInfo
 
-instance ToOrderedKeysJsonBs ExtensionConfig where
-  toJsonOrderedKeys = gToJsonOrderedKeys optionsExtensionInfo
+instance ToJsonBs ExtensionConfig where
+  toJsonBs = gToJsonOrderedKeys optionsExtensionInfo
 
 instance FromJSON IsRelease where
   parseJSON (Number n) =
