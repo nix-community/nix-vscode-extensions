@@ -274,17 +274,16 @@ writeJsonCompact path vals =
       BS.hPutStr h "]"
 
 -- | Fetch the extension info given their configs
-runInfoFetcher :: (TargetSettings, ?mkTargetJson :: FilePath -> FilePath, ?extensionInfoCachePath :: FilePath) => [ExtensionInfo] -> [ExtensionConfig] -> MyLogger ()
+runInfoFetcher :: (TargetSettings, ?mkTargetLatestJson :: FilePath -> FilePath, ?extensionInfoCachePath :: FilePath) => [ExtensionInfo] -> [ExtensionConfig] -> MyLogger ()
 runInfoFetcher extensionInfoCached extensionConfigs =
   do
     let
       target = ?target
-      mkTargetJson = ?mkTargetJson
 
     -- if there were target files, remove them
     forM_
       [?fetchedDir, ?failedDir]
-      ( \(mkTargetJson -> f) -> do
+      ( \(?mkTargetLatestJson -> f) -> do
           existsFile <- liftIO (Directory.doesFileExist f)
           when existsFile (liftIO (Directory.removeFile f))
       )
@@ -387,8 +386,8 @@ runInfoFetcher extensionInfoCached extensionConfigs =
     unless ?collectGarbage (atomically $ takeTMVar collectGarbage)
 
     -- we prepare file names where threads will write to
-    let fetchedExtensionInfoFile = mkTargetJson ?fetchedDir
-        failedExtensionConfigFile = mkTargetJson ?failedDir
+    let fetchedExtensionInfoFile = ?mkTargetLatestJson ?fetchedDir
+        failedExtensionConfigFile = ?mkTargetLatestJson ?failedDir
 
     -- and run together
     ( mapConcurrently_
@@ -954,8 +953,8 @@ runConfigFetcher extensionInfoCached = do
   -- finally, we return the configs
   pure extensionConfigs
 
-mkTargetJson' :: Target -> FilePath -> FilePath -> FilePath
-mkTargetJson' target prefix suffix = [fmt|{prefix}/{showTarget target}-{suffix}.json|]
+mkTargetJson :: Target -> FilePath -> FilePath -> FilePath
+mkTargetJson target prefix suffix = [fmt|{prefix}/{showTarget target}-{suffix}.json|]
 
 decodeFile :: (Aeson.FromJSON a) => FilePath -> BS.ByteString -> MyLogger [a]
 decodeFile path initialContent = do
@@ -986,12 +985,12 @@ processTarget :: (TargetSettings) => MyLogger ()
 processTarget =
   do
     let
-      mkTargetJson :: String -> FilePath
-      mkTargetJson prefix = mkTargetJson' ?target prefix "latest"
+      mkTargetLatestJson :: String -> FilePath
+      mkTargetLatestJson prefix = mkTargetJson ?target prefix "latest"
 
     let
-      ?extensionInfoCachePath = mkTargetJson ?cacheDir
-      ?mkTargetJson = mkTargetJson
+      ?extensionInfoCachePath = mkTargetLatestJson ?cacheDir
+      ?mkTargetLatestJson = mkTargetLatestJson
 
     extensionInfoCached <- decodeFile ?extensionInfoCachePath "[ ]"
 
