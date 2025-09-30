@@ -292,7 +292,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
       )
 
     let
-      mkKey x = (x.publisher, x.name, x.platform, x.version)
+      mkKey x = (x.publisher, x.name, x.isRelease, x.platform, x.version)
 
       -- We load the cached info into a map for quicker access
       extensionInfoCachedMap =
@@ -444,7 +444,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
         -- We need new fetched info to override old cached info.
         -- `HashMap.unions` keeps elements of maps
         -- that are closer to the head of the list.
-        let mkKey' x = (x.publisher, x.name, x.platform)
+        let mkKey' x = (x.publisher, x.name, x.isRelease, x.platform)
 
             extensionInfoUpdated =
               HashMap.elems $
