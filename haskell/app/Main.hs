@@ -11,7 +11,7 @@ import Control.Concurrent.Async.Pool qualified as AsyncPool (mapConcurrently, wi
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Concurrent.Thread.Delay (delay)
 import Control.Concurrent.Timeout (Timeout, timeout)
-import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (.~), (<&>), (^.), (^..), (^?), _1, _2, _Empty, _Just, _Left, _Right)
+import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (.~), (<&>), (^.), (^..), (^?), _2, _Empty, _Just, _Left, _Right)
 import Control.Lens.Extras (is)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
@@ -28,9 +28,8 @@ import Data.Foldable (foldr', traverse_)
 import Data.Function (fix, (&))
 import Data.Generics.Labels ()
 import Data.HashMap.Strict (HashMap)
-import Data.HashMap.Strict qualified as Map
+import Data.HashMap.Strict qualified as HashMap
 import Data.HashSet qualified as HashSet
-import Data.Hashable (Hashable)
 import Data.List (intersect, partition, sortOn)
 import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
@@ -190,7 +189,6 @@ getExtension
     , name
     , version
     , platform
-    , missingTimes
     , engineVersion
     , isRelease
     } = do
@@ -237,8 +235,8 @@ getExtension
             pure True
           Just hash -> do
             logInfo [fmt|{FINISH} Fetching extension {extName} from {url}|]
-            -- when everything is ok, we write the extension info into a queue
-            -- this is to let other threads read from it
+            -- When everything is ok, we write the extension info into a queue.
+            -- Other threads will read from it.
             liftIO $
               atomically $
                 writeTBMQueue extInfoQueue $
@@ -259,51 +257,13 @@ getExtension
       isFailed
       do
         liftIO $ atomically $ writeTBMQueue extFailedConfigQueue extConfig
-        liftIO $ atomically $ readTVar extFailedN >>= \x -> writeTVar extFailedN (x + 1)
+        liftIO $ atomically do
+          extFailedN' <- readTVar extFailedN
+          writeTVar extFailedN (extFailedN' + 1)
     -- when finished, we update a shared counter
-    liftIO $ atomically $ takeTMVar extProcessedN >>= \x -> putTMVar extProcessedN (x + 1)
-
-data Key = Key
-  { publisher :: Publisher
-  , name :: Name
-  , platform :: Platform
-  , version :: Version
-  }
-  deriving stock (Eq, Generic, Ord)
-  deriving anyclass (Hashable)
-
-whenM :: (Monad m) => m Bool -> m () -> m ()
-whenM cond action = cond >>= (`when` action)
-
-mkKeyInfo :: ExtensionInfo -> Key
-mkKeyInfo
-  ExtensionInfo
-    { publisher
-    , name
-    , version
-    , platform
-    } =
-    Key
-      { publisher
-      , name
-      , version
-      , platform
-      }
-
-mkKeyConfig :: ExtensionConfig -> Key
-mkKeyConfig
-  ExtensionConfig
-    { publisher
-    , name
-    , version
-    , platform
-    } =
-    Key
-      { publisher
-      , name
-      , version
-      , platform
-      }
+    liftIO $ atomically do
+      extProcessedN' <- takeTMVar extProcessedN
+      putTMVar extProcessedN (extProcessedN' + 1)
 
 writeJsonCompact :: (ToOrderedKeysJsonBs a) => FilePath -> [a] -> IO ()
 writeJsonCompact path vals =
@@ -340,38 +300,52 @@ runInfoFetcher extensionInfoCached extensionConfigs =
     -- if there were target files, remove them
     forM_
       [fetchedTmpDir, failedTmpDir]
-      ( \(mkTargetJson -> f) ->
-          whenM (liftIO (Directory.doesFileExist f)) (liftIO (Directory.removeFile f))
+      ( \(mkTargetJson -> f) -> do
+          existsFile <- liftIO (Directory.doesFileExist f)
+          when existsFile (liftIO (Directory.removeFile f))
       )
 
     let
-      -- we load the cached info into a map for quicker access
-      extensionInfoCacheMap =
-        Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoCached)
+      mkKey x = (x.publisher, x.name, x.platform, x.version)
 
-      -- also, we filter out the duplicates among the extension configs
-      extensionConfigsSorted = HashSet.toList . HashSet.fromList $ extensionConfigs
-      -- we partition the extension configs based on whether they're present in a cache
-      (extensionInfoPresent, extensionConfigsMissing) =
+      -- We load the cached info into a map for quicker access
+      extensionInfoCachedMap =
+        HashMap.fromList ((\d -> (mkKey d, d)) <$> extensionInfoCached)
+
+      -- Also, we filter out the duplicates among the extension configs
+      extensionConfigsUnique = HashSet.toList . HashSet.fromList $ extensionConfigs
+
+      -- We determine which fetched configs do and don't have corresponding cached info.
+      -- We map those that do to that corresponding cached info.
+      -- We reset the missing times counter for them.
+      (extensionInfoCachedAndFetched, extensionConfigsFetchedNotCached) =
         ( partition
             (isJust . fst)
-            ( (\c -> (Map.lookup (mkKeyConfig c) extensionInfoCacheMap, c))
-                <$> extensionConfigsSorted
+            ( (\c -> (HashMap.lookup (mkKey c) extensionInfoCachedMap, c))
+                <$> extensionConfigsUnique
             )
         )
           & bimap ((\x -> x & #missingTimes .~ 0) . fromJust . fst <$>) (snd <$>)
-      -- Info about extensions that were present both in the cache and the response
-      extensionInfoPresentMap = Map.fromList ((\d -> (mkKeyInfo d, d)) <$> extensionInfoPresent)
-      -- info about cached extensions that were missing (not in the response)
-      -- the missing counter is incremented
-      extensionInfoMissing =
-        (partition (\c -> isNothing $ Map.lookup (mkKeyInfo c) extensionInfoPresentMap) extensionInfoCached)
-          ^.. _1 . traversed . filtered (\c -> c.missingTimes + 1 < ?maxMissingTimes)
+
+      extensionInfoCachedAndFetchedMap =
+        HashMap.fromList ((\d -> (mkKey d, d)) <$> extensionInfoCachedAndFetched)
+
+      -- We identify cached info that has no corresponding fetched configs.
+      -- We increment counters for such info.
+      extensionInfoCachedNotFetched =
+        extensionInfoCached
+          ^.. traversed
+            . filtered
+              ( \c ->
+                  (isNothing $ HashMap.lookup (mkKey c) extensionInfoCachedAndFetchedMap)
+                    && (c.missingTimes + 1 < ?maxMissingTimes)
+              )
           & traversed . #missingTimes +~ 1
-      -- these missing info are turned into configs so that they can be fetched again
+
+      -- We need to fetch these missing extensions
       -- this conversion preserves the missing times counter
-      extensionInfoConfigsMissing =
-        extensionInfoMissing
+      extensionConfigsCachedNotFetched =
+        extensionInfoCachedNotFetched
           <&> ( \ExtensionInfo
                   { name
                   , publisher
@@ -392,23 +366,22 @@ runInfoFetcher extensionInfoCached extensionConfigs =
                       }
               )
       -- combine new and old missing configs
-      extensionConfigsMissing' = extensionConfigsMissing <> extensionInfoConfigsMissing
+      extensionConfigsMissing = extensionConfigsFetchedNotCached <> extensionConfigsCachedNotFetched
       -- and calculate the number of the configs of extensions that are missing
-      numberExtensionConfigsMissing = length extensionConfigsMissing'
+      numberExtensionConfigsMissing = length extensionConfigsMissing
 
     liftIO do
-      writeJsonCompact (mkTargetJson "info-present") extensionInfoPresent
-      writeJsonCompact (mkTargetJson "configs-not-in-cache") extensionConfigsMissing
-      writeJsonCompact (mkTargetJson "info-not-in-response") extensionInfoConfigsMissing
-      writeJsonCompact (mkTargetJson "configs-missing-all") extensionConfigsMissing'
+      writeJsonCompact (mkTargetJson "info-present-and-fetched") extensionInfoCachedAndFetched
+      writeJsonCompact (mkTargetJson "configs-fetched-not-cached") extensionConfigsFetchedNotCached
+      writeJsonCompact (mkTargetJson "configs-cached-not-fetched") extensionConfigsCachedNotFetched
+      writeJsonCompact (mkTargetJson "configs-missing") extensionConfigsMissing
 
-    -- collect extensions from cache that are not present
     traverse_
       logInfo
       [ [fmt|{INFO} We have {length extensionInfoCached} cached extensions.|]
       , [fmt|{START} Analyzing extension configs from {target}.|]
-      , [fmt|{INFO} {length extensionConfigsMissing} collected extension config(s) aren't cached yet.|]
-      , [fmt|{INFO} {length extensionInfoConfigsMissing} cached extension config(s) are not among collected extension configs.|]
+      , [fmt|{INFO} {length extensionConfigsFetchedNotCached} collected extension config(s) aren't cached yet.|]
+      , [fmt|{INFO} {length extensionConfigsCachedNotFetched} cached extension config(s) are not among collected extension configs.|]
       , [fmt|{INFO} We need to update cached info about {numberExtensionConfigsMissing} extension(s).|]
       , [fmt|{FINISH} Analyzing extension configs from {target}.|]
       ]
@@ -457,7 +430,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
                     ( AsyncPool.mapConcurrently
                         g
                         (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
-                        extensionConfigsMissing'
+                        extensionConfigsMissing
                     )
             )
             `logAndForwardError` [fmt|in "worker" threads|]
@@ -475,27 +448,30 @@ runInfoFetcher extensionInfoCached extensionConfigs =
                 collectGarbageOnce
         ]
       )
-      -- even if there are some errors
-      -- we want to finally append the info about the newly fetched extensions to the cache
+      -- Even if there are some errors,
+      -- we want to finally update the cached info
       `finally` do
         logInfo [fmt|{START} Caching updated info about extensions from {target}.|]
 
         extensionInfoFetched <- fromRight [] <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
 
-        let mkKeyInfo' x = (x.publisher, x.name, x.platform)
+        -- We need new fetched info to override old cached info.
+        -- `HashMap.unions` keeps elements of maps
+        -- that are closer to the head of the list.
+        let mkKey' x = (x.publisher, x.name, x.platform)
 
             extensionInfoUpdated =
-              Map.elems $
-                Map.unions $
-                  Map.fromList
-                    . ((\x -> (mkKeyInfo' x, x)) <$>)
+              HashMap.elems $
+                HashMap.unions $
+                  HashMap.fromList
+                    . ((\x -> (mkKey' x, x)) <$>)
                     <$> [ extensionInfoFetched
-                        , extensionInfoMissing
-                        , extensionInfoPresent
+                        , extensionInfoCachedNotFetched
+                        , extensionInfoCachedAndFetched
                         ]
 
             extensionInfoSorted =
-              sortOn mkKeyInfo extensionInfoUpdated
+              sortOn mkKey extensionInfoUpdated
 
         -- after that, we compactly write the extensions info
         liftIO
@@ -506,12 +482,6 @@ runInfoFetcher extensionInfoCached extensionConfigs =
         extFailedN' <- readTVarIO extFailedN
         logInfo [fmt|{INFO} Processed {extProcessedNFinal'}, failed {extFailedN'} extensions|]
         logInfo [fmt|{FINISH} Running a fetcher on {target}|]
-
-isTimeout :: SomeException -> Bool
-isTimeout e =
-  case fromException @Timeout e of
-    Just _ -> True
-    _ -> False
 
 -- | Retry an action a given number of times with a given delay and logs about its status
 retry_ :: (MonadUnliftIO m, Alternative m, WithLog (LogAction m msg) Message m, (?retryDelay :: Int, ?programTimeout :: Int)) => Int -> Text -> m b -> m b
@@ -528,7 +498,7 @@ retry_ nAttempts msg action
               Left err ->
                 if
                   | -- Handle the asynchronous Timeout exception.
-                    isTimeout err -> do
+                    Just _ <- fromException @Timeout err -> do
                       let seconds = ?programTimeout
                       logError [fmt|{ABORT} Attempt {n_} of {nAttempts}. Timed out in {seconds} seconds.|]
                       throwIO err
@@ -893,7 +863,7 @@ getExtensionConfigsReleaseFromResponse response =
         ( parseMaybe
             ( withObject [fmt|Extension|] $ \o -> do
                 name :: Name <- o .: "extensionName"
-                publisher :: Publisher <- o .: "publisher" >>= \x -> x .: "publisherName"
+                publisher :: Publisher <- o .: "publisher" >>= (.: "publisherName")
                 versions_ :: [Value] <- o .: "versions"
                 let
                   -- Configs for release versions.
@@ -939,7 +909,7 @@ getExtensionConfigsReleaseFromResponse response =
                   -- We need to get the most recent config for each platform.
                   -- Thus, we initialize a map `platform -> maybe config`
                   platformMap :: HashMap Platform (Maybe a)
-                  platformMap = Map.fromList $ (enumFrom minBound) <&> (,Nothing)
+                  platformMap = HashMap.fromList $ (enumFrom minBound) <&> (,Nothing)
                   -- We want to get configs for as many platforms as possible,
                   -- so we go through all configs.
                   --
@@ -948,7 +918,7 @@ getExtensionConfigsReleaseFromResponse response =
                   configsFiltered =
                     foldl'
                       ( \platformConfigs config ->
-                          Map.insertWith
+                          HashMap.insertWith
                             ( \new old ->
                                 case old of
                                   Nothing -> new
