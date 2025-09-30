@@ -277,7 +277,14 @@ writeDebugJsonCompact :: (ToOrderedKeysJsonBs a, ?target :: Target, ?debugDir ::
 writeDebugJsonCompact suffix = writeJsonCompact (mkTargetJson ?target ?debugDir suffix)
 
 -- | Fetch the extension info given their configs
-runInfoFetcher :: (TargetSettings, ?mkTargetLatestJson :: FilePath -> FilePath, ?extensionInfoCachePath :: FilePath) => [ExtensionInfo] -> [ExtensionConfig] -> MyLogger ()
+runInfoFetcher ::
+  ( TargetSettings
+  , ?mkTargetLatestJson :: FilePath -> FilePath
+  , ?extensionInfoCachePath :: FilePath
+  ) =>
+  [ExtensionInfo] ->
+  [ExtensionConfig] ->
+  MyLogger ()
 runInfoFetcher extensionInfoCached extensionConfigs =
   do
     let
@@ -1020,7 +1027,9 @@ main =
     hSetBuffering stdout NoBuffering
     config_ <-
       case configOptions.config of
-        Nothing -> putStrLn [fmt|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
+        Nothing -> do
+          putStrLn [fmt|No path to config file specified. Using the default config.|]
+          pure (mkDefaultAppConfig def)
         Just s -> do
           -- TODO use decodeFile
           appConfig <- tryAny $ decodeFileThrow s
