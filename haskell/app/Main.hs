@@ -5,7 +5,7 @@ module Main (main) where
 
 import Colog (LogAction (..), Message, Msg (..), WithLog, cfilter, fmtMessage, formatWith, logDebug, logError, logInfo, logTextStdout, usingLoggerT)
 import Colog.Concurrent (defCapacity, withBackgroundLogger)
-import Configs ( Settings, TargetSettings, SiteConfig(..), AppConfig(..), _MICROSECONDS, mkDefaultAppConfig )
+import Configs (AppConfig (..), Settings, SiteConfig (..), TargetSettings, mkDefaultAppConfig, _MICROSECONDS)
 import Control.Applicative (Alternative)
 import Control.Concurrent.Async.Pool qualified as AsyncPool (mapConcurrently, withTaskGroup)
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
@@ -21,7 +21,7 @@ import Data.Aeson.Lens (key, nth, _Array, _String)
 import Data.Aeson.Types (parseMaybe)
 import Data.Bits (Bits (..))
 import Data.ByteString qualified as BS
-import Data.Coerce ( coerce )
+import Data.Coerce (coerce)
 import Data.Default (def)
 import Data.Either (fromRight)
 import Data.Foldable (foldr', traverse_)
@@ -41,16 +41,16 @@ import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
 import GHC.IO.IOMode (IOMode (AppendMode, WriteMode))
-import Logger ( MyLogger,MyLoggerT(_myLoggerT),ActionStatus(FINISH, INFO, ABORT, FAIL, START) )
+import Logger (ActionStatus (..), MyLogger, MyLoggerT (..))
 import Main.Utf8 (withUtf8)
 import Network.HTTP.Client (Response (..))
 import Network.HTTP.Client.Conduit (Request (method))
 import Network.HTTP.Simple (JSONException, httpJSONEither, setRequestBodyJSON, setRequestHeaders)
 import Options.Generic
 import Prettyprinter (Pretty (..))
-import PyF ( fmt )
-import Requests ( Req(..),Filter(..),Criterion(..) )
-import System.Directory as Directory ( createDirectoryIfMissing, doesFileExist, removeFile )
+import PyF (fmt)
+import Requests (Criterion (..), Filter (..), Req (..))
+import System.Directory as Directory (createDirectoryIfMissing, doesFileExist, removeFile)
 import UnliftIO (Exception (fromException), MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, throwIO, try, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 import UnliftIO.Process (readCreateProcessWithExitCode, shell)
@@ -68,7 +68,7 @@ showTarget :: Target -> String
 showTarget target = targetSelect target "vscode-marketplace" "open-vsx"
 
 -- | Handle the case when we need to write the first list of extensions' info into a file
-encodeFirstList :: ToOrderedKeysJsonBs a => Handle -> [a] -> IO ()
+encodeFirstList :: (ToOrderedKeysJsonBs a) => Handle -> [a] -> IO ()
 encodeFirstList h (x : xs) = do
   BS.hPutStr h ([fmt|{toJsonOrderedKeys x}\n|])
   traverse_ (\y -> BS.hPutStr h ([fmt|, {toJsonOrderedKeys y}\n|])) xs
@@ -87,7 +87,7 @@ flushTBMQueue q = flip fix [] $ \ret contents -> do
     _ -> pure $ pure contents
 
 -- | Log info about extensions from a queue into a file
-extLogger :: forall a. ToOrderedKeysJsonBs a => FilePath -> TBMQueue a -> MyLogger ()
+extLogger :: forall a. (ToOrderedKeysJsonBs a) => FilePath -> TBMQueue a -> MyLogger ()
 extLogger file queue = liftIO $
   withFile file AppendMode $ \h ->
     do
@@ -170,8 +170,15 @@ logAndForwardError action message =
 -- | Get an extension from a target site and pass info about it to other threads
 --
 -- We do this by using the thread-safe data structures like special queues and vars
-getExtension :: (?requestResponseTimeout :: Int) => 
-  Target -> TBMQueue ExtensionInfo -> TBMQueue ExtensionConfig -> TMVar Int -> TVar Int -> ExtensionConfig -> MyLogger ()
+getExtension ::
+  (?requestResponseTimeout :: Int) =>
+  Target ->
+  TBMQueue ExtensionInfo ->
+  TBMQueue ExtensionConfig ->
+  TMVar Int ->
+  TVar Int ->
+  ExtensionConfig ->
+  MyLogger ()
 getExtension
   target
   extInfoQueue
@@ -265,7 +272,7 @@ data Key = Key
   deriving stock (Eq, Generic, Ord)
   deriving anyclass (Hashable)
 
-whenM :: Monad m => m Bool -> m () -> m ()
+whenM :: (Monad m) => m Bool -> m () -> m ()
 whenM cond action = cond >>= (`when` action)
 
 mkKeyInfo :: ExtensionInfo -> Key
@@ -298,9 +305,9 @@ mkKeyConfig
       , platform
       }
 
-writeJsonCompact :: ToOrderedKeysJsonBs a => FilePath -> [a] -> IO ()
-writeJsonCompact path vals = 
-  withFile path WriteMode $ \h -> 
+writeJsonCompact :: (ToOrderedKeysJsonBs a) => FilePath -> [a] -> IO ()
+writeJsonCompact path vals =
+  withFile path WriteMode $ \h ->
     do
       BS.hPutStr h "[ "
       case vals of
@@ -487,9 +494,9 @@ runInfoFetcher extensionInfoCached extensionConfigs =
               sortOn mkKeyInfo extensionInfoUpdated
 
         -- after that, we compactly write the extensions info
-        liftIO 
+        liftIO
           (writeJsonCompact ?extensionInfoCachePath extensionInfoSorted)
-            `logAndForwardError` "when writing extensions to file"
+          `logAndForwardError` "when writing extensions to file"
         logInfo [fmt|{FINISH} Caching updated info about extensions from {target}.|]
         extProcessedNFinal' <- readTVarIO extProcessedNFinal
         extFailedN' <- readTVarIO extFailedN
@@ -553,7 +560,7 @@ filteredExtensions =
     . traversed
     . filteredByFlags
 
-mkRequest :: ToJSON a => Target -> a -> Request
+mkRequest :: (ToJSON a) => Target -> a -> Request
 mkRequest target requestBody =
   setRequestBodyJSON requestBody
     $ setRequestHeaders
@@ -604,7 +611,7 @@ partitionEithersOn pl pr =
     ([], [])
 
 -- | Get a list of extension configs from the target marketplace.
-getExtensionConfigs :: TargetSettings => MyLogger [ExtensionConfig]
+getExtensionConfigs :: (TargetSettings) => MyLogger [ExtensionConfig]
 getExtensionConfigs = do
   let target = ?target
       nRetry = ?nRetry
@@ -771,7 +778,7 @@ getExtensionConfigsFromResponse response =
       . traversed
 
 -- | Get a list of extension configs from VSCode Marketplace
-getExtensionConfigsRelease :: Settings => Target -> [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
+getExtensionConfigsRelease :: (Settings) => Target -> [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
 getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
   logInfo [fmt|{START} Identifying pre-release extensions that may have release versions|]
 
@@ -1078,7 +1085,7 @@ main =
         $ \logger -> usingLoggerT logger do
           logInfo [fmt|{START} Updating extensions|]
           logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
-          -- we'll run the extension fetcher and info fetcher 
+          -- we'll run the extension fetcher and info fetcher
           -- a given number of times on both target sites
           let ?config = config_
               ?cacheDir = [fmt|{dataDir}/cache|]
@@ -1087,7 +1094,7 @@ main =
               ?programTimeout = config_.programTimeout
               ?retryDelay = config_.retryDelay
               ?dataDir = dataDir
-              ?queueCapacity = queueCapacity                          
+              ?queueCapacity = queueCapacity
               ?nRetry = config_.nRetry
               ?collectGarbage = config_.collectGarbage
               ?garbageCollectorDelay = config_.garbageCollectorDelay

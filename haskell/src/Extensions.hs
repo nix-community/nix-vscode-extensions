@@ -356,10 +356,10 @@ optionsExtensionInfo =
 class GFields f where
   gFields :: f p -> [(String, Value)]
 
-instance GFields f => GFields (M1 D c f) where
+instance (GFields f) => GFields (M1 D c f) where
   gFields (M1 x) = gFields x
 
-instance GFields f => GFields (M1 C c f) where
+instance (GFields f) => GFields (M1 C c f) where
   gFields (M1 x) = gFields x
 
 instance (GFields f, GFields g) => GFields (f :*: g) where
@@ -378,7 +378,7 @@ class (Generic f, GFields (Rep f)) => GToOrderedKeysJsonBs f where
     fieldValues = x & from & gFields & traversed . _1 %~ opts.fieldLabelModifier
     result = "{" <> BS.intercalate "," [[fmt|"{k}":{encode v}|] | (k, v) <- fieldValues] <> "}"
 
-class GToOrderedKeysJsonBs f => ToOrderedKeysJsonBs f where
+class (GToOrderedKeysJsonBs f) => ToOrderedKeysJsonBs f where
   toJsonOrderedKeys :: f -> BS.ByteString
 
 instance ToOrderedKeysJsonBs ExtensionInfo where
