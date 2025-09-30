@@ -641,16 +641,15 @@ getExtensionConfigs = do
 
     -- We request pages of extensions from VSCode Marketplace concurrently.
     (pagesFailed, pagesFetched) <- do
-      responses <- withRunInIO $ \runInIO ->
+      responses <- liftIO $
         AsyncPool.withTaskGroup siteConfig.nThreads $ \g -> do
           AsyncPool.mapConcurrently
             g
             ( \pageNumber -> do
                 page' <-
-                  runInIO $
-                    retry_ nRetry [fmt|{FAIL} Getting configs at {pageNumber}|] $
-                      requestJsonEither target $
-                        requestExtensionsList pageNumber
+                  -- TODO try several times
+                  requestJsonEither target $
+                    requestExtensionsList pageNumber
                 pure (pageNumber, responseBody page')
             )
             [1 .. pageCount]
