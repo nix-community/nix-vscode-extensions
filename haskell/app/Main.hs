@@ -325,33 +325,8 @@ runInfoFetcher extensionInfoCached extensionConfigs =
               )
           & traversed . #missingTimes +~ 1
 
-      -- We need to fetch these missing extensions
-      -- this conversion preserves the missing times counter
-      extensionConfigsCachedNotFetched =
-        extensionInfoCachedNotFetched
-          <&> ( \ExtensionInfo
-                  { name
-                  , publisher
-                  , version
-                  , platform
-                  , missingTimes
-                  , engineVersion
-                  , isRelease
-                  } ->
-                    ExtensionConfig
-                      { name
-                      , publisher
-                      , version
-                      , platform
-                      , missingTimes
-                      , engineVersion
-                      , isRelease
-                      }
-              )
-      -- combine new and old missing configs
-      extensionConfigsMissing = extensionConfigsFetchedNotCached <> extensionConfigsCachedNotFetched
       -- and calculate the number of the configs of extensions that are missing
-      numberExtensionConfigsMissing = length extensionConfigsMissing
+      numberExtensionConfigsFetchedNotCached = length extensionConfigsFetchedNotCached
 
     liftIO do
       writeJsonCompact (mkTargetJson "info-present-and-fetched") extensionInfoCachedAndFetched
@@ -393,7 +368,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
     ( mapConcurrently_
         id
         [ -- a logger of info about the number of successfully processed extensions
-          processedLogger numberExtensionConfigsMissing extProcessedN
+          processedLogger numberExtensionConfigsFetchedNotCached extProcessedN
             `logAndForwardError` [fmt|in "processed" logger thread|]
         , -- a logger that writes the info about successfully fetched extensions into a file
           extLogger fetchedExtensionInfoFile extInfoQueue
@@ -413,7 +388,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
                     ( AsyncPool.mapConcurrently
                         g
                         (runInIO . getExtension target extInfoQueue extFailedConfigQueue extProcessedN extFailedN)
-                        extensionConfigsMissing
+                        extensionConfigsFetchedNotCached
                     )
             )
             `logAndForwardError` [fmt|in "worker" threads|]
