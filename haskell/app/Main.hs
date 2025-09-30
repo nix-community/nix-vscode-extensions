@@ -15,7 +15,7 @@ import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to
 import Control.Lens.Extras (is)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
-import Data.Aeson (ToJSON, Value (..), eitherDecodeFileStrict', withObject, (.:), (.:?))
+import Data.Aeson (ToJSON, Value (..), withObject, (.:), (.:?))
 import Data.Aeson qualified as Aeson
 import Data.Aeson.Lens (key, nth, _Array, _String)
 import Data.Aeson.Types (parseMaybe)
@@ -23,7 +23,6 @@ import Data.Bits (Bits (..))
 import Data.ByteString qualified as BS
 import Data.Coerce (coerce)
 import Data.Default (def)
-import Data.Either (fromRight)
 import Data.Foldable (foldr', traverse_)
 import Data.Function (fix, (&))
 import Data.Generics.Labels ()
@@ -35,7 +34,7 @@ import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
 import Data.Text qualified as T
 import Data.Text qualified as Text
-import Data.Yaml (decodeFileEither)
+import Data.Yaml (decodeFileThrow)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.IO.Handle (BufferMode (NoBuffering), Handle, hSetBuffering)
@@ -164,7 +163,6 @@ logAndForwardError action message =
     `catchAny` \error' -> do
       logError [fmt|Error {message}:\n{show error'}|]
       throwIO error'
-
 
 -- | Get an extension from a target site and pass info about it to other threads
 --
@@ -439,7 +437,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
       `finally` do
         logInfo [fmt|{START} Caching updated info about extensions from {target}.|]
 
-        extensionInfoFetched <- fromRight [] <$> liftIO (eitherDecodeFileStrict' fetchedExtensionInfoFile)
+        extensionInfoFetched <- decodeFile fetchedExtensionInfoFile "[ ]"
 
         -- We need new fetched info to override old cached info.
         -- `HashMap.unions` keeps elements of maps
@@ -959,6 +957,31 @@ runConfigFetcher extensionInfoCached = do
 mkTargetJson' :: Target -> FilePath -> FilePath -> FilePath
 mkTargetJson' target prefix suffix = [fmt|{prefix}/{showTarget target}-{suffix}.json|]
 
+decodeFile :: (Aeson.FromJSON a) => FilePath -> BS.ByteString -> MyLogger [a]
+decodeFile path initialContent = do
+  existsInfoCacheFile <- liftIO $ Directory.doesFileExist path
+
+  when (not existsInfoCacheFile) do
+    logError [fmt|{FAIL} The file at `{path}` doesn't exist.|]
+
+    logInfo [fmt|{START} Creating a file at `{path}`.|]
+
+    liftIO $ BS.writeFile path initialContent
+
+    logInfo [fmt|{FINISH} Creating a file at `{path}`.|]
+
+  -- TODO support yaml
+  extensionInfoCached <- tryAny $ liftIO $ Aeson.eitherDecodeFileStrict path
+
+  let handleError errorMessage = do
+        logError [fmt|{FAIL} Decoding the file at {path}:\n\n{errorMessage}|]
+        pure []
+
+  case extensionInfoCached of
+    Left err -> handleError (show err)
+    Right (Left err) -> handleError err
+    Right (Right v) -> pure v
+
 processTarget :: (TargetSettings) => MyLogger ()
 processTarget =
   do
@@ -970,15 +993,7 @@ processTarget =
       ?extensionInfoCachePath = mkTargetJson ?cacheDir
       ?mkTargetJson = mkTargetJson
 
-    -- If there's a file with cached info, we read it.
-    extensionInfoCached <- do
-      extensionInfoCached <- liftIO $ eitherDecodeFileStrict' ?extensionInfoCachePath
-      case extensionInfoCached of
-        Left err -> do
-          logError [fmt|Could not decode the file with cached extension info:\n\n{show err}|]
-          pure []
-        Right v -> do
-          pure v
+    extensionInfoCached <- decodeFile ?extensionInfoCachePath "[ ]"
 
     -- We first run a crawler to get the extension configs.
     extensionConfigs <-
@@ -1016,9 +1031,10 @@ main =
       case configOptions.config of
         Nothing -> putStrLn [fmt|No path to config file specified. Using the default config.|] >> pure (mkDefaultAppConfig def)
         Just s -> do
-          appConfig <- decodeFileEither s
+          -- TODO use decodeFile
+          appConfig <- tryAny $ decodeFileThrow s
           case appConfig of
-            Left err -> error [fmt|Could not decode the config file\n\n{show err}. Aborting.|]
+            Left err -> error [fmt|Could not decode the config file. Aborting because got an error:\n\n{show err}|]
             Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
 
     let dataDir = config_.dataDir
