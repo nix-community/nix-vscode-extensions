@@ -1047,15 +1047,14 @@ main =
       [dataDir, fetchedDir, failedDir, cacheDir, debugDir]
       (liftIO . Directory.createDirectoryIfMissing True)
 
-    let ?config = config_
+    let ?dataDir = dataDir
         ?cacheDir = cacheDir
         ?debugDir = debugDir
-        ?failedDir = cacheDir
-        ?fetchedDir = debugDir
+        ?failedDir = failedDir
+        ?fetchedDir = fetchedDir
         ?tmpDir = tmpDir
         ?programTimeout = config_.programTimeout
         ?retryDelay = config_.retryDelay
-        ?dataDir = dataDir
         ?queueCapacity = config_.queueCapacity
         ?nRetry = config_.nRetry
         ?collectGarbage = config_.collectGarbage
