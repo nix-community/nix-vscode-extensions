@@ -345,12 +345,11 @@ runInfoFetcher extensionInfoCached extensionConfigs =
 
     traverse_
       logInfo
-      [ [fmt|{INFO} We have {length extensionInfoCached} cached extensions.|]
-      , [fmt|{START} Analyzing extension configs from {target}.|]
-      , [fmt|{INFO} {length extensionConfigsFetchedNotCached} collected extension config(s) aren't cached yet.|]
-      , [fmt|{INFO} {length extensionConfigsCachedNotFetched} cached extension config(s) are not among collected extension configs.|]
-      , [fmt|{INFO} We need to update cached info about {numberExtensionConfigsMissing} extension(s).|]
-      , [fmt|{FINISH} Analyzing extension configs from {target}.|]
+      [ [fmt|{START} Analyzing cached info and configs from {target}.|]
+      , [fmt|{INFO} We have cached info for {length extensionInfoCached} extensions.|]
+      , [fmt|{INFO} {length extensionInfoCachedNotFetched} extensions with cached info have no corresponding fetched configs.|]
+      , [fmt|{INFO} {length extensionConfigsFetchedNotCached} fetched configs have no corresponding cached info.|]
+      , [fmt|{FINISH} Analyzing cached info and configs from {target}.|]
       ]
 
     logInfo [fmt|{START} Running a fetcher on {target}.|]
