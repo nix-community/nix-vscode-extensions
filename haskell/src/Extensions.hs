@@ -372,14 +372,18 @@ instance GFields U1 where
 instance (Selector s, ToJSON c) => GFields (M1 S s (K1 i c)) where
   gFields s@(M1 (K1 val)) = [(selName s, toJSON val)]
 
+fieldValuesToJson :: [(String, Value)] -> BS.ByteString
+fieldValuesToJson fieldValues =
+  "{" <> BS.intercalate "," [[fmt|"{k}":{Aeson.encode v}|] | (k, v) <- fieldValues] <> "}"
+
 class (Generic f, GFields (Rep f)) => GToOrderedKeysJsonBs f where
   gToJsonOrderedKeys :: Options -> f -> BS.ByteString
   gToJsonOrderedKeys opts x = result
    where
     fieldValues = x & from & gFields & traversed . _1 %~ opts.fieldLabelModifier
-    result = "{" <> BS.intercalate "," [[fmt|"{k}":{encode v}|] | (k, v) <- fieldValues] <> "}"
+    result = fieldValuesToJson fieldValues
 
-class (GToOrderedKeysJsonBs f) => ToOrderedKeysJsonBs f where
+class ToOrderedKeysJsonBs f where
   toJsonOrderedKeys :: f -> BS.ByteString
 
 instance ToOrderedKeysJsonBs ExtensionInfo where
