@@ -30,7 +30,7 @@ import Data.Generics.Labels ()
 import Data.HashMap.Strict (HashMap)
 import Data.HashMap.Strict qualified as Map
 import Data.HashSet qualified as HashSet
-import Data.Hashable
+import Data.Hashable (Hashable)
 import Data.List (intersect, partition, sortOn)
 import Data.Maybe (fromJust, isJust, isNothing)
 import Data.String (IsString (fromString))
@@ -225,17 +225,17 @@ getExtension
         let command = [fmt|nix store prefetch-file --timeout {timeout'} --json {url} --name {extName}-{version}-{platform}|]
          in readCreateProcessWithExitCode (shell command) ""
               `logAndForwardError` [fmt|during prefetch-file: {command}|]
-      let sha256Maybe = stdoutStr ^? key "hash" . _String
+      let hashMaybe = stdoutStr ^? key "hash" . _String
       -- if stderr was non-empty, there was an error
       if not (null stderrStr)
         then do
           logInfo [fmt|{FAIL} Fetching {extName} from {url}. The stderr:\n{stderrStr}|]
           pure True
-        else case sha256Maybe of
+        else case hashMaybe of
           Nothing -> do
             logInfo [fmt|{FAIL} Fetching {extName} from {url}. Could not parse JSON: {stdoutStr}|]
             pure True
-          Just sha256 -> do
+          Just hash -> do
             logInfo [fmt|{FINISH} Fetching extension {extName} from {url}|]
             -- when everything is ok, we write the extension info into a queue
             -- this is to let other threads read from it
@@ -249,7 +249,7 @@ getExtension
                     , platform
                     , missingTimes
                     , engineVersion
-                    , sha256
+                    , hash
                     , isRelease
                     }
             pure False
@@ -1005,7 +1005,7 @@ processTarget =
     let
       mkTargetJson :: String -> FilePath
       mkTargetJson prefix = mkTargetJson' ?target prefix "latest"
-  
+
     let
       ?extensionInfoCachePath = mkTargetJson ?cacheDir
       ?mkTargetJson = mkTargetJson

@@ -5,7 +5,7 @@ module Extensions where
 import Control.Lens (Prism', has, prism', review, traversed, (#), (%~), (^..), (^?), _1, _Just)
 import Control.Lens qualified as Lens
 import Control.Monad (guard)
-import Data.Aeson (FromJSON (..), Options (..), ToJSON (toJSON), Value (..), defaultOptions, encode, genericParseJSON, genericToJSON, withText)
+import Data.Aeson as Aeson (FromJSON (..), Options (..), ToJSON (toJSON), Value (..), defaultOptions, encode, genericParseJSON, genericToJSON, withText)
 import Data.Aeson.Lens (_String)
 import Data.Aeson.Types (parseFail)
 import Data.Aeson.Types qualified
@@ -110,9 +110,10 @@ data ExtensionInfo = ExtensionInfo
   , platform :: Platform
   , version :: Version
   , engineVersion :: EngineVersion
-  , sha256 :: Text
   , missingTimes :: Int
-  -- ^ how many times the extension could not be fetched
+  -- ^ How many times the extension could be missing
+  -- in the responses about all available extensions.
+  , hash :: Text
   }
   deriving stock (Generic, Show, Eq, Ord)
   deriving anyclass (Hashable, GToOrderedKeysJsonBs)
@@ -343,7 +344,7 @@ fieldLabelModifier' = \case
   "platform" -> "s"
   "version" -> "v"
   "engineVersion" -> "e"
-  "sha256" -> "h"
+  "hash" -> "h"
   "missingTimes" -> "m"
   x -> error [fmt|Field not found: {x}|]
 
