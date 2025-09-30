@@ -49,7 +49,7 @@ import Prettyprinter (Pretty (..))
 import PyF (fmt)
 import Requests (Criterion (..), Filter (..), Req (..))
 import System.Directory as Directory (createDirectoryIfMissing, doesFileExist, removeFile)
-import UnliftIO (Exception (fromException), MonadUnliftIO (withRunInIO), STM, SomeException, TMVar, TVar, atomically, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, throwIO, try, tryReadTMVar, withFile, writeTVar)
+import UnliftIO (Exception (fromException), MonadUnliftIO (withRunInIO), STM, TMVar, TVar, atomically, mapConcurrently_, newTMVarIO, newTVarIO, putTMVar, readTVar, readTVarIO, stdout, takeTMVar, throwIO, tryAny, tryReadTMVar, withFile, writeTVar)
 import UnliftIO.Exception (catchAny, finally)
 import UnliftIO.Process (readCreateProcessWithExitCode, shell)
 
@@ -479,7 +479,7 @@ retry_ nAttempts msg action
       let retryDelay = ?retryDelay
           action_ n = do
             let n_ = nAttempts - n + 1
-            res <- try @_ @SomeException do
+            res <- tryAny do
               res <- action
               logDebug [fmt|{INFO} Attempt {n_} of {nAttempts} succeeded. Continuing.|]
               pure res
