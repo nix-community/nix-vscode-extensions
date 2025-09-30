@@ -281,25 +281,11 @@ runInfoFetcher extensionInfoCached extensionConfigs =
   do
     let
       target = ?target
-      tmpDir = ?tmpDir
-      cacheDir = ?cacheDir
-      debugDir = ?debugDir
       mkTargetJson = ?mkTargetJson
 
-      fetchedTmpDir :: FilePath
-      fetchedTmpDir = [fmt|{tmpDir}/fetched|]
-
-      failedTmpDir :: FilePath
-      failedTmpDir = [fmt|{tmpDir}/failed|]
-
-    -- create directories for files with fetched, failed, and cached extensions
-    -- just in case these directories don't exist
-    forM_
-      [fetchedTmpDir, failedTmpDir, cacheDir, debugDir]
-      (liftIO . Directory.createDirectoryIfMissing True)
     -- if there were target files, remove them
     forM_
-      [fetchedTmpDir, failedTmpDir]
+      [?fetchedDir, ?failedDir]
       ( \(mkTargetJson -> f) -> do
           existsFile <- liftIO (Directory.doesFileExist f)
           when existsFile (liftIO (Directory.removeFile f))
@@ -403,8 +389,8 @@ runInfoFetcher extensionInfoCached extensionConfigs =
     unless ?collectGarbage (atomically $ takeTMVar collectGarbage)
 
     -- we prepare file names where threads will write to
-    let fetchedExtensionInfoFile = mkTargetJson fetchedTmpDir
-        failedExtensionConfigFile = mkTargetJson failedTmpDir
+    let fetchedExtensionInfoFile = mkTargetJson ?fetchedDir
+        failedExtensionConfigFile = mkTargetJson ?failedDir
 
     -- and run together
     ( mapConcurrently_
@@ -1035,16 +1021,35 @@ main =
             Left err -> error [fmt|Could not decode the config file\n\n{show err}. Aborting.|]
             Right appConfig_ -> pure $ mkDefaultAppConfig appConfig_
 
-    let AppConfig
-          { dataDir
-          , queueCapacity
-          , logSeverity
-          , vscodeMarketplace
-          , openVSX
-          , runN
-          } = config_
+    let dataDir = config_.dataDir
+        cacheDir = [fmt|{dataDir}/cache|]
+        debugDir = [fmt|{dataDir}/debug|]
+        tmpDir = [fmt|{dataDir}/tmp|]
+        fetchedDir = [fmt|{tmpDir}/fetched|]
+        failedDir = [fmt|{tmpDir}/failed|]
 
-    createDirectoryIfMissing True dataDir
+    forM_
+      [dataDir, fetchedDir, failedDir, cacheDir, debugDir]
+      (liftIO . Directory.createDirectoryIfMissing True)
+
+    let ?config = config_
+        ?cacheDir = cacheDir
+        ?debugDir = debugDir
+        ?failedDir = cacheDir
+        ?fetchedDir = debugDir
+        ?tmpDir = tmpDir
+        ?programTimeout = config_.programTimeout
+        ?retryDelay = config_.retryDelay
+        ?dataDir = dataDir
+        ?queueCapacity = config_.queueCapacity
+        ?nRetry = config_.nRetry
+        ?collectGarbage = config_.collectGarbage
+        ?garbageCollectorDelay = config_.garbageCollectorDelay
+        ?openVSX = config_.openVSX
+        ?processedLoggerDelay = config_.processedLoggerDelay
+        ?vscodeMarketplace = config_.vscodeMarketplace
+        ?maxMissingTimes = config_.maxMissingTimes
+        ?requestResponseTimeout = config_.requestResponseTimeout
 
     let timeoutMicroseconds = fromIntegral config_.programTimeout * _MICROSECONDS
 
@@ -1054,38 +1059,26 @@ main =
     void $ timeout timeoutMicroseconds do
       withBackgroundLogger @IO
         defCapacity
-        (cfilter (\(Msg sev _ _) -> sev >= logSeverity) $ formatWith fmtMessage logTextStdout)
+        ( cfilter (\(Msg sev _ _) -> sev >= config_.logSeverity) $
+            formatWith fmtMessage logTextStdout
+        )
         (pure ())
         $ \logger -> usingLoggerT logger do
           logInfo [fmt|{START} Updating extensions|]
           logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
           -- we'll run the extension fetcher and info fetcher
           -- a given number of times on both target sites
-          let ?config = config_
-              ?cacheDir = [fmt|{dataDir}/cache|]
-              ?debugDir = [fmt|{dataDir}/debug|]
-              ?tmpDir = [fmt|{dataDir}/tmp|]
-              ?programTimeout = config_.programTimeout
-              ?retryDelay = config_.retryDelay
-              ?dataDir = dataDir
-              ?queueCapacity = queueCapacity
-              ?nRetry = config_.nRetry
-              ?collectGarbage = config_.collectGarbage
-              ?garbageCollectorDelay = config_.garbageCollectorDelay
-              ?openVSX = config_.openVSX
-              ?processedLoggerDelay = config_.processedLoggerDelay
-              ?vscodeMarketplace = config_.vscodeMarketplace
-              ?maxMissingTimes = config_.maxMissingTimes
-              ?requestResponseTimeout = config_.requestResponseTimeout
-          forM_ ([VSCodeMarketplace | vscodeMarketplace.enable] <> [OpenVSX | openVSX.enable]) $
+          let
+          forM_ ([VSCodeMarketplace | ?vscodeMarketplace.enable] <> [OpenVSX | ?openVSX.enable]) $
             \target ->
               _myLoggerT do
                 ( retry_
-                    runN
+                    ?nRetry
                     [fmt|Processing {target}|]
-                    ( let ?target = target
-                          ?threadNumber = targetSelect target vscodeMarketplace.nThreads openVSX.nThreads
-                       in processTarget
+                    ( do
+                        let ?target = target
+                            ?threadNumber = targetSelect target ?vscodeMarketplace.nThreads ?openVSX.nThreads
+                        processTarget
                     )
                   )
                   `logAndForwardError` [fmt|when processing {target}|]
