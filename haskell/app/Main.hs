@@ -1080,9 +1080,7 @@ main =
         $ \logger -> usingLoggerT logger do
           logInfo [fmt|{START} Updating extensions|]
           logInfo [fmt|{START} Config:\n{encodePretty defConfig config_}|]
-          -- we'll run the extension fetcher and info fetcher
-          -- a given number of times on both target sites
-          let
+
           forM_ ([VSCodeMarketplace | ?vscodeMarketplace.enable] <> [OpenVSX | ?openVSX.enable]) $
             \target ->
               _myLoggerT do
