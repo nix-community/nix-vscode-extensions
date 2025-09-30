@@ -39,9 +39,7 @@ data SiteConfig f = SiteConfig
 --
 -- We use HKD because we need to allow optional fields when parsing
 data AppConfig f = AppConfig
-  { runN :: HKD f Int
-  -- ^ Times to process a target site
-  , processedLoggerDelay :: HKD f Int
+  { processedLoggerDelay :: HKD f Int
   -- ^ Period in seconds till the next logging about processed extensions
   , garbageCollectorDelay :: HKD f Int
   -- ^ Period in seconds till the next garbage collection
@@ -96,6 +94,8 @@ type Settings =
   , ?cacheDir :: FilePath
   , ?nRetry :: Int
   , ?tmpDir :: FilePath
+  , ?fetchedDir :: FilePath
+  , ?failedDir :: FilePath
   , ?maxMissingTimes :: Int
   , ?collectGarbage :: Bool
   , ?processedLoggerDelay :: Int
@@ -161,8 +161,7 @@ mkDefaultConfig config sc =
 mkDefaultAppConfig :: AppConfig Maybe -> AppConfig Identity
 mkDefaultAppConfig ac =
   AppConfig
-    { runN = ac.runN ^. non 1
-    , processedLoggerDelay = ac.processedLoggerDelay ^. non 2
+    { processedLoggerDelay = ac.processedLoggerDelay ^. non 2
     , garbageCollectorDelay = ac.garbageCollectorDelay ^. non 30
     , collectGarbage = ac.collectGarbage ^. non False
     , programTimeout = ac.programTimeout ^. non 900
