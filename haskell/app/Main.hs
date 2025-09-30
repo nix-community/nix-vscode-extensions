@@ -273,6 +273,9 @@ writeJsonCompact path vals =
         xs -> encodeFirstList h xs
       BS.hPutStr h "]"
 
+writeDebugJsonCompact :: (ToOrderedKeysJsonBs a, ?target :: Target, ?debugDir :: FilePath) => FilePath -> [a] -> IO ()
+writeDebugJsonCompact suffix = writeJsonCompact (mkTargetJson ?target ?debugDir suffix)
+
 -- | Fetch the extension info given their configs
 runInfoFetcher :: (TargetSettings, ?mkTargetLatestJson :: FilePath -> FilePath, ?extensionInfoCachePath :: FilePath) => [ExtensionInfo] -> [ExtensionConfig] -> MyLogger ()
 runInfoFetcher extensionInfoCached extensionConfigs =
@@ -329,10 +332,9 @@ runInfoFetcher extensionInfoCached extensionConfigs =
       numberExtensionConfigsFetchedNotCached = length extensionConfigsFetchedNotCached
 
     liftIO do
-      writeJsonCompact (mkTargetJson "info-present-and-fetched") extensionInfoCachedAndFetched
-      writeJsonCompact (mkTargetJson "configs-fetched-not-cached") extensionConfigsFetchedNotCached
-      writeJsonCompact (mkTargetJson "configs-cached-not-fetched") extensionConfigsCachedNotFetched
-      writeJsonCompact (mkTargetJson "configs-missing") extensionConfigsMissing
+      writeDebugJsonCompact "info-present-and-fetched" extensionInfoCachedAndFetched
+      writeDebugJsonCompact "configs-fetched-not-cached" extensionConfigsFetchedNotCached
+      writeDebugJsonCompact "configs-missing" extensionConfigsFetchedNotCached
 
     traverse_
       logInfo
@@ -435,6 +437,29 @@ runInfoFetcher extensionInfoCached extensionConfigs =
         liftIO
           (writeJsonCompact ?extensionInfoCachePath extensionInfoSorted)
           `logAndForwardError` "when writing extensions to file"
+
+        let
+          extensionInfoCached' = HashSet.fromList extensionInfoCached
+          extensionInfoUpdated' = HashSet.fromList extensionInfoUpdated
+
+          mkFun fun a b =
+            sortOn mkKey $
+              HashSet.toList $
+                fun a b
+
+          mkDiff = mkFun HashSet.difference
+
+          cachedNotUpdated = mkDiff extensionInfoCached' extensionInfoUpdated'
+
+          updatedNotCached = mkDiff extensionInfoUpdated' extensionInfoCached'
+
+          cachedAndUpdated = mkFun HashSet.intersection extensionInfoCached' extensionInfoUpdated'
+
+        liftIO do
+          writeDebugJsonCompact "cached-not-updated" cachedNotUpdated
+          writeDebugJsonCompact "updated-not-cached" updatedNotCached
+          writeDebugJsonCompact "cached-and-updated" cachedAndUpdated
+
         logInfo [fmt|{FINISH} Caching updated info about extensions from {target}.|]
         extProcessedNFinal' <- readTVarIO extProcessedNFinal
         extFailedN' <- readTVarIO extFailedN
@@ -548,7 +573,6 @@ getExtensionConfigs = do
   let target = ?target
       nRetry = ?nRetry
       siteConfig = targetSelect target ?vscodeMarketplace ?openVSX
-      mkDebugJson suffix = mkTargetJson' target ?debugDir suffix
 
   retry_ nRetry [fmt|Collecting the extension configs from {target}|] do
     let
@@ -639,15 +663,9 @@ getExtensionConfigs = do
 
     -- TODO if all fetched pages failed, we probably shouldn't proceed
 
-    liftIO $
-      Aeson.encodeFile
-        (mkDebugJson "pages-failed")
-        (pagesFailed & traversed . _2 %~ show)
-
-    liftIO $
-      Aeson.encodeFile
-        (mkDebugJson "pages-fetched")
-        pagesFetched
+    liftIO do
+      writeDebugJsonCompact "pages-failed" (Aeson.encode <$> (pagesFailed & traversed . _2 %~ show))
+      writeDebugJsonCompact "pages-fetched" (Aeson.encode <$> pagesFetched)
 
     let extensionConfigs =
           pagesFetched
