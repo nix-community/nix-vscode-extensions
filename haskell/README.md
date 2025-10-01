@@ -1,63 +1,55 @@
 # Haskell
 
-## Prerequisites
-
-- [flake.nix](./flake.nix) - extensively commented code
-- [Prerequisites](https://github.com/deemp/flakes#prerequisites)
-- [Haskell](https://github.com/deemp/flakes/blob/main/README/Haskell.md)
-
 ## Quick start
 
-1. Install Nix - see [how](https://github.com/deemp/flakes/blob/main/README/InstallNix.md).
+1. Install `Nix` ([link](https://nixos.org/download/)).
 
-1. In a new terminal, run a devshell from the `hs` dir. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
+1. Install `direnv` ([link](https://direnv.net/#basic-installation)).
+
+1. In a new terminal, allow `direnv` to run the devshell.
+   When prompted about `extra-trusted-substituters` answer `y`.
+   This is to use binary caches.
 
     ```console
-    cd hs
-    nix develop
+    cd haskell
+    direnv allow
     ```
 
-1. (Optionally) Edit the [config](./config.yaml).
+1. (Optionally) Edit the [config](./config.yaml) (see [./src/Config.hs](./src/Configs.hs) for all available options).
 
-1. Run the app.
+1. Run the updater.
 
     ```console
-    set -a
-    source .env
-    cabal run
+    cabal run updater -- --config config.yaml
     ```
 
 1. The fetched extensions will be in [data](./data).
 
-1. (Optionally) Run `VSCodium`.
-
-    ```console
-    nix run .#codium .
-    ```
-
-1. (Optionally) Open a `.hs` file and hover over a function. Wait until HLS gives the type info.
-
 ## Requests
 
-- [filterType](https://github.com/microsoft/vscode/blob/6aca75d9d09f7d9d32c18e58c836067f2d420495/src/vs/platform/extensionManagement/common/extensionGalleryService.ts#L185)
+### VSCode Marketplace
 
-- [flags](https://github.com/microsoft/vscode/blob/6aca75d9d09f7d9d32c18e58c836067f2d420495/src/vs/platform/extensionManagement/common/extensionGalleryService.ts#L101)
+- [filterType](https://github.com/microsoft/vscode/blob/b4c1eaa7c86d5daa45f6a41e255e70ae3cb03326/src/vs/platform/extensionManagement/common/extensionGalleryManifestService.ts#L88)
 
-- Run sample requests. Results will be printed to the `./tmp` dir.
+- [flags](https://github.com/microsoft/vscode/blob/b4c1eaa7c86d5daa45f6a41e255e70ae3cb03326/src/vs/platform/extensionManagement/common/extensionGalleryManifestService.ts#L158)
+
+### OpenVSX
+
+- [filterType](https://github.com/eclipse/openvsx/blob/0b5b657529f0784f7bc901fae39afc8df25a4389/server/src/main/java/org/eclipse/openvsx/adapter/ExtensionQueryParam.java#L90)
+
+- [flags](https://github.com/eclipse/openvsx/blob/d02ca60957c0281671fd7e1cad0ebb147e14aa21/server/src/main/java/org/eclipse/openvsx/adapter/ExtensionQueryParam.java#L26)
+
+### Example
+
+Run sample requests and see results in the [./tmp](./tmp/) directory.
   
-  ```console
-  bash requests.sh
-  ```
+```console
+bash requests.sh
+```
 
 ### Configs
 
 - [package.yaml] - used by `hpack` to generate a `.cabal`
 - [.markdownlint.jsonc](./.markdownlint.jsonc) - for `markdownlint` from the extension `davidanson.vscode-markdownlint`
-- [.ghcid](./.ghcid) - for [ghcid](https://github.com/ndmitchell/ghcid)
 - [.envrc](./.envrc) - for [direnv](https://github.com/direnv/direnv)
 - [fourmolu.yaml](./fourmolu.yaml) - for [fourmolu](https://github.com/fourmolu/fourmolu#configuration)
-
-### Troubleshooting
-
-- If `VSCodium` doesn't pick up the extensions, try to reboot your computer and start `VSCodium` again.
-- See [troubleshooting](https://github.com/deemp/flakes/blob/main/README/Troubleshooting.md).
