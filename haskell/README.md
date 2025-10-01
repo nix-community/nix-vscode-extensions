@@ -25,6 +25,30 @@
 
 1. The fetched extensions will be in [data](./data).
 
+## Keys of objects in the cache
+
+Example:
+
+```json
+{"p":"0-don","n":"code-collector","r":1,"s":0,"v":"0.0.54","e":"^1.80.0","m":2,"h":"sha256-tBfwL+zl8etRp3xPkXYJn9OrX/s2o4F957bRLJR7xT8="}
+```
+
+- `p` - extension publisher
+- `n` - extension name
+- `r` - whether it's a release version
+  - `0` means `true`
+  - `1` means `false`
+- `s` - extension platform ("s" is from "system")
+  - `0` means `universal` (platform)
+  - `1` means `linux-x64` (platform) or `x86_64-linux` (system)
+  - `2` means `linux-arm64` (platform) or `aarch64-linux` (system)
+  - `3` means `darwin-x64` (platform) or `x86_64-darwin` (system)
+  - `4` means `darwin-arm64` (platform) or `aarch64-darwin` (system)
+- `v` - extension version
+- `e` - engine version (minimal compatible VSCode version)
+- `m` - missing times
+- `h` - hash
+
 ## Requests
 
 ### VSCode Marketplace
