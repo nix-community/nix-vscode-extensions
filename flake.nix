@@ -33,14 +33,41 @@
         let
           vscode-marketplace = "vscode-marketplace";
           open-vsx = "open-vsx";
-          universal = "universal";
+
+          platformUniversal = "universal";
 
           systemPlatform = {
-            "aarch64-darwin" = "darwin-arm64";
-            "aarch64-linux" = "linux-arm64";
-            "x86_64-linux" = "linux-x64";
-            "x86_64-darwin" = "darwin-x64";
+            x86_64-linux = "linux-x64";
+            aarch64-linux = "linux-arm64";
+            x86_64-darwin = "darwin-x64";
+            aarch64-darwin = "darwin-arm64";
           };
+
+          numberToPlatform =
+            number:
+            let
+              numberStr = builtins.toString number;
+            in
+            {
+              "0" = platformUniversal;
+              "1" = systemPlatform.x86_64-linux;
+              "2" = systemPlatform.aarch64-linux;
+              "3" = systemPlatform.x86_64-darwin;
+              "4" = systemPlatform.aarch64-darwin;
+            }
+            .${builtins.toString number} or (builtins.throw "Platform not recognized: ${numberStr}");
+
+          numberToIsRelease =
+            number:
+            let
+              numberStr = builtins.toString number;
+            in
+            {
+              "0" = false;
+              "1" = true;
+            }
+            .${builtins.toString number}
+            or (builtins.throw "Value for `isRelease` not recognized: ${numberStr}");
 
           overlays = {
             default =
@@ -48,37 +75,56 @@
               let
                 pkgs = prev;
                 inherit (pkgs) lib;
-                currentPlatform = systemPlatform.${final.system};
+                platformCurrent = systemPlatform.${final.system};
                 isCompatibleVersion =
                   vscodeVersion: engineVersion:
                   if lib.strings.hasPrefix "^" engineVersion then
                     lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
                   else
                     vscodeVersion == engineVersion;
-                filterByPlatform =
-                  {
-                    checkVSCodeVersion,
-                    # version of VSCode or VSCodium
-                    vscodeVersion,
-                  }:
-                  (builtins.filter (
-                    x:
-                    (x.platform == universal || x.platform == currentPlatform)
-                    && (if checkVSCodeVersion then (isCompatibleVersion vscodeVersion x.engineVersion) else true)
-                  ));
+                checkPlatform = x: x.platform == platformUniversal || x.platform == platformCurrent;
+                checkVSCodeVersion =
+                  { doCheckVSCodeVersion, vscodeVersion }:
+                  (x: if doCheckVSCodeVersion then isCompatibleVersion vscodeVersion x.engineVersion else true);
                 loadGenerated =
                   {
+                    # `false` means "need only release versions"
                     needLatest ? true,
-                    checkVSCodeVersion ? false,
+                    doCheckVSCodeVersion ? false,
                     vscodeVersion ? "*",
                     site,
                     pkgsWithFixes ? pkgs,
                   }:
+                  let
+                    filterCheck =
+                      x: checkPlatform x && checkVSCodeVersion { inherit doCheckVSCodeVersion vscodeVersion; } x;
+                  in
                   lib.pipe site [
-                    (x: ./data/cache/${site}${if needLatest then "-latest" else "-release"}.json)
+                    (x: ./data/cache/${site}${"-latest"}.json)
                     builtins.readFile
                     builtins.fromJSON
-                    (filterByPlatform { inherit checkVSCodeVersion vscodeVersion; })
+                    (map (
+                      {
+                        p,
+                        n,
+                        r,
+                        s,
+                        v,
+                        e,
+                        h,
+                        ...
+                      }:
+                      {
+                        publisher = p;
+                        name = n;
+                        isRelease = numberToIsRelease r;
+                        platform = numberToPlatform s;
+                        version = v;
+                        engineVersion = e;
+                        hash = h;
+                      }
+                    ))
+                    (builtins.filter filterCheck)
                     (map (
                       extension@{
                         name,
@@ -92,21 +138,21 @@
                         url =
                           if site == vscode-marketplace then
                             let
-                              platformSuffix = if platform == universal then "" else "targetPlatform=${platform}";
+                              platformSuffix = if platform == platformUniversal then "" else "targetPlatform=${platform}";
                             in
                             "https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage?${platformSuffix}"
                           else
                             let
-                              platformSuffix = if platform == universal then "" else "@${platform}";
-                              platformInfix = if platform == universal then "" else "/${platform}";
+                              platformSuffix = if platform == platformUniversal then "" else "@${platform}";
+                              platformInfix = if platform == platformUniversal then "" else "/${platform}";
                             in
                             "https://open-vsx.org/api/${publisher}/${name}${platformInfix}/${version}/file/${publisher}.${name}-${version}${platformSuffix}.vsix";
                       }
                     ))
                     (
                       x:
-                      builtins.map (ext: ext // { hash = ext.sha256; }) x
-                      ++ filterByPlatform { inherit checkVSCodeVersion vscodeVersion; } (
+                      x
+                      ++ builtins.filter filterCheck (
                         pkgs.lib.attrsets.mapAttrsToList
                           (name: value: {
                             url = value.src.url;
@@ -154,7 +200,9 @@
                           version,
                           hash,
                           url,
+                          platform,
                           engineVersion,
+                          isRelease,
                           ...
                         }:
                         let
@@ -175,7 +223,7 @@
                               name = "${name}-${version}.zip";
                             };
 
-                            inherit engineVersion;
+                            inherit engineVersion platform isRelease;
                           };
                         in
                         {
@@ -187,24 +235,68 @@
                     )
                     # group by publisher
                     (builtins.groupBy ({ publisher, ... }: publisher))
-                    # platform-specific extensions will overwrite universal extensions
-                    # due to the sorting order of platforms in the Haskell script
                     (builtins.mapAttrs (
                       _:
                       builtins.foldl' (
-                        k:
+                        acc:
                         { name, value, ... }:
-                        k
-                        // {
-                          ${name} =
-                            if !(lib.attrsets.isDerivation value) then
-                              builtins.throw ''
-                                The extension '${value.vscodeExtPublisher}.${name}' has been removed on ${pkgs.system}.
-                                See '${./removed.nix}' for details.
-                              ''
-                            else
-                              value;
-                        }
+                        acc
+                        // (
+                          let
+                            valueValidated =
+                              if !(lib.attrsets.isDerivation value) then
+                                builtins.throw ''
+                                  The extension '${value.vscodeExtPublisher}.${name}' has been removed on ${pkgs.system}.
+                                  See '${./removed.nix}' for details.
+                                ''
+                              else
+                                value;
+                            # We have no reliable way to determine whether
+                            # - the pre-release version is newer than the release version;
+                            # - the platform-specific version is newer than the universal version.
+
+                            # Therefore, we assume that pre-release versions
+                            # are the latest ones.
+
+                            # Additionally, we assume that platform-specific versions are the latest ones
+                            # when both universal and platform-specific versions are available.
+
+                            # At this point, we process a list of extensions of a publisher.
+                            # They're sorted ascending by:
+                            # 1. publisher
+                            # 2. name
+                            # 3. isRelease
+                            # 4. platform
+                            # 5. version
+
+                            # There is at most one universal and at most one platform-specific version
+                            # among any of pre-release and release versions.
+
+                            # Pre-release versions go first in the list.
+                            # Therefore, when we need the latest version,
+                            # we keep an existing version in the accumulator attrset
+                            # except for the case when a platform-specific version
+                            # with the same `isRelease` is available.
+
+                            # Universal versions go first in the list.
+                            # Therefore, we choose the later one.
+
+                            valueSelected =
+                              if needLatest then
+                                if acc ? ${name} then
+                                  if acc.${name}.meta.extensionConfig.isRelease == valueValidated.meta.extensionConfig.isRelease then
+                                    valueValidated
+                                  else
+                                    acc.${name}
+                                else
+                                  valueValidated
+                              else
+                                valueValidated;
+                          in
+                          {
+                            ${name} = valueSelected;
+                          }
+                        )
                       ) { }
                     ))
                   ];

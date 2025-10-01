@@ -126,23 +126,24 @@ let
       mktplcRef,
       vsix,
       engineVersion,
+      platform,
+      isRelease,
     }@extensionConfig:
     let
-      mkExtension = (
+      mkExtension =
         (self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
           if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
             # In `flake.nix`, there is a check whether the result is a derivation.
             _: { vscodeExtPublisher = mktplcRef.publisher; }
           else
             buildVscodeMarketplaceExtension
-        )
-      );
+        );
+
+      extension = lib.meta.addMetaAttrs { inherit extensionConfig; } (mkExtension {
+        inherit mktplcRef vsix;
+      });
     in
-    # TODO fix on macOS after enabling
-    # (mkExtension { inherit mktplcRef vsix engineVersion; }).overrideAttrs (prev: {
-    #   passthru = prev.passthru // extensionConfig;
-    # })
-    mkExtension { inherit mktplcRef vsix; };
+    extension;
 in
 builtins.foldl' lib.attrsets.recursiveUpdate { } [
   mkExtensionNixpkgs
