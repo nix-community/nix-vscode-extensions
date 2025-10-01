@@ -64,7 +64,7 @@ data AppConfig f = AppConfig
   , openVSX :: HKD f (SiteConfig f)
   -- ^ Config for Open VSX
   , vscodeMarketplace :: HKD f (SiteConfig f)
-  -- ^ Config for VSCode Marketplace
+  -- ^ Config for VS Code Marketplace
   }
   deriving stock (Generic)
 

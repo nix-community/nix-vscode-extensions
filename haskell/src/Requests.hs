@@ -6,7 +6,7 @@ import Data.Aeson
 import Data.Text
 import GHC.Generics
 
--- types for constructing a request to VSCode Marketplace
+-- types for constructing a request to VS Code Marketplace
 data Criterion = Criterion
   { filterType :: Int
   , value :: Text

@@ -285,7 +285,7 @@ parseEngineVersion =
           , _modifier
           }
 
--- | Examples of versions for VSCode engine used in extensions
+-- | Examples of versions for VS Code engine used in extensions
 exampleEngineVersions :: [Text]
 exampleEngineVersions =
   [ "^0.0.0"
@@ -328,7 +328,7 @@ targetSelect target f g =
 
 -- | Possible action statuses
 ppTarget :: Target -> Text
-ppTarget x = targetSelect x "VSCode Marketplace" "Open VSX"
+ppTarget x = targetSelect x "VS Code Marketplace" "Open VSX"
 
 type instance PyFClassify Target = 'PyFString
 type instance PyFClassify Version = 'PyFString

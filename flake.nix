@@ -216,7 +216,7 @@
                                 ;
                             };
 
-                            # We use not only VSCode Markeplace but also Open VSX
+                            # We use not only VS Code Markeplace but also Open VSX
                             # so we need to provide the URL for the extension
                             vsix = prev.fetchurl {
                               inherit url hash;

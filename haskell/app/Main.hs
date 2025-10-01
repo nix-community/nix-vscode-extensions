@@ -645,7 +645,7 @@ getExtensionConfigs = do
     logInfo [fmt|{START} Collecting the latest versions of extensions|]
     logInfo [fmt|{START} Collecting {pageCount} page(s) of size {pageSize}.|]
 
-    -- We request pages of extensions from VSCode Marketplace concurrently.
+    -- We request pages of extensions from VS Code Marketplace concurrently.
     (pagesFailed, pagesFetched) <- do
       responses <- liftIO $
         AsyncPool.withTaskGroup siteConfig.nThreads $ \g -> do
@@ -732,7 +732,7 @@ getExtensionConfigsFromResponse response =
       . _Just
       . traversed
 
--- | Get a list of extension configs from VSCode Marketplace
+-- | Get a list of extension configs from VS Code Marketplace
 getExtensionConfigsRelease :: (Settings) => Target -> [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
 getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
   logInfo [fmt|{START} Identifying pre-release extensions that may have release versions|]
