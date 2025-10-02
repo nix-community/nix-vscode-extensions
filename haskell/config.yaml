@@ -1,13 +1,21 @@
 collectGarbage: true
+dataDir: data
 garbageCollectorDelay: 20
-programTimeout: 3600
 logSeverity: Info
 maxMissingTimes: 10
-vscodeMarketplace:
-  pageCount: 10
-  pageSize: 200
-  nThreads: 100
-openVsx:
-  pageCount: 10
-  pageSize: 200
+nRetry: 3
+processedLoggerDelay: 2
+programTimeout: 3600
+queueCapacity: 200
+requestResponseTimeout: 100
+retryDelay: 20
+openVSX:
+  enable: true
   nThreads: 30
+  pageCount: 10
+  pageSize: 1000
+vscodeMarketplace:
+  enable: true
+  nThreads: 100
+  pageCount: 10
+  pageSize: 200
