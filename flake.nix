@@ -302,7 +302,7 @@
                   ];
                 mkSet =
                   attrs@{
-                    checkVSCodeVersion ? false,
+                    doCheckVSCodeVersion ? false,
                     vscodeVersion ? "*",
                     pkgsWithFixes ? pkgs,
                   }:
@@ -333,7 +333,7 @@
                       forVSCodeVersion =
                         vscodeVersion:
                         mkFun {
-                          checkVSCodeVersion = true;
+                          doCheckVSCodeVersion = true;
                           inherit vscodeVersion;
                         };
                       usingFixesFrom = pkgsWithFixes: mkFun { inherit pkgsWithFixes; };
