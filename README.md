@@ -2,7 +2,7 @@
 
 As of October 2, 2025, the [nixpkgs](https://github.com/nixos/nixpkgs) repository contains **456** [VS Code](https://code.visualstudio.com/) extensions. This is a small fraction of the nearly **80,000** extensions available on the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). In addition, many of the extensions in `nixpkgs` are outdated.
 
-This flake provides Nix expressions for the majority of available extensions from the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) and the [Open VSX Registry](https://open-vsx.org/). A [GitHub Action](https://github.com/features/actions) updates these extensions daily.
+This flake provides Nix expressions for the latest pre-release and release versions of the majority of available extensions from the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) and the [Open VSX Registry](https://open-vsx.org/). A [GitHub Action](https://github.com/features/actions) updates these extensions daily.
 
 ## Important
 
@@ -223,15 +223,18 @@ We use a reasonable mapping between the sites target platforms and Nix-supported
 
 ### `extensions` attrsets
 
+> [!NOTE]
+> Here, `*` stands for a sequence of zero or more characters.
+
 The [Get `extensions`](#get-extensions) section explains how to get the `extensions` attrset.
 
 This attrset contains the following attributes:
 
 - `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `*-release` attrsets.
-- `vscode-marketplace-release` and `open-vsx-release` contain the release versions of extensions (see [Release extensions](#release-extensions)).
+- `vscode-marketplace-release` and `open-vsx-release` contain only release versions of extensions.
 - `forVSCodeVersion` - `forVSCodeVersion "1.78.2"` produces an attrset containing only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"1.78.2"` version of `VS Code` (see [Versions compatible with a given version of VS Code](#versions-compatible-with-a-given-version-of-vs-code)).
-  - You may supply the actual version of your `VS Code` instead of `"1.78.2"`.
-- `usingFixesFrom` - `usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
+  - You should supply your `VS Code` version instead of `"1.78.2"`.
+- `usingFixesFrom` - `usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
   - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
   - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
 - The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to (if you [get `extensions` via the overlay](#get-extensions-via-the-overlay)) or `nixpkgs` from the `nix-vscode-extensions` repository (if you [get `extensions` from `nix-vscode-extensions`](#get-extensions-from-nix-vscode-extensions)).
@@ -362,15 +365,7 @@ Resolve [issues](https://github.com/nix-community/nix-vscode-extensions/issues).
 - Fix links.
 - Write new sections.
 - Update commit hashes used in examples if they're too old.
-- Enhance text.
-
-### Release extensions
-
-The [config](.github/config.yaml) contains several extensions.
-We cache the information about the latest **release** versions of these extensions (see [Extensions](#extensions)).
-
-You can add new extensions to the config and make a Pull Request.
-Use the original extension publisher and name, e.g. `GitHub` and `copilot`.
+- Enhance the text.
 
 ### Extra extensions
 
