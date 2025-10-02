@@ -1,26 +1,44 @@
 # Nix expressions for VS Code Extensions
 
-At the time of writing this, `nixpkgs` contains **271** `VS Code` extensions. This is a small fraction of the more than **40,000** extensions in the `VS Code Marketplace`! In addition, many of the extensions in `nixpkgs` are significantly out-of-date.
+As of October 2, 2025, the [nixpkgs](https://github.com/nixos/nixpkgs) repository contains **456** [VS Code](https://code.visualstudio.com/) extensions. This is a small fraction of the nearly **80,000** extensions available on the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). In addition, many of the extensions in `nixpkgs` are outdated.
 
-This flake provides Nix expressions for the majority of available extensions from [Open VSX](https://open-vsx.org/) and [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). A `GitHub Action` updates the extensions daily.
+This flake provides Nix expressions for the majority of available extensions from the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) and the [Open VSX Registry](https://open-vsx.org/). A [GitHub Action](https://github.com/features/actions) updates these extensions daily.
 
-That said, you can now use a different set of extensions for `VS Code`/`VSCodium` in each of your projects. Moreover, you can share your flakes and cache them so that other people don't need to install these extensions manually!
+## Important
 
-## Note
+### Don't abuse this flake
 
-### API crawler
+We have a permission from MS to use a crawler on their API (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)).
 
-- We have a permission from MS to use a crawler on their API (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)). Don't abuse this flake!
+Don't abuse this flake!
 
 ### nix4vscode
 
-- Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need a more individual approach to extensions.
+Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need more extension versions.
 
-### Prerequisites
+## Prerequisites
 
-- [VS Code](https://wiki.nixos.org/wiki/Visual_Studio_Code) page on the NixOS wiki.
-- (Optional) [Flakes](https://wiki.nixos.org/wiki/Flakes).
+Read the [VS Code page](https://wiki.nixos.org/wiki/Visual_Studio_Code) on the NixOS wiki.
 
+### (Optional) Enable flakes and experimental commands
+
+- Read about [Nix flakes](https://wiki.nixos.org/wiki/Flakes).
+- [Set them up](https://wiki.nixos.org/wiki/Flakes#Setup).
+- Enable the [`nix-command`](https://nix.dev/manual/nix/2.18/contributing/experimental-features#xp-feature-nix-command) option to use [`nix repl`](https://nix.dev/manual/nix/2.18/command-ref/new-cli/nix3-repl) (see [Explore](#explore)) and other experimental commands. This option should already be enabled if you followed the setup instructions for flakes.
+
+### (Optional) Allow unfree packages
+
+See [Unfree extensions](#unfree-extensions).
+
+### (Optional) Enter the repository directory
+
+Clone this repository and enter its directory.
+
+```console
+git clone https://github.com/nix-community/nix-vscode-extensions
+cd nix-vscode-extensions
+```
+  
 ## History
 
 You can search for an extension in the repository history:
@@ -31,7 +49,7 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [flake.nix](./flake.nix) provides an example (`packages.${builtins.currentSystem}.default`) of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/81b9a5f9d1f7f87619df26a4eaf48bf6dec8c82c/pkgs/applications/editors/vscode/with-extensions.nix).
+The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/92a0dfe8c7f43da7188c911563069c543a7c0c68/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
@@ -39,6 +57,15 @@ Run `VS Code` and list installed extensions.
 
 ```console
 nix run github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d# -- --list-extensions
+```
+
+Or, inspect the package in the Nix REPL (see [`nix repl`](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html)).
+
+```console
+nix repl
+nix-repl> :lf .
+nix-repl> packages.${builtins.currentSystem}.default
+«derivation /nix/store/blilnmz4vcs2pqykxr46rx7s3ilymb0p-vscode-with-extensions-1.104.1.drv»
 ```
 
 ## Template
@@ -74,7 +101,7 @@ In case of problems see [Troubleshooting](#troubleshooting).
 
 See [Overlays](https://wiki.nixos.org/wiki/Overlays#Using_overlays).
 
-If you use NixOS, Home Manager, or similar:
+If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.github.io/home-manager/), or similar:
 
 1. If you use flakes, add `nix-vscode-extensions` to your flake inputs (see [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L16)).
 
