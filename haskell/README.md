@@ -15,7 +15,7 @@
     direnv allow
     ```
 
-1. (Optionally) Edit the [config](./config.yaml) (see [./src/Config.hs](./src/Configs.hs) for all available options).
+1. (Optionally) Edit the [config](#config).
 
 1. Run the updater.
 
@@ -25,7 +25,19 @@
 
 1. The fetched extensions will be in [data](./data).
 
-## Keys of objects in the cache
+## Design
+
+### Config
+
+See [./config.yaml](./config.yaml).
+
+### Cache
+
+#### Cache files
+
+Cache files are stored in the [./data](./data) directory, as specified by `dataDir` in the [config](#config).
+
+#### Keys of objects in the cache
 
 Example:
 

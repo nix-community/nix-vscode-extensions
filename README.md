@@ -242,7 +242,7 @@ This attrset contains the following attributes:
 ### Extension identifiers
 
 - Extension publishers and names are lowercased only in Nix.
-  - They're not lowercased in `.json` cache files such as [data/cache/open-vsx-latest.json](./data/cache/open-vsx-latest.json).
+  - They're not lowercased in `.json` [cache files](#cache-files).
 - Access an extension in the format `<attrset>.<publisher>.<name>`, where `<attrset>` is `vscode-marketplace`, `open-vsx`, etc. (see [Explore](#explore)).
 - If an extension publisher or name aren't valid Nix identifiers, quote them like `<attrset>."4"."2"`.
 
@@ -250,7 +250,7 @@ This attrset contains the following attributes:
 
 - Some previously available extensions may be unavailable in newer versions of this flake.
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions ([discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
-  - We let missing extensions remain in cache files (see [data/cache](./data/cache)) at most `maxMissingTimes` (specified in [.github/config.yaml](.github/config.yaml)).
+  - We let missing extensions remain in [cache files](#cache-files) at most `maxMissingTimes`.
 
 ### Extension packs
 
@@ -353,6 +353,16 @@ The `extensionsFixed` attrset contains some of the [`extensions` attrsets](#exte
 Some extensions are unavailable or don't work on particular platforms.
 
 These extensions are disabled via [removed.nix](./removed.nix).
+
+## Design
+
+### Config
+
+See [Config](./haskell/README.md#config).
+
+### Cache files
+
+See [Cache files](./haskell/README.md#cache-files).
 
 ## Contribute
 
