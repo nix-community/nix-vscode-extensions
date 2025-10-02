@@ -1,6 +1,6 @@
 # Nix expressions for VS Code Extensions
 
-As of October 2, 2025, the [nixpkgs](https://github.com/nixos/nixpkgs) repository contains **456** [VS Code](https://code.visualstudio.com/) extensions. This is a small fraction of the nearly **80,000** extensions available on the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). In addition, many of the extensions in `nixpkgs` are outdated.
+As of October 2, 2025, the [nixpkgs](https://github.com/NixOS/nixpkgs) repository contains **456** [VS Code](https://code.visualstudio.com/) extensions. This is a small fraction of the nearly **80,000** extensions available on the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). In addition, many of the extensions in `nixpkgs` are outdated.
 
 This flake provides Nix expressions for the latest pre-release and release versions of the majority of available extensions from the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) and the [Open VSX Registry](https://open-vsx.org/). A [GitHub Action](https://github.com/features/actions) updates these extensions daily.
 
@@ -49,7 +49,7 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/92a0dfe8c7f43da7188c911563069c543a7c0c68/pkgs/applications/editors/vscode/with-extensions.nix).
+The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
@@ -164,7 +164,7 @@ x86_64-linux
 #### Get `nixpkgs` with flakes
 
 ```console
-nix-repl> nixpkgs = builtins.getFlake github:nixos/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c
+nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0
 ```
 
 #### Get `nixpkgs` without flakes
@@ -173,7 +173,7 @@ nix-repl> nixpkgs = builtins.getFlake github:nixos/nixpkgs/ebe4301cbd8f81c4f8d32
 nix-repl> nixpkgs = (import (builtins.fetchGit {
             url = "https://github.com/NixOS/nixpkgs";
             ref = "refs/heads/master";
-            rev = "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c";
+            rev = "a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0";
           }))
 ```
 
