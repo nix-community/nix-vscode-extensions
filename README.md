@@ -360,6 +360,10 @@ These extensions are disabled via [removed.nix](./removed.nix).
 
 Resolve [issues](https://github.com/nix-community/nix-vscode-extensions/issues).
 
+### Pull requests
+
+Make [pull requests](https://github.com/nix-community/nix-vscode-extensions/pulls).
+
 ### README
 
 - Fix links.
@@ -409,24 +413,7 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 
 ### Haskell script
 
-1. See the [README](./haskell/README.md).
-
-1. Set the environment.
-
-   ```console
-   set -a
-   source .env
-   ```
-
-1. Run the script.
-
-   ```console
-   nix run haskell/#updateExtensions
-   ```
-
-### Pull requests
-
-Pull requests are welcome!
+See the [./haskell/README.md](./haskell/README.md#quick-start).
 
 ## Troubleshooting
 
