@@ -82,14 +82,13 @@
                     lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
                   else
                     vscodeVersion == engineVersion;
-                checkPlatform = x: x.platform == platformUniversal || x.platform == platformCurrent;
                 checkVSCodeVersion =
                   { doCheckVSCodeVersion, vscodeVersion }:
                   (x: if doCheckVSCodeVersion then isCompatibleVersion vscodeVersion x.engineVersion else true);
                 loadGenerated =
                   {
-                    # `false` means "need only release versions"
-                    needLatest ? true,
+                    onlyRelease ? false,
+                    onlyUniversal ? false,
                     doCheckVSCodeVersion ? false,
                     vscodeVersion ? "*",
                     site,
@@ -97,7 +96,12 @@
                   }:
                   let
                     filterCheck =
-                      x: checkPlatform x && checkVSCodeVersion { inherit doCheckVSCodeVersion vscodeVersion; } x;
+                      x:
+                      (
+                        x.platform == platformUniversal || (if !onlyUniversal then x.platform == platformCurrent else false)
+                      )
+                      && (if onlyRelease then x.isRelease else true)
+                      && (checkVSCodeVersion { inherit doCheckVSCodeVersion vscodeVersion; } x);
                   in
                   lib.pipe site [
                     (x: ./data/cache/${site}${"-latest"}.json)
@@ -251,45 +255,37 @@
                                 ''
                               else
                                 value;
-                            # We have no reliable way to determine whether
-                            # - the pre-release version is newer than the release version;
-                            # - the platform-specific version is newer than the universal version.
+                            # We have no reliable way to find the semantically latest version
+                            # of an extension.
 
-                            # Therefore, we assume that pre-release versions
-                            # are the latest ones.
+                            # Therefore, for an extension, we prioritize its versions
+                            # and choose one with the highest priority.
 
-                            # Additionally, we assume that platform-specific versions are the latest ones
-                            # when both universal and platform-specific versions are available.
+                            # Here are the priorities (1 - highest) and properties:
+                            # 1. pre-release platform-specific
+                            # 2. pre-release universal
+                            # 3. release platform-specific
+                            # 4. release universal
 
-                            # At this point, we process a list of extensions of a publisher.
-                            # They're sorted ascending by:
-                            # 1. publisher
-                            # 2. name
-                            # 3. isRelease
-                            # 4. platform
-                            # 5. version
+                            # When there are no pre-release platform-specific versions,
+                            # we choose a pre-release universal version etc.
+
+                            # At this point, we process a list of objects (cache).
 
                             # There is at most one universal and at most one platform-specific version
                             # among any of pre-release and release versions.
 
-                            # Pre-release versions go first in the list.
-                            # Therefore, when we need the latest version,
+                            # When we need the latest version,
                             # we keep an existing version in the accumulator attrset
                             # except for the case when a platform-specific version
                             # with the same `isRelease` is available.
 
-                            # Universal versions go first in the list.
-                            # Therefore, we choose the later one.
-
                             valueSelected =
-                              if needLatest then
-                                if acc ? ${name} then
-                                  if acc.${name}.meta.extensionConfig.isRelease == valueValidated.meta.extensionConfig.isRelease then
-                                    valueValidated
-                                  else
-                                    acc.${name}
-                                else
+                              if acc ? ${name} then
+                                if acc.${name}.meta.extensionConfig.isRelease == valueValidated.meta.extensionConfig.isRelease then
                                   valueValidated
+                                else
+                                  acc.${name}
                               else
                                 valueValidated;
                           in
@@ -306,23 +302,76 @@
                     vscodeVersion ? "*",
                     pkgsWithFixes ? pkgs,
                   }:
+                  let
+                    loadGenerated' = attrs': loadGenerated (attrs // attrs');
+                  in
                   {
-                    vscode-marketplace = loadGenerated (attrs // { site = vscode-marketplace; });
-                    open-vsx = loadGenerated (attrs // { site = open-vsx; });
-                    vscode-marketplace-release = loadGenerated (
-                      attrs
-                      // {
-                        needLatest = false;
-                        site = vscode-marketplace;
-                      }
-                    );
-                    open-vsx-release = loadGenerated (
-                      attrs
-                      // {
-                        needLatest = false;
-                        site = open-vsx;
-                      }
-                    );
+                    # See the documentation for `valueSelected` above.
+
+                    # ---
+
+                    # Below are priorities and corresponding combinations
+                    # of properties that can appear in an attrset.
+                    # For each extension, the attrset stores 
+                    # a version with the the highest priority.
+
+                    # ---
+
+                    # These attrsets contain pre-release and release 
+                    # universal and platform-specific versions.
+
+                    # Priorities and properties:
+                    # 1. pre-release platform-specific
+                    # 2. pre-release universal
+                    # 3. release platform-specific
+                    # 4. release universal
+                    vscode-marketplace = loadGenerated' { site = vscode-marketplace; };
+                    open-vsx = loadGenerated' { site = open-vsx; };
+
+                    # These attrsets contain only release
+                    # universal and platform-specific versions.
+
+                    # Priorities and properties:
+                    # 1. release platform-specific
+                    # 2. release universal
+                    vscode-marketplace-release = loadGenerated' {
+                      site = vscode-marketplace;
+                      onlyRelease = true;
+                    };
+                    open-vsx-release = loadGenerated' {
+                      site = open-vsx;
+                      onlyRelease = true;
+                    };
+
+                    # These attrsets contain only pre-release and release
+                    # universal versions.
+
+                    # Priorities and properties:
+                    # 1. pre-release universal
+                    # 2. release universal
+                    vscode-marketplace-universal = loadGenerated' {
+                      site = vscode-marketplace;
+                      onlyUniversal = true;
+                    };
+                    open-vsx-universal = loadGenerated' {
+                      site = open-vsx;
+                      onlyUniversal = true;
+                    };
+
+                    # These attrsets contain only release universal versions.
+
+                    # Priorities and properties:
+                    # 1. release universal
+                    vscode-marketplace-release-universal = loadGenerated' {
+                      site = vscode-marketplace;
+                      onlyRelease = true;
+                      onlyUniversal = true;
+                    };
+                    open-vsx-release-universal = loadGenerated' {
+                      site = open-vsx;
+                      onlyRelease = true;
+                      onlyUniversal = true;
+                    };
                   };
 
                 nix-vscode-extensions =
@@ -390,6 +439,11 @@
                 open-vsx
                 vscode-marketplace-release
                 open-vsx-release
+                vscode-marketplace-universal
+                open-vsx-universal
+                vscode-marketplace-release-universal
+                open-vsx-release-universal
+
                 forVSCodeVersion
                 usingFixesFrom
                 ;
