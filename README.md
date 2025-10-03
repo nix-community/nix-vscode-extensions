@@ -210,7 +210,7 @@ nix-repl> extensions = (import nixpkgs { system = builtins.currentSystem; config
 ### Get `extensions` from `nix-vscode-extensions`
 
 ```console
-nix-repl> extensions = nix-vscode-extensions.extensions.x86_64-linux
+nix-repl> extensions = nix-vscode-extensions.extensions.${builtins.currentSystem}
 ```
 
 ## Extensions
