@@ -38,7 +38,30 @@ Clone this repository and enter its directory.
 git clone https://github.com/nix-community/nix-vscode-extensions
 cd nix-vscode-extensions
 ```
-  
+
+### (Optional) Start REPL
+
+See [nix repl](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html).
+
+```console
+nix repl
+```
+
+### (Optional) Get your system
+
+```console
+nix-repl> builtins.currentSystem
+```
+
+Output on my machine:
+
+```console
+x86_64-linux
+```
+
+> [!NOTE]
+> You can use the value that you got on your machine instead of `builtins.currentSystem` in instructions below.
+
 ## History
 
 You can search for an extension in the repository history:
@@ -139,25 +162,10 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 ## Get `extensions`
 
-### Start REPL
+Prerequisites:
 
-See [nix repl](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html).
-
-```console
-nix repl
-```
-
-### Get your system
-
-```console
-nix-repl> builtins.currentSystem
-```
-
-Output on my machine:
-
-```console
-x86_64-linux
-```
+- [Start REPL](#optional-start-repl)
+- [Get your `system`](#optional-get-your-system)
 
 ### Get `nixpkgs`
 
@@ -291,7 +299,9 @@ This attrset contains the following attributes:
 
 ## Explore
 
-[Start REPL](#start-repl).
+Prerequisites:
+
+- [Get `extensions`](#get-extensions)
 
 > [!NOTE]
 > Press the `Tab` button (denoted as `<TAB>` below) to see attrset attributes.
