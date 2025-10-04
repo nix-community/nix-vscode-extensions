@@ -374,7 +374,7 @@ nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer
 nix-repl> extensionsCompatible = extensions.forVSCodeVersion "1.78.2"
 ```
 
-The `extensionsCompatible` attrset contains some of the [the `extensions` attrset](#the-extensions-attrset) attributes.
+The `extensionsCompatible` attrset contains some of the [the `extensions` attrset](#the-extensions-attrset) attributes (see [`forVSCodeVersion`](#forvscodeversion)).
 
 ### Versions with fixes from particular `nixpkgs`
 
