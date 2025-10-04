@@ -35,9 +35,9 @@ See [./config.yaml](./config.yaml).
 
 #### Cache files
 
-Cache files are stored in the [./data](./data) directory, as specified by `dataDir` in the [config](#config).
+Cache files are stored in the [./data/cache](./data/cache) directory.
 
-#### Keys of objects in the cache
+#### Mapping to Nix
 
 Example:
 
@@ -45,21 +45,21 @@ Example:
 {"p":"0-don","n":"code-collector","r":1,"s":0,"v":"0.0.54","e":"^1.80.0","m":2,"h":"sha256-tBfwL+zl8etRp3xPkXYJn9OrX/s2o4F957bRLJR7xT8="}
 ```
 
-- `p` - extension publisher
-- `n` - extension name
-- `r` - whether it's a release version
-  - `0` means `true`
-  - `1` means `false`
-- `s` - extension platform ("s" is from "system")
-  - `0` means `universal` (platform)
-  - `1` means `linux-x64` (platform) or `x86_64-linux` (system)
-  - `2` means `linux-arm64` (platform) or `aarch64-linux` (system)
-  - `3` means `darwin-x64` (platform) or `x86_64-darwin` (system)
-  - `4` means `darwin-arm64` (platform) or `aarch64-darwin` (system)
-- `v` - extension version
-- `e` - engine version (minimal compatible VSCode version)
-- `m` - missing times
-- `h` - hash
+| JSON key | Nix attrname    | Description                                        |
+| -------- | --------------- | -------------------------------------------------- |
+| `p`      | `publisher`     | extension publisher                                |
+| `n`      | `name`          | extension name                                     |
+| `r`      | `isRelease`     | whether it's a release extension version           |
+| `s`      | `platform`      | extension platform ("s" is from "system")          |
+| `v`      | `version`       | extension version                                  |
+| `e`      | `engineVersion` | engine version (minimal compatible VSCode version) |
+| `m`      | N/A             | N/A                                                |
+| `h`      | `hash`          | extension archive hash                             |
+
+In the [../flake.nix](../flake.nix), see:
+
+- `systemPlatform` and `numberToPlatform` for values of `s` and `platform`.
+- `numberToIsRelease` for values of `r` and `isRelease`.
 
 ## Requests
 
