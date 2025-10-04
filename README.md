@@ -362,11 +362,19 @@ These extensions are disabled via [removed.nix](./removed.nix).
 
 ### Config
 
-See [Config](./haskell/README.md#config).
+See:
+
+- [Config](./haskell/README.md#config)
+- [`./github/config.yaml`](./.github/config.yaml)
 
 ### Cache files
 
-See [Cache files](./haskell/README.md#cache-files).
+See:
+
+- [Cache](./haskell/README.md#cache)
+- [`./data/cache`](./data/cache)
+- [`./data/cache/open-vsx-latest.json`](./data/cache/open-vsx-latest.json)
+- [`./data/cache/vscode-marketplace-latest.json`](./data/cache/vscode-marketplace-latest.json)
 
 ## Contribute
 
