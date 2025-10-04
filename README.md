@@ -151,7 +151,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 1. (Optional) Allow unfree packages (see [Unfree extensions](#unfree-extensions)).
 
-1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [`extensions` attrsets](#extensions-attrsets), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
+1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [The `extensions` attrset](#the-extensions-attrset), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
 > [!NOTE]
 > See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
@@ -223,7 +223,7 @@ We provide attrsets that contain both universal and platform-specific extensions
 
 We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [flake.nix](./flake.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
 
-### `extensions` attrsets
+### The `extensions` attrset
 
 > [!NOTE]
 > Here, `*` stands for a sequence of zero or more characters.
@@ -329,7 +329,7 @@ nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer
 nix-repl> extensionsCompatible = extensions.forVSCodeVersion "1.78.2"
 ```
 
-The `extensionsCompatible` attrset contains some of the [`extensions` attrsets](#extensions-attrsets).
+The `extensionsCompatible` attrset contains some of the [the `extensions` attrset](#the-extensions-attrset) attributes.
 
 ### Versions with fixes from particular `nixpkgs`
 
@@ -350,7 +350,7 @@ You can use any other version instead.
 nix-repl> extensionsFixed = extensions.usingFixesFrom nixpkgs
 ```
 
-The `extensionsFixed` attrset contains some of the [`extensions` attrsets](#extensions-attrsets).
+The `extensionsFixed` attrset contains some of the [the `extensions` attrset](#the-extensions-attrset) attributes.
 
 ### Removed extensions
 
