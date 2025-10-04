@@ -349,32 +349,74 @@ Prerequisites:
 
 ```console
 nix-repl> extensions.<TAB>
-extensions.forVSCodeVersion            extensions.usingFixesFrom
-extensions.open-vsx                    extensions.vscode-marketplace
-extensions.open-vsx-release            extensions.vscode-marketplace-release
+extensions.forVSCodeVersion                      extensions.vscode-marketplace
+extensions.open-vsx                              extensions.vscode-marketplace-release
+extensions.open-vsx-release                      extensions.vscode-marketplace-release-universal
+extensions.open-vsx-release-universal            extensions.vscode-marketplace-universal
+extensions.open-vsx-universal
+extensions.usingFixesFrom
 ```
 
-### Latest versions
+### Explore `vscode-marketplace` and `open-vsx`
+
+See [`vscode-marketplace` and `open-vsx`](#vscode-marketplace-and-open-vsx).
 
 ```console
 nix-repl> extensions.vscode-marketplace.rust-lang.rust-analyzer
-«derivation /nix/store/v2dyb61zg6faalpcz4faf6dd0ckgbcsp-vscode-extension-rust-lang-rust-analyzer-0.4.2434.drv»
+«derivation /nix/store/rfn6nizlib2ax08qhid179scdbsqnjmg-vscode-extension-rust-lang-rust-analyzer-0.4.2627.drv»
 ```
 
-### Release versions
+```console
+nix-repl> extensions.vscode-marketplace.vadimcn.vscode-lldb
+«derivation /nix/store/qpk223y8y5d9ic1qnfls0xwyni7llwkg-vscode-extension-vadimcn-vscode-lldb-1.11.0.drv»
+```
+
+### Explore `vscode-marketplace-release` and `open-vsx-release`
+
+See [`vscode-marketplace-release` and `open-vsx-release`](#vscode-marketplace-release-and-open-vsx-release).
 
 ```console
 nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer
-«derivation /nix/store/5xhr4a3j62awpnsd9l0llq2yn9q4gb6r-vscode-extension-rust-lang-rust-analyzer-0.3.2433.drv»
+«derivation /nix/store/q6kbj7hg50npbh38rm4x5iiga6v5x37d-vscode-extension-rust-lang-rust-analyzer-0.3.2593.drv»
+```
+
+```console
+nix-repl> extensions.vscode-marketplace-release.vadimcn.vscode-lldb
+«derivation /nix/store/qpk223y8y5d9ic1qnfls0xwyni7llwkg-vscode-extension-vadimcn-vscode-lldb-1.11.0.drv»
+```
+
+### Explore `vscode-marketplace-universal` and `open-vsx-universal`
+
+See [`vscode-marketplace-universal` and `open-vsx-universal`](#vscode-marketplace-universal-and-open-vsx-universal).
+
+```console
+nix-repl> extensions.vscode-marketplace-universal.rust-lang.rust-analyzer
+«derivation /nix/store/8yl0lqqj01xavacrvq0zzjzf2zcgwq0b-vscode-extension-rust-lang-rust-analyzer-0.4.1067.drv»
+```
+
+```console
+nix-repl> extensions.vscode-marketplace-universal.vadimcn.vscode-lldb
+«derivation /nix/store/iaqf2sczfpfwvfclkhzy9hymyqs2j7lr-vscode-extension-vadimcn-vscode-lldb-1.11.5.drv»
+```
+
+### Explore `vscode-marketplace-release-universal` and `open-vsx-release-universal`
+
+See [`vscode-marketplace-release-universal` and `open-vsx-release-universal`](#vscode-marketplace-release-universal-and-open-vsx-release-universal).
+
+```console
+nix-repl> extensions.vscode-marketplace-release-universal.vadimcn.vscode-lldb
+«derivation /nix/store/iaqf2sczfpfwvfclkhzy9hymyqs2j7lr-vscode-extension-vadimcn-vscode-lldb-1.11.5.drv»
 ```
 
 ### Versions compatible with a given version of VS Code
+
+See [`forVSCodeVersion`](#forvscodeversion).
 
 ```console
 nix-repl> extensionsCompatible = extensions.forVSCodeVersion "1.78.2"
 ```
 
-The `extensionsCompatible` attrset contains some of the [the `extensions` attrset](#the-extensions-attrset) attributes (see [`forVSCodeVersion`](#forvscodeversion)).
+The `extensionsCompatible` attrset contains some of the [the `extensions` attrset](#the-extensions-attrset) attributes.
 
 ### Versions with fixes from particular `nixpkgs`
 
