@@ -516,23 +516,24 @@
                         overlays = [ self.overlays.default ];
                       };
                     in
-                    with extensions.vscode-marketplace;
-                    [
+                    (with extensions.vscode-marketplace; [
                       golang.go
                       vlanguage.vscode-vlang
                       rust-lang.rust-analyzer
-                      vadimcn.vscode-lldb
                       ms-dotnettools.vscode-dotnet-runtime
                       mkhl.direnv
                       jnoortheen.nix-ide
                       tamasfe.even-better-toml
-                    ]
-                    ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) [
-                      # Exclusively for testing purpose
-                      (resetLicense ms-vscode.cpptools)
-                      # Local build hangs
-                      # yzane.markdown-pdf
-                    ]);
+                    ])
+                    ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
+                      with extensions.vscode-marketplace;
+                      [
+                        # Exclusively for testing purpose
+                        (resetLicense ms-vscode.cpptools)
+                        yzane.markdown-pdf
+                      ]
+                    ))
+                    ++ (with extensions.vscode-marketplace-universal; [ vadimcn.vscode-lldb ]);
                 }).overrideAttrs
                   (prev: {
                     meta = prev.meta // {
