@@ -345,15 +345,11 @@ runInfoFetcher extensionInfoCached extensionConfigs =
 
     traverse_
       logInfo
-      [ [fmt|{START} Analyzing cached info and configs from {target}.|]
-      , [fmt|{INFO} We have cached info for {length extensionInfoCached} extensions.|]
-      , [fmt|{INFO} {length extensionInfoCachedNotFetched} extensions with cached info have no corresponding fetched configs.|]
+      [ [fmt|{INFO} We have cached info for {length extensionInfoCached} extensions.|]
       , [fmt|{INFO} {length extensionConfigsFetchedNotCached} fetched configs have no corresponding cached info.|]
-      , [fmt|{FINISH} Analyzing cached info and configs from {target}.|]
+      , [fmt|{START} Running a fetcher on {target}.|]
+      , [fmt|{INFO} Fetching {length extensionConfigsFetchedNotCached} extensions whose fetched configs have no corresponding cached info.|]
       ]
-
-    logInfo [fmt|{START} Running a fetcher on {target}.|]
-
 
     -- we prepare shared queues and variables
     extInfoQueue <- liftIO $ newTBMQueueIO ?queueCapacity
