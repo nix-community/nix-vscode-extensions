@@ -60,6 +60,7 @@ let
       { config.allowAliases = false; };
 
   extensionsProblematic =
+    # Problem:
     # Some arguments of the function that produces a derivation
     # are provided in the `let .. in` expression before the call to that function
 
@@ -70,14 +71,6 @@ let
       # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
       "vadimcn.vscode-lldb"
       "rust-lang.rust-analyzer"
-    ]
-    ++
-    # Have old fixes
-    [
-      # Doesn't build due to the patch
-      # https://github.com/NixOS/nixpkgs/tree/a3cd526f08839bd963e7d106b7869694b0579a94/pkgs/applications/editors/vscode/extensions/hashicorp.terraform
-      # TODO newer fix
-      "hashicorp.terraform"
     ];
 
   pathSpecial = {
