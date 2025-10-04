@@ -407,7 +407,7 @@ These extensions are disabled via [removed.nix](./removed.nix).
 
 See:
 
-- [`./github/config.yaml`](./.github/config.yaml)
+- [`./config.yaml`](./config.yaml)
 
 <!-- TODO provide command to print config -->
 

@@ -96,7 +96,7 @@ jobs:
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.update
       - name: Update extensions
-        run: nix run .#updateExtensions -- --config .github/config.yaml
+        run: nix run .#updateExtensions -- --config config.yaml
       - name: Update extra extensions
         run: nix run .#updateExtraExtensions
       - name: Commit and push changes
