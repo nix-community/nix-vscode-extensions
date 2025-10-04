@@ -2,6 +2,7 @@ collectGarbage: true
 garbageCollectorDelay: 10
 logSeverity: Info
 maxMissingTimes: 10
+programTimeout: 3600
 openVSX:
   enable: true
   pageCount: 10
