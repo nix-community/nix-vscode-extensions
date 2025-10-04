@@ -297,7 +297,7 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 
 - Some previously available extensions may be unavailable in newer versions of this flake.
   - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions ([discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
-  - We let missing extensions remain in [cache files](#cache-files) at most `maxMissingTimes`.
+  - We let missing extensions remain in [cache files](#cache-files) at most `maxMissingTimes` (specified in the [config](#config)).
 
 ### Extension packs
 
@@ -403,23 +403,49 @@ Some extensions are unavailable or don't work on particular platforms.
 
 These extensions are disabled via [removed.nix](./removed.nix).
 
-## Design
-
-### Config
+## Config
 
 See:
 
-- [Config](./haskell/README.md#config)
 - [`./github/config.yaml`](./.github/config.yaml)
+
+<!-- TODO provide command to print config -->
+
+## Cache
 
 ### Cache files
 
 See:
 
-- [Cache](./haskell/README.md#cache)
 - [`./data/cache`](./data/cache)
 - [`./data/cache/open-vsx-latest.json`](./data/cache/open-vsx-latest.json)
 - [`./data/cache/vscode-marketplace-latest.json`](./data/cache/vscode-marketplace-latest.json)
+
+### Cache object example
+
+```json
+{"p":"haskell","n":"haskell","r":0,"s":0,"v":"2.7.0","e":"^1.102.0","m":2,"h":"sha256-rkQw8A2irw1AcUCnEffG5BNPuQQF9dfjiRHHXPdK/zU="}
+```
+
+### Intermediate Nix representation
+
+| JSON key | Nix attrname    | Description                                                  |
+| -------- | --------------- | ------------------------------------------------------------ |
+| `p`      | `publisher`     | extension publisher                                          |
+| `n`      | `name`          | extension name                                               |
+| `r`      | `isRelease`     | whether it's a release extension version                     |
+| `P`      | `platform`      | extension platform                                           |
+| `v`      | `version`       | extension version                                            |
+| `e`      | `engineVersion` | engine version (minimal compatible VSCode version)           |
+| `m`      | N/A             | [missing times](../README.md#missing-extensions)             |
+| `h`      | `hash`          | extension `.vsix` hash obtained via [nix store prefetch-file](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-store-prefetch-file.html) |
+
+### Values
+
+In the [./flake.nix](./flake.nix):
+
+- `numberToPlatform` converts `s` to `platform`;
+- `numberToIsRelease` converts `r` to `isRelease`.
 
 ## Contribute
 

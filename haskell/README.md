@@ -15,7 +15,7 @@
     direnv allow
     ```
 
-1. (Optionally) Edit the [config](#config).
+1. (Optionally) Edit the config in the [./config.yaml](./config.yaml) file (see [Config](../README.md#config)).
 
 1. Run the updater.
 
@@ -23,43 +23,7 @@
     cabal run updater -- --config config.yaml
     ```
 
-1. The fetched extensions will be in [data](./data).
-
-## Design
-
-### Config
-
-See [./config.yaml](./config.yaml).
-
-### Cache
-
-#### Cache files
-
-Cache files are stored in the [./data/cache](./data/cache) directory.
-
-#### Mapping to Nix
-
-Example:
-
-```json
-{"p":"0-don","n":"code-collector","r":1,"s":0,"v":"0.0.54","e":"^1.80.0","m":2,"h":"sha256-tBfwL+zl8etRp3xPkXYJn9OrX/s2o4F957bRLJR7xT8="}
-```
-
-| JSON key | Nix attrname    | Description                                        |
-| -------- | --------------- | -------------------------------------------------- |
-| `p`      | `publisher`     | extension publisher                                |
-| `n`      | `name`          | extension name                                     |
-| `r`      | `isRelease`     | whether it's a release extension version           |
-| `s`      | `platform`      | extension platform ("s" is from "system")          |
-| `v`      | `version`       | extension version                                  |
-| `e`      | `engineVersion` | engine version (minimal compatible VSCode version) |
-| `m`      | N/A             | N/A                                                |
-| `h`      | `hash`          | extension archive hash                             |
-
-In the [../flake.nix](../flake.nix), see:
-
-- `systemPlatform` and `numberToPlatform` for values of `s` and `platform`.
-- `numberToIsRelease` for values of `r` and `isRelease`.
+1. Check the cache files in the [./data](./data) directory (see [Cache](../README.md#cache)).
 
 ## Requests
 
