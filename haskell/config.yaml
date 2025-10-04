@@ -1,18 +1,21 @@
-collectGarbage: false
+collectGarbage: true
+dataDir: data
+garbageCollectorDelay: 20
 logSeverity: Info
+maxMissingTimes: 10
+nRetry: 3
+processedLoggerDelay: 2
+programTimeout: 3600
+queueCapacity: 200
+requestResponseTimeout: 100
+retryDelay: 20
 openVSX:
-  release:
-    eamodio:
-    - gitlens
-    rust-lang:
-    - rust-analyzer
-    stkb:
-    - rewrap
+  enable: true
+  nThreads: 30
+  pageCount: 10
+  pageSize: 1000
 vscodeMarketplace:
-  release:
-    eamodio:
-    - gitlens
-    rust-lang:
-    - rust-analyzer
-    stkb:
-    - rewrap
+  enable: true
+  nThreads: 100
+  pageCount: 10
+  pageSize: 200

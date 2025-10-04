@@ -8,7 +8,7 @@ repository:
   name: nix-vscode-extensions
 
   # A short description of the repository that will show up on GitHub
-  description: VSCode and OpenVSX extensions as Nix expressions
+  description: VS Code and OpenVSX extensions as Nix expressions
 
   # A URL with more information about the repository
   homepage: https://github.com/nix-community/nix-vscode-marketplace

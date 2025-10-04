@@ -5,14 +5,12 @@ module Configs where
 
 import Colog
 import Control.Lens
-import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withArray, withText)
-import Data.Aeson.Key (toText)
-import Data.Aeson.Lens (members, _String)
+import Data.Aeson (FromJSON (parseJSON), ToJSON, Value (String), withText)
 import Data.Aeson.Types (Parser, typeMismatch)
 import Data.Default (Default (..))
 import Data.Text qualified as T
 import Data.Text.Encoding (decodeUtf8)
-import Data.Yaml (decodeFileEither, parseMaybe)
+import Data.Yaml (decodeFileEither)
 import Data.Yaml.Pretty (defConfig, encodePretty)
 import Extensions
 import GHC.Generics (Generic)
@@ -25,10 +23,6 @@ data ReleaseExtension = ReleaseExtension {publisher :: Publisher, name :: Name}
   deriving stock (Eq, Show, Generic)
   deriving anyclass (ToJSON)
 
-newtype ReleaseExtensions = ReleaseExtensions {releaseExtensions :: [ReleaseExtension]}
-  deriving stock (Eq, Show, Generic)
-  deriving anyclass (ToJSON)
-
 data SiteConfig f = SiteConfig
   { pageSize :: HKD f Int
   -- ^ Number of extensions per page in a request
@@ -36,16 +30,16 @@ data SiteConfig f = SiteConfig
   -- ^ Number of extension pages to request
   , nThreads :: HKD f Int
   -- ^ Number of threads to use for fetching
-  , release :: HKD f ReleaseExtensions
-  -- ^ Extensions that require the release version
   , enable :: HKD f Bool
+  -- ^ Whether to enable functionality for this site
   }
   deriving stock (Generic)
 
+-- | Application configuration.
+--
+-- We use HKD because we need to allow optional fields when parsing
 data AppConfig f = AppConfig
-  { runN :: HKD f Int
-  -- ^ Times to process a target site
-  , processedLoggerDelay :: HKD f Int
+  { processedLoggerDelay :: HKD f Int
   -- ^ Period in seconds till the next logging about processed extensions
   , garbageCollectorDelay :: HKD f Int
   -- ^ Period in seconds till the next garbage collection
@@ -70,7 +64,7 @@ data AppConfig f = AppConfig
   , openVSX :: HKD f (SiteConfig f)
   -- ^ Config for Open VSX
   , vscodeMarketplace :: HKD f (SiteConfig f)
-  -- ^ Config for VSCode Marketplace
+  -- ^ Config for VS Code Marketplace
   }
   deriving stock (Generic)
 
@@ -84,56 +78,39 @@ instance ToJSON (AppConfig Identity)
 
 instance Default (SiteConfig Maybe)
 
-type AppConfig' = (?config :: AppConfig Identity)
+type TargetSettings =
+  ( ?target :: Target
+  , ?threadNumber :: Int
+  , Settings
+  )
 
-data ProcessTargetConfig a = ProcessTargetConfig
-  { target :: Target
-  , nThreads :: Int
-  , queueCapacity :: Int
-  , dataDir :: FilePath
-  , logger :: LogAction a Message
-  }
-
--- | Config for a crawler
-data CrawlerConfig a = CrawlerConfig
-  { target :: Target
-  , nRetry :: Int
-  , logger :: LogAction a Message
-  }
-
--- | Config of a fetcher
-data FetcherConfig a = FetcherConfig
-  { target :: Target
-  , nThreads :: Int
-  , queueCapacity :: Int
-  , extConfigs :: [ExtensionConfig]
-  , cacheDir :: FilePath
-  , mkTargetJSON :: FilePath -> FilePath
-  , logger :: LogAction a Message
-  , tmpDir :: FilePath
-  }
+-- | Settings that don't change.
+--
+-- @target@ was included because it's ubiquitous.
+type Settings =
+  ( ?queueCapacity :: Int
+  , ?dataDir :: FilePath
+  , ?debugDir :: FilePath
+  , ?cacheDir :: FilePath
+  , ?nRetry :: Int
+  , ?tmpDir :: FilePath
+  , ?fetchedDir :: FilePath
+  , ?failedDir :: FilePath
+  , ?maxMissingTimes :: Int
+  , ?collectGarbage :: Bool
+  , ?processedLoggerDelay :: Int
+  , ?garbageCollectorDelay :: Int
+  , ?requestResponseTimeout :: Int
+  , ?openVSX :: SiteConfig Identity
+  , ?vscodeMarketplace :: SiteConfig Identity
+  , ?retryDelay :: Int
+  , ?programTimeout :: Int
+  )
 
 instance FromJSON (SiteConfig Identity)
 instance FromJSON (SiteConfig Maybe)
 deriving instance Eq (SiteConfig Maybe)
 
-instance FromJSON ReleaseExtensions where
-  parseJSON obj =
-    pure $
-      ReleaseExtensions $
-        (obj ^@.. members)
-          ^.. traversed
-            . to
-              ( \(k, v) ->
-                  let publisher = Publisher (toText k)
-                   in parseMaybe
-                        ( withArray "Names" $ \a ->
-                            pure $ a ^.. traversed . _String . to (\name -> ReleaseExtension{name = Name name, ..})
-                        )
-                        v
-              )
-            . _Just
-            . traversed
 
 instance FromJSON Severity where
   parseJSON :: Value -> Data.Aeson.Types.Parser Severity
@@ -151,7 +128,7 @@ instance FromJSON (AppConfig Maybe)
 
 instance Default (AppConfig Maybe)
 
-_MICROSECONDS :: Int
+_MICROSECONDS :: Integer
 _MICROSECONDS = 1_000_000
 
 defaultOpenVSXConfig :: SiteConfig Identity
@@ -160,7 +137,6 @@ defaultOpenVSXConfig =
     { pageSize = 1_000
     , pageCount = 10
     , nThreads = 30
-    , release = ReleaseExtensions []
     , enable = True
     }
 
@@ -170,37 +146,34 @@ defaultVSCodeMarketplaceConfig =
     { pageSize = 1_000
     , pageCount = 100
     , nThreads = 100
-    , release = ReleaseExtensions []
     , enable = True
     }
 
 mkDefaultConfig :: SiteConfig Identity -> SiteConfig Maybe -> SiteConfig Identity
-mkDefaultConfig config SiteConfig{..} =
+mkDefaultConfig config sc =
   SiteConfig
-    { pageSize = pageSize ^. non config.pageSize
-    , pageCount = pageCount ^. non config.pageCount
-    , nThreads = nThreads ^. non config.nThreads
-    , release = release ^. non config.release
-    , enable = enable ^. non config.enable
+    { pageSize = sc.pageSize ^. non config.pageSize
+    , pageCount = sc.pageCount ^. non config.pageCount
+    , nThreads = sc.nThreads ^. non config.nThreads
+    , enable = sc.enable ^. non config.enable
     }
 
 mkDefaultAppConfig :: AppConfig Maybe -> AppConfig Identity
-mkDefaultAppConfig AppConfig{..} =
+mkDefaultAppConfig ac =
   AppConfig
-    { runN = runN ^. non 1
-    , processedLoggerDelay = processedLoggerDelay ^. non 2
-    , garbageCollectorDelay = garbageCollectorDelay ^. non 30
-    , collectGarbage = collectGarbage ^. non False
-    , programTimeout = programTimeout ^. non 900
-    , retryDelay = retryDelay ^. non 20
-    , nRetry = nRetry ^. non 3
-    , logSeverity = logSeverity ^. non Info
-    , dataDir = dataDir ^. non "data"
-    , queueCapacity = queueCapacity ^. non 200
-    , maxMissingTimes = maxMissingTimes ^. non 5
-    , requestResponseTimeout = requestResponseTimeout ^. non 100
-    , openVSX = openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
-    , vscodeMarketplace = vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
+    { processedLoggerDelay = ac.processedLoggerDelay ^. non 2
+    , garbageCollectorDelay = ac.garbageCollectorDelay ^. non 30
+    , collectGarbage = ac.collectGarbage ^. non False
+    , programTimeout = ac.programTimeout ^. non 900
+    , retryDelay = ac.retryDelay ^. non 20
+    , nRetry = ac.nRetry ^. non 3
+    , logSeverity = ac.logSeverity ^. non Info
+    , dataDir = ac.dataDir ^. non "data"
+    , queueCapacity = ac.queueCapacity ^. non 200
+    , maxMissingTimes = ac.maxMissingTimes ^. non 5
+    , requestResponseTimeout = ac.requestResponseTimeout ^. non 100
+    , openVSX = ac.openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
+    , vscodeMarketplace = ac.vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
     }
 
 -- | A type for printing multiline stuff when using HLS
@@ -222,14 +195,6 @@ instance Show Pretty where
 --   nThreads: 30
 --   pageCount: 10
 --   pageSize: 1000
---   release:
---     releaseExtensions:
---     - name: gitlens
---       publisher: eamodio
---     - name: rust-analyzer
---       publisher: rust-lang
---     - name: rewrap
---       publisher: stkb
 -- processedLoggerDelay: 2
 -- programTimeout: 900
 -- queueCapacity: 200
@@ -241,13 +206,5 @@ instance Show Pretty where
 --   nThreads: 100
 --   pageCount: 100
 --   pageSize: 1000
---   release:
---     releaseExtensions:
---     - name: gitlens
---       publisher: eamodio
---     - name: rust-analyzer
---       publisher: rust-lang
---     - name: rewrap
---       publisher: stkb
 prettyConfig :: IO Pretty
 prettyConfig = Pretty . either show (T.unpack . decodeUtf8 . encodePretty defConfig . mkDefaultAppConfig) <$> decodeFileEither @(AppConfig Maybe) "config.yaml"

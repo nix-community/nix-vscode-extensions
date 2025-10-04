@@ -35,7 +35,7 @@ let-style: auto
 in-style: right-align
 
 # Whether to put parentheses around a single constraint (choices: auto, always, or never)
-single-constraint-parens: never
+single-constraint-parens: always
 
 # Output Unicode syntax (choices: detect, always, or never)
 unicode: never

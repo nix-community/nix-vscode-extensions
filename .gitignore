@@ -3,7 +3,7 @@ result
 tmp
 .vscode
 dist-newstyle
-data/tmp
+data
 !data/cache
 data/extra-extensions/generated.json
 !data/extra/generated.nix
