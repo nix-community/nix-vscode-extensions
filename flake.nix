@@ -530,7 +530,9 @@
                       [
                         # Exclusively for testing purpose
                         (resetLicense ms-vscode.cpptools)
-                        yzane.markdown-pdf
+                        # on aarch64-linux, triggers the error:
+                        # build input /nix/store/194yri6cyqad6yvbhpqp5wswsppnsi7x-jq-1.8.1-dev does not exist
+                        # yzane.markdown-pdf
                       ]
                     ))
                     ++ (with extensions.vscode-marketplace-universal; [ vadimcn.vscode-lldb ]);
