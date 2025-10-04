@@ -230,16 +230,61 @@ We use a reasonable mapping between the sites target platforms and Nix-supported
 
 The [Get `extensions`](#get-extensions) section explains how to get the `extensions` attrset.
 
-This attrset contains the following attributes:
+This attrset contains several attributes described in the sections [Extension attrsets](#extension-attrsets) and [Functions that produce extension attrsets](#functions-that-produce-extension-attrsets).
 
-- `vscode-marketplace` and `open-vsx` contain the latest versions of extensions, including pre-release ones. Such pre-release versions expire in some time. That's why, there are `*-release` attrsets.
-- `vscode-marketplace-release` and `open-vsx-release` contain only release versions of extensions.
-- `forVSCodeVersion` - `forVSCodeVersion "1.78.2"` produces an attrset containing only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `"1.78.2"` version of `VS Code` (see [Versions compatible with a given version of VS Code](#versions-compatible-with-a-given-version-of-vs-code)).
-  - You should supply your `VS Code` version instead of `"1.78.2"`.
-- `usingFixesFrom` - `usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
-  - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
-  - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
-- The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to (if you [get `extensions` via the overlay](#get-extensions-via-the-overlay)) or `nixpkgs` from the `nix-vscode-extensions` repository (if you [get `extensions` from `nix-vscode-extensions`](#get-extensions-from-nix-vscode-extensions)).
+### Extension attrsets
+
+We have no reliable way to choose the semantically latest cached version of an extension (see [cache files](#cache-files)).
+
+Therefore, we used the following method:
+
+1. We chose properties of extension versions that may predict whether a version is the latest one:
+    - whether a version is pre-release or release;
+    - whether a version is universal or platform-specific.
+1. We prioritized all combinations of property values.
+1. We created several attrsets of extensions with constraints on possible combinations of property values.
+1. We named attrsets to show additional constraints. E.g., `vscode-marketplace*` attrsets contain only extensions from the `VS Code Marketplace`.
+1. In each attrset, for each extension whose versions could be in that attrset, we provided a single highest-priority version of that extension.
+
+The next sections show permitted property combinations and their priorities in corresponding attrsets.
+
+#### `vscode-marketplace` and `open-vsx`
+
+1. pre-release platform-specific
+2. pre-release universal
+3. release platform-specific
+4. release universal
+
+#### `vscode-marketplace-release` and `open-vsx-release`
+
+1. release platform-specific
+2. release universal
+
+#### `vscode-marketplace-universal` and `open-vsx-universal`
+
+1. pre-release universal
+2. release universal
+
+#### `vscode-marketplace-release-universal` and `open-vsx-release-universal`
+
+1. release universal
+
+### Functions that produce extension attrsets
+
+#### `forVSCodeVersion`
+
+`forVSCodeVersion version` produces an attrset similar to `extensions` (see [The `extensions` attrset](#the-extensions-attrset)) but containing only the extensions [compatible](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#visual-studio-code-compatibility) with the `version` version of `VS Code` (see [Versions compatible with a given version of VS Code](#versions-compatible-with-a-given-version-of-vs-code)).
+
+You should replace `version` with your `VS Code` or `VSCodium` version.
+
+#### `usingFixesFrom`
+
+`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
+
+- The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
+- The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
+  
+The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to (if you [get `extensions` via the overlay](#get-extensions-via-the-overlay)) or `nixpkgs` from the `nix-vscode-extensions` repository (if you [get `extensions` from `nix-vscode-extensions`](#get-extensions-from-nix-vscode-extensions)).
 
 ### Extension identifiers
 
