@@ -206,12 +206,6 @@ nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
 ### Get `extensions` via the overlay
 
 ```console
-nix-repl> extensions = import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }
-```
-
-If you want `extensions` to have only [`extensions` attrsets](#extensions-attrsets), get `extensions` as follows:
-
-```console
 nix-repl> extensions = (import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }).nix-vscode-extensions
 ```
 
