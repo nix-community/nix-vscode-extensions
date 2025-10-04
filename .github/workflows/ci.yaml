@@ -26,6 +26,7 @@ jobs:
           - ubuntu-24.04-arm
           - macos-13
           - macos-15
+      fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout this repo
