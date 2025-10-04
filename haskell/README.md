@@ -2,9 +2,9 @@
 
 ## Quick start
 
-1. Install `Nix` ([link](https://nixos.org/download/)).
+1. [Install `Nix`](https://nixos.org/download/).
 
-1. Install `direnv` ([link](https://direnv.net/#basic-installation)).
+1. [Install `direnv`](https://direnv.net/#basic-installation).
 
 1. In a new terminal, allow `direnv` to run the devshell.
    When prompted about `extra-trusted-substituters` answer `y`.
