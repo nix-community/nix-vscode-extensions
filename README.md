@@ -239,8 +239,8 @@ We have no reliable way to choose the semantically latest cached version of an e
 Therefore, we used the following method:
 
 1. We chose properties of extension versions that may predict whether a version is the latest one:
-    - whether a version is pre-release or release;
-    - whether a version is universal or platform-specific.
+   - whether a version is pre-release or release;
+   - whether a version is universal or platform-specific.
 1. We prioritized all combinations of property values.
 1. We created several attrsets of extensions with constraints on possible combinations of property values.
 1. We named attrsets to show additional constraints. E.g., `vscode-marketplace*` attrsets contain only extensions from the `VS Code Marketplace`.
@@ -283,7 +283,7 @@ You should replace `version` with your `VS Code` or `VSCodium` version.
 
 - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
 - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
-  
+
 The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to (if you [get `extensions` via the overlay](#get-extensions-via-the-overlay)) or `nixpkgs` from the `nix-vscode-extensions` repository (if you [get `extensions` from `nix-vscode-extensions`](#get-extensions-from-nix-vscode-extensions)).
 
 ### Extension identifiers
@@ -308,7 +308,6 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 - We use derivations and code from `nixpkgs` for some extensions (see [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs)).
 - Unfree extensions from `nixpkgs` stay unfree here (see [Unfree software](https://wiki.nixos.org/wiki/Unfree_software), [Special extensions](#special-extensions)).
 - If you want to use unfree extensions, try one of the following ways:
-
   - [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree).
   - [Global configuration](https://nixos.org/manual/nixpkgs/stable/#chap-packageconfig) - [Example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L45).
   - Set `config.allowUnfree = true` when constructing `pkgs`.
@@ -466,20 +465,29 @@ See:
 ### Cache object example
 
 ```json
-{"p":"haskell","n":"haskell","r":0,"s":0,"v":"2.7.0","e":"^1.102.0","m":2,"h":"sha256-rkQw8A2irw1AcUCnEffG5BNPuQQF9dfjiRHHXPdK/zU="}
+{
+  "p": "haskell",
+  "n": "haskell",
+  "r": 0,
+  "s": 0,
+  "v": "2.7.0",
+  "e": "^1.102.0",
+  "m": 2,
+  "h": "sha256-rkQw8A2irw1AcUCnEffG5BNPuQQF9dfjiRHHXPdK/zU="
+}
 ```
 
 ### Intermediate Nix representation
 
-| JSON key | Nix attrname    | Description                                                  |
-| -------- | --------------- | ------------------------------------------------------------ |
-| `p`      | `publisher`     | extension publisher                                          |
-| `n`      | `name`          | extension name                                               |
-| `r`      | `isRelease`     | whether it's a release extension version                     |
-| `P`      | `platform`      | extension platform                                           |
-| `v`      | `version`       | extension version                                            |
-| `e`      | `engineVersion` | engine version (minimal compatible VSCode version)           |
-| `m`      | N/A             | [missing times](../README.md#missing-extensions)             |
+| JSON key | Nix attrname    | Description                                                                                                                                      |
+| -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `p`      | `publisher`     | extension publisher                                                                                                                              |
+| `n`      | `name`          | extension name                                                                                                                                   |
+| `r`      | `isRelease`     | whether it's a release extension version                                                                                                         |
+| `P`      | `platform`      | extension platform                                                                                                                               |
+| `v`      | `version`       | extension version                                                                                                                                |
+| `e`      | `engineVersion` | engine version (minimal compatible VSCode version)                                                                                               |
+| `m`      | N/A             | [missing times](../README.md#missing-extensions)                                                                                                 |
 | `h`      | `hash`          | extension `.vsix` hash obtained via [nix store prefetch-file](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-store-prefetch-file.html) |
 
 ### Values

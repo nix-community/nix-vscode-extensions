@@ -312,12 +312,12 @@
 
                     # Below are priorities and corresponding combinations
                     # of properties that can appear in an attrset.
-                    # For each extension, the attrset stores 
+                    # For each extension, the attrset stores
                     # a version with the the highest priority.
 
                     # ---
 
-                    # These attrsets contain pre-release and release 
+                    # These attrsets contain pre-release and release
                     # universal and platform-specific versions.
 
                     # Priorities and properties:
@@ -501,68 +501,67 @@
               };
             });
 
-          packages =
-            {
-              default =
-                (pkgs.vscode-with-extensions.override {
-                  # vscode = pkgs.vscodium;
-                  vscode = resetLicense pkgs.vscode;
-                  vscodeExtensions =
-                    let
-                      extensions = import inputs.nixpkgs {
-                        inherit system;
-                        # Uncomment to allow unfree extensions
-                        # config.allowUnfree = true;
-                        overlays = [ self.overlays.default ];
-                      };
-                    in
-                    (with extensions.vscode-marketplace; [
-                      golang.go
-                      vlanguage.vscode-vlang
-                      rust-lang.rust-analyzer
-                      ms-dotnettools.vscode-dotnet-runtime
-                      mkhl.direnv
-                      jnoortheen.nix-ide
-                      tamasfe.even-better-toml
-                    ])
-                    ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
-                      with extensions.vscode-marketplace;
-                      [
-                        # Exclusively for testing purpose
-                        (resetLicense ms-vscode.cpptools)
-                        # on aarch64-linux, triggers the error:
-                        # build input /nix/store/194yri6cyqad6yvbhpqp5wswsppnsi7x-jq-1.8.1-dev does not exist
-                        # yzane.markdown-pdf
-                      ]
-                    ))
-                    ++ (with extensions.vscode-marketplace-universal; [ vadimcn.vscode-lldb ]);
-                }).overrideAttrs
-                  (prev: {
-                    meta = prev.meta // {
-                      description = "VSCodium with a few extensions.";
-                      longDescription = ''
-                        This is a sample overridden VSCodium (a FOSS fork of VS Code) with a few extensions.
-                        You can override this package and set `vscodeExtensions` to a list of extension
-                        derivations, specifically those provided by this flake.
-                        The [repository] offers approximately 40,000 extensions from the [Visual Studio Marketplace]
-                        and an additional 4,500 from the [Open VSX Registry].
-                        [repository]: https://github.com/nix-community/nix-vscode-extensions
-                        [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
-                        [Open VSX Registry]: https://open-vsx.org/
-                      '';
+          packages = {
+            default =
+              (pkgs.vscode-with-extensions.override {
+                # vscode = pkgs.vscodium;
+                vscode = resetLicense pkgs.vscode;
+                vscodeExtensions =
+                  let
+                    extensions = import inputs.nixpkgs {
+                      inherit system;
+                      # Uncomment to allow unfree extensions
+                      # config.allowUnfree = true;
+                      overlays = [ self.overlays.default ];
                     };
-                  });
-            }
-            // mkShellApps {
-              updateExtensions = {
-                text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
-                meta.description = "Update extensions";
-              };
-              updateExtraExtensions = {
-                text = "${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
-                meta.description = "Update extra extensions";
-              };
+                  in
+                  (with extensions.vscode-marketplace; [
+                    golang.go
+                    vlanguage.vscode-vlang
+                    rust-lang.rust-analyzer
+                    ms-dotnettools.vscode-dotnet-runtime
+                    mkhl.direnv
+                    jnoortheen.nix-ide
+                    tamasfe.even-better-toml
+                  ])
+                  ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
+                    with extensions.vscode-marketplace;
+                    [
+                      # Exclusively for testing purpose
+                      (resetLicense ms-vscode.cpptools)
+                      # on aarch64-linux, triggers the error:
+                      # build input /nix/store/194yri6cyqad6yvbhpqp5wswsppnsi7x-jq-1.8.1-dev does not exist
+                      # yzane.markdown-pdf
+                    ]
+                  ))
+                  ++ (with extensions.vscode-marketplace-universal; [ vadimcn.vscode-lldb ]);
+              }).overrideAttrs
+                (prev: {
+                  meta = prev.meta // {
+                    description = "VSCodium with a few extensions.";
+                    longDescription = ''
+                      This is a sample overridden VSCodium (a FOSS fork of VS Code) with a few extensions.
+                      You can override this package and set `vscodeExtensions` to a list of extension
+                      derivations, specifically those provided by this flake.
+                      The [repository] offers approximately 40,000 extensions from the [Visual Studio Marketplace]
+                      and an additional 4,500 from the [Open VSX Registry].
+                      [repository]: https://github.com/nix-community/nix-vscode-extensions
+                      [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
+                      [Open VSX Registry]: https://open-vsx.org/
+                    '';
+                  };
+                });
+          }
+          // mkShellApps {
+            updateExtensions = {
+              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
+              meta.description = "Update extensions";
             };
+            updateExtraExtensions = {
+              text = "${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
+              meta.description = "Update extra extensions";
+            };
+          };
 
           legacyPackages.saveFromGC.ci.jobs =
             let
