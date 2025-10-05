@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0";
     cache-nix-action = {
-      url = "github:nix-community/cache-nix-action";
+      url = "github:nix-community/cache-nix-action/e2cf51da82e145785f5db595f553f7cbc2ca54df";
       flake = false;
     };
     systems.url = "github:nix-systems/default";
