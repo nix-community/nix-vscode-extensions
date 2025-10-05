@@ -35,6 +35,7 @@ jobs:
         uses: nixbuild/nix-quick-install-action@v34
         with:
           nix_conf: ${{ env.nix_conf }}
+          nix_version: "2.31.2"
       - uses: nix-community/cache-nix-action/restore@v6
         with:
           primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-latest.json') }}
