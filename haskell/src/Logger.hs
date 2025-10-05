@@ -1,13 +1,11 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module Logger where
 
 import Colog (LogAction (..), LoggerT (..), Message)
+import Control.Applicative (Alternative (..))
 import Control.Monad.IO.Class (MonadIO (..))
 import Control.Monad.Reader (ReaderT (..))
 import Control.Monad.Reader.Class (MonadReader (ask, local))
-import Data.String.Interpolate (i)
-import Turtle (Alternative (..))
+import PyF (PyFCategory (PyFString), PyFClassify, PyFToString (..), fmt)
 import UnliftIO (MonadUnliftIO (withRunInIO))
 
 newtype MyLoggerT msg m a = MyLoggerT {_myLoggerT :: LoggerT msg m a}
@@ -47,4 +45,9 @@ instance Show ActionStatus where
         FINISH -> "FINISH"
       width = maximum $ length . repr <$> [INFO, START, FAIL, ABORT, FINISH]
      in
-      (\x -> [i|[ #{x <> (replicate (width - length x) ' ') } ]|]) (repr d)
+      (\x -> [fmt|[ {x <> (replicate (width - length x) ' ') } ]|]) (repr d)
+
+type instance PyFClassify ActionStatus = 'PyFString
+
+instance PyFToString ActionStatus where
+  pyfToString = show

@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
-  useFetchCargoVendor = true;
   inherit cargoHash;
 
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>

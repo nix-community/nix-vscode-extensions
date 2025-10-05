@@ -1,8 +1,8 @@
 {
   description = "srid/haskell-template: Nix template for Haskell projects";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a";
-    nixpkgs-lib.url = "github:nixos/nixpkgs/3a05eebede89661660945da1f151959900903b6a?dir=lib";
+    nixpkgs.url = "github:nixos/nixpkgs/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0";
+    nixpkgs-lib.url = "github:nixos/nixpkgs/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0?dir=lib";
     systems.url = "github:nix-systems/default";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -43,7 +43,7 @@
           ...
         }:
         let
-          ghcVersion = "9101";
+          ghcVersion = "910";
           haskellPackages = pkgs.haskell.packages."ghc${ghcVersion}";
           devTools =
             let
@@ -66,7 +66,7 @@
             in
             {
               cabal = wrapTool "cabal-install" "cabal" "-v0";
-              hpack = pkgs.haskellPackages.hpack_0_37_0;
+              inherit (pkgs) hpack;
               ghc = builtins.head (
                 builtins.filter (
                   x: pkgs.lib.attrsets.isDerivation x && pkgs.lib.strings.hasPrefix "ghc-" x.name
@@ -112,13 +112,9 @@
                     super.callHackageDirect { inherit pkg ver sha256; } { };
                 in
                 {
-                  co-log =
-                    packageFromHackage "co-log" "0.6.1.2"
-                      "sha256-3drK/5n45xLc2DES0tTAqGvR6DHpgWnWvPjdx987DeE=";
-                  co-log-concurrent = jailbreakUnbreak super.co-log-concurrent;
-                  with-utf8 = super.with-utf8_1_1_0_0;
-                  bytebuild = super.bytebuild_0_3_16_3;
-                  chronos = super.chronos_1_1_6_2;
+                  # co-log-concurrent = jailbreakUnbreak super.co-log-concurrent;
+                  # with-utf8 = super.with-utf8_1_1_0_0;
+                  tls = packageFromHackage "tls" "1.9.0" "sha256-WpzhvGh6AUdWEKMit2PcpmCo1R28wyTlJY/r5503zL8=";
                 };
             };
 
@@ -130,20 +126,9 @@
                 };
               in
               {
-                co-log = {
-                  check = false;
-                };
-                co-log-concurrent = {
-                  check = false;
-                };
-                with-utf8 = {
-                  check = false;
-                };
-                bytebuild = default;
-                chronos = default;
-                PyF = {
-                  check = false;
-                };
+                crypton = default;
+                tls = default;
+                http-client-tls = default;
               };
 
             # Development shell configuration

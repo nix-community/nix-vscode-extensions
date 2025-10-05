@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.36.0.
+-- This file has been generated from package.yaml by hpack version 0.37.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -34,35 +34,20 @@ library
   hs-source-dirs:
       src
   default-extensions:
-      BangPatterns
       BlockArguments
-      ConstraintKinds
-      DeriveGeneric
-      DerivingStrategies
       DuplicateRecordFields
-      FlexibleContexts
-      FlexibleInstances
       GeneralizedNewtypeDeriving
       ImplicitParams
-      ImportQualifiedPost
-      InstanceSigs
-      LambdaCase
-      NamedFieldPuns
-      NumericUnderscores
       OverloadedLabels
       OverloadedRecordDot
       OverloadedStrings
       QuasiQuotes
-      RankNTypes
-      RecordWildCards
-      ScopedTypeVariables
-      StandaloneDeriving
-      TypeApplications
       TypeFamilies
       ViewPatterns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
-      aeson
+      PyF
+    , aeson
     , async
     , async-pool
     , base >=4.7 && <5
@@ -70,6 +55,7 @@ library
     , co-log
     , co-log-concurrent
     , data-default
+    , directory
     , generic-lens
     , hashable
     , http-client
@@ -80,19 +66,20 @@ library
     , megaparsec
     , mtl
     , optparse-generic
+    , prettyprinter
+    , scientific
     , stm
     , stm-chans
-    , string-interpolate
     , text
     , time
-    , turtle
+    , unbounded-delays
     , unliftio
     , unordered-containers
     , vector
     , versions
     , with-utf8
     , yaml
-  default-language: Haskell2010
+  default-language: GHC2024
 
 executable updater
   main-is: Main.hs
@@ -101,35 +88,20 @@ executable updater
   hs-source-dirs:
       app
   default-extensions:
-      BangPatterns
       BlockArguments
-      ConstraintKinds
-      DeriveGeneric
-      DerivingStrategies
       DuplicateRecordFields
-      FlexibleContexts
-      FlexibleInstances
       GeneralizedNewtypeDeriving
       ImplicitParams
-      ImportQualifiedPost
-      InstanceSigs
-      LambdaCase
-      NamedFieldPuns
-      NumericUnderscores
       OverloadedLabels
       OverloadedRecordDot
       OverloadedStrings
       QuasiQuotes
-      RankNTypes
-      RecordWildCards
-      ScopedTypeVariables
-      StandaloneDeriving
-      TypeApplications
       TypeFamilies
       ViewPatterns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
+      PyF
+    , aeson
     , async
     , async-pool
     , base >=4.7 && <5
@@ -137,6 +109,7 @@ executable updater
     , co-log
     , co-log-concurrent
     , data-default
+    , directory
     , generic-lens
     , hashable
     , http-client
@@ -147,12 +120,13 @@ executable updater
     , megaparsec
     , mtl
     , optparse-generic
+    , prettyprinter
+    , scientific
     , stm
     , stm-chans
-    , string-interpolate
     , text
     , time
-    , turtle
+    , unbounded-delays
     , unliftio
     , unordered-containers
     , updater
@@ -160,4 +134,4 @@ executable updater
     , versions
     , with-utf8
     , yaml
-  default-language: Haskell2010
+  default-language: GHC2024

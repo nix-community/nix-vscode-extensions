@@ -19,31 +19,17 @@ extra-source-files:
 # common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/value/updater#readme>
 
+language: GHC2024
+
 default-extensions:
-- BangPatterns
 - BlockArguments
-- ConstraintKinds
-- DeriveGeneric
-- DerivingStrategies
 - DuplicateRecordFields
-- FlexibleContexts
-- FlexibleInstances
 - GeneralizedNewtypeDeriving
 - ImplicitParams
-- ImportQualifiedPost
-- InstanceSigs
-- LambdaCase
-- NamedFieldPuns
-- NumericUnderscores
 - OverloadedLabels
 - OverloadedRecordDot
 - OverloadedStrings
 - QuasiQuotes
-- RankNTypes
-- RecordWildCards
-- ScopedTypeVariables
-- StandaloneDeriving
-- TypeApplications
 - TypeFamilies
 - ViewPatterns
 
@@ -56,6 +42,7 @@ dependencies:
 - co-log
 - co-log-concurrent
 - data-default
+- directory
 - generic-lens
 - hashable
 - http-client
@@ -66,14 +53,16 @@ dependencies:
 - megaparsec
 - mtl
 - optparse-generic
+- prettyprinter
+- PyF
+- scientific
 - stm
 - stm-chans
-- string-interpolate
 - text
 - time
-- turtle
 - unliftio
 - unordered-containers
+- unbounded-delays
 - vector
 - versions
 - with-utf8
