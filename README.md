@@ -24,7 +24,7 @@ Read the [VS Code page](https://wiki.nixos.org/wiki/Visual_Studio_Code) on the N
 
 - Read about [Nix flakes](https://wiki.nixos.org/wiki/Flakes).
 - [Set them up](https://wiki.nixos.org/wiki/Flakes#Setup).
-- Enable the [`nix-command`](https://nix.dev/manual/nix/2.18/contributing/experimental-features#xp-feature-nix-command) option to use [`nix repl`](https://nix.dev/manual/nix/2.18/command-ref/new-cli/nix3-repl) (see [Explore](#explore)) and other experimental commands. This option should already be enabled if you followed the setup instructions for flakes.
+- Enable the [`nix-command`](https://nix.dev/manual/nix/2.31/contributing/experimental-features#xp-feature-nix-command) option to use [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl) (see [Explore](#explore)) and other experimental commands. This option should already be enabled if you followed the setup instructions for flakes.
 
 ### (Optional) Allow unfree packages
 
@@ -41,7 +41,7 @@ cd nix-vscode-extensions
 
 ### (Optional) Start REPL
 
-See [nix repl](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html).
+See [nix repl](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html).
 
 ```console
 nix repl
@@ -82,7 +82,7 @@ Run `VS Code` and list installed extensions.
 nix run github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d# -- --list-extensions
 ```
 
-Or, inspect the package in the Nix REPL (see [`nix repl`](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html)).
+Or, inspect the package in the Nix REPL (see [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html)).
 
 ```console
 nix repl
@@ -97,7 +97,7 @@ This repository has a flake [template](template/flake.nix).
 
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 
-1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/latest/command-ref/new-cli/nix3-flake-new.html)).
+1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/2.31/command-ref/new-cli/nix3-flake-new.html)).
 
    ```console
    nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
@@ -154,7 +154,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [The `extensions` attrset](#the-extensions-attrset), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
 > [!NOTE]
-> See [With-expressions](https://nix.dev/manual/nix/latest/language/syntax#with-expressions).
+> See [With-expressions](https://nix.dev/manual/nix/2.31/language/syntax#with-expressions).
 >
 > In `with A; with B;`, the attributes of `B` shadow the attributes of `A`.
 >
