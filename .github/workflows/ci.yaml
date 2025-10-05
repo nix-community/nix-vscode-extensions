@@ -44,8 +44,8 @@ jobs:
       - name: Check flake
         # --impure is necessary for checking the updater
         run: nix flake check --impure
-      # - uses: mxschmitt/action-tmate@v3
-      #   if: always()
+      - uses: mxschmitt/action-tmate@v3
+        if: always()
       - name: Save flake attributes from GC
         if: always()
         run: nix profile install .#saveFromGC.ci.jobs.test
