@@ -530,22 +530,6 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 - Extension with multiple extensions in a zipfile ([issue](https://github.com/nix-community/nix-vscode-extensions/issues/31))
 - Platform-specific extensions ([comment](https://github.com/nix-community/nix-vscode-extensions/issues/20#issuecomment-1543679655))
 
-### Main flake
-
-1. (Optionally) [Install](https://direnv.net/#basic-installation), e.g., via `nix profile install nixpkgs#direnv`.
-
-1. Run a devshell. When prompted about `extra-trusted-substituters` answer `y`. This is to use binary caches.
-
-   ```console
-   nix develop nix-dev/
-   ```
-
-1. (Optionally) Start `VSCodium` with necessary extensions and tools.
-
-   ```console
-   nix run nix-dev/#codium .
-   ```
-
 ### Haskell script
 
 See the [./haskell/README.md](./haskell/README.md#quick-start).
