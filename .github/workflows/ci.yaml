@@ -49,7 +49,7 @@ jobs:
       #   if: always()
       - name: Save flake attributes from GC
         if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.test
+        run: nix profile add .#saveFromGC.ci.jobs.test
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
@@ -99,7 +99,7 @@ jobs:
         # Need this to run before updateExtensions*
         # because the following steps run GC
         if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.update
+        run: nix profile add .#saveFromGC.ci.jobs.update
       - name: Update extensions
         run: nix run .#updateExtensions -- --config config.yaml
       - name: Update extra extensions
@@ -162,7 +162,7 @@ jobs:
         run: nix develop -vvv template/#vscodium
       - name: Save flake attributes from GC
         if: always()
-        run: nix profile install .#saveFromGC.ci.jobs.test-template
+        run: nix profile add .#saveFromGC.ci.jobs.test-template
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
