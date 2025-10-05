@@ -341,14 +341,13 @@ runInfoFetcher extensionInfoCached extensionConfigs =
     liftIO do
       writeDebugJsonCompact "info-present-and-fetched" extensionInfoCachedAndFetched
       writeDebugJsonCompact "configs-fetched-not-cached" extensionConfigsFetchedNotCached
-      writeDebugJsonCompact "configs-missing" extensionConfigsFetchedNotCached
 
     traverse_
       logInfo
       [ [fmt|{INFO} We have cached info for {length extensionInfoCached} extensions.|]
       , [fmt|{INFO} {length extensionConfigsFetchedNotCached} fetched configs have no corresponding cached info.|]
       , [fmt|{START} Running a fetcher on {target}.|]
-      , [fmt|{INFO} Fetching {length extensionConfigsFetchedNotCached} extensions whose fetched configs have no corresponding cached info.|]
+      , [fmt|{INFO} Fetching {length extensionConfigsFetchedNotCached} extensions.|]
       ]
 
     -- we prepare shared queues and variables
