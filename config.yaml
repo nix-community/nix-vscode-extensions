@@ -1,7 +1,7 @@
 collectGarbage: true
 garbageCollectorDelay: 10
 logSeverity: Info
-maxMissingTimes: 10
+maxMissingTimes: 100
 programTimeout: 3600
 openVSX:
   enable: true
