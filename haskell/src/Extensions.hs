@@ -95,7 +95,7 @@ data ExtensionConfig = ExtensionConfig
   , platform :: Platform
   , version :: Version
   , engineVersion :: EngineVersion
-  , missingTimes :: Int
+  -- , missingTimes :: Int
   }
   deriving stock (Generic, Show, Eq, Ord)
   deriving anyclass (Hashable, GToOrderedKeysJsonBs)
@@ -111,10 +111,11 @@ data ExtensionInfo = ExtensionInfo
   , platform :: Platform
   , version :: Version
   , engineVersion :: EngineVersion
-  , missingTimes :: Int
   -- ^ How many times the extension could be missing
   -- in the responses about all available extensions.
-  , hash :: Text
+  , -- , missingTimes :: Int
+
+    hash :: Text
   }
   deriving stock (Generic, Show, Eq, Ord)
   deriving anyclass (Hashable, GToOrderedKeysJsonBs)
@@ -346,7 +347,7 @@ fieldLabelModifier' = \case
   "version" -> "v"
   "engineVersion" -> "e"
   "hash" -> "h"
-  "missingTimes" -> "m"
+  -- "missingTimes" -> "m"
   x -> error [fmt|Field not found: {x}|]
 
 optionsExtensionInfo :: Options
