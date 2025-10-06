@@ -78,7 +78,7 @@ jobs:
           nix_version: "2.31.2"
       - uses: nix-community/cache-nix-action/restore@v6
         with:
-          primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
+          primary-key: nix-update-${{ hashfiles('{.,nix-dev,haskell}/*.{nix,lock}','haskell/updater.cabal', 'haskell/package.yaml') }}
           restore-prefixes-first-match: nix-update-
       - name: Configure git
         env:
@@ -121,7 +121,7 @@ jobs:
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
-          primary-key: nix-update-${{ hashfiles('{.,nix-dev}/*.{nix,lock}', 'haskell') }}
+          primary-key: nix-update-${{ hashfiles('{.,nix-dev,haskell}/*.{nix,lock}','haskell/updater.cabal', 'haskell/package.yaml') }}
           gc-max-store-size: 3G
           purge: true
           purge-prefixes: nix-update-
