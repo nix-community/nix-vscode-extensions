@@ -57,7 +57,7 @@ data AppConfig f = AppConfig
   -- ^ Data directory
   , queueCapacity :: HKD f Int
   -- ^ Max number of elements to store in a queue
-  , maxMissingTimes :: HKD f Int
+  -- , maxMissingTimes :: HKD f Int
   -- ^ Max number of times an extension may be missing before it's removed from cache
   , requestResponseTimeout :: HKD f Int
   -- ^ Seconds to wait until the site responds
@@ -96,8 +96,8 @@ type Settings =
   , ?tmpDir :: FilePath
   , ?fetchedDir :: FilePath
   , ?failedDir :: FilePath
-  , ?maxMissingTimes :: Int
-  , ?collectGarbage :: Bool
+  , -- , ?maxMissingTimes :: Int
+    ?collectGarbage :: Bool
   , ?processedLoggerDelay :: Int
   , ?garbageCollectorDelay :: Int
   , ?requestResponseTimeout :: Int
@@ -110,7 +110,6 @@ type Settings =
 instance FromJSON (SiteConfig Identity)
 instance FromJSON (SiteConfig Maybe)
 deriving instance Eq (SiteConfig Maybe)
-
 
 instance FromJSON Severity where
   parseJSON :: Value -> Data.Aeson.Types.Parser Severity
@@ -170,8 +169,8 @@ mkDefaultAppConfig ac =
     , logSeverity = ac.logSeverity ^. non Info
     , dataDir = ac.dataDir ^. non "data"
     , queueCapacity = ac.queueCapacity ^. non 200
-    , maxMissingTimes = ac.maxMissingTimes ^. non 5
-    , requestResponseTimeout = ac.requestResponseTimeout ^. non 100
+    , -- , maxMissingTimes = ac.maxMissingTimes ^. non 5
+      requestResponseTimeout = ac.requestResponseTimeout ^. non 100
     , openVSX = ac.openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
     , vscodeMarketplace = ac.vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
     }
@@ -188,7 +187,6 @@ instance Show Pretty where
 -- dataDir: data
 -- garbageCollectorDelay: 30
 -- logSeverity: Info
--- maxMissingTimes: 5
 -- nRetry: 3
 -- openVSX:
 --   enable: true

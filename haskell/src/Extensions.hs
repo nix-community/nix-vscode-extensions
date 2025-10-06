@@ -10,6 +10,7 @@ import Data.Aeson.Lens (_String)
 import Data.Aeson.Types (parseFail)
 import Data.Aeson.Types qualified
 import Data.ByteString qualified as BS
+import Data.ByteString.Lazy qualified as BSL
 import Data.Function ((&))
 import Data.Functor (void)
 import Data.Generics.Labels ()
@@ -29,7 +30,6 @@ import Text.Megaparsec (Parsec, choice, many, (<|>))
 import Text.Megaparsec qualified as TM (parse, parseMaybe)
 import Text.Megaparsec.Char (asciiChar, string)
 import Text.Megaparsec.Char.Lexer (decimal)
-import qualified Data.ByteString.Lazy as BSL
 
 -- | Possible targets
 data Target = VSCodeMarketplace | OpenVSX
@@ -95,7 +95,7 @@ data ExtensionConfig = ExtensionConfig
   , platform :: Platform
   , version :: Version
   , engineVersion :: EngineVersion
-  , missingTimes :: Int
+  -- , missingTimes :: Int
   }
   deriving stock (Generic, Show, Eq, Ord)
   deriving anyclass (Hashable, GToOrderedKeysJsonBs)
@@ -111,10 +111,11 @@ data ExtensionInfo = ExtensionInfo
   , platform :: Platform
   , version :: Version
   , engineVersion :: EngineVersion
-  , missingTimes :: Int
   -- ^ How many times the extension could be missing
   -- in the responses about all available extensions.
-  , hash :: Text
+  , -- , missingTimes :: Int
+
+    hash :: Text
   }
   deriving stock (Generic, Show, Eq, Ord)
   deriving anyclass (Hashable, GToOrderedKeysJsonBs)
@@ -346,7 +347,7 @@ fieldLabelModifier' = \case
   "version" -> "v"
   "engineVersion" -> "e"
   "hash" -> "h"
-  "missingTimes" -> "m"
+  -- "missingTimes" -> "m"
   x -> error [fmt|Field not found: {x}|]
 
 optionsExtensionInfo :: Options
@@ -392,6 +393,15 @@ instance ToJsonBs BS.ByteString where
 
 instance ToJsonBs BSL.ByteString where
   toJsonBs = BS.toStrict
+
+instance (ToJsonBs a, ToJsonBs b) => ToJsonBs (a, b) where
+  toJsonBs (a, b) = [fmt|[{toJsonBs a}, {toJsonBs b}]|]
+
+instance ToJsonBs Publisher where
+  toJsonBs p = [fmt|{p}|]
+
+instance ToJsonBs Name where
+  toJsonBs p = [fmt|{p}|]
 
 instance ToJsonBs ExtensionInfo where
   toJsonBs = gToJsonOrderedKeys optionsExtensionInfo

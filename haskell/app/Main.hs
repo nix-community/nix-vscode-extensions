@@ -243,8 +243,8 @@ getExtension
                     , publisher
                     , version
                     , platform
-                    , missingTimes = 0
-                    , engineVersion
+                    , -- , missingTimes = 0
+                      engineVersion
                     , hash
                     , isRelease
                     }
@@ -318,7 +318,14 @@ runInfoFetcher extensionInfoCached extensionConfigs =
                 <$> extensionConfigsUnique
             )
         )
-          & bimap ((\x -> x & #missingTimes .~ 0) . fromJust . fst <$>) (snd <$>)
+          & bimap
+            ( -- (\x -> x & #missingTimes .~ 0)
+              -- .
+              fromJust
+                . fst
+                <$>
+            )
+            (snd <$>)
 
       extensionInfoCachedAndFetchedMap =
         HashMap.fromList ((\d -> (mkKey d, d)) <$> extensionInfoCachedAndFetched)
@@ -331,9 +338,9 @@ runInfoFetcher extensionInfoCached extensionConfigs =
             . filtered
               ( \c ->
                   (isNothing $ HashMap.lookup (mkKey c) extensionInfoCachedAndFetchedMap)
-                    && (c.missingTimes + 1 < ?maxMissingTimes)
+                  -- && (c.missingTimes + 1 < ?maxMissingTimes)
               )
-          & traversed . #missingTimes +~ 1
+      -- & traversed . #missingTimes +~ 1
 
       -- and calculate the number of the configs of extensions that are missing
       numberExtensionConfigsFetchedNotCached = length extensionConfigsFetchedNotCached
@@ -531,7 +538,6 @@ mkRequest target requestBody =
 requestJsonEither :: (MonadIO w, ToJSON a) => Target -> a -> w (Response (Either JSONException Value))
 requestJsonEither target requestBody = httpJSONEither @_ @Value (mkRequest target requestBody)
 
-
 -- | A request flag value.
 --
 -- https://github.com/microsoft/vscode/blob/b4c1eaa7c86d5daa45f6a41e255e70ae3cb03326/src/vs/platform/extensionManagement/common/extensionGalleryManifestService.ts#L158
@@ -707,7 +713,7 @@ getExtensionConfigsFromResponse response =
                                         ^? traversed
                                           . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
                                         & is _Empty
-                                    missingTimes = 0
+                                    -- missingTimes = 0
                                 guard (isJust engineVersion)
                                 pure
                                   ExtensionConfig
@@ -716,7 +722,7 @@ getExtensionConfigsFromResponse response =
                                     , publisher
                                     , version
                                     , platform
-                                    , missingTimes
+                                    -- , missingTimes
                                     , isRelease = IsRelease release
                                     }
                             )
@@ -728,8 +734,8 @@ getExtensionConfigsFromResponse response =
       . traversed
 
 -- | Get a list of extension configs from VS Code Marketplace
-getExtensionConfigsRelease :: (Settings) => Target -> [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
-getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
+getExtensionConfigsRelease :: (Settings, ?target :: Target) => [ExtensionConfig] -> [ExtensionInfo] -> MyLogger [ExtensionConfig]
+getExtensionConfigsRelease extensionConfigs extensionInfoCached = do
   logInfo [fmt|{START} Identifying pre-release extensions that may have release versions|]
 
   let
@@ -737,16 +743,17 @@ getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
     -- Hence, if they contain a pre-release version of an extension,
     -- they don't contain a release version of the extension.
 
-    -- We find all pre-release configs from the response.
-    extensionConfigsPreRelease =
+    -- We find ids of fetched pre-release configs.
+    extensionIdsPreRelease =
       extensionConfigs
         ^.. traversed
           . filtered (not . coerce . (.isRelease))
           . to (\c -> (c.publisher, c.name))
 
     -- We find cached pre-release configs that
-    -- don't have any corresponding cached release configs.
-    extensionConfigsPreReleaseCached =
+    -- don't have any corresponding cached release configs
+    -- and get their ids.
+    extensionIdsPreReleaseCached =
       let (preRelease, release) = partition (not . coerce . (.isRelease)) extensionInfoCached
           mkSet info = HashSet.fromList [(c.publisher, c.name) | c <- info]
        in HashSet.toList $
@@ -754,17 +761,24 @@ getExtensionConfigsRelease target extensionConfigs extensionInfoCached = do
               (mkSet preRelease)
               (mkSet release)
 
-    extensionIdsPreRelease =
+    extensionIdsPreReleaseAll =
       HashSet.toList $
         HashSet.fromList
-          ( extensionConfigsPreRelease
-              <> extensionConfigsPreReleaseCached
+          ( extensionIdsPreRelease
+              <> extensionIdsPreReleaseCached
           )
+
+  logInfo [fmt|Found {length extensionIdsPreReleaseAll} configs.|]
+
+  liftIO do
+    writeDebugJsonCompact "ids-pre-release-configs" extensionIdsPreRelease
+    writeDebugJsonCompact "ids-pre-release-cached" extensionIdsPreReleaseCached
 
   logInfo [fmt|{FINISH} Identifying pre-release extensions that may have release versions|]
 
   let nRetry = ?nRetry
       siteConfig = targetSelect target ?vscodeMarketplace ?openVSX
+      target = ?target
 
   retry_ nRetry [fmt|Collecting the release extension configs from {target}|] do
     let
@@ -862,7 +876,7 @@ getExtensionConfigsReleaseFromResponse response =
                                             . key "value"
                                             . _String
                                             . _EngineVersion
-                                      missingTimes = 0
+                                      -- missingTimes = 0
                                       release =
                                         properties
                                           ^? traversed
@@ -872,7 +886,7 @@ getExtensionConfigsReleaseFromResponse response =
                                   pure
                                     ExtensionConfig
                                       { engineVersion = fromJust engineVersion
-                                      , missingTimes
+                                      -- , missingTimes
                                       , name
                                       , publisher
                                       , version
@@ -934,7 +948,7 @@ runConfigFetcher extensionInfoCached = do
       -- For VS Code, latest configs already include
       -- both release and pre-release versions
       (pure [])
-      (getExtensionConfigsRelease target extensionConfigsLatest extensionInfoCached)
+      (getExtensionConfigsRelease extensionConfigsLatest extensionInfoCached)
 
   -- TODO check
   -- These configs should be unique because we found fetched configs
@@ -998,7 +1012,6 @@ processTarget =
     -- in case of errors, rethrow an exception
     `logAndForwardError` (let target = ?target in [fmt|when requesting {target}|])
 
-
 newtype ConfigOptions w = ConfigOptions
   { config :: w ::: Maybe FilePath <?> "Path to a config file"
   }
@@ -1057,7 +1070,7 @@ main =
         ?openVSX = config_.openVSX
         ?processedLoggerDelay = config_.processedLoggerDelay
         ?vscodeMarketplace = config_.vscodeMarketplace
-        ?maxMissingTimes = config_.maxMissingTimes
+        -- ?maxMissingTimes = config_.maxMissingTimes
         ?requestResponseTimeout = config_.requestResponseTimeout
 
     let timeoutMicroseconds = fromIntegral config_.programTimeout * _MICROSECONDS
