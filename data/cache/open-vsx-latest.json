@@ -1771,10 +1771,10 @@
 , {"p":"TomsMartinez","n":"localhost-browser","r":1,"s":0,"v":"1.1.3","e":"^1.74.0","h":"sha256-RmsIaK1NjwkhhmasM6bbi41rmTXL2PmvRKlIQt6KpZU="}
 , {"p":"ToughType","n":"pydance","r":1,"s":0,"v":"0.3.0","e":"^1.85.0","h":"sha256-bex+mm5+KlvLk/iwdeBuM6mh6+Kgt/QaDDPzpK+UuD4="}
 , {"p":"Traves-Theberge","n":"nudgeai","r":1,"s":0,"v":"1.0.7","e":"^1.96.2","h":"sha256-P6uItzwe8JXMJAg5yP4KPcShfRCmsKHYnPQMP2Pi1OE="}
-, {"p":"Traycer","n":"traycer-vscode","r":1,"s":1,"v":"2.11.3","e":"^1.75.0","h":"sha256-9IWzQZ4rW6Vz7QSE1tf5HToJ9eW97ofunU3Euex6jCs="}
-, {"p":"Traycer","n":"traycer-vscode","r":1,"s":2,"v":"2.11.3","e":"^1.75.0","h":"sha256-o/p7fNS/pGsd5T3IZomKFhg+5yMybSMqmcOerEmEUHw="}
-, {"p":"Traycer","n":"traycer-vscode","r":1,"s":3,"v":"2.11.3","e":"^1.75.0","h":"sha256-KtmjZIBV8IpETnLZfy3hpv1v5YNtJ15W/xmsgUlUgPs="}
-, {"p":"Traycer","n":"traycer-vscode","r":1,"s":4,"v":"2.11.3","e":"^1.75.0","h":"sha256-LbbelVmk2rqJRx6QfUgNF4zINl3Q/MWvjLB8L/ztibM="}
+, {"p":"Traycer","n":"traycer-vscode","r":1,"s":1,"v":"2.11.4","e":"^1.75.0","h":"sha256-aIceZ31u6Aiyphg8wP6PBZPvU48lTMAUi+30MnClSMk="}
+, {"p":"Traycer","n":"traycer-vscode","r":1,"s":2,"v":"2.11.4","e":"^1.75.0","h":"sha256-NMwzRBbscScrGTkpK5xly8JS1XtXnJDbWBSvwUh6I8s="}
+, {"p":"Traycer","n":"traycer-vscode","r":1,"s":3,"v":"2.11.4","e":"^1.75.0","h":"sha256-nRT37LsCvQxoN+ud7MzoXYHOxAEbxVICL95GNKRR068="}
+, {"p":"Traycer","n":"traycer-vscode","r":1,"s":4,"v":"2.11.4","e":"^1.75.0","h":"sha256-/RxAQR6Iq0XbwCvFVxih0rxkTo1rVU8SOxzLwetPQ0k="}
 , {"p":"Trelent","n":"trelent","r":1,"s":0,"v":"1.3.1","e":"^1.60.0","h":"sha256-j6e2LIO9yaEcs58SYr+ND5i6BGAD3+fTcJgEh/hdGgs="}
 , {"p":"TretinV3","n":"forts-api-extention","r":1,"s":0,"v":"0.3.0","e":"^1.75.0","h":"sha256-6qjYk1E+DBfH0EhNmYKZSE9WCXzDrur8k2a8mGMHRuE="}
 , {"p":"TrueSparrow","n":"sirji","r":1,"s":0,"v":"0.0.31","e":"^1.80.2","h":"sha256-z8d8DWIH1UA8m7ih2qhxFm3B/ZQerZ0exxEkkm3Buwg="}
@@ -2085,7 +2085,7 @@
 , {"p":"aleggs","n":"open-in-sourcegraph-2","r":1,"s":0,"v":"1.0.2","e":"^1.94.0","h":"sha256-vUFWS8gbCrj3NDOXwxAXMRUemXRDsLMYwYDfDfUIunw="}
 , {"p":"aleksa-codes","n":"one-dark-modern-pro","r":1,"s":0,"v":"1.0.8","e":"^1.76.0","h":"sha256-Wb8oN0eiG5R/8RXNAB84ATr/6szJVe90qmZ0+0W823U="}
 , {"p":"alesbrelih","n":"gitlab-ci-ls","r":1,"s":0,"v":"1.0.0","e":"^1.75.0","h":"sha256-gd3KzjV7seeIvKNl5dFPDvdyA9CWhEeqQUcZV9rt/dk="}
-, {"p":"alex-c","n":"code-canvas-app","r":1,"s":0,"v":"0.9.0","e":"^1.93.0","h":"sha256-eknnoQz35gzTgE5SghXiTc/sP4Xd40SebUYjCqWpYc8="}
+, {"p":"alex-c","n":"code-canvas-app","r":1,"s":0,"v":"0.10.0","e":"^1.93.0","h":"sha256-XsQ0x2EcNGjIgER3vHdhSv0zpk7WI/baWv2Y5xOoPbw="}
 , {"p":"alex-tf","n":"foldable-use-statements","r":1,"s":0,"v":"0.0.5","e":"^1.99.0","h":"sha256-qs1/LHMMZIvryHmLXpWfzFi/2m6h2Vvl6+ykcOUP0rE="}
 , {"p":"alexanderbast","n":"vscode-snazzy","r":1,"s":0,"v":"2.9.0","e":"^0.0.0","h":"sha256-/+hfDtg9Q4KlV4kHJ9qW4JDV+s1ymLbwGQzUoC77wWY="}
 , {"p":"alexandrepaiva-dev","n":"nextjs-app-router-ts-vscode-snippets","r":1,"s":0,"v":"1.1.0","e":"^1.97.0","h":"sha256-oAXVGekPk2vTNQJEfFUclL6uVWlPrfmgmOB8rnikqVM="}
