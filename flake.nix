@@ -232,9 +232,8 @@
                           };
                         in
                         {
-                          inherit name;
+                          inherit publisher name;
                           value = mkExtension extensionConfig;
-                          inherit (extensionConfig.mktplcRef) publisher;
                         }
                       )
                     )
