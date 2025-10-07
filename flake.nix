@@ -283,7 +283,7 @@
 
                             valueSelected =
                               if acc ? ${name} then
-                                if acc.${name}.meta.extensionConfig.isRelease == valueValidated.meta.extensionConfig.isRelease then
+                                if acc.${name}.passthru.isRelease == valueValidated.passthru.isRelease then
                                   valueValidated
                                 else
                                   acc.${name}

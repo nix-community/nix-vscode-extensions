@@ -34,7 +34,7 @@ let
   };
 
   applyMkExtension = builtins.mapAttrs (
-    publisher: builtins.mapAttrs (name: f: { mktplcRef, vsix }@extensionConfig: f (extensionConfig))
+    publisher: builtins.mapAttrs (name: f: { mktplcRef, vsix }@extensionConfig: f extensionConfig)
   );
 
   mkExtensionLocal = applyMkExtension (import ./extensions { pkgs = pkgs'; });
@@ -142,9 +142,9 @@ let
             buildVscodeMarketplaceExtension
         );
 
-      extension = lib.meta.addMetaAttrs { inherit extensionConfig; } (mkExtension {
-        inherit mktplcRef vsix;
-      });
+      extension = (mkExtension { inherit mktplcRef vsix; }) // {
+        passthru = extensionConfig;
+      };
     in
     extension;
 in
