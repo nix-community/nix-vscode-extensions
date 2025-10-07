@@ -40,9 +40,9 @@ let
   # nix-repl> rev = "1.11.6"
   # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
   # nix-repl> :b src
-  # 
+  #
   # copy the hash that you got
-  # 
+  #
   # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-uqvcixxJduF1l/qgt2rIACNsPcH1REiVwRz3zZBA82Q="; }
   hash =
     {
@@ -57,7 +57,7 @@ let
     .${version};
 
   # nix-repl> :b pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; inherit src; useFetchCargoVendor = true; }
-  # 
+  #
   # add here the cargoHash that you got.
   cargoHash =
     {
@@ -72,7 +72,7 @@ let
     .${version};
 
   # nix-repl> :b pkgs.buildNpmPackage { npmDepsHash = ""; name = "dummy"; inherit src; dontNpmBuild = true; }
-  # 
+  #
   # add here the npmDepsHash that you got.
   npmDepsHash =
     {
@@ -153,14 +153,13 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
     cp -r ${nodeDeps}/lib/node_modules .
   '';
 
-  postConfigure =
-    ''
-      cp -r ${nodeDeps}/lib/node_modules .
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export HOME="$TMPDIR/home"
-      mkdir $HOME
-    '';
+  postConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export HOME="$TMPDIR/home"
+    mkdir $HOME
+  '';
 
   cmakeFlags = [
     # Do not append timestamp to version.

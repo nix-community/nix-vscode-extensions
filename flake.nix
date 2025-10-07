@@ -534,9 +534,9 @@
                       # yzane.markdown-pdf
                     ]
                   ))
-                  ++ (with extensions.vscode-marketplace-universal; [ 
+                  ++ (with extensions.vscode-marketplace-universal; [
                     # TODO make v1.11.6 build
-                    # vadimcn.vscode-lldb 
+                    # vadimcn.vscode-lldb
                   ]);
               }).overrideAttrs
                 (prev: {
