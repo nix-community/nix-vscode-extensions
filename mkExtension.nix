@@ -71,7 +71,11 @@ let
       # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
       "vadimcn.vscode-lldb"
       "rust-lang.rust-analyzer"
-    ];
+    ]
+    ++
+    # Nixpkgs doesn't provide special fixes for these extensions.
+    # Therefore, no need to use expressions from nixpkgs.
+    [ "kilocode.kilo-code" ];
 
   pathSpecial = {
     ms-ceintl = "language-packs.nix";
