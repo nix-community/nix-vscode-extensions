@@ -75,7 +75,10 @@ let
     ++
     # Nixpkgs doesn't provide special fixes for these extensions.
     # Therefore, no need to use expressions from nixpkgs.
-    [ "kilocode.kilo-code" ];
+    [
+      "kilocode.kilo-code"
+      "eamodio.gitlens"
+    ];
 
   pathSpecial = {
     ms-ceintl = "language-packs.nix";
