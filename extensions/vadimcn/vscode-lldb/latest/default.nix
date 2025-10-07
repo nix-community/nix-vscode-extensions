@@ -140,6 +140,7 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    cargo
     makeWrapper
     nodejs
     unzip
