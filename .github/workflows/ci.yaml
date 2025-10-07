@@ -24,7 +24,7 @@ jobs:
         os:
           - ubuntu-24.04
           - ubuntu-24.04-arm
-          - macos-13
+          - macos-14
           - macos-15
       fail-fast: false
     runs-on: ${{ matrix.os }}
@@ -141,7 +141,7 @@ jobs:
         os:
           - ubuntu-24.04
           - ubuntu-24.04-arm
-          - macos-13
+          - macos-14
           - macos-15
     runs-on: ${{ matrix.os }}
     steps:
