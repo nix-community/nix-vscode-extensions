@@ -5,7 +5,11 @@
 
 # Custom fixes are loaded via `mkExtensionLocal`.
 
-{ pkgs, pkgsWithFixes, system }:
+{
+  pkgs,
+  pkgsWithFixes,
+  system,
+}:
 let
   inherit (pkgs) lib;
 
