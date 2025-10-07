@@ -640,6 +640,25 @@
                   expr = (builtins.tryEval vscode-marketplace.rust-lang.rust-analyzer).success;
                   expected = true;
                 };
+                "test: `allowAliases = false` and `checkMeta = true` work" = {
+                  # https://github.com/nix-community/nix-vscode-extensions/issues/142
+                  expr =
+                    let
+                      pkgs = import inputs.nixpkgs {
+                        inherit system;
+
+                        config = {
+                          allowAliases = false;
+                          checkMeta = true;
+                        };
+
+                        overlays = [ self.overlays.default ];
+                      };
+                      extensions = pkgs.nix-vscode-extensions;
+                    in
+                    (builtins.tryEval extensions.vscode-marketplace.b4dm4n.nixpkgs-fmt).success;
+                  expected = true;
+                };
               };
           };
 
