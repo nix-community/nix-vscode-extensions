@@ -75,7 +75,8 @@
               let
                 pkgs = prev;
                 inherit (pkgs) lib;
-                platformCurrent = systemPlatform.${final.system};
+                system = final.stdenv.hostPlatform.system;
+                platformCurrent = systemPlatform.${system};
                 isCompatibleVersion =
                   vscodeVersion: engineVersion:
                   if lib.strings.hasPrefix "^" engineVersion then
@@ -195,7 +196,7 @@
                       let
                         # keep outside of map to improve performance
                         # TODO pass user's nixpkgs
-                        mkExtension = import ./mkExtension.nix { inherit pkgs pkgsWithFixes; };
+                        mkExtension = import ./mkExtension.nix { inherit pkgs pkgsWithFixes system; };
                       in
                       map (
                         {

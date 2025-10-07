@@ -5,7 +5,7 @@
 
 # Custom fixes are loaded via `mkExtensionLocal`.
 
-{ pkgs, pkgsWithFixes }:
+{ pkgs, pkgsWithFixes, system }:
 let
   inherit (pkgs) lib;
 
@@ -39,7 +39,7 @@ let
 
   mkExtensionLocal = applyMkExtension (import ./extensions { pkgs = pkgs'; });
 
-  extensionsRemoved = (import ./removed.nix).${pkgs.system} or [ ];
+  extensionsRemoved = (import ./removed.nix).${system} or [ ];
 
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 
