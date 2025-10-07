@@ -75,7 +75,8 @@
               let
                 pkgs = prev;
                 inherit (pkgs) lib;
-                platformCurrent = systemPlatform.${final.system};
+                system = final.stdenv.hostPlatform.system;
+                platformCurrent = systemPlatform.${system};
                 isCompatibleVersion =
                   vscodeVersion: engineVersion:
                   if lib.strings.hasPrefix "^" engineVersion then
@@ -195,7 +196,7 @@
                       let
                         # keep outside of map to improve performance
                         # TODO pass user's nixpkgs
-                        mkExtension = import ./mkExtension.nix { inherit pkgs pkgsWithFixes; };
+                        mkExtension = import ./mkExtension.nix { inherit pkgs pkgsWithFixes system; };
                       in
                       map (
                         {
@@ -231,9 +232,8 @@
                           };
                         in
                         {
-                          inherit name;
+                          inherit publisher name;
                           value = mkExtension extensionConfig;
-                          inherit (extensionConfig.mktplcRef) publisher;
                         }
                       )
                     )
@@ -282,7 +282,7 @@
 
                             valueSelected =
                               if acc ? ${name} then
-                                if acc.${name}.meta.extensionConfig.isRelease == valueValidated.meta.extensionConfig.isRelease then
+                                if acc.${name}.passthru.isRelease == valueValidated.passthru.isRelease then
                                   valueValidated
                                 else
                                   acc.${name}
@@ -638,6 +638,25 @@
                 };
                 "test: rust-lang.rust-analyzer passes" = {
                   expr = (builtins.tryEval vscode-marketplace.rust-lang.rust-analyzer).success;
+                  expected = true;
+                };
+                "test: `allowAliases = false` and `checkMeta = true` work" = {
+                  # https://github.com/nix-community/nix-vscode-extensions/issues/142
+                  expr =
+                    let
+                      pkgs = import inputs.nixpkgs {
+                        inherit system;
+
+                        config = {
+                          allowAliases = false;
+                          checkMeta = true;
+                        };
+
+                        overlays = [ self.overlays.default ];
+                      };
+                      extensions = pkgs.nix-vscode-extensions;
+                    in
+                    (builtins.tryEval extensions.vscode-marketplace.b4dm4n.nixpkgs-fmt).success;
                   expected = true;
                 };
               };
