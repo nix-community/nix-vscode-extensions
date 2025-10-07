@@ -1,7 +1,9 @@
-# Each `${publisher}.${name}` MUST provide a function `{ mktplcRef, vsix } -> Derivation`
-# Each Derivation MUST be produced via overridable `buildVscodeMarketplaceExtension` (see below)
+# The result of this function is an attrset where
+# each `${publisher}.${name}` maps to a function `{ mktplcRef, vsix } -> (Derivation | { publisher })`
+# Each Derivation is produced via the overridable `buildVscodeMarketplaceExtension` function (defined below).
+# The `{ publisher }` attrset is provided for compatibility with `groupBy`.
 
-# Custom fixes are loaded via `mkExtensionLocal`
+# Custom fixes are loaded via `mkExtensionLocal`.
 
 { pkgs, pkgsWithFixes }:
 let
@@ -71,6 +73,14 @@ let
       # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
       "vadimcn.vscode-lldb"
       "rust-lang.rust-analyzer"
+    ]
+    ++
+    # Nixpkgs doesn't provide special fixes for these extensions.
+    # Therefore, there's no need to use expressions from nixpkgs
+    # for these extensions.
+    [
+      "kilocode.kilo-code"
+      "eamodio.gitlens"
     ];
 
   pathSpecial = {

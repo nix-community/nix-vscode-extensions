@@ -37,8 +37,13 @@ let
   # - Use the `got:` hash.
 
   # Hashes of the source code in releases (https://github.com/vadimcn/codelldb/releases)
-  # nix-repl> f = rev: pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
-  # nix-repl> :b f "1.11.4"
+  # nix-repl> rev = "1.11.6"
+  # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
+  # nix-repl> :b src
+  # 
+  # copy the hash that you got
+  # 
+  # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-uqvcixxJduF1l/qgt2rIACNsPcH1REiVwRz3zZBA82Q="; }
   hash =
     {
       "1.11.0" = "sha256-BzLKRs1fbLN4XSltnxPsgUG7ZJSMz/yJ/jQDZ9OTVxY=";
@@ -47,11 +52,13 @@ let
       "1.11.3" = "sha256-zqaJzRTYc2gsipnbn4t16u62C/gkIohenWJDTEvZRvU=";
       "1.11.4" = "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI=";
       "1.11.5" = "sha256-mp50QmYmqMjIUfGKAt8fWcov4Bn9ruya+SwXGT3T/zk=";
+      "1.11.6" = "sha256-uqvcixxJduF1l/qgt2rIACNsPcH1REiVwRz3zZBA82Q=";
     }
     .${version};
 
-  # nix-repl> f = rev: hash: pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = rev; hash = hash; }; useFetchCargoVendor = true; }
-  # nix-repl> :b f "1.11.4" "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI="
+  # nix-repl> :b pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; inherit src; useFetchCargoVendor = true; }
+  # 
+  # add here the cargoHash that you got.
   cargoHash =
     {
       "1.11.0" = "sha256-cLmL+QnFh2HwS2FcKTmGYI1NsrGV7MLWf3UBhNzBo0g=";
@@ -60,11 +67,13 @@ let
       "1.11.3" = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
       "1.11.4" = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
       "1.11.5" = "sha256-nTQbgYDDDI+pnKpCAUWDtk5rujjlK+7ZLUgPp1C/foo=";
+      "1.11.6" = "sha256-jAr/5wW9Vy2xfgHKeJGz/vuIRuouVAGH3XHFdQ34x4A=";
     }
     .${version};
 
-  # nix-repl> f = rev: hash: pkgs.buildNpmPackage { npmDepsHash = ""; name = "dummy"; src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = rev; hash = hash; }; dontNpmBuild = true; }
-  # nix-repl> :b f "1.11.4" "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI="
+  # nix-repl> :b pkgs.buildNpmPackage { npmDepsHash = ""; name = "dummy"; inherit src; dontNpmBuild = true; }
+  # 
+  # add here the npmDepsHash that you got.
   npmDepsHash =
     {
       "1.11.0" = "sha256-JRLXPsru+4cJe/WInYSr57+Js7mohL1CMR9LLCXORDg=";
@@ -73,6 +82,7 @@ let
       "1.11.3" = "sha256-Efeun7AFMAnoNXLbTGH7OWHaBHT2tO9CodfjKrIYw40=";
       "1.11.4" = "sha256-Efeun7AFMAnoNXLbTGH7OWHaBHT2tO9CodfjKrIYw40=";
       "1.11.5" = "sha256-mHSY4LqcQiaVs6qvusxjybdKyrMh9sQatBanpIo6xk4=";
+      "1.11.6" = "sha256-cS7Fr4mrq0QIPFtG5VjLEOOiC2QuVDW+Ispt2LmI258=";
     }
     .${version};
 
@@ -130,6 +140,7 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    cargo
     makeWrapper
     nodejs
     unzip
@@ -142,13 +153,14 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
     cp -r ${nodeDeps}/lib/node_modules .
   '';
 
-  postConfigure = ''
-    cp -r ${nodeDeps}/lib/node_modules .
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export HOME="$TMPDIR/home"
-    mkdir $HOME
-  '';
+  postConfigure =
+    ''
+      cp -r ${nodeDeps}/lib/node_modules .
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export HOME="$TMPDIR/home"
+      mkdir $HOME
+    '';
 
   cmakeFlags = [
     # Do not append timestamp to version.
