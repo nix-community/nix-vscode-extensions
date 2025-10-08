@@ -28,6 +28,7 @@ pkgs.vscode-with-extensions.override {
       mkhl.direnv
       jnoortheen.nix-ide
       tamasfe.even-better-toml
+      ms-python.python
     ])
     ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
       with extensions.vscode-marketplace;
