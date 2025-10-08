@@ -57,8 +57,6 @@ data AppConfig f = AppConfig
   -- ^ Data directory
   , queueCapacity :: HKD f Int
   -- ^ Max number of elements to store in a queue
-  -- , maxMissingTimes :: HKD f Int
-  -- ^ Max number of times an extension may be missing before it's removed from cache
   , requestResponseTimeout :: HKD f Int
   -- ^ Seconds to wait until the site responds
   , openVSX :: HKD f (SiteConfig f)
@@ -96,8 +94,7 @@ type Settings =
   , ?tmpDir :: FilePath
   , ?fetchedDir :: FilePath
   , ?failedDir :: FilePath
-  , -- , ?maxMissingTimes :: Int
-    ?collectGarbage :: Bool
+  , ?collectGarbage :: Bool
   , ?processedLoggerDelay :: Int
   , ?garbageCollectorDelay :: Int
   , ?requestResponseTimeout :: Int
@@ -169,8 +166,7 @@ mkDefaultAppConfig ac =
     , logSeverity = ac.logSeverity ^. non Info
     , dataDir = ac.dataDir ^. non "data"
     , queueCapacity = ac.queueCapacity ^. non 200
-    , -- , maxMissingTimes = ac.maxMissingTimes ^. non 5
-      requestResponseTimeout = ac.requestResponseTimeout ^. non 100
+    , requestResponseTimeout = ac.requestResponseTimeout ^. non 100
     , openVSX = ac.openVSX ^. non def . to (mkDefaultConfig defaultOpenVSXConfig)
     , vscodeMarketplace = ac.vscodeMarketplace ^. non def . to (mkDefaultConfig defaultVSCodeMarketplaceConfig)
     }

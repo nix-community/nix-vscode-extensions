@@ -243,8 +243,7 @@ getExtension
                     , publisher
                     , version
                     , platform
-                    , -- , missingTimes = 0
-                      engineVersion
+                    , engineVersion
                     , hash
                     , isRelease
                     }
@@ -319,9 +318,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
             )
         )
           & bimap
-            ( -- (\x -> x & #missingTimes .~ 0)
-              -- .
-              fromJust
+            ( fromJust
                 . fst
                 <$>
             )
@@ -338,9 +335,7 @@ runInfoFetcher extensionInfoCached extensionConfigs =
             . filtered
               ( \c ->
                   (isNothing $ HashMap.lookup (mkKey c) extensionInfoCachedAndFetchedMap)
-                  -- && (c.missingTimes + 1 < ?maxMissingTimes)
               )
-      -- & traversed . #missingTimes +~ 1
 
       -- and calculate the number of the configs of extensions that are missing
       numberExtensionConfigsFetchedNotCached = length extensionConfigsFetchedNotCached
@@ -713,7 +708,6 @@ getExtensionConfigsFromResponse response =
                                         ^? traversed
                                           . filtered (has (key "key" . _String . only "Microsoft.VisualStudio.Code.PreRelease"))
                                         & is _Empty
-                                    -- missingTimes = 0
                                 guard (isJust engineVersion)
                                 pure
                                   ExtensionConfig
@@ -722,7 +716,6 @@ getExtensionConfigsFromResponse response =
                                     , publisher
                                     , version
                                     , platform
-                                    -- , missingTimes
                                     , isRelease = IsRelease release
                                     }
                             )
@@ -876,7 +869,6 @@ getExtensionConfigsReleaseFromResponse response =
                                             . key "value"
                                             . _String
                                             . _EngineVersion
-                                      -- missingTimes = 0
                                       release =
                                         properties
                                           ^? traversed
@@ -886,7 +878,6 @@ getExtensionConfigsReleaseFromResponse response =
                                   pure
                                     ExtensionConfig
                                       { engineVersion = fromJust engineVersion
-                                      -- , missingTimes
                                       , name
                                       , publisher
                                       , version
@@ -1070,7 +1061,6 @@ main =
         ?openVSX = config_.openVSX
         ?processedLoggerDelay = config_.processedLoggerDelay
         ?vscodeMarketplace = config_.vscodeMarketplace
-        -- ?maxMissingTimes = config_.maxMissingTimes
         ?requestResponseTimeout = config_.requestResponseTimeout
 
     let timeoutMicroseconds = fromIntegral config_.programTimeout * _MICROSECONDS
