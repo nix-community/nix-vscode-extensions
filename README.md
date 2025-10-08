@@ -279,7 +279,7 @@ You should replace `version` with your `VS Code` or `VSCodium` version.
 
 #### `usingFixesFrom`
 
-`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
+`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](#mkextensionnix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
 
 - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
 - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
@@ -423,7 +423,7 @@ Some extensions require non-trivial fixes ([example](https://github.com/nix-comm
 
 These fixes may be available in a particular version of `nixpkgs`.
 
-These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
+These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [mkExtension.nix](#mkextensionnix)).
 
 #### Use fixes from `nixpkgs`
 
@@ -497,6 +497,12 @@ In the [./flake.nix](./flake.nix):
 - `numberToPlatform` converts `s` to `platform`;
 - `numberToIsRelease` converts `r` to `isRelease`.
 
+### Nix
+
+### `mkExtension.nix`
+
+[`./nix/mkExtension.nix`](./nix/mkExtension.nix) provides a function to build an extension from an extension config.
+
 ## Contribute
 
 ### Issues
@@ -529,7 +535,7 @@ Provide functions to build such extension in the [extensions](extensions) direct
 
 Optionally, create and link issues explaining chosen functions.
 
-Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [mkExtension.nix](mkExtension.nix).
+Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [mkExtension.nix](#mkextensionnix).
 
 These functions don't modify the license of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
 
