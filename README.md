@@ -296,8 +296,8 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 ### Missing extensions
 
 - Some previously available extensions may be unavailable in newer versions of this flake.
-  - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions ([discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
-  - We let missing extensions remain in [cache files](#cache-files) at most `maxMissingTimes` (specified in the [config](#config)).
+  - An extension is missing if it doesn't appear during a particular workflow run in a `VS Code Marketplace` or an `Open VSX` response about the full set of available extensions (see [discussion](https://github.com/nix-community/nix-vscode-extensions/issues/16#issuecomment-1441025955)).
+  - We let missing extensions remain in [cache files](#cache-files) and plan to purge missing extensions periodically (see [#139](https://github.com/nix-community/nix-vscode-extensions/issues/139)).
 
 ### Extension packs
 
