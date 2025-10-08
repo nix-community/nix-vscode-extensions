@@ -170,10 +170,9 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 ## Get `extensions`
 
-Prerequisites:
+### Prerequisites
 
 - [Start REPL](#optional-start-repl)
-- [Get your `system`](#optional-get-your-system)
 
 ### Get `nixpkgs`
 
@@ -345,7 +344,7 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 
 ## Explore
 
-Prerequisites:
+### Prerequisites
 
 - [Get `extensions`](#get-extensions)
 
