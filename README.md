@@ -230,7 +230,7 @@ nix-repl> extensions = nix-vscode-extensions.extensions.${builtins.currentSystem
 
 We provide attrsets that contain both universal and platform-specific extensions.
 
-We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [flake.nix](./flake.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
+We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [`flake.nix`](./flake.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
 
 ### The `extensions` attrset
 
@@ -288,7 +288,7 @@ You should replace `version` with your `VS Code` or `VSCodium` version.
 
 #### `usingFixesFrom`
 
-`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](#mkextensionnix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
+`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [`mkExtension.nix`](#mkextensionnix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
 
 - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
 - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
@@ -432,7 +432,7 @@ Some extensions require non-trivial fixes ([example](https://github.com/nix-comm
 
 These fixes may be available in a particular version of `nixpkgs`.
 
-These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [mkExtension.nix](#mkextensionnix)).
+These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [`mkExtension.nix`](#mkextensionnix)).
 
 #### Use fixes from `nixpkgs`
 
@@ -451,7 +451,7 @@ The `extensionsFixed` attrset contains some of the [the `extensions` attrset](#t
 
 Some extensions are unavailable or don't work on particular platforms.
 
-These extensions are disabled via [removed.nix](./removed.nix).
+These extensions are disabled via [`removed.nix`](./removed.nix).
 
 ## Config
 
@@ -501,7 +501,7 @@ See:
 
 ### Values
 
-In the [./flake.nix](./flake.nix):
+In the [`./flake.nix`](./flake.nix):
 
 - `numberToPlatform` converts `s` to `platform`;
 - `numberToIsRelease` converts `r` to `isRelease`.
@@ -540,11 +540,11 @@ Add necessary extensions there, preferrably, for all supported platforms (see [E
 
 Certain extensions require special treatment.
 
-Provide functions to build such extension in the [extensions](extensions) directory (see [extensions/default.nix](./extensions/default.nix)).
+Provide functions to build such extension in the [extensions](extensions) directory (see [`extensions/default.nix`](./extensions/default.nix)).
 
 Optionally, create and link issues explaining chosen functions.
 
-Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [mkExtension.nix](#mkextensionnix).
+Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [`mkExtension.nix`](#mkextensionnix).
 
 These functions don't modify the license of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
 
@@ -555,7 +555,7 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 
 ### Haskell script
 
-See the [./haskell/README.md](./haskell/README.md#quick-start).
+See the [`./haskell/README.md`](./haskell/README.md#quick-start).
 
 ## Troubleshooting
 
