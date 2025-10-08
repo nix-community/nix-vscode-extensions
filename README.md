@@ -26,7 +26,7 @@ Read the [VS Code page](https://wiki.nixos.org/wiki/Visual_Studio_Code) on the N
 
 - Read about [Nix flakes](https://wiki.nixos.org/wiki/Flakes).
 - [Set them up](https://wiki.nixos.org/wiki/Flakes#Setup).
-- Enable the [`nix-command`](https://nix.dev/manual/nix/2.31/contributing/experimental-features#xp-feature-nix-command) option to use [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl) (see [Explore](#explore)) and other experimental commands. This option should already be enabled if you followed the setup instructions for flakes.
+- Enable the [`nix-command`](https://nix.dev/manual/nix/2.31/contributing/experimental-features#xp-feature-nix-command) option to use `nix repl` and other experimental commands (see [Start REPL](#optional-start-repl), [Explore](#explore)). This option should already be enabled if you followed the setup instructions for flakes.
 
 ### (Optional) Allow unfree packages
 
