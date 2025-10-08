@@ -151,7 +151,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 1. (Optional) Allow unfree packages (see [Unfree extensions](#unfree-extensions)).
 
-1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [The `extensions` attrset](#the-extensions-attrset), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
+1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [The `extensions` attrset](#the-extensions-attrset), [Explore](#explore), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
 > [!NOTE]
 > See [With-expressions](https://nix.dev/manual/nix/2.31/language/syntax#with-expressions).
