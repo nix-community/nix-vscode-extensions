@@ -72,14 +72,14 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0/pkgs/applications/editors/vscode/with-extensions.nix).
+The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/674c2b09c59a220204350ced584cadaacee30038/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
 Run `VS Code` and list installed extensions.
 
 ```console
-nix run github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d# -- --list-extensions
+nix run github:nix-community/nix-vscode-extensions/fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb#default -- --list-extensions
 ```
 
 Or, inspect the package in the Nix REPL (see [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html)).
@@ -129,7 +129,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 1. If you use flakes, add `nix-vscode-extensions` to your flake inputs (see [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L16)).
 
    ```nix
-   inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d";
+   inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb";
    outputs = inputs@{ nix-vscode-extensions, ... }: ...
    ```
 
@@ -141,7 +141,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
        builtins.fetchGit {
          url = "https://github.com/nix-community/nix-vscode-extensions";
          ref = "refs/heads/master";
-         rev = "00e11463876a04a77fb97ba50c015ab9e5bee90d";
+         rev = "fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb";
        }
      );
    in
@@ -172,7 +172,7 @@ Prerequisites:
 #### Get `nixpkgs` with flakes
 
 ```console
-nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0
+nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/674c2b09c59a220204350ced584cadaacee30038
 ```
 
 #### Get `nixpkgs` without flakes
@@ -181,7 +181,7 @@ nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a1f79a1770d05af18111f
 nix-repl> nixpkgs = (import (builtins.fetchGit {
             url = "https://github.com/NixOS/nixpkgs";
             ref = "refs/heads/master";
-            rev = "a1f79a1770d05af18111fbbe2a3ab2c42c0f6cd0";
+            rev = "674c2b09c59a220204350ced584cadaacee30038";
           }))
 ```
 
@@ -190,7 +190,7 @@ nix-repl> nixpkgs = (import (builtins.fetchGit {
 #### Get `nix-vscode-extensions` with flakes
 
 ```console
-nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/00e11463876a04a77fb97ba50c015ab9e5bee90d
+nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vscode-extensions/fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb
 ```
 
 #### Get `nix-vscode-extensions` without flakes
@@ -199,7 +199,7 @@ nix-repl> nix-vscode-extensions = builtins.getFlake github:nix-community/nix-vsc
 nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
             url = "https://github.com/nix-community/nix-vscode-extensions";
             ref = "refs/heads/master";
-            rev = "00e11463876a04a77fb97ba50c015ab9e5bee90d";
+            rev = "fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb";
           }))
 ```
 
@@ -361,13 +361,13 @@ extensions.usingFixesFrom
 See [`vscode-marketplace` and `open-vsx`](#vscode-marketplace-and-open-vsx).
 
 ```console
-nix-repl> extensions.vscode-marketplace.rust-lang.rust-analyzer
-«derivation /nix/store/rfn6nizlib2ax08qhid179scdbsqnjmg-vscode-extension-rust-lang-rust-analyzer-0.4.2627.drv»
+nix-repl> extensions.vscode-marketplace.rust-lang.rust-analyzer.version
+"0.4.2638"
 ```
 
 ```console
-nix-repl> extensions.vscode-marketplace.vadimcn.vscode-lldb
-«derivation /nix/store/qpk223y8y5d9ic1qnfls0xwyni7llwkg-vscode-extension-vadimcn-vscode-lldb-1.11.0.drv»
+nix-repl> extensions.vscode-marketplace.vadimcn.vscode-lldb.version
+"1.11.0"
 ```
 
 ### Explore `vscode-marketplace-release` and `open-vsx-release`
@@ -375,13 +375,13 @@ nix-repl> extensions.vscode-marketplace.vadimcn.vscode-lldb
 See [`vscode-marketplace-release` and `open-vsx-release`](#vscode-marketplace-release-and-open-vsx-release).
 
 ```console
-nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer
-«derivation /nix/store/q6kbj7hg50npbh38rm4x5iiga6v5x37d-vscode-extension-rust-lang-rust-analyzer-0.3.2593.drv»
+nix-repl> extensions.vscode-marketplace-release.rust-lang.rust-analyzer.version
+"0.3.2593"
 ```
 
 ```console
-nix-repl> extensions.vscode-marketplace-release.vadimcn.vscode-lldb
-«derivation /nix/store/qpk223y8y5d9ic1qnfls0xwyni7llwkg-vscode-extension-vadimcn-vscode-lldb-1.11.0.drv»
+nix-repl> extensions.vscode-marketplace-release.vadimcn.vscode-lldb.version
+"1.11.0"
 ```
 
 ### Explore `vscode-marketplace-universal` and `open-vsx-universal`
@@ -389,13 +389,13 @@ nix-repl> extensions.vscode-marketplace-release.vadimcn.vscode-lldb
 See [`vscode-marketplace-universal` and `open-vsx-universal`](#vscode-marketplace-universal-and-open-vsx-universal).
 
 ```console
-nix-repl> extensions.vscode-marketplace-universal.rust-lang.rust-analyzer
-«derivation /nix/store/8yl0lqqj01xavacrvq0zzjzf2zcgwq0b-vscode-extension-rust-lang-rust-analyzer-0.4.1067.drv»
+nix-repl> extensions.vscode-marketplace-universal.rust-lang.rust-analyzer.version
+"0.4.1067"
 ```
 
 ```console
-nix-repl> extensions.vscode-marketplace-universal.vadimcn.vscode-lldb
-«derivation /nix/store/iaqf2sczfpfwvfclkhzy9hymyqs2j7lr-vscode-extension-vadimcn-vscode-lldb-1.11.5.drv»
+nix-repl> extensions.vscode-marketplace-universal.vadimcn.vscode-lldb.version
+"1.11.6"
 ```
 
 ### Explore `vscode-marketplace-release-universal` and `open-vsx-release-universal`
@@ -403,8 +403,8 @@ nix-repl> extensions.vscode-marketplace-universal.vadimcn.vscode-lldb
 See [`vscode-marketplace-release-universal` and `open-vsx-release-universal`](#vscode-marketplace-release-universal-and-open-vsx-release-universal).
 
 ```console
-nix-repl> extensions.vscode-marketplace-release-universal.vadimcn.vscode-lldb
-«derivation /nix/store/iaqf2sczfpfwvfclkhzy9hymyqs2j7lr-vscode-extension-vadimcn-vscode-lldb-1.11.5.drv»
+nix-repl> extensions.vscode-marketplace-release-universal.vadimcn.vscode-lldb.version
+"1.11.6"
 ```
 
 ### Versions compatible with a given version of VS Code
