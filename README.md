@@ -72,7 +72,7 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/674c2b09c59a220204350ced584cadaacee30038/pkgs/applications/editors/vscode/with-extensions.nix).
+The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/674c2b09c59a220204350ced584cadaacee30038/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
