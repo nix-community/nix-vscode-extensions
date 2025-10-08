@@ -196,7 +196,7 @@
                       let
                         # keep outside of map to improve performance
                         # TODO pass user's nixpkgs
-                        mkExtension = import ./mkExtension.nix { inherit pkgs pkgsWithFixes system; };
+                        mkExtension = import ./nix/mkExtension.nix { inherit pkgs pkgsWithFixes system; };
                       in
                       map (
                         {
@@ -502,58 +502,10 @@
             });
 
           packages = {
-            default =
-              (pkgs.vscode-with-extensions.override {
-                # vscode = pkgs.vscodium;
-                vscode = resetLicense pkgs.vscode;
-                vscodeExtensions =
-                  let
-                    extensions = import inputs.nixpkgs {
-                      inherit system;
-                      # Uncomment to allow unfree extensions
-                      # config.allowUnfree = true;
-                      overlays = [ self.overlays.default ];
-                    };
-                  in
-                  (with extensions.vscode-marketplace; [
-                    golang.go
-                    vlanguage.vscode-vlang
-                    rust-lang.rust-analyzer
-                    ms-dotnettools.vscode-dotnet-runtime
-                    mkhl.direnv
-                    jnoortheen.nix-ide
-                    tamasfe.even-better-toml
-                  ])
-                  ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
-                    with extensions.vscode-marketplace;
-                    [
-                      # Exclusively for testing purpose
-                      (resetLicense ms-vscode.cpptools)
-                      # on aarch64-linux, triggers the error:
-                      # build input /nix/store/194yri6cyqad6yvbhpqp5wswsppnsi7x-jq-1.8.1-dev does not exist
-                      # yzane.markdown-pdf
-                    ]
-                  ))
-                  ++ (with extensions.vscode-marketplace-universal; [
-                    # TODO make v1.11.6 build
-                    # vadimcn.vscode-lldb
-                  ]);
-              }).overrideAttrs
-                (prev: {
-                  meta = prev.meta // {
-                    description = "VSCodium with a few extensions.";
-                    longDescription = ''
-                      This is a sample overridden VSCodium (a FOSS fork of VS Code) with a few extensions.
-                      You can override this package and set `vscodeExtensions` to a list of extension
-                      derivations, specifically those provided by this flake.
-                      The [repository] offers approximately 40,000 extensions from the [Visual Studio Marketplace]
-                      and an additional 4,500 from the [Open VSX Registry].
-                      [repository]: https://github.com/nix-community/nix-vscode-extensions
-                      [Visual Studio Marketplace]: https://marketplace.visualstudio.com/vscode
-                      [Open VSX Registry]: https://open-vsx.org/
-                    '';
-                  };
-                });
+            default = import ./nix/vscode-with-extensions.nix { 
+              inherit system nixpkgs resetLicense;
+              nix-vscode-extensions = self;
+            };
           }
           // mkShellApps {
             updateExtensions = {

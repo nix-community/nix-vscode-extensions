@@ -41,9 +41,9 @@ let
     publisher: builtins.mapAttrs (name: f: { mktplcRef, vsix }@extensionConfig: f extensionConfig)
   );
 
-  mkExtensionLocal = applyMkExtension (import ./extensions { pkgs = pkgs'; });
+  mkExtensionLocal = applyMkExtension (import ../extensions { pkgs = pkgs'; });
 
-  extensionsRemoved = (import ./removed.nix).${system} or [ ];
+  extensionsRemoved = (import ../removed.nix).${system} or [ ];
 
   callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
 

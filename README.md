@@ -18,13 +18,15 @@ Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!
 
 ## Prerequisites
 
+### Read NixOS wiki
+
 Read the [VS Code page](https://wiki.nixos.org/wiki/Visual_Studio_Code) on the NixOS wiki.
 
 ### (Optional) Enable flakes and experimental commands
 
 - Read about [Nix flakes](https://wiki.nixos.org/wiki/Flakes).
 - [Set them up](https://wiki.nixos.org/wiki/Flakes#Setup).
-- Enable the [`nix-command`](https://nix.dev/manual/nix/2.31/contributing/experimental-features#xp-feature-nix-command) option to use [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl) (see [Explore](#explore)) and other experimental commands. This option should already be enabled if you followed the setup instructions for flakes.
+- Enable the [`nix-command`](https://nix.dev/manual/nix/2.31/contributing/experimental-features#xp-feature-nix-command) option to use `nix repl` and other experimental commands (see [Start REPL](#optional-start-repl), [Explore](#explore)). This option should already be enabled if you followed the setup instructions for flakes.
 
 ### (Optional) Allow unfree packages
 
@@ -50,13 +52,14 @@ nix repl
 ### (Optional) Get your system
 
 ```console
-nix-repl> builtins.currentSystem
+system="$(nix-instantiate --eval --expr "builtins.currentSystem")"
 ```
 
-Output on my machine:
+On my system:
 
 ```console
-x86_64-linux
+printf "$system"
+"x86_64-linux"
 ```
 
 > [!NOTE]
@@ -72,24 +75,31 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [flake.nix](./flake.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/674c2b09c59a220204350ced584cadaacee30038/pkgs/applications/editors/vscode/with-extensions.nix).
+The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/674c2b09c59a220204350ced584cadaacee30038/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
 Run `VS Code` and list installed extensions.
 
+### List extensions with flakes
+
 ```console
 nix run github:nix-community/nix-vscode-extensions/fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb#default -- --list-extensions
 ```
 
-Or, inspect the package in the Nix REPL (see [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html)).
+<!-- 
+TODO
 
-```console
-nix repl
-nix-repl> :lf .
-nix-repl> packages.${builtins.currentSystem}.default
-«derivation /nix/store/blilnmz4vcs2pqykxr46rx7s3ilymb0p-vscode-with-extensions-1.104.1.drv»
-```
+### List extensions without flakes
+
+1. [Enter the repository directory](#optional-enter-the-repository-directory).
+2. [Get your system](#optional-get-your-system).
+3. List extensions, including already installed on your system (???):
+
+    ```console
+    nix-shell -A "packages.$system.default" --run 'code --list-extensions'
+    ``` 
+-->
 
 ## Template
 
@@ -151,7 +161,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 1. (Optional) Allow unfree packages (see [Unfree extensions](#unfree-extensions)).
 
-1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [The `extensions` attrset](#the-extensions-attrset), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
+1. Use `pkgs.nix-vscode-extensions.vscode-marketplace`, `pkgs.nix-vscode-extensions.open-vsx` and others (see [The `extensions` attrset](#the-extensions-attrset), [Explore](#explore), [example](https://github.com/maurerf/nix-darwin-config/blob/0f88b77e712f14e3da72ec0b640e206a37da7afe/flake.nix#L131)).
 
 > [!NOTE]
 > See [With-expressions](https://nix.dev/manual/nix/2.31/language/syntax#with-expressions).
@@ -162,10 +172,9 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 ## Get `extensions`
 
-Prerequisites:
+### Prerequisites
 
 - [Start REPL](#optional-start-repl)
-- [Get your `system`](#optional-get-your-system)
 
 ### Get `nixpkgs`
 
@@ -279,7 +288,7 @@ You should replace `version` with your `VS Code` or `VSCodium` version.
 
 #### `usingFixesFrom`
 
-`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
+`usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [mkExtension.nix](#mkextensionnix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
 
 - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
 - The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
@@ -337,7 +346,7 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 
 ## Explore
 
-Prerequisites:
+### Prerequisites
 
 - [Get `extensions`](#get-extensions)
 
@@ -423,7 +432,7 @@ Some extensions require non-trivial fixes ([example](https://github.com/nix-comm
 
 These fixes may be available in a particular version of `nixpkgs`.
 
-These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [mkExtension.nix](./mkExtension.nix)).
+These fixes are read from the source code of that `nixpkgs` version (see `mkExtensionNixpkgs` in [mkExtension.nix](#mkextensionnix)).
 
 #### Use fixes from `nixpkgs`
 
@@ -497,6 +506,12 @@ In the [./flake.nix](./flake.nix):
 - `numberToPlatform` converts `s` to `platform`;
 - `numberToIsRelease` converts `r` to `isRelease`.
 
+### Nix
+
+### `mkExtension.nix`
+
+[`./nix/mkExtension.nix`](./nix/mkExtension.nix) provides a function to build an extension from an extension config.
+
 ## Contribute
 
 ### Issues
@@ -529,7 +544,7 @@ Provide functions to build such extension in the [extensions](extensions) direct
 
 Optionally, create and link issues explaining chosen functions.
 
-Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [mkExtension.nix](mkExtension.nix).
+Each extension, including [Extra extensions](#extra-extensions), is built via one of the functions in [mkExtension.nix](#mkextensionnix).
 
 These functions don't modify the license of ([unfree](https://wiki.nixos.org/wiki/Unfree_software)) extensions from `nixpkgs`.
 
