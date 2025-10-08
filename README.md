@@ -18,6 +18,8 @@ Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!
 
 ## Prerequisites
 
+### Read NixOS wiki
+
 Read the [VS Code page](https://wiki.nixos.org/wiki/Visual_Studio_Code) on the NixOS wiki.
 
 ### (Optional) Enable flakes and experimental commands
