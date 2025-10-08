@@ -87,7 +87,7 @@ Run `VS Code` and list installed extensions.
 nix run github:nix-community/nix-vscode-extensions/fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb#default -- --list-extensions
 ```
 
-<!-- 
+<!--
 TODO
 
 ### List extensions without flakes
@@ -98,7 +98,7 @@ TODO
 
     ```console
     nix-shell -A "packages.$system.default" --run 'code --list-extensions'
-    ``` 
+    ```
 -->
 
 ## Template

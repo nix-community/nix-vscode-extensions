@@ -502,7 +502,7 @@
             });
 
           packages = {
-            default = import ./nix/vscode-with-extensions.nix { 
+            default = import ./nix/vscode-with-extensions.nix {
               inherit system nixpkgs resetLicense;
               nix-vscode-extensions = self;
             };
