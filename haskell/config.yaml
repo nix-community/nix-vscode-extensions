@@ -2,7 +2,6 @@ collectGarbage: true
 dataDir: data
 garbageCollectorDelay: 20
 logSeverity: Info
-maxMissingTimes: 10
 nRetry: 3
 processedLoggerDelay: 2
 programTimeout: 3600
