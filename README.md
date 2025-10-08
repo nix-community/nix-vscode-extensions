@@ -79,18 +79,25 @@ This package is `VS Code` with a couple of extensions.
 
 Run `VS Code` and list installed extensions.
 
+### List extensions with flakes
+
 ```console
 nix run github:nix-community/nix-vscode-extensions/fd5c5549692ff4d2dbee1ab7eea19adc2f97baeb#default -- --list-extensions
 ```
 
-Or, inspect the package in the Nix REPL (see [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html)).
+<!-- 
+TODO
 
-```console
-nix repl
-nix-repl> :lf .
-nix-repl> packages.${builtins.currentSystem}.default
-«derivation /nix/store/blilnmz4vcs2pqykxr46rx7s3ilymb0p-vscode-with-extensions-1.104.1.drv»
-```
+### List extensions without flakes
+
+1. [Enter the repository directory](#optional-enter-the-repository-directory).
+2. [Get your system](#optional-get-your-system).
+3. List extensions, including already installed on your system (???):
+
+    ```console
+    nix-shell -A "packages.$system.default" --run 'code --list-extensions'
+    ``` 
+-->
 
 ## Template
 
