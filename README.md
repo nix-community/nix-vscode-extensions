@@ -50,13 +50,14 @@ nix repl
 ### (Optional) Get your system
 
 ```console
-nix-repl> builtins.currentSystem
+system="$(nix-instantiate --eval --expr "builtins.currentSystem")"
 ```
 
-Output on my machine:
+On my system:
 
 ```console
-x86_64-linux
+printf "$system"
+"x86_64-linux"
 ```
 
 > [!NOTE]
