@@ -43,7 +43,7 @@ cd nix-vscode-extensions
 
 ### (Optional) Start REPL
 
-See [nix repl](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html).
+See [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.html).
 
 ```console
 nix repl
@@ -107,7 +107,7 @@ This repository has a flake [template](template/flake.nix).
 
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 
-1. Create a flake from the template (see [nix flake new](https://nixos.org/manual/nix/2.31/command-ref/new-cli/nix3-flake-new.html)).
+1. Create a flake from the template (see [`nix flake new`](https://nixos.org/manual/nix/2.31/command-ref/new-cli/nix3-flake-new.html)).
 
    ```console
    nix flake new vscodium-project -t github:nix-community/nix-vscode-extensions
@@ -496,7 +496,7 @@ See:
 | `P`      | `platform`      | extension platform                                                                                                                               |
 | `v`      | `version`       | extension version                                                                                                                                |
 | `e`      | `engineVersion` | engine version (minimal compatible VSCode version)                                                                                               |
-| `h`      | `hash`          | extension `.vsix` hash obtained via [nix store prefetch-file](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-store-prefetch-file.html) |
+| `h`      | `hash`          | extension `.vsix` hash obtained via [`nix store prefetch-file`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-store-prefetch-file.html) |
 
 ### Values
 
