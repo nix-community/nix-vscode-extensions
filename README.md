@@ -502,7 +502,7 @@ See:
 
 In the [`./flake.nix`](./flake.nix):
 
-- `numberToPlatform` converts `s` to `platform`;
+- `numberToPlatform` converts `P` to `platform`;
 - `numberToIsRelease` converts `r` to `isRelease`.
 
 ### Nix
