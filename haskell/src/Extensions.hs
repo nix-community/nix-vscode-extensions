@@ -338,7 +338,7 @@ fieldLabelModifier' = \case
   "publisher" -> "p"
   "name" -> "n"
   "isRelease" -> "r"
-  "platform" -> "s"
+  "platform" -> "P"
   "version" -> "v"
   "engineVersion" -> "e"
   "hash" -> "h"
