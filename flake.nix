@@ -113,7 +113,7 @@
                         p,
                         n,
                         r,
-                        s,
+                        P,
                         v,
                         e,
                         h,
@@ -123,7 +123,7 @@
                         publisher = p;
                         name = n;
                         isRelease = numberToIsRelease r;
-                        platform = numberToPlatform s;
+                        platform = numberToPlatform P;
                         version = v;
                         engineVersion = e;
                         hash = h;
