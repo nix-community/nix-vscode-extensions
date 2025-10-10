@@ -488,14 +488,14 @@ See:
 
 ### Intermediate Nix representation
 
-| JSON key | Nix attrname    | Description                                                                                                                                      |
-| -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `p`      | `publisher`     | extension publisher                                                                                                                              |
-| `n`      | `name`          | extension name                                                                                                                                   |
-| `r`      | `isRelease`     | whether it's a release extension version                                                                                                         |
-| `P`      | `platform`      | extension platform                                                                                                                               |
-| `v`      | `version`       | extension version                                                                                                                                |
-| `e`      | `engineVersion` | engine version (minimal compatible VSCode version)                                                                                               |
+| JSON key | Nix attrname    | Description                                                                                                                                        |
+| -------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `p`      | `publisher`     | extension publisher                                                                                                                                |
+| `n`      | `name`          | extension name                                                                                                                                     |
+| `r`      | `isRelease`     | whether it's a release extension version                                                                                                           |
+| `P`      | `platform`      | extension platform                                                                                                                                 |
+| `v`      | `version`       | extension version                                                                                                                                  |
+| `e`      | `engineVersion` | engine version (minimal compatible VSCode version)                                                                                                 |
 | `h`      | `hash`          | extension `.vsix` hash obtained via [`nix store prefetch-file`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-store-prefetch-file.html) |
 
 ### Values
