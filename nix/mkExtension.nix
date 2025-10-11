@@ -77,14 +77,15 @@ let
       # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
       "vadimcn.vscode-lldb"
       "rust-lang.rust-analyzer"
-    ]
-    ++
-    # Nixpkgs doesn't provide special fixes for these extensions.
-    # Therefore, there's no need to use expressions from nixpkgs
-    # for these extensions.
+    ];
+
+  extensionsBuildVscodeExtension =
+    # In Nixpkgs, these packages are constructed
+    # using the `buildVscodeExtension` function.
     [
       "kilocode.kilo-code"
       "eamodio.gitlens"
+      "vscode-icons-team.vscode-icons"
     ];
 
   pathSpecial = {
@@ -123,7 +124,12 @@ let
           (extension'.override
             or (abort "The extension '${publisher}.${name}' doesn't have an 'override' attribute.")
           )
-            extensionConfig
+            (
+              if builtins.elem extensionId extensionsBuildVscodeExtension then
+                { inherit vsix; }
+              else
+                extensionConfig
+            )
     )
   ) extensionsNixpkgs;
 
