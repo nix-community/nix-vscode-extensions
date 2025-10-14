@@ -20,15 +20,14 @@
     },
     "nix-vscode-extensions": {
       "inputs": {
-        "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1760320782,
-        "narHash": "sha256-1ycwVgQbDxEc4/zf8OxvnwJJwZ4wNIqgigOv/R/KdW8=",
+        "lastModified": 1761240774,
+        "narHash": "sha256-qFQ1UbwkITPozzVQlG/xdcpOQoA+Z9I05KmV0E4Q3M0=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "b227991f119ccaf404e9236d527c1d0e7412fe95",
+        "rev": "8dc044f184d57c022f915a04e686260e24eba3ee",
         "type": "github"
       },
       "original": {
@@ -55,10 +54,7 @@
     },
     "root": {
       "inputs": {
-        "flake-utils": [
-          "nix-vscode-extensions",
-          "flake-utils"
-        ],
+        "flake-utils": "flake-utils",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": [
           "nix-vscode-extensions",

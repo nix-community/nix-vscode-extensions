@@ -45,7 +45,25 @@ let
 
   extensionsRemoved = (import ../removed.nix).${system} or [ ];
 
-  callPackage = pkgs.beam.beamLib.callPackageWith pkgs';
+  # Similar to callPackageWith/callPackage, but without makeOverridable.
+  #
+  # In `nixpkgs`, `pkgs.lib.callPackageWith` uses `pkgs.lib.makeOverridable`.
+  # We need `callPackageWith` to use a custom `makeOverridable`
+  # to handle the case when in an expression for an extension in `nixpkgs`,
+  # `pkgs.vscode-utils.buildVscodeMarketplaceExtension`
+  # takes a function, not an attrset.
+  #
+  # Adapted from
+  # https://github.com/NixOS/nixpkgs/blob/b044ad6e5e92e70d7a7723864b0ab7a6c25bafda/pkgs/development/beam-modules/lib.nix#L9
+  callPackageWith =
+    autoArgs: fn: args:
+    let
+      f = if lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
+    in
+    f (auto // args);
+
+  callPackage = callPackageWith pkgs';
 
   # TODO find a cleaner way to get the store path of nixpkgs from given pkgs
   pathNixpkgs =
