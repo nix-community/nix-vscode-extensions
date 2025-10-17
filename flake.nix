@@ -6,22 +6,29 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/674c2b09c59a220204350ced584cadaacee30038";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
     inputs@{
       self,
       nixpkgs,
-      flake-utils,
       ...
     }:
     let
       nix-dev = import ./nix-dev;
       inputsCombined = nix-dev.inputs // inputs;
+
+      systemPlatform = {
+        x86_64-linux = "linux-x64";
+        aarch64-linux = "linux-arm64";
+        x86_64-darwin = "darwin-x64";
+        aarch64-darwin = "darwin-arm64";
+      };
+
+      systems = builtins.attrNames systemPlatform;
     in
     nix-dev.inputs.flake-parts.lib.mkFlake { inputs = inputsCombined; } {
-      systems = import flake-utils.inputs.systems;
+      inherit systems;
 
       imports = [
         nix-dev.inputs.devshell.flakeModule
@@ -35,13 +42,6 @@
           open-vsx = "open-vsx";
 
           platformUniversal = "universal";
-
-          systemPlatform = {
-            x86_64-linux = "linux-x64";
-            aarch64-linux = "linux-arm64";
-            x86_64-darwin = "darwin-x64";
-            aarch64-darwin = "darwin-arm64";
-          };
 
           numberToPlatform =
             number:
@@ -423,7 +423,7 @@
         {
           inherit overlays templates;
         }
-        // flake-utils.lib.eachDefaultSystem (
+        // (nix-dev.inputs.flake-utils.lib.eachSystem systems (
           system:
           let
             pkgs = import nixpkgs {
@@ -452,7 +452,7 @@
           {
             inherit extensions;
           }
-        );
+        ));
 
       perSystem =
         {

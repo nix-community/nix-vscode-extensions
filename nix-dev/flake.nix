@@ -6,6 +6,10 @@
       flake = false;
     };
     systems.url = "github:nix-systems/default";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.url = "github:nixos/nixpkgs/674c2b09c59a220204350ced584cadaacee30038?dir=lib";
@@ -13,7 +17,7 @@
     devshell = {
       url = "github:deemp/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.inputs.systems.follows = "systems";
+      inputs.flake-utils.follows = "flake-utils";
     };
     flake-compat = {
       url = "github:edolstra/flake-compat";
