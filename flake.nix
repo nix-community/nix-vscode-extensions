@@ -7,6 +7,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/674c2b09c59a220204350ced584cadaacee30038";
     flake-utils.url = "github:numtide/flake-utils";
+    nix-dev.url = "path:./nix-dev";
   };
 
   outputs =
@@ -14,10 +15,10 @@
       self,
       nixpkgs,
       flake-utils,
+      nix-dev,
       ...
     }:
     let
-      nix-dev = import ./nix-dev;
       inputsCombined = nix-dev.inputs // inputs;
     in
     nix-dev.inputs.flake-parts.lib.mkFlake { inputs = inputsCombined; } {
