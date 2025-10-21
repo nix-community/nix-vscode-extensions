@@ -1,14 +1,16 @@
 {
+  lib,
   buildNpmPackage,
 
+  stdenv,
   libsecret,
   python3,
   pkg-config,
+  clang_20,
 
   pname,
   src,
   version,
-
   npmDepsHash,
 }:
 buildNpmPackage {
@@ -17,12 +19,14 @@ buildNpmPackage {
 
   inherit npmDepsHash;
 
-  nativeBuildInputs = [
-    python3
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      python3
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isDarwin [clang_20];
 
-  buildInputs = [ libsecret ];
+  buildInputs = [libsecret];
 
   dontNpmBuild = true;
 
