@@ -89,6 +89,7 @@ let
     }
     .${version};
 
+
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "codelldb";
@@ -128,6 +129,18 @@ let
         ;
     }
   );
+
+  codelldb-types = (
+    callPackage ./lldb-types.nix {
+      inherit
+        pname
+        src
+        version
+        cargoHash
+        nodeDeps
+        ;
+    }
+  );
 in
 lib.customisation.makeOverridable stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -158,6 +171,14 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
 
   postConfigure = ''
     cp -r ${nodeDeps}/lib/node_modules .
+
+    # Copy pre-built package.json and generated types from codelldb-types
+    cp ${codelldb-types}/package.json .
+    mkdir -p generated
+    cp -r ${codelldb-types}/generated/* generated/
+
+    # Touch the files to ensure they're newer than dependencies
+    touch package.json generated/codelldb.ts
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export HOME="$TMPDIR/home"
@@ -200,7 +221,7 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit lldb adapter;
+    inherit lldb adapter codelldb-types;
     updateScript = ./update.sh;
   };
 
