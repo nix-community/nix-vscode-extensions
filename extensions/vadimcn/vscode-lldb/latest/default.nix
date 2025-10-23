@@ -33,61 +33,27 @@ let
   # nix-repl> :lf nixpkgs
   # nix-repl> pkgs = legacyPackages.${builtins.currentSystem}
 
-  # - Build `f` with the version and the hash of the `src` of the new version.
-  # - Use the `got:` hash.
-
-  # Hashes of the source code in releases (https://github.com/vadimcn/codelldb/releases)
-  # nix-repl> rev = "1.11.6"
+  # Get the hash of a source code in a release (https://github.com/vadimcn/codelldb/releases)
+  #
+  # nix-repl> rev = "1.11.7"
   # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
   # nix-repl> :b src
   #
-  # copy the hash that you got
-  #
-  # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-uqvcixxJduF1l/qgt2rIACNsPcH1REiVwRz3zZBA82Q="; }
-  hash =
-    {
-      "1.11.0" = "sha256-BzLKRs1fbLN4XSltnxPsgUG7ZJSMz/yJ/jQDZ9OTVxY=";
-      "1.11.1" = "sha256-b063cCuiDpaeSSWxY0sbKsZucY7BCxI5s+35soJRFFQ=";
-      "1.11.2" = "sha256-wj0X7nAcMU+kwl2qQRKixF+kTbTlnpgU7BYwaibIIKQ=";
-      "1.11.3" = "sha256-zqaJzRTYc2gsipnbn4t16u62C/gkIohenWJDTEvZRvU=";
-      "1.11.4" = "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI=";
-      "1.11.5" = "sha256-mp50QmYmqMjIUfGKAt8fWcov4Bn9ruya+SwXGT3T/zk=";
-      "1.11.6" = "sha256-uqvcixxJduF1l/qgt2rIACNsPcH1REiVwRz3zZBA82Q=";
-      "1.11.7" = "sha256-qbpl+/GsMjhs7xZdt8r3CM5gYOowBlu/yCd5RmU2eXE=";
-    }
-    .${version};
+  # Write here the hash that you `got:`.
+  hash = "sha256-qbpl+/GsMjhs7xZdt8r3CM5gYOowBlu/yCd5RmU2eXE=";
+
+  # Write here the hash from above.
+  # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-qbpl+/GsMjhs7xZdt8r3CM5gYOowBlu/yCd5RmU2eXE="; }
 
   # nix-repl> :b pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; inherit src; useFetchCargoVendor = true; }
   #
-  # add here the cargoHash that you got.
-  cargoHash =
-    {
-      "1.11.0" = "sha256-cLmL+QnFh2HwS2FcKTmGYI1NsrGV7MLWf3UBhNzBo0g=";
-      "1.11.1" = "sha256-HFu3u/DX+SOIwwgk7+2EbQZ1tp9yqaV1CxiCN1PgXwM=";
-      "1.11.2" = "sha256-Bl7bD+ulRJkeTdzyS8T/eMBmFaeqgMFFg3OTwSfo/RY=";
-      "1.11.3" = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
-      "1.11.4" = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
-      "1.11.5" = "sha256-nTQbgYDDDI+pnKpCAUWDtk5rujjlK+7ZLUgPp1C/foo=";
-      "1.11.6" = "sha256-jAr/5wW9Vy2xfgHKeJGz/vuIRuouVAGH3XHFdQ34x4A=";
-      "1.11.7" = "sha256-jAr/5wW9Vy2xfgHKeJGz/vuIRuouVAGH3XHFdQ34x4A=";
-    }
-    .${version};
+  # Write here the hash that you `got:`.
+  cargoHash = "sha256-jAr/5wW9Vy2xfgHKeJGz/vuIRuouVAGH3XHFdQ34x4A=";
 
   # nix-repl> :b pkgs.buildNpmPackage { npmDepsHash = ""; name = "dummy"; inherit src; dontNpmBuild = true; }
   #
-  # add here the npmDepsHash that you got.
-  npmDepsHash =
-    {
-      "1.11.0" = "sha256-JRLXPsru+4cJe/WInYSr57+Js7mohL1CMR9LLCXORDg=";
-      "1.11.1" = "sha256-4CCvOh7XOUsdI/gzDfx0OwzE7rhdCYFO49wVv6Gn/J0=";
-      "1.11.2" = "sha256-oqRV9oDYPJkSkvYJA0jCgDyfzy6AnYq/ftRPM3swDyE=";
-      "1.11.3" = "sha256-Efeun7AFMAnoNXLbTGH7OWHaBHT2tO9CodfjKrIYw40=";
-      "1.11.4" = "sha256-Efeun7AFMAnoNXLbTGH7OWHaBHT2tO9CodfjKrIYw40=";
-      "1.11.5" = "sha256-mHSY4LqcQiaVs6qvusxjybdKyrMh9sQatBanpIo6xk4=";
-      "1.11.6" = "sha256-cS7Fr4mrq0QIPFtG5VjLEOOiC2QuVDW+Ispt2LmI258=";
-      "1.11.7" = "sha256-cS7Fr4mrq0QIPFtG5VjLEOOiC2QuVDW+Ispt2LmI258=";
-    }
-    .${version};
+  # Write here the hash that you `got:`.
+  npmDepsHash = "sha256-cS7Fr4mrq0QIPFtG5VjLEOOiC2QuVDW+Ispt2LmI258=";
 
   src = fetchFromGitHub {
     owner = "vadimcn";
