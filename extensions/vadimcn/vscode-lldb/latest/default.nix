@@ -35,7 +35,7 @@ let
 
   # Get the hash of a source code in a release (https://github.com/vadimcn/codelldb/releases)
   #
-  # nix-repl> rev = "1.11.6"
+  # nix-repl> rev = "1.11.7"
   # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
   # nix-repl> :b src
   #
