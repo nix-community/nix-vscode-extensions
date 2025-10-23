@@ -32,9 +32,19 @@ in
 
   vadimcn.vscode-lldb =
     config@{ mktplcRef, ... }:
-    if lib.versionAtLeast mktplcRef.version "1.11.0" then
-      # https://github.com/NixOS/nixpkgs/pull/383013
+    let
+      lowestSupportedVersion = "1.11.7";
+    in
+    if lib.versionAtLeast mktplcRef.version lowestSupportedVersion then
+      # https://github.com/nix-community/nix-vscode-extensions/pull/151
       callPackage ./vadimcn/vscode-lldb/latest config
     else
-      callPackage ./vadimcn/vscode-lldb/1.10.0 config;
+      throw ''
+        The version `${mktplcRef.version}` of `vadimcn.vscode-lldb` is unsupported.
+         
+        Only versions greater or equal to `${lowestSupportedVersion}` are supported.
+
+        Try `extensions.${pkgs.stdenv.hostPlatform.system}.vscode-marketplace-universal.vadimcn.vscode-lldb`
+        or  `extensions.${pkgs.stdenv.hostPlatform.system}.open-vsx-universal.vadimcn.vscode-lldb`.
+      '';
 }
