@@ -89,7 +89,6 @@ let
     }
     .${version};
 
-
   src = fetchFromGitHub {
     owner = "vadimcn";
     repo = "codelldb";
