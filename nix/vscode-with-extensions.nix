@@ -41,7 +41,6 @@ pkgs.vscode-with-extensions.override {
       ]
     ))
     ++ (with extensions.vscode-marketplace-universal; [
-      # TODO make v1.11.6 build
-      # vadimcn.vscode-lldb
+      vadimcn.vscode-lldb
     ]);
 }
