@@ -1,20 +1,16 @@
 # Nix expressions for VS Code Extensions
 
-As of October 2, 2025, the [nixpkgs](https://github.com/NixOS/nixpkgs) repository contains **456** [VS Code](https://code.visualstudio.com/) extensions. This is a small fraction of the nearly **80,000** extensions available on the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). In addition, many of the extensions in `nixpkgs` are outdated.
-
 This flake provides Nix expressions for the latest pre-release and release versions of the majority of available extensions from the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) and the [Open VSX Registry](https://open-vsx.org/). A [GitHub Action](https://github.com/features/actions) updates these extensions daily.
 
-## Important
+As of October 2, 2025, the [nixpkgs](https://github.com/NixOS/nixpkgs) repository contains **456** [VS Code](https://code.visualstudio.com/) extensions. This is a small fraction of the nearly **80,000** extensions available on the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode). In addition, many of the extensions in `nixpkgs` are outdated.
 
-### Don't abuse this flake
+Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need not only the latest extension versions.
+
+## Don't abuse this flake
 
 We have a permission from MS to use a crawler on their API (see the [discussion](https://github.com/NixOS/nixpkgs/issues/208456)).
 
 Don't abuse this flake!
-
-### nix4vscode
-
-Check [nix4vscode](https://github.com/nix-community/nix4vscode) (and contribute!) if you need more extension versions.
 
 ## Prerequisites
 
