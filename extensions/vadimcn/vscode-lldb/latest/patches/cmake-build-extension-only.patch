@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0132c82..83e871c 100644
+index 215dd3c..0409d03 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -16,13 +16,6 @@ endif()
@@ -15,8 +15,8 @@ index 0132c82..83e871c 100644
 -
  set(CMAKE_CTEST_ARGUMENTS "--output-on-failure" CACHE INTERNAL "CTest arguments")
  
- set(TEST_TIMEOUT 5000 CACHE STRING "Test timeout [ms]")
-@@ -116,33 +109,9 @@ configure_file(webpack.config.mjs ${CMAKE_CURRENT_BINARY_DIR}/webpack.config.mjs
+ if (CMAKE_SYSROOT)
+@@ -121,30 +114,9 @@ configure_file(webpack.config.mjs ${CMAKE_CURRENT_BINARY_DIR}/webpack.config.mjs
  configure_file(vscode.test.mjs ${CMAKE_CURRENT_BINARY_DIR}/.vscode-test.mjs)
  
  set(PLATFORM_PACKAGE_URL "https://github.com/vadimcn/codelldb/releases/download/v\${version}/\${platformPackage}" CACHE STRING "")
@@ -28,11 +28,8 @@ index 0132c82..83e871c 100644
 -execute_process(
 -    COMMAND ${NPM} install
 -    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
--    RESULT_VARIABLE Result
+-    COMMAND_ERROR_IS_FATAL ANY
 -)
--if (NOT ${Result} EQUAL 0)
--    message(FATAL_ERROR "npm install failed: ${Result}")
--endif()
 -# So we can commit any changes
 -file(COPY_FILE ${CMAKE_CURRENT_BINARY_DIR}/package-lock.json ${CMAKE_CURRENT_SOURCE_DIR}/package-lock.json)
 -
@@ -53,7 +50,7 @@ index 0132c82..83e871c 100644
  add_custom_target(package_json
      DEPENDS ${CMAKE_BINARY_DIR}/package.json
  )
-@@ -161,6 +130,7 @@ add_custom_target(update_lockfiles
+@@ -163,6 +135,7 @@ add_custom_target(update_lockfiles
  
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/README.md ${CMAKE_CURRENT_BINARY_DIR}/README.md)
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md ${CMAKE_CURRENT_BINARY_DIR}/CHANGELOG.md)
@@ -61,7 +58,7 @@ index 0132c82..83e871c 100644
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/lldb.png ${CMAKE_CURRENT_BINARY_DIR}/images/lldb.png)
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/user.svg ${CMAKE_CURRENT_BINARY_DIR}/images/user.svg)
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/users.svg ${CMAKE_CURRENT_BINARY_DIR}/images/users.svg)
-@@ -177,6 +147,7 @@ add_custom_target(dev_debugging
+@@ -179,6 +152,7 @@ add_custom_target(dev_debugging
  set(PackagedFilesBootstrap
      README.md
      CHANGELOG.md

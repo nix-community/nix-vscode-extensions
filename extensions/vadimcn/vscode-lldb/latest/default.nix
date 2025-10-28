@@ -35,20 +35,20 @@ let
 
   # Get the hash of a source code in a release (https://github.com/vadimcn/codelldb/releases)
   #
-  # nix-repl> rev = "1.11.7"
+  # nix-repl> rev = "1.11.8"
   # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = ""; }
   # nix-repl> :b src
   #
   # Write here the hash that you `got:`.
-  hash = "sha256-qbpl+/GsMjhs7xZdt8r3CM5gYOowBlu/yCd5RmU2eXE=";
+  hash = "sha256-mal3hhf+nri8/2Y0wjfBhnMuGVwM3i0JswxT+ttTm7E=";
 
   # Write here the hash from above.
-  # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-qbpl+/GsMjhs7xZdt8r3CM5gYOowBlu/yCd5RmU2eXE="; }
+  # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-mal3hhf+nri8/2Y0wjfBhnMuGVwM3i0JswxT+ttTm7E="; }
 
   # nix-repl> :b pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; inherit src; useFetchCargoVendor = true; }
   #
   # Write here the hash that you `got:`.
-  cargoHash = "sha256-jAr/5wW9Vy2xfgHKeJGz/vuIRuouVAGH3XHFdQ34x4A=";
+  cargoHash = "sha256-sRqL629+mqvGyNkxpsYd/Kb3AyuysomN0JDR9zKwCO0=";
 
   # nix-repl> :b pkgs.buildNpmPackage { npmDepsHash = ""; name = "dummy"; inherit src; dontNpmBuild = true; }
   #
