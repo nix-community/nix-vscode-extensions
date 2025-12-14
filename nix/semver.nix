@@ -29,7 +29,10 @@ let
     let
       parse = v:
         let
-          m = builtins.match "^([0-9]+)\\.([0-9]+)\\.([0-9]+)(-([0-9A-Za-z.-]+))?(\\+[0-9A-Za-z.-]+)?$" v;
+          # This is based on the official SemVer regex [1], adopted for Nix Regex compatibility (no `?:`, no `\d`).
+          #
+          # [1]: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+          m = builtins.match "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?$" v;
         in
           if m == null then builtins.throw "Invalid SemVer: ${v}"
           else {
