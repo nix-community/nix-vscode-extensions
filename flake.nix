@@ -225,7 +225,7 @@
                             # so we need to provide the URL for the extension
                             vsix = prev.fetchurl {
                               inherit url hash;
-                              name = "${name}-${version}.zip";
+                              name = "${name}-${version}.vsix";
                             };
 
                             inherit engineVersion platform isRelease;
