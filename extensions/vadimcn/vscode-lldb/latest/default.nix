@@ -21,7 +21,7 @@
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
-  supportedVersion = "1.11.8";
+  supportedVersion = "1.12.0";
 in
 assert lib.asserts.assertMsg (mktplcRef.version == supportedVersion) ''
   The version `${mktplcRef.version}` of `vadimcn.vscode-lldb` is not supported.
@@ -51,7 +51,7 @@ let
   # nix-repl> :b src
   #
   # Write here the hash that you `got:`.
-  hash = "sha256-mal3hhf+nri8/2Y0wjfBhnMuGVwM3i0JswxT+ttTm7E=";
+  hash = "sha256-YJMCk+V3mossGDUUlWVmDOLtMrw36jWCuKZrQcgbU40=";
 
   # Write here the hash from above.
   # nix-repl> src = pkgs.fetchFromGitHub { owner = "vadimcn"; repo = "codelldb"; rev = "v${rev}"; hash = "sha256-mal3hhf+nri8/2Y0wjfBhnMuGVwM3i0JswxT+ttTm7E="; }
@@ -59,12 +59,12 @@ let
   # nix-repl> :b pkgs.rustPlatform.buildRustPackage { cargoHash = ""; name = "dummy"; inherit src; useFetchCargoVendor = true; }
   #
   # Write here the hash that you `got:`.
-  cargoHash = "sha256-sRqL629+mqvGyNkxpsYd/Kb3AyuysomN0JDR9zKwCO0=";
+  cargoHash = "sha256-fuUTLdavMiYfpyxctXes2GJCsNZd5g1d4B/v+W/Rnu8=";
 
   # nix-repl> :b pkgs.buildNpmPackage { npmDepsHash = ""; name = "dummy"; inherit src; dontNpmBuild = true; }
   #
   # Write here the hash that you `got:`.
-  npmDepsHash = "sha256-cS7Fr4mrq0QIPFtG5VjLEOOiC2QuVDW+Ispt2LmI258=";
+  npmDepsHash = "sha256-TCeIBrlsNuphW2gVsX97+Wu1lOG5gDwS7559YA1d10M=";
 
   src = fetchFromGitHub {
     owner = "vadimcn";
