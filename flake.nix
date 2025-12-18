@@ -267,7 +267,7 @@
                               if !(lib.attrsets.isDerivation value) then
                                 builtins.throw ''
                                   The extension '${value.vscodeExtPublisher}.${name}' has been removed on ${pkgs.system}.
-                                  See '${./removed.nix}' for details.
+                                  See '${./nix/removed.nix}' for details.
                                 ''
                               else
                                 value;

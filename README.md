@@ -447,7 +447,7 @@ The `extensionsFixed` attrset contains some of the [the `extensions` attrset](#t
 
 Some extensions are unavailable or don't work on particular platforms.
 
-These extensions are disabled via [`removed.nix`](./removed.nix).
+These extensions are disabled via [`./nix/removed.nix`](./nix/removed.nix).
 
 ## Config
 

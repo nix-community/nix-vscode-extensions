@@ -43,7 +43,7 @@ let
 
   mkExtensionLocal = applyMkExtension (import ../extensions { pkgs = pkgs'; });
 
-  extensionsRemoved = (import ../removed.nix).${system} or [ ];
+  extensionsRemoved = (import ./removed.nix).${system} or [ ];
 
   # Similar to callPackageWith/callPackage, but without makeOverridable.
   #
