@@ -164,7 +164,7 @@ let
       mkExtension =
         (self.${mktplcRef.publisher} or { }).${mktplcRef.name} or (
           if builtins.elem "${mktplcRef.publisher}.${mktplcRef.name}" extensionsRemoved then
-            # In `flake.nix`, there is a check whether the result is a derivation.
+            # In `./nix/overlay.nix`, there is a check whether the result is a derivation.
             _: { vscodeExtPublisher = mktplcRef.publisher; }
           else
             buildVscodeMarketplaceExtension

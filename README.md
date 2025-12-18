@@ -99,7 +99,7 @@ TODO
 
 ## Template
 
-This repository has a flake [template](template/flake.nix).
+This repository has a flake [`./template/flake.nix`](./template/flake.nix).
 
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 
@@ -168,7 +168,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 ## Get `extensions`
 
-### Prerequisites
+Prerequisites:
 
 - [Start REPL](#optional-start-repl)
 
@@ -226,7 +226,7 @@ nix-repl> extensions = nix-vscode-extensions.extensions.${builtins.currentSystem
 
 We provide attrsets that contain both universal and platform-specific extensions.
 
-We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [`flake.nix`](./flake.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
+We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [`./nix/overlay.nix`](./nix/overlay.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
 
 ### The `extensions` attrset
 
@@ -342,7 +342,7 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 
 ## Explore
 
-### Prerequisites
+Prerequisites:
 
 - [Get `extensions`](#get-extensions)
 
@@ -496,7 +496,7 @@ See:
 
 ### Values
 
-In the [`./flake.nix`](./flake.nix):
+In the [`./nix/overlay.nix`](./nix/overlay.nix):
 
 - `numberToPlatform` converts `P` to `platform`;
 - `numberToIsRelease` converts `r` to `isRelease`.
