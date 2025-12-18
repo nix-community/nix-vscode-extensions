@@ -168,7 +168,7 @@ If you use [NixOS](https://nixos.org/), [Home Manager](https://nix-community.git
 
 ## Get `extensions`
 
-### Prerequisites
+Prerequisites:
 
 - [Start REPL](#optional-start-repl)
 
@@ -342,7 +342,7 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
 
 ## Explore
 
-### Prerequisites
+Prerequisites:
 
 - [Get `extensions`](#get-extensions)
 
