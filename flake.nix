@@ -77,12 +77,14 @@
                 inherit (pkgs) lib;
                 system = final.stdenv.hostPlatform.system;
                 platformCurrent = systemPlatform.${system};
+                inherit (import ./nix/semver.nix { inherit pkgs; }) compareSemVer;
+
                 isCompatibleVersion =
                   vscodeVersion: engineVersion:
                   if lib.strings.hasPrefix "^" engineVersion then
-                    lib.versionAtLeast vscodeVersion (lib.strings.removePrefix "^" engineVersion)
+                    compareSemVer vscodeVersion (lib.strings.removePrefix "^" engineVersion) >= 0
                   else
-                    vscodeVersion == engineVersion;
+                    compareSemVer vscodeVersion engineVersion == 0;
                 checkVSCodeVersion =
                   { doCheckVSCodeVersion, vscodeVersion }:
                   (x: if doCheckVSCodeVersion then isCompatibleVersion vscodeVersion x.engineVersion else true);
@@ -585,8 +587,10 @@
             tests =
               let
                 inherit (self.extensions.${system}) vscode-marketplace;
+                semver = import ./nix/semver.nix { inherit pkgs; };
               in
-              {
+              semver.tests
+              // {
                 "test: ms-python.vscode-pylance fails if unfree" = {
                   expr =
                     # https://discourse.nixos.org/t/evaluating-possibly-nonfree-derivations/24835/2
