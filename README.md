@@ -251,7 +251,7 @@ Therefore, we used the following method:
 1. We named attrsets to show additional constraints. E.g., `vscode-marketplace*` attrsets contain only extensions from the `VS Code Marketplace`.
 1. In each attrset, for each extension whose versions could be in that attrset, we provided a single highest-priority version of that extension.
 
-The next sections show permitted property combinations and their priorities in corresponding attrsets.
+The next sections show permitted property combinations and their priorities in corresponding attrsets (1 - the highest priority).
 
 #### `vscode-marketplace` and `open-vsx`
 
