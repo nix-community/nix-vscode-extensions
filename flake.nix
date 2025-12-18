@@ -225,19 +225,21 @@
                             # so we need to provide the URL for the extension
                             vsix = prev.fetchurl {
                               inherit url hash;
-                              name = let
-                                dummy_ext = pkgs.vscode-utils.buildVscodeExtension {
-                                  pname = "";
-                                  version = "";
-                                  src = "";
-                                  vscodeExtUniqueId = "";
-                                  vscodeExtPublisher = "";
-                                  vscodeExtName = "";
-                                };
-                                dummy_deps = builtins.map (x: x.name) dummy_ext.nativeBuildInputs;
-                                is_vsix = builtins.elem "unpack-vsix-setup-hook" dummy_deps;
-                                file_extension = if is_vsix then "vsix" else "zip";
-                              in "${name}-${version}.${file_extension}";
+                              name =
+                                let
+                                  dummy_ext = pkgs.vscode-utils.buildVscodeExtension {
+                                    pname = "";
+                                    version = "";
+                                    src = "";
+                                    vscodeExtUniqueId = "";
+                                    vscodeExtPublisher = "";
+                                    vscodeExtName = "";
+                                  };
+                                  dummy_deps = builtins.map (x: x.name) dummy_ext.nativeBuildInputs;
+                                  is_vsix = builtins.elem "unpack-vsix-setup-hook" dummy_deps;
+                                  file_extension = if is_vsix then "vsix" else "zip";
+                                in
+                                "${name}-${version}.${file_extension}";
                             };
 
                             inherit engineVersion platform isRelease;
