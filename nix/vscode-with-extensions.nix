@@ -41,6 +41,7 @@ pkgs.vscode-with-extensions.override {
       ]
     ))
     ++ (with extensions.vscode-marketplace-universal; [
-      vadimcn.vscode-lldb
+      # TODO enable after closing https://github.com/nix-community/nix-vscode-extensions/issues/165
+      # vadimcn.vscode-lldb
     ]);
 }
