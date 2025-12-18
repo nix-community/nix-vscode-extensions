@@ -92,6 +92,10 @@ let
       expr = compareSemVer "1.106.0-20251103" "1.106.0";
       expected = -1;
     };
+    "test: semver prerelease non-numeric greater than numeric" = {
+      expr = compareSemVer "1.106.0-20251103" "1.106.0-beta";
+      expected = -1;
+    };
     "test: semver prerelease numeric greater" = {
       expr = compareSemVer "1.107.0-20251103" "1.106.0";
       expected = 1;
