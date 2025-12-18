@@ -99,7 +99,7 @@ TODO
 
 ## Template
 
-This repository has a flake [./template/flake.nix](./template/flake.nix).
+This repository has a flake [`./template/flake.nix`](./template/flake.nix).
 
 This template provides a [VSCodium](https://github.com/VSCodium/vscodium) with a couple of extensions.
 
