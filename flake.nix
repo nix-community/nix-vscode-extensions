@@ -95,7 +95,7 @@
         }:
         let
           devshells.default = {
-            commands = {
+            commandGroups = {
               tools = [
                 {
                   expose = true;
