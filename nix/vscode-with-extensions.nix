@@ -29,6 +29,8 @@ pkgs.vscode-with-extensions.override {
       jnoortheen.nix-ide
       tamasfe.even-better-toml
       ms-python.python
+      drmerfy.overtype
+      marlinfirmware.auto-build
     ])
     ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
       with extensions.vscode-marketplace;
@@ -41,6 +43,7 @@ pkgs.vscode-with-extensions.override {
       ]
     ))
     ++ (with extensions.vscode-marketplace-universal; [
-      vadimcn.vscode-lldb
+      # TODO enable after closing https://github.com/nix-community/nix-vscode-extensions/issues/165
+      # vadimcn.vscode-lldb
     ]);
 }

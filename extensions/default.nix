@@ -1,6 +1,6 @@
 { pkgs }:
 let
-  inherit (pkgs) callPackage lib;
+  inherit (pkgs) callPackage;
 in
 {
   # Each extension may have several fixes that depend on the extension version.
@@ -31,4 +31,8 @@ in
   sumneko.lua = callPackage ./sumneko/lua/latest;
 
   vadimcn.vscode-lldb = callPackage ./vadimcn/vscode-lldb/latest;
+
+  drmerfy.overtype = callPackage (import ./lib.nix).handleGzippedZip;
+
+  marlinfirmware.auto-build = callPackage (import ./lib.nix).handleGzippedZip;
 }
