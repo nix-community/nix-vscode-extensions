@@ -12,7 +12,7 @@
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.url = "github:nixos/nixpkgs/def3da69945bbe338c373fddad5a1bb49cf199ce?dir=lib";
+      inputs.nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     };
     devshell = {
       url = "github:deemp/devshell";
@@ -24,7 +24,7 @@
       flake = false;
     };
     nix-unit = {
-      url = "github:nix-community/nix-unit/7a952131cbef9cb21953ae70ad09249541848f07";
+      url = "github:nix-community/nix-unit";
       inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.treefmt-nix.follows = "treefmt-nix";
