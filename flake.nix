@@ -34,9 +34,7 @@
 
       flake =
         let
-          overlays = {
-            default = import ./nix/overlay.nix { inherit systemPlatform; };
-          };
+          overlays.default = import ./nix/overlay.nix;
 
           templates = {
             default = {
