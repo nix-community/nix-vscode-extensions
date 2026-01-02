@@ -23,13 +23,13 @@
 
       systems = builtins.attrNames systemPlatform;
     in
-    nix-dev.inputs.flake-parts.lib.mkFlake { inputs = inputsCombined; } {
+    inputsCombined.flake-parts.lib.mkFlake { inputs = inputsCombined; } {
       inherit systems;
 
       imports = [
-        nix-dev.inputs.devshell.flakeModule
-        nix-dev.inputs.treefmt-nix.flakeModule
-        nix-dev.inputs.nix-unit.modules.flake.default
+        inputsCombined.devshell.flakeModule
+        inputsCombined.treefmt-nix.flakeModule
+        inputsCombined.nix-unit.modules.flake.default
       ];
 
       flake =
@@ -46,7 +46,7 @@
         {
           inherit overlays templates;
         }
-        // (nix-dev.inputs.flake-utils.lib.eachSystem systems (
+        // (inputsCombined.flake-utils.lib.eachSystem systems (
           system:
           let
             pkgs = import nixpkgs {
@@ -144,8 +144,8 @@
           legacyPackages.saveFromGC.ci.jobs =
             let
               mkSaveFromGC =
-                attrs: import "${nix-dev.inputs.cache-nix-action}/saveFromGC.nix" ({ inherit pkgs; } // attrs);
-              template = (import nix-dev.inputs.flake-compat { src = ./template; }).defaultNix;
+                attrs: import "${inputsCombined.cache-nix-action}/saveFromGC.nix" ({ inherit pkgs; } // attrs);
+              template = (import inputsCombined.flake-compat { src = ./template; }).defaultNix;
             in
             {
               test =
