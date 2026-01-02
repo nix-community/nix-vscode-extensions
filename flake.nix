@@ -15,7 +15,18 @@
       ...
     }:
     let
-      nix-dev = import ./nix-dev;
+      flake-compat = import (
+        builtins.fetchGit {
+          url = "https://github.com/deemp/flake-compat";
+          rev = "7f5e675bc0baf8640e3f587f7ba241fea5b122bd";
+        }
+      );
+
+      nix-dev =
+        (flake-compat {
+          src = ./.;
+          root = "nix-dev";
+        }).defaultNix;
 
       inputsCombined = nix-dev.inputs // inputs;
 
@@ -29,7 +40,6 @@
       imports = [
         inputsCombined.devshell.flakeModule
         inputsCombined.treefmt-nix.flakeModule
-        inputsCombined.nix-unit.modules.flake.default
       ];
 
       flake =
@@ -46,36 +56,11 @@
         {
           inherit overlays templates;
         }
-        // (inputsCombined.flake-utils.lib.eachSystem systems (
-          system:
-          let
-            pkgs = import nixpkgs {
-              inherit system;
-              # Uncomment to allow unfree extensions
-              # config.allowUnfree = true;
-              overlays = [ self.overlays.default ];
-            };
-
-            extensions = {
-              inherit (pkgs)
-                vscode-marketplace
-                open-vsx
-                vscode-marketplace-release
-                open-vsx-release
-                vscode-marketplace-universal
-                open-vsx-universal
-                vscode-marketplace-release-universal
-                open-vsx-release-universal
-
-                forVSCodeVersion
-                usingFixesFrom
-                ;
-            };
-          in
-          {
-            inherit extensions;
-          }
-        ));
+        // (inputsCombined.flake-utils.lib.eachSystem systems (system: {
+          extensions = import ./nix/extensions.nix {
+            inherit system nixpkgs;
+          };
+        }));
 
       perSystem =
         {
@@ -116,18 +101,9 @@
 
           haskell = import ./haskell;
 
-          resetLicense =
-            drv:
-            drv.overrideAttrs (prev: {
-              meta = prev.meta // {
-                license = [ ];
-              };
-            });
-
           packages = {
             default = import ./nix/vscode-with-extensions.nix {
-              inherit system nixpkgs resetLicense;
-              nix-vscode-extensions = self;
+              inherit system nixpkgs;
             };
           }
           // mkShellApps {
@@ -145,7 +121,7 @@
             let
               mkSaveFromGC =
                 attrs: import "${inputsCombined.cache-nix-action}/saveFromGC.nix" ({ inherit pkgs; } // attrs);
-              template = (import inputsCombined.flake-compat { src = ./template; }).defaultNix;
+              template = (flake-compat { src = ./template; }).defaultNix;
             in
             {
               test =
@@ -179,66 +155,6 @@
                 }).saveFromGC;
             };
 
-          nix-unit = {
-            allowNetwork = true;
-
-            inputs = {
-              inherit (inputsCombined)
-                nixpkgs
-                flake-parts
-                nix-unit
-                flake-compat
-                ;
-            };
-
-            tests =
-              let
-                inherit (self.extensions.${system}) vscode-marketplace;
-                semver = import ./nix/semver.nix { inherit pkgs; };
-              in
-              semver.tests
-              // {
-                "test: ms-python.vscode-pylance fails if unfree" = {
-                  expr =
-                    # https://discourse.nixos.org/t/evaluating-possibly-nonfree-derivations/24835/2
-                    (builtins.tryEval (builtins.unsafeDiscardStringContext vscode-marketplace.ms-python.vscode-pylance))
-                    .success;
-                  expected = false;
-                };
-                "test: ms-vscode.cpptools passes only on " = {
-                  expr = (builtins.tryEval vscode-marketplace.ms-vscode.cpptools).success;
-                  expected = builtins.elem system lib.platforms.linux;
-                };
-                "test: ms-python.vscode-pylance passes if not unfree" = {
-                  expr = (builtins.tryEval (resetLicense vscode-marketplace.ms-python.vscode-pylance)).success;
-                  expected = true;
-                };
-                "test: rust-lang.rust-analyzer passes" = {
-                  expr = (builtins.tryEval vscode-marketplace.rust-lang.rust-analyzer).success;
-                  expected = true;
-                };
-                "test: `allowAliases = false` and `checkMeta = true` work" = {
-                  # https://github.com/nix-community/nix-vscode-extensions/issues/142
-                  expr =
-                    let
-                      pkgs = import inputs.nixpkgs {
-                        inherit system;
-
-                        config = {
-                          allowAliases = false;
-                          checkMeta = true;
-                        };
-
-                        overlays = [ self.overlays.default ];
-                      };
-                      extensions = pkgs.nix-vscode-extensions;
-                    in
-                    (builtins.tryEval extensions.vscode-marketplace.b4dm4n.nixpkgs-fmt).success;
-                  expected = true;
-                };
-              };
-          };
-
           treefmt = {
             flakeCheck = false;
 
@@ -266,9 +182,9 @@
             devshells
             packages
             legacyPackages
-            nix-unit
             treefmt
             ;
+          checks = nix-dev.outputs.checks.${system};
         };
     };
 

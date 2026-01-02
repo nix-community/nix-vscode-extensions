@@ -1,7 +1,5 @@
-{ pkgs }:
+{ lib }:
 let
-  inherit (pkgs) lib;
-
   # Compare two pre-release identifiers
   comparePreReleaseIdentifiers =
     id1: id2:

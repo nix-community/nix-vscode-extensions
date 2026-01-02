@@ -5,7 +5,7 @@ let
   open-vsx = "open-vsx";
 
   platformUniversal = "universal";
-  
+
   systemPlatform = import ./systemPlatform.nix;
 
   numberToPlatform =
