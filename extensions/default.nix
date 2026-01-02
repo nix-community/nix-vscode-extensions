@@ -1,6 +1,6 @@
 { pkgs }:
 let
-  inherit (pkgs) callPackage lib;
+  inherit (pkgs) callPackage;
 in
 {
   # Each extension may have several fixes that depend on the extension version.

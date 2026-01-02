@@ -29,6 +29,8 @@ pkgs.vscode-with-extensions.override {
       jnoortheen.nix-ide
       tamasfe.even-better-toml
       ms-python.python
+      drmerfy.overtype
+      marlinfirmware.auto-build
     ])
     ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
       with extensions.vscode-marketplace;

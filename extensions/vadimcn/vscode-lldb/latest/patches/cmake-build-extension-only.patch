@@ -28,7 +28,7 @@ index 0132c82..83e871c 100644
 -execute_process(
 -    COMMAND ${NPM} install
 -    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
--    RESULT_VARIABLE Result
+-    COMMAND_ERROR_IS_FATAL ANY
 -)
 -if (NOT ${Result} EQUAL 0)
 -    message(FATAL_ERROR "npm install failed: ${Result}")

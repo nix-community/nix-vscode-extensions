@@ -80,6 +80,18 @@ jobs:
         with:
           primary-key: nix-update-${{ hashfiles('{.,nix-dev,haskell}/*.{nix,lock}','haskell/updater.cabal', 'haskell/package.yaml') }}
           restore-prefixes-first-match: nix-update-
+      # adapted from https://github.com/nodejs/node/pull/54658
+      - name: Cleanup
+        run: |
+          echo "::group::Free space before cleanup"
+          df -h
+          echo "::endgroup::"
+          echo "::group::Cleaned Files"
+          sudo rm -rfv '/usr/local/lib/android'
+          echo "::endgroup::"
+          echo "::group::Free space after cleanup"
+          df -h
+          echo "::endgroup::"
       - name: Configure git
         env:
           # required for gh
@@ -159,7 +171,7 @@ jobs:
         with:
           primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.*') }}
       - name: Check template VSCodium
-        run: nix develop -vvv template/#vscodium
+        run: nix develop template/#vscodium
       - name: Save flake attributes from GC
         if: always()
         run: nix profile add .#saveFromGC.ci.jobs.test-template
