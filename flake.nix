@@ -6,17 +6,17 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/def3da69945bbe338c373fddad5a1bb49cf199ce";
+    nix-dev.url = "path:./nix-dev";
   };
 
   outputs =
     inputs@{
       self,
       nixpkgs,
+      nix-dev,
       ...
     }:
     let
-      nix-dev = import ./nix-dev;
-
       inputsCombined = nix-dev.inputs // inputs;
 
       systemPlatform = {

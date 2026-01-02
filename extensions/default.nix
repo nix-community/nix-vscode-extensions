@@ -30,9 +30,21 @@ in
 
   sumneko.lua = callPackage ./sumneko/lua/latest;
 
-  vadimcn.vscode-lldb = callPackage ./vadimcn/vscode-lldb/latest;
+  vadimcn.vscode-lldb =
+    config@{ mktplcRef, ... }:
+    let
+      lowestSupportedVersion = "1.11.7";
+    in
+    if lib.versionAtLeast mktplcRef.version lowestSupportedVersion then
+      # https://github.com/nix-community/nix-vscode-extensions/pull/151
+      callPackage ./vadimcn/vscode-lldb/latest config
+    else
+      throw ''
+        The version `${mktplcRef.version}` of `vadimcn.vscode-lldb` is unsupported.
+         
+        Only versions greater or equal to `${lowestSupportedVersion}` are supported.
 
-  drmerfy.overtype = callPackage (import ./lib.nix).handleGzippedZip;
-
-  marlinfirmware.auto-build = callPackage (import ./lib.nix).handleGzippedZip;
+        Try `extensions.${pkgs.stdenv.hostPlatform.system}.vscode-marketplace-universal.vadimcn.vscode-lldb`
+        or  `extensions.${pkgs.stdenv.hostPlatform.system}.open-vsx-universal.vadimcn.vscode-lldb`.
+      '';
 }
