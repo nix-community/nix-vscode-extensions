@@ -16,7 +16,7 @@ semver.tests
       .success;
     expected = false;
   };
-  "test: ms-vscode.cpptools passes only on " = {
+  "test: ms-vscode.cpptools passes only on Linux" = {
     expr = (builtins.tryEval vscode-marketplace.ms-vscode.cpptools).success;
     expected = builtins.elem system lib.platforms.linux;
   };
