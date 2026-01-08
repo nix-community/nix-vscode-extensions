@@ -17,7 +17,6 @@
     devshell = {
       url = "github:deemp/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
     flake-compat = {
       url = "github:edolstra/flake-compat";
@@ -33,6 +32,49 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    parent = {
+      url = "path:../";
+      flake = false;
+    };
   };
-  outputs = _: { };
+  outputs =
+    inputs@{ nixpkgs, ... }:
+    let
+      parent = inputs.parent.outPath;
+      systemPlatform = import "${parent}/nix/systemPlatform.nix";
+      systems = builtins.attrNames systemPlatform;
+      overlay = import "${parent}/nix/overlay.nix";
+    in
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      inherit systems;
+
+      imports = [
+        inputs.nix-unit.modules.flake.default
+      ];
+
+      perSystem =
+        {
+          inputs',
+          pkgs,
+          system,
+          ...
+        }:
+        {
+          nix-unit = {
+            inputs = {
+              inherit (inputs)
+                nixpkgs
+                flake-parts
+                nix-unit
+                parent
+                ;
+              "flake-parts/nixpkgs-lib" = inputs.flake-parts.inputs.nixpkgs-lib;
+            };
+
+            tests = import "${parent}/nix/tests.nix" {
+              inherit system nixpkgs overlay;
+            };
+          };
+        };
+    };
 }

@@ -1,8 +1,8 @@
 {
   system,
   nixpkgs,
-  nix-vscode-extensions,
-  resetLicense,
+  overlay ? import ./overlay.nix,
+  resetLicense ? import ./resetLicense.nix,
 }:
 let
   pkgs = nixpkgs.legacyPackages.${system};
@@ -17,7 +17,7 @@ pkgs.vscode-with-extensions.override {
         inherit system;
         # Uncomment to allow unfree extensions
         # config.allowUnfree = true;
-        overlays = [ nix-vscode-extensions.overlays.default ];
+        overlays = [ overlay ];
       };
     in
     (with extensions.vscode-marketplace; [
