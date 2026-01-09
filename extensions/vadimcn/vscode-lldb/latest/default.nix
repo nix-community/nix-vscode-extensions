@@ -21,14 +21,15 @@
 assert lib.versionAtLeast python3.version "3.5";
 let
   supportedVersion = "1.12.1";
+  extFullName = "${mktplcRef.publisher}.${mktplcRef.name}";
 in
 assert lib.asserts.assertMsg (mktplcRef.version == supportedVersion) ''
-  The version `${mktplcRef.version}` of `vadimcn.vscode-lldb` is not supported.
+  The version `${mktplcRef.version}` of `${extFullName}` is not supported.
    
   Only the version `${supportedVersion}` is supported.
 
-  Try `extensions.${stdenv.hostPlatform.system}.vscode-marketplace-universal.vadimcn.vscode-lldb`
-  or  `extensions.${stdenv.hostPlatform.system}.open-vsx-universal.vadimcn.vscode-lldb`.
+  Try `extensions.${stdenv.hostPlatform.system}.vscode-marketplace-universal.${extFullName}`
+  or  `extensions.${stdenv.hostPlatform.system}.open-vsx-universal.${extFullName}`.
 '';
 let
   inherit (mktplcRef) publisher version;
