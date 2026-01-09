@@ -21,7 +21,6 @@ let
     else
       "${lib.getBin lldb}/bin/lldb-server";
   LLVM_TRIPLE = stdenv.buildPlatform.rust.rustcTarget;
-  DYLIB_SUFFIX = if stdenv.hostPlatform.isDarwin then ".dylib" else ".so";
 in
 rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
@@ -33,10 +32,8 @@ rustPlatform.buildRustPackage {
   # The LLDB_* variables are used in adapter/lldb/build.rs.
   "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
   "CXX_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/c++";
+  LLDB_DYLIB = "${lib.getLib lldb}/lib/liblldb${stdenv.hostPlatform.extensions.sharedLibrary}";
   LLDB_INCLUDE = "${lib.getDev lldb}/include";
-  LLDB_LINK_LIB = "lldb";
-  LLDB_LINK_SEARCH = "${lib.getLib lldb}/lib";
-  LLDB_DYLIB = "${lib.getLib lldb}/lib/liblldb${DYLIB_SUFFIX}";
 
   nativeBuildInputs = [ makeWrapper ];
 
