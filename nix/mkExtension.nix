@@ -99,9 +99,16 @@ let
     # using the `buildVscodeExtension` function.
     #
     # Their expressions don't provide any meaningful fixes.
+    # 
+    # Find all such extensions:
+    # https://github.com/search?q=repo%3ANixOS%2Fnixpkgs%20buildVscodeExtension&type=code
     "eamodio.gitlens"
+    "google.gemini-cli-vscode-ide-companion"
     "kilocode.kilo-code"
+    "ms-vscode.js-debug-companion"
+    "ms-vscode.vscode-js-profile-table"
     "prettier.prettier-vscode"
+    "rooveterinaryinc.roo-cline"
     "vscode-icons-team.vscode-icons"
   ];
 
