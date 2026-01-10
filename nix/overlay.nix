@@ -38,7 +38,7 @@ let
   inherit (pkgs) lib;
   system = final.stdenv.hostPlatform.system;
   platformCurrent = systemPlatform.${system};
-  inherit (import ./semver.nix { inherit pkgs; }) compareSemVer;
+  inherit (import ./semver.nix { inherit lib; }) compareSemVer;
 
   isCompatibleVersion =
     vscodeVersion: engineVersion:
