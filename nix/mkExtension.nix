@@ -83,28 +83,34 @@ let
     callPackage "${pathNixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix"
       { config.allowAliases = false; };
 
-  extensionsProblematic =
+  extensionsProblematic = [
     # Problem:
     # Some arguments of the function that produces a derivation
     # are provided in the `let .. in` expression before the call to that function
 
     # TODO make a PR to nixpkgs to simplify overriding for these extensions
-    [
-      "anweber.vscode-httpyac"
-      "chenglou92.rescript-vscode"
-      # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
-      "vadimcn.vscode-lldb"
-      "rust-lang.rust-analyzer"
-    ];
+    "anweber.vscode-httpyac"
+    "chenglou92.rescript-vscode"
+    # Wait for https://github.com/NixOS/nixpkgs/pull/383013 to be merged
+    "vadimcn.vscode-lldb"
+    "rust-lang.rust-analyzer"
 
-  extensionsBuildVscodeExtension =
     # In Nixpkgs, these packages are constructed
     # using the `buildVscodeExtension` function.
-    [
-      "kilocode.kilo-code"
-      "eamodio.gitlens"
-      "vscode-icons-team.vscode-icons"
-    ];
+    #
+    # Their expressions don't provide any meaningful fixes.
+    # 
+    # Find all such extensions:
+    # https://github.com/search?q=repo%3ANixOS%2Fnixpkgs%20buildVscodeExtension&type=code
+    "eamodio.gitlens"
+    "google.gemini-cli-vscode-ide-companion"
+    "kilocode.kilo-code"
+    "ms-vscode.js-debug-companion"
+    "ms-vscode.vscode-js-profile-table"
+    "prettier.prettier-vscode"
+    "rooveterinaryinc.roo-cline"
+    "vscode-icons-team.vscode-icons"
+  ];
 
   pathSpecial = {
     ms-ceintl = "language-packs.nix";
@@ -137,17 +143,14 @@ let
         in
         { mktplcRef, vsix }@extensionConfig:
         if builtins.elem extensionId extensionsProblematic then
-          buildVscodeMarketplaceExtension extensionConfig
+          buildVscodeMarketplaceExtension (
+            extensionConfig // (if extension' ? meta then { meta = extension'.meta; } else { })
+          )
         else
           (extension'.override
             or (abort "The extension '${publisher}.${name}' doesn't have an 'override' attribute.")
           )
-            (
-              if builtins.elem extensionId extensionsBuildVscodeExtension then
-                { inherit vsix; }
-              else
-                extensionConfig
-            )
+            extensionConfig
     )
   ) extensionsNixpkgs;
 
