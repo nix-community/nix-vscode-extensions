@@ -284,7 +284,7 @@ You should replace `version` with your `VS Code` or `VSCodium` version.
 `usingFixesFrom nixpkgsWithFixes` produces an attrset where particular extensions have fixes specified in the supplied `nixpkgsWithFixes` (see `mkExtensionNixpkgs` in [`mkExtension.nix`](#mkextensionnix), [Versions with fixes from particular `nixpkgs`](#versions-with-fixes-from-particular-nixpkgs), [Use fixes from `nixpkgs`](#use-fixes-from-nixpkgs)).
 
 - The supplied `nixpkgsWithFixes` can be any version of `nixpkgs` (see [Get `nixpkgs`](#get-nixpkgs)).
-- The supplied `nixpkgsWithFixes` is used only to look up the fixes in its source code and is independent of the `nixpkgs` that you apply the overlay to.
+- The supplied `nixpkgsWithFixes` is used only to look up the fixes in its *source code* and is independent of the `nixpkgs` that you apply the overlay to.
 
 The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed using fixes from `nixpkgs` that you apply the overlay to (if you [get `extensions` via the overlay](#get-extensions-via-the-overlay)) or `nixpkgs` from the `nix-vscode-extensions` repository (if you [get `extensions` from `nix-vscode-extensions`](#get-extensions-from-nix-vscode-extensions)).
 
