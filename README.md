@@ -45,22 +45,6 @@ See [`nix repl`](https://nix.dev/manual/nix/2.31/command-ref/new-cli/nix3-repl.h
 nix repl
 ```
 
-### (Optional) Get your system
-
-```console
-system="$(nix-instantiate --eval --expr "builtins.currentSystem")"
-```
-
-On my system:
-
-```console
-printf "$system"
-"x86_64-linux"
-```
-
-> [!NOTE]
-> You can use the value that you got on your machine instead of `builtins.currentSystem` in instructions below.
-
 ## History
 
 You can search for an extension in the repository history:
@@ -208,16 +192,25 @@ nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
           }))
 ```
 
-### Get `extensions` via the overlay
+### Get `extensions` attrset
+
+#### Get `system`
+
+nix-repl> system = builtins.currentSystem
+
+> [!TIP]
+> `system` can be provided by `flake-utils` or `flake-parts`.
+
+#### Get `extensions` via the overlay
 
 ```console
-nix-repl> extensions = (import nixpkgs { system = builtins.currentSystem; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }).nix-vscode-extensions
+nix-repl> extensions = (import nixpkgs { inherit system; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }).nix-vscode-extensions
 ```
 
-### Get `extensions` from `nix-vscode-extensions`
+#### Get `extensions` from `nix-vscode-extensions`
 
 ```console
-nix-repl> extensions = nix-vscode-extensions.extensions.${builtins.currentSystem}
+nix-repl> extensions = nix-vscode-extensions.extensions.${system}
 ```
 
 ## Extensions
@@ -318,8 +311,12 @@ The top-level `vscode-marketplace*` and `open-vsx*` attributes are constructed u
   - Set `config.allowUnfree = true` when constructing `pkgs`.
 
     ```nix
+    # If you use flakes, `system` can be provided 
+    # by `flake-utils` or `flake-parts`.
+    system = builtins.currentSystem;
+    
     pkgs = import nixpkgs {
-      system = builtins.currentSystem;
+      inherit system;
       config.allowUnfree = true;
       overlays = [ overlays.default ];
     }
