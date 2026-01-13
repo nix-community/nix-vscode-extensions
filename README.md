@@ -203,11 +203,15 @@ nix-repl> system = builtins.currentSystem
 
 #### Get `extensions` via the overlay
 
+See [Overlay](#overlay).
+
 ```console
 nix-repl> extensions = (import nixpkgs { inherit system; config.allowUnfree = true; overlays = [ nix-vscode-extensions.overlays.default ]; }).nix-vscode-extensions
 ```
 
 #### Get `extensions` from `nix-vscode-extensions`
+
+The `nix-vscode-extensions.extensions` attribute is constructed by extending `nixpkgs` from the `nix-vscode-extensions` flake inputs with the [overlay](#overlay).
 
 ```console
 nix-repl> extensions = nix-vscode-extensions.extensions.${system}
