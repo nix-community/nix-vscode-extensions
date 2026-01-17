@@ -50,6 +50,8 @@
 
       imports = [
         inputs.nix-unit.modules.flake.default
+        inputs.devshell.flakeModule
+        inputs.treefmt-nix.flakeModule
       ];
 
       perSystem =
@@ -57,9 +59,118 @@
           inputs',
           pkgs,
           system,
+          self',
+          lib,
           ...
         }:
-        {
+        let
+          devshells.default = {
+            commandGroups = {
+              tools = [
+                {
+                  expose = true;
+                  packages = {
+                    inherit (pkgs) nvfetcher;
+                  };
+                }
+                {
+                  prefix = "nix run .#";
+                  packages = {
+                    inherit (self'.packages) updateExtensions updateExtraExtensions;
+                  };
+                }
+              ];
+            };
+          };
+
+          mkShellApps = lib.mapAttrs (
+            name: value:
+            if !(lib.isDerivation value) && lib.isAttrs value then
+              pkgs.writeShellApplication (value // { inherit name; })
+            else
+              value
+          );
+
+          haskell = import ../haskell;
+
+          packages = {
+            default = import ../nix/vscode-with-extensions.nix {
+              inherit system nixpkgs;
+            };
+          }
+          // mkShellApps {
+            updateExtensions = {
+              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
+              meta.description = "Update extensions";
+            };
+            updateExtraExtensions = {
+              text = "${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
+              meta.description = "Update extra extensions";
+            };
+          };
+
+          flake-compat = import ../nix/flake-compat.nix;
+
+          legacyPackages.saveFromGC.ci.jobs =
+            let
+              mkSaveFromGC =
+                attrs: import "${inputs.cache-nix-action}/saveFromGC.nix" ({ inherit pkgs; } // attrs);
+              template = (flake-compat { src = ../template; }).defaultNix;
+            in
+            {
+              test =
+                (mkSaveFromGC {
+                  inputs = {
+                    self.inputs = inputs;
+                  };
+                  derivations = [ self'.packages.default ];
+                }).saveFromGC;
+
+              update =
+                (mkSaveFromGC {
+                  inputs = {
+                    self.inputs = inputs;
+                    inherit haskell;
+                  };
+                  derivations = [
+                    self'.packages.updateExtensions
+                    self'.packages.updateExtraExtensions
+                    self'.formatter
+                  ];
+                }).saveFromGC;
+
+              test-template =
+                (mkSaveFromGC {
+                  inputs = {
+                    self = template;
+                    inherit template;
+                  };
+                  derivations = [ template.devShells.${system}.default ];
+                }).saveFromGC;
+            };
+
+          treefmt = {
+            flakeCheck = false;
+
+            programs = {
+              nixfmt.enable = true;
+              prettier.enable = true;
+            };
+
+            settings.global.excludes = [
+              "haskell/**"
+              "data/**"
+              # ".github/**"
+              ".envrc"
+              ".env"
+              "LICENSE"
+              # "README.md"
+              "cabal.project"
+              "extra-extensions.toml"
+              ".markdownlint.jsonc"
+            ];
+          };
+
           nix-unit = {
             inputs = {
               inherit (inputs)
@@ -67,6 +178,8 @@
                 flake-parts
                 nix-unit
                 parent
+                devshell
+                treefmt-nix
                 ;
               "flake-parts/nixpkgs-lib" = inputs.flake-parts.inputs.nixpkgs-lib;
             };
@@ -75,6 +188,15 @@
               inherit system nixpkgs overlay;
             };
           };
+        in
+        {
+          inherit
+            devshells
+            legacyPackages
+            nix-unit
+            packages
+            treefmt
+            ;
         };
     };
 }

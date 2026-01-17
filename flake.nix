@@ -9,18 +9,9 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      ...
-    }:
+    { nixpkgs, ... }:
     let
-      flake-compat = import (
-        builtins.fetchGit {
-          url = "https://github.com/deemp/flake-compat";
-          rev = "7f5e675bc0baf8640e3f587f7ba241fea5b122bd";
-        }
-      );
+      flake-compat = import ./nix/flake-compat.nix;
 
       nix-dev =
         (flake-compat {
@@ -28,164 +19,28 @@
           root = "nix-dev";
         }).defaultNix;
 
-      inputsCombined = nix-dev.inputs // inputs;
-
       systemPlatform = import ./nix/systemPlatform.nix;
-
-      systems = builtins.attrNames systemPlatform;
+      
+      overlay = import ./nix/overlay.nix;
     in
-    inputsCombined.flake-parts.lib.mkFlake { inputs = inputsCombined; } {
-      inherit systems;
-
-      imports = [
-        inputsCombined.devshell.flakeModule
-        inputsCombined.treefmt-nix.flakeModule
-      ];
-
-      flake =
-        let
-          overlays.default = import ./nix/overlay.nix;
-
-          templates = {
-            default = {
-              path = ./template;
-              description = "VSCodium with extensions";
-            };
-          };
-        in
-        {
-          inherit overlays templates;
+    {
+      extensions = builtins.mapAttrs (
+        system: _:
+        import ./nix/extensions.nix {
+          inherit system nixpkgs overlay;
         }
-        // (inputsCombined.flake-utils.lib.eachSystem systems (system: {
-          extensions = import ./nix/extensions.nix {
-            inherit system nixpkgs;
-          };
-        }));
+      ) systemPlatform;
 
-      perSystem =
-        {
-          self',
-          system,
-          lib,
-          pkgs,
-          inputs',
-          ...
-        }:
-        let
-          devshells.default = {
-            commandGroups = {
-              tools = [
-                {
-                  expose = true;
-                  packages = {
-                    inherit (pkgs) nvfetcher;
-                  };
-                }
-                {
-                  prefix = "nix run .#";
-                  packages = {
-                    inherit (self'.packages) updateExtensions updateExtraExtensions;
-                  };
-                }
-              ];
-            };
-          };
+      inherit (nix-dev) devShells checks;
 
-          mkShellApps = lib.mapAttrs (
-            name: value:
-            if !(lib.isDerivation value) && lib.isAttrs value then
-              pkgs.writeShellApplication (value // { inherit name; })
-            else
-              value
-          );
+      overlays.default = overlay;
 
-          haskell = import ./haskell;
-
-          packages = {
-            default = import ./nix/vscode-with-extensions.nix {
-              inherit system nixpkgs;
-            };
-          }
-          // mkShellApps {
-            updateExtensions = {
-              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
-              meta.description = "Update extensions";
-            };
-            updateExtraExtensions = {
-              text = "${lib.meta.getExe pkgs.nvfetcher} -c extra-extensions.toml -o data/extra-extensions";
-              meta.description = "Update extra extensions";
-            };
-          };
-
-          legacyPackages.saveFromGC.ci.jobs =
-            let
-              mkSaveFromGC =
-                attrs: import "${inputsCombined.cache-nix-action}/saveFromGC.nix" ({ inherit pkgs; } // attrs);
-              template = (flake-compat { src = ./template; }).defaultNix;
-            in
-            {
-              test =
-                (mkSaveFromGC {
-                  inputs = {
-                    self.inputs = inputsCombined;
-                  };
-                  derivations = [ self'.packages.default ];
-                }).saveFromGC;
-
-              update =
-                (mkSaveFromGC {
-                  inputs = {
-                    self.inputs = inputsCombined;
-                    inherit haskell;
-                  };
-                  derivations = [
-                    self'.packages.updateExtensions
-                    self'.packages.updateExtraExtensions
-                    self'.formatter
-                  ];
-                }).saveFromGC;
-
-              test-template =
-                (mkSaveFromGC {
-                  inputs = {
-                    self = template;
-                    inherit template;
-                  };
-                  derivations = [ template.devShells.${system}.default ];
-                }).saveFromGC;
-            };
-
-          treefmt = {
-            flakeCheck = false;
-
-            programs = {
-              nixfmt.enable = true;
-              prettier.enable = true;
-            };
-
-            settings.global.excludes = [
-              "haskell/**"
-              "data/**"
-              # ".github/**"
-              ".envrc"
-              ".env"
-              "LICENSE"
-              # "README.md"
-              "cabal.project"
-              "extra-extensions.toml"
-              ".markdownlint.jsonc"
-            ];
-          };
-        in
-        {
-          inherit
-            devshells
-            packages
-            legacyPackages
-            treefmt
-            ;
-          checks = nix-dev.outputs.checks.${system};
+      templates = {
+        default = {
+          path = ./template;
+          description = "VSCodium with extensions";
         };
+      };
     };
 
   nixConfig = {
