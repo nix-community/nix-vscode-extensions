@@ -31,7 +31,7 @@
         }
       ) systemPlatform;
 
-      inherit (nix-dev) devShells checks;
+      inherit (nix-dev) devShells checks formatter;
 
       overlays.default = overlay;
 
