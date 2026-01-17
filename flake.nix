@@ -20,7 +20,7 @@
         }).defaultNix;
 
       systemPlatform = import ./nix/systemPlatform.nix;
-      
+
       overlay = import ./nix/overlay.nix;
     in
     {
