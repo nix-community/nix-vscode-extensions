@@ -41,7 +41,7 @@ jobs:
           primary-key: nix-test-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('*.{nix,lock}', 'data/cache/vscode-marketplace-latest.json') }}
           restore-prefixes-first-match: nix-test-${{ runner.os }}-${{ runner.arch }}-
       - name: Build VS Code with extensions
-        run: nix run .# -- --list-extensions
+        run: nix run ./nix-dev# -- --list-extensions
       - name: Check flake
         # --impure is necessary for checking the updater
         run: nix flake check --impure
@@ -49,7 +49,7 @@ jobs:
       #   if: always()
       - name: Save flake attributes from GC
         if: always()
-        run: nix profile add .#saveFromGC.ci.jobs.test
+        run: nix profile add ./nix-dev#saveFromGC.ci.jobs.test
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
@@ -111,11 +111,11 @@ jobs:
         # Need this to run before updateExtensions*
         # because the following steps run GC
         if: always()
-        run: nix profile add .#saveFromGC.ci.jobs.update
+        run: nix profile add ./nix-dev#saveFromGC.ci.jobs.update
       - name: Update extensions
-        run: nix run .#updateExtensions -- --config config.yaml
+        run: nix run ./nix-dev#updateExtensions -- --config config.yaml
       - name: Update extra extensions
-        run: nix run .#updateExtraExtensions
+        run: nix run ./nix-dev#updateExtraExtensions
       - name: Commit and push changes
         run: |-
           git pull --rebase --autostash origin master
@@ -171,10 +171,10 @@ jobs:
         with:
           primary-key: nix-template-${{ runner.os }}-${{ runner.arch }}-${{ hashfiles('template/flake.*') }}
       - name: Check template VSCodium
-        run: nix develop template/#vscodium
+        run: nix develop ./template#vscodium
       - name: Save flake attributes from GC
         if: always()
-        run: nix profile add .#saveFromGC.ci.jobs.test-template
+        run: nix profile add ./nix-dev#saveFromGC.ci.jobs.test-template
       - uses: nix-community/cache-nix-action/save@v6
         if: always()
         with:
