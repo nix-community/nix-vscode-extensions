@@ -79,9 +79,9 @@ let
         builtins.dirOf
       ];
 
-  extensionsNixpkgs =
-    callPackage "${pathNixpkgs}/pkgs/applications/editors/vscode/extensions/default.nix"
-      { config.allowAliases = false; };
+  extensionsNixpkgs = callPackage (
+    pathNixpkgs + "/pkgs/applications/editors/vscode/extensions/default.nix"
+  ) { config.allowAliases = false; };
 
   extensionsProblematic = [
     # Problem:
@@ -130,7 +130,7 @@ let
         let
           subPath = pathSpecial.${publisher} or extensionId;
 
-          path = "${pathNixpkgs}/pkgs/applications/editors/vscode/extensions/${subPath}";
+          path = pathNixpkgs + "/pkgs/applications/editors/vscode/extensions/${subPath}";
 
           extension' =
             if builtins.pathExists path then
