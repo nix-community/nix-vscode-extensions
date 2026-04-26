@@ -13,16 +13,16 @@ newtype MyLoggerT msg m a = MyLoggerT {_myLoggerT :: LoggerT msg m a}
 
 type MyLogger = MyLoggerT Message IO
 
-instance Alternative m => Alternative (MyLoggerT msg m) where
+instance (Alternative m) => Alternative (MyLoggerT msg m) where
   empty = MyLoggerT $ LoggerT empty
   (<|>) :: MyLoggerT msg m a -> MyLoggerT msg m a -> MyLoggerT msg m a
   (<|>) (MyLoggerT (LoggerT r1)) (MyLoggerT (LoggerT r2)) = MyLoggerT (LoggerT (r1 <|> r2))
 
-instance MonadUnliftIO m => MonadUnliftIO (MyLoggerT msg m) where
+instance (MonadUnliftIO m) => MonadUnliftIO (MyLoggerT msg m) where
   withRunInIO :: ((forall a. MyLoggerT msg m a -> IO a) -> IO b) -> MyLoggerT msg m b
   withRunInIO action = MyLoggerT $ LoggerT $ withRunInIO $ \runInIO -> action $ \(MyLoggerT (LoggerT x)) -> runInIO x
 
-instance Monad m => MonadReader (LogAction (MyLoggerT msg m) msg) (MyLoggerT msg m) where
+instance (Monad m) => MonadReader (LogAction (MyLoggerT msg m) msg) (MyLoggerT msg m) where
   ask :: MyLoggerT msg m (LogAction (MyLoggerT msg m) msg)
   ask = MyLoggerT $ LoggerT $ ReaderT $ \(LogAction l) -> pure $ LogAction $ MyLoggerT . l
   local :: (LogAction (MyLoggerT msg m) msg -> LogAction (MyLoggerT msg m) msg) -> MyLoggerT msg m a -> MyLoggerT msg m a
