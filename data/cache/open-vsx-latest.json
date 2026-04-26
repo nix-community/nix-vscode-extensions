@@ -6708,7 +6708,7 @@
 , {"p":"elszon","n":"golang-regroup-imports","r":1,"P":0,"v":"0.1.4","e":"^1.95.0","h":"sha256-p50hTR8a9dk7SLaizdoIWjVWKRh18aLyl7jnGCzGqAc="}
 , {"p":"eltociear","n":"kiro-chan","r":1,"P":0,"v":"1.2.0","e":"^1.94.0","h":"sha256-gkTxcpoHxFKTg+kT221uoD1HASzZaAzFrQW4MPlHkO0="}
 , {"p":"eltociear","n":"vscode-rgb-everywhere","r":1,"P":0,"v":"0.0.11","e":"^1.85.0","h":"sha256-DUhimFJxbdOUll9ST1XpIRa74LRR8yex812jOZND81A="}
-, {"p":"elumine","n":"kotlin-jump","r":1,"P":0,"v":"1.17.9","e":"^1.88.0","h":"sha256-+J3vM9AtJfV0xpJzIgkJaMePxEKBYQRBCRlR4uRN09U="}
+, {"p":"elumine","n":"kotlin-jump","r":1,"P":0,"v":"1.17.10","e":"^1.88.0","h":"sha256-fWqca2hPh2HlXvKEQGGn2op3IRmzCiak/VUO8VUbrBE="}
 , {"p":"elves","n":"elvish","r":1,"P":0,"v":"0.4.2","e":"^1.65.0","h":"sha256-bmoAhyztEAeF/e7ajTnFpChSMApHqGBW9qfL/Ba5fHc="}
 , {"p":"elvessousa","n":"sobrio","r":1,"P":0,"v":"0.2.0","e":"^1.54.0","h":"sha256-KEStU4wcbi3zrBODFt9+WBGzyc7kX9NQlVBvAOlHMXY="}
 , {"p":"elyalon","n":"dynasty-theme","r":1,"P":0,"v":"1.0.5","e":"^1.105.0","h":"sha256-pXo2bmtet3LolApf+sNTvVguNRyV7vHM+3Mad5RGKP8="}
@@ -10714,6 +10714,9 @@
 , {"p":"obukhovai","n":"image-compare","r":1,"P":4,"v":"0.2.1","e":"^1.85.0","h":"sha256-k7f3yMeX49XeJX7/RynPNIW3sbnX3gVmyqtufepR2mw="}
 , {"p":"ocamllabs","n":"ocaml-platform","r":1,"P":0,"v":"2.1.0","e":"^1.86.0","h":"sha256-Z35u4Jo8PjKp5plOgZA7N8/lSAewB6rDaZXm2bWZRWA="}
 , {"p":"ocet247","n":"tf2-vscript-support","r":1,"P":0,"v":"2.3.1","e":"^1.96.1","h":"sha256-WexywDYFFEx+1qK5dQUYeod4JbPRePdddNdxxjyPh38="}
+, {"p":"ocet247","n":"tf2-vscript-support","r":1,"P":1,"v":"3.0.0","e":"^1.93.0","h":"sha256-/ddW82yYovQ+ZWiMJQeqOu4reaN7lCPBmrds4ZBoUmA="}
+, {"p":"ocet247","n":"tf2-vscript-support","r":1,"P":3,"v":"3.0.0","e":"^1.93.0","h":"sha256-h6UxB8ebGgNeGM4Yy4VvjYSckJa2HCs/LueoQSGABIw="}
+, {"p":"ocet247","n":"tf2-vscript-support","r":1,"P":4,"v":"3.0.0","e":"^1.93.0","h":"sha256-cK8vVcOuRpBJCB9+2Fk9N8NsIV+oXeLW6nP5ZzQAwcg="}
 , {"p":"ocgen","n":"ocgen-ai","r":1,"P":0,"v":"1.0.4","e":"^1.75.0","h":"sha256-8SXYBs4UYrOmiX1gjEpYTX50kplSphWRxUxiRBdFxYM="}
 , {"p":"octech","n":"clockit","r":1,"P":0,"v":"1.9.0","e":"^1.77.0","h":"sha256-k32aA7qHKf7LxV3ma5ljC3RfEzYoC+WbBTa0Bq8wI/o="}
 , {"p":"octech","n":"commit-watcher","r":1,"P":0,"v":"1.2.4","e":"^1.77.0","h":"sha256-lvH89zvA+FotB5K7Pa6I3VZftpbRej0tifou7z4jAbY="}
