@@ -123,10 +123,7 @@ jobs:
           git add .
 
           git commit \
-            -m "action" \
-            -m "Update flake locks" \
-            -m "Update extensions" \
-            -m "Update extra extensions" \
+            -m "Update extensions and flake locks" \
             || echo "commit failed!"
 
           git push
