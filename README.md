@@ -55,7 +55,7 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/def3da69945bbe338c373fddad5a1bb49cf199ce/pkgs/applications/editors/vscode/with-extensions.nix).
+The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
@@ -161,7 +161,7 @@ Prerequisites:
 #### Get `nixpkgs` with flakes
 
 ```console
-nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/def3da69945bbe338c373fddad5a1bb49cf199ce
+nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a7ecea3deccfbdbf22945a89984fcc5a169da8aa
 ```
 
 #### Get `nixpkgs` without flakes
@@ -170,7 +170,7 @@ nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/def3da69945bbe338c373
 nix-repl> nixpkgs = (import (builtins.fetchGit {
             url = "https://github.com/NixOS/nixpkgs";
             ref = "refs/heads/master";
-            rev = "def3da69945bbe338c373fddad5a1bb49cf199ce";
+            rev = "a7ecea3deccfbdbf22945a89984fcc5a169da8aa";
           }))
 ```
 
