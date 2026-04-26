@@ -44,7 +44,7 @@ jobs:
         run: nix run ./nix-dev# -- --list-extensions
       - name: Check flake
         # --impure is necessary for checking the updater
-        run: nix flake check --impure
+        run: nix flake check
       # - uses: mxschmitt/action-tmate@v3
       #   if: always()
       - name: Save flake attributes from GC
