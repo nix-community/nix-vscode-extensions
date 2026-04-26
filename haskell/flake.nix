@@ -188,7 +188,7 @@
 
           # Default shell.
           devshells.default = {
-            commands = {
+            commandGroups = {
               tools = [
                 {
                   expose = true;

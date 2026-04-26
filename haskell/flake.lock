@@ -2,17 +2,16 @@
   "nodes": {
     "devshell": {
       "inputs": {
-        "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1713447246,
-        "narHash": "sha256-lafrzPN19LdRC3S0s6moAjI5ICyY9HSE1EJAXiEBLAw=",
+        "lastModified": 1766161567,
+        "narHash": "sha256-Zr6e74wdSrodxEjCUtYcIvMTLUKNADKLykAvZK7u3dQ=",
         "owner": "deemp",
         "repo": "devshell",
-        "rev": "eece9ce8466060972c2f8aa332b7e7263ad115d6",
+        "rev": "c2b908c6cbddd6db32ad0c43656a21e2c155de04",
         "type": "github"
       },
       "original": {
@@ -55,25 +54,6 @@
         "owner": "hercules-ci",
         "repo": "flake-parts",
         "type": "github"
-      }
-    },
-    "flake-utils": {
-      "inputs": {
-        "systems": [
-          "systems"
-        ]
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "id": "flake-utils",
-        "type": "indirect"
       }
     },
     "haskell-flake": {
