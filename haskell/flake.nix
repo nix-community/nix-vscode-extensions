@@ -156,7 +156,7 @@
           treefmt.config = {
             projectRootFile = "flake.nix";
             programs.fourmolu.enable = true;
-            programs.nixfmt-rfc-style.enable = true;
+            programs.nixfmt.enable = true;
             programs.hlint.enable = true;
           };
 
