@@ -452,6 +452,22 @@ Some extensions are unavailable or don't work on particular platforms.
 
 These extensions are disabled via [`./nix/removed.nix`](./nix/removed.nix).
 
+## Modify
+
+### Override an extension
+
+Most of the extensions have the [`override`](https://nixos.org/manual/nixpkgs/stable/#sec-pkg-override) attribute.
+This attribute allows you to override the arguments passed to [`buildVscodeMarketplaceExtension`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/extensions/vscode-utils.nix#L91-L116).
+
+Also see:
+
+- [`buildVscodeExtension`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/extensions/vscode-utils.nix#L21-L86)
+- [`extendMkDerivation`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/lib/customisation.nix#L764-L903)
+
+Example:
+
+- `jj-view.jj-view` extension in [`vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix)
+
 ## Config
 
 See:
