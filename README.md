@@ -196,7 +196,9 @@ nix-repl> nix-vscode-extensions = (import (builtins.fetchGit {
 
 #### Get `system`
 
+```console
 nix-repl> system = builtins.currentSystem
+```
 
 > [!TIP]
 > `system` can be provided by `flake-utils` or `flake-parts`.
