@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://www.schemastore.org/any.json
 name:                updater
 version:             0.1.0.0
 github:              "nix-community/nix-vscode-extensions"
