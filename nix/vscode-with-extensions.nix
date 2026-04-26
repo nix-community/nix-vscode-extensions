@@ -31,6 +31,14 @@ pkgs.vscode-with-extensions.override {
       ms-python.python
       drmerfy.overtype
       marlinfirmware.auto-build
+
+      (jj-view.jj-view.override {
+        nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+        buildInputs = [
+          pkgs.stdenv.cc.cc.lib
+          pkgs.musl
+        ];
+      })
     ])
     ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
       with extensions.vscode-marketplace;
