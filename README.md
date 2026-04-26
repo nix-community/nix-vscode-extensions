@@ -55,7 +55,7 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [vscode-with-extensions](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/with-extensions.nix).
+The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [`vscode-with-extensions`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
