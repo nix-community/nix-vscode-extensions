@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveAnyClass #-}
-
 module Extensions where
 
 import Control.Lens (Prism', has, prism', review, traversed, (#), (%~), (^..), (^?), _1, _Just)

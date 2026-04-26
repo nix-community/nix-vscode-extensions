@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.37.0.
+-- This file has been generated from package.yaml by hpack version 0.38.3.
 --
 -- see: https://github.com/sol/hpack
 
@@ -35,9 +35,11 @@ library
       src
   default-extensions:
       BlockArguments
+      DeriveAnyClass
       DuplicateRecordFields
       GeneralizedNewtypeDeriving
       ImplicitParams
+      MultiWayIf
       OverloadedLabels
       OverloadedRecordDot
       OverloadedStrings
@@ -89,9 +91,11 @@ executable updater
       app
   default-extensions:
       BlockArguments
+      DeriveAnyClass
       DuplicateRecordFields
       GeneralizedNewtypeDeriving
       ImplicitParams
+      MultiWayIf
       OverloadedLabels
       OverloadedRecordDot
       OverloadedStrings

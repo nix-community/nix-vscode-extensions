@@ -24,9 +24,11 @@ language: GHC2024
 
 default-extensions:
 - BlockArguments
+- DeriveAnyClass
 - DuplicateRecordFields
 - GeneralizedNewtypeDeriving
 - ImplicitParams
+- MultiWayIf
 - OverloadedLabels
 - OverloadedRecordDot
 - OverloadedStrings

@@ -1,6 +1,3 @@
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE MultiWayIf #-}
-
 module Main (main) where
 
 import Colog (LogAction (..), Message, Msg (..), WithLog, cfilter, fmtMessage, formatWith, logDebug, logError, logInfo, logTextStdout, usingLoggerT)
@@ -11,7 +8,7 @@ import Control.Concurrent.Async.Pool qualified as AsyncPool (mapConcurrently, wi
 import Control.Concurrent.STM.TBMQueue (TBMQueue, closeTBMQueue, newTBMQueueIO, peekTBMQueue, tryReadTBMQueue, writeTBMQueue)
 import Control.Concurrent.Thread.Delay (delay)
 import Control.Concurrent.Timeout (Timeout, timeout)
-import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to, traversed, (%~), (+~), (.~), (<&>), (^.), (^..), (^?), _2, _Empty, _Just, _Left, _Right)
+import Control.Lens (Bifunctor (bimap), Traversal', filtered, has, non, only, to, traversed, (%~), (<&>), (^.), (^..), (^?), _2, _Empty, _Just, _Left, _Right)
 import Control.Lens.Extras (is)
 import Control.Monad (forM_, guard, unless, void, when)
 import Control.Monad.IO.Class (MonadIO (..))
