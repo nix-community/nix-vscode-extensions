@@ -91,6 +91,7 @@ let
         version
         cargoHash
         stdenv
+        codelldb-launch
         ;
     }
   );
@@ -213,7 +214,8 @@ lib.customisation.makeOverridable stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit lldb adapter;
+    inherit lldb;
+    adapter = adapter.override { standalone = true; };
     updateScript = ./update.sh;
   };
 
