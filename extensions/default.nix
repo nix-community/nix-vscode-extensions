@@ -26,6 +26,8 @@ in
 
   ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare/vsliveshare/latest;
 
+  jj-view.jj-view = callPackage ./jj-view/jj-view/latest;
+
   rust-lang.rust-analyzer = callPackage ./rust-lang/rust-analyzer/latest;
 
   sumneko.lua = callPackage ./sumneko/lua/latest;
