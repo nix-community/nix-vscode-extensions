@@ -191,6 +191,59 @@ pub fn record(
     }
 }
 
+pub fn assert_latest_fixture(
+    body: &str,
+    expected: &[(&str, &str, &str, Platform, bool, &str)],
+) {
+    assert_configs_match(
+        nix_vscode_extensions_updater::marketplace::parse_latest_response(body).unwrap(),
+        expected,
+    );
+}
+
+pub fn assert_release_fixture(
+    body: &str,
+    expected: &[(&str, &str, &str, Platform, bool, &str)],
+) {
+    assert_configs_match(
+        nix_vscode_extensions_updater::marketplace::parse_release_response(body).unwrap(),
+        expected,
+    );
+}
+
+fn assert_configs_match(
+    parsed: Vec<ExtensionConfig>,
+    expected: &[(&str, &str, &str, Platform, bool, &str)],
+) {
+    let parsed = parsed
+        .iter()
+        .map(|config| {
+            (
+                config.publisher.0.clone(),
+                config.name.0.clone(),
+                config.version.to_string(),
+                config.platform,
+                config.is_release.0,
+                config.engine_version.to_string(),
+            )
+        })
+        .collect::<Vec<_>>();
+    let expected = expected
+        .iter()
+        .map(|(publisher, name, version, platform, is_release, engine_version)| {
+            (
+                (*publisher).to_string(),
+                (*name).to_string(),
+                (*version).to_string(),
+                *platform,
+                *is_release,
+                (*engine_version).to_string(),
+            )
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(parsed, expected);
+}
+
 pub fn test_config(data_dir: &Path) -> AppConfig {
     AppConfig {
         data_dir: data_dir.to_path_buf(),
