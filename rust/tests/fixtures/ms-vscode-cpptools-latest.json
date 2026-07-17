@@ -1,0 +1,88 @@
+{
+  "results": [
+    {
+      "extensions": [
+        {
+          "flags": "validated, public",
+          "extensionName": "cpptools",
+          "publisher": {
+            "publisherName": "ms-vscode"
+          },
+          "versions": [
+            {
+              "version": "1.33.4",
+              "targetPlatform": "darwin-x64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.77.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.PreRelease",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "version": "1.33.4",
+              "targetPlatform": "linux-arm64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.77.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.PreRelease",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "version": "1.33.4",
+              "targetPlatform": "linux-x64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.77.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.PreRelease",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "version": "1.33.4",
+              "targetPlatform": "darwin-arm64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.77.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.PreRelease",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "version": "1.7.1",
+              "targetPlatform": null,
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.60.0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -136,6 +136,266 @@ fn release_response_parses_real_marketplace_payload() {
     );
 }
 
+fn assert_latest_fixture(
+    body: &str,
+    expected: &[(&str, &str, &str, Platform, bool, &str)],
+) {
+    let parsed = parse_latest_response(body).unwrap();
+    let parsed = parsed
+        .iter()
+        .map(|config| {
+            (
+                config.publisher.0.clone(),
+                config.name.0.clone(),
+                config.version.to_string(),
+                config.platform,
+                config.is_release.0,
+                config.engine_version.to_string(),
+            )
+        })
+        .collect::<Vec<_>>();
+    let expected = expected
+        .iter()
+        .map(|(publisher, name, version, platform, is_release, engine_version)| {
+            (
+                (*publisher).to_string(),
+                (*name).to_string(),
+                (*version).to_string(),
+                *platform,
+                *is_release,
+                (*engine_version).to_string(),
+            )
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        parsed, expected
+    );
+}
+
+fn assert_release_fixture(
+    body: &str,
+    expected: &[(&str, &str, &str, Platform, bool, &str)],
+) {
+    let parsed = parse_release_response(body).unwrap();
+    let parsed = parsed
+        .iter()
+        .map(|config| {
+            (
+                config.publisher.0.clone(),
+                config.name.0.clone(),
+                config.version.to_string(),
+                config.platform,
+                config.is_release.0,
+                config.engine_version.to_string(),
+            )
+        })
+        .collect::<Vec<_>>();
+    let expected = expected
+        .iter()
+        .map(|(publisher, name, version, platform, is_release, engine_version)| {
+            (
+                (*publisher).to_string(),
+                (*name).to_string(),
+                (*version).to_string(),
+                *platform,
+                *is_release,
+                (*engine_version).to_string(),
+            )
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        parsed, expected
+    );
+}
+
+#[test]
+fn latest_response_parses_rust_analyzer_fixture() {
+    assert_latest_fixture(
+        include_str!("fixtures/rust-lang-rust-analyzer-latest.json"),
+        &[
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.4.2977",
+                Platform::LinuxX64,
+                false,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.4.2977",
+                Platform::LinuxArm64,
+                false,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.4.2977",
+                Platform::DarwinX64,
+                false,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.4.2977",
+                Platform::DarwinArm64,
+                false,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.4.2977",
+                Platform::Universal,
+                false,
+                "^1.93.0",
+            ),
+        ],
+    );
+}
+
+#[test]
+fn release_response_parses_rust_analyzer_fixture() {
+    assert_release_fixture(
+        include_str!("fixtures/rust-lang-rust-analyzer-release.json"),
+        &[
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.3.2971",
+                Platform::Universal,
+                true,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.3.2971",
+                Platform::LinuxX64,
+                true,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.3.2971",
+                Platform::LinuxArm64,
+                true,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.3.2971",
+                Platform::DarwinX64,
+                true,
+                "^1.93.0",
+            ),
+            (
+                "rust-lang",
+                "rust-analyzer",
+                "0.3.2971",
+                Platform::DarwinArm64,
+                true,
+                "^1.93.0",
+            ),
+        ],
+    );
+}
+
+#[test]
+fn latest_response_parses_cpptools_fixture() {
+    assert_latest_fixture(
+        include_str!("fixtures/ms-vscode-cpptools-latest.json"),
+        &[
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.33.4",
+                Platform::DarwinX64,
+                false,
+                "^1.77.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.33.4",
+                Platform::LinuxArm64,
+                false,
+                "^1.77.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.33.4",
+                Platform::LinuxX64,
+                false,
+                "^1.77.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.33.4",
+                Platform::DarwinArm64,
+                false,
+                "^1.77.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.7.1",
+                Platform::Universal,
+                true,
+                "^1.60.0",
+            ),
+        ],
+    );
+}
+
+#[test]
+fn release_response_parses_cpptools_fixture() {
+    assert_release_fixture(
+        include_str!("fixtures/ms-vscode-cpptools-release.json"),
+        &[
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.32.2",
+                Platform::LinuxX64,
+                true,
+                "^1.67.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.32.2",
+                Platform::LinuxArm64,
+                true,
+                "^1.67.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.32.2",
+                Platform::DarwinX64,
+                true,
+                "^1.67.0",
+            ),
+            (
+                "ms-vscode",
+                "cpptools",
+                "1.32.2",
+                Platform::DarwinArm64,
+                true,
+                "^1.67.0",
+            ),
+        ],
+    );
+}
+
 #[test]
 fn marketplace_parsers_filter_flags() {
     let body = json!({
