@@ -87,7 +87,13 @@
               value
           );
 
-          haskell = import ../haskell;
+          rustUpdater = pkgs.rustPlatform.buildRustPackage {
+            pname = "nix-vscode-extensions-updater";
+            version = "0.1.0";
+            src = ../rust;
+            cargoLock.lockFile = ../rust/Cargo.lock;
+            meta.mainProgram = "nix-vscode-extensions-updater";
+          };
 
           packages = {
             default = import ../nix/vscode-with-extensions.nix {
@@ -96,7 +102,7 @@
           }
           // mkShellApps {
             updateExtensions = {
-              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
+              text = ''${lib.meta.getExe rustUpdater} "$@"'';
               meta.description = "Update extensions";
             };
             updateExtraExtensions = {
@@ -126,7 +132,6 @@
                 (mkSaveFromGC {
                   inputs = {
                     self.inputs = inputs;
-                    inherit haskell;
                   };
                   derivations = [
                     self'.packages.updateExtensions

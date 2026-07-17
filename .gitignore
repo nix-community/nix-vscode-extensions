@@ -8,3 +8,4 @@ data
 data/extra-extensions/generated.json
 !data/extra/generated.nix
 data_*
+rust/target

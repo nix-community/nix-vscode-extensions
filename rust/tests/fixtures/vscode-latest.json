@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "extensions": [
+        {
+          "flags": "public",
+          "extensionName": "sample",
+          "publisher": { "publisherName": "alice" },
+          "versions": [
+            {
+              "version": "1.2.3",
+              "properties": [
+                { "key": "Microsoft.VisualStudio.Code.Engine", "value": "^1.0.0" }
+              ]
+            },
+            {
+              "version": "1.2.4-insider",
+              "properties": [
+                { "key": "Microsoft.VisualStudio.Code.Engine", "value": "^1.0.0" },
+                { "key": "Microsoft.VisualStudio.Code.PreRelease", "value": "true" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

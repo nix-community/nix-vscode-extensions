@@ -68,9 +68,9 @@ let
         && (checkVSCodeVersion { inherit doCheckVSCodeVersion vscodeVersion; } x);
     in
     lib.pipe site [
-      (x: ../data/cache/${site}${"-latest"}.json)
-      builtins.readFile
-      builtins.fromJSON
+      (x: builtins.readFile ../data/cache/${site}-latest.jsonl)
+      (contents: lib.filter (line: line != "") (lib.splitString "\n" contents))
+      (lines: map builtins.fromJSON lines)
       (map (
         {
           p,
