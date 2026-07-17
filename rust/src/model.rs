@@ -10,6 +10,15 @@ pub enum Target {
     OpenVsx,
 }
 
+impl Display for Target {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Target::VscodeMarketplace => "vscode-marketplace",
+            Target::OpenVsx => "open-vsx",
+        })
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Ord, PartialOrd)]
 pub enum Platform {
     Universal,

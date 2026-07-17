@@ -2,7 +2,9 @@
 
 use nix_vscode_extensions_updater::config::{AppConfig, SiteConfig};
 use nix_vscode_extensions_updater::logging::{Level, Logger};
-use nix_vscode_extensions_updater::marketplace::{MarketplaceClient, MarketplaceFetchResult};
+use nix_vscode_extensions_updater::marketplace::{
+    MarketplaceClient, MarketplaceFetchResult, ReleaseConfigFetchResult, ReleaseLookupFailure,
+};
 use nix_vscode_extensions_updater::model::{
     CacheRecord, EngineVersion, ExtensionConfig, IsRelease, Name, Platform, Publisher, Target,
     Version,
@@ -11,35 +13,63 @@ use nix_vscode_extensions_updater::pipeline::Pipeline;
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use tempfile::TempDir;
 
-pub struct TestLogger;
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct LogEntry {
+    pub level: Level,
+    pub message: String,
+}
+
+#[derive(Clone, Default)]
+pub struct TestLogger {
+    entries: Arc<Mutex<Vec<LogEntry>>>,
+}
+
+impl TestLogger {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn entries(&self) -> Vec<LogEntry> {
+        self.entries.lock().unwrap().clone()
+    }
+}
 
 impl Logger for TestLogger {
     fn enabled(&self, _level: Level) -> bool {
         true
     }
 
-    fn log(&self, _level: Level, _message: &str) {}
+    fn log(&self, level: Level, message: &str) {
+        self.entries.lock().unwrap().push(LogEntry {
+            level,
+            message: message.to_string(),
+        });
+    }
 }
 
 pub struct FakeMarketplace {
     pub latest: MarketplaceFetchResult,
-    pub releases: Vec<ExtensionConfig>,
+    pub release_result: ReleaseConfigFetchResult,
     pub latest_error: Option<String>,
     pub release_error: Option<String>,
     pub requested_release_ids: Mutex<Vec<(Publisher, Name)>>,
+    latest_failures_remaining: Mutex<u32>,
+    release_failures_remaining: Mutex<u32>,
 }
 
 impl FakeMarketplace {
     pub fn new(latest: MarketplaceFetchResult) -> Self {
         Self {
             latest,
-            releases: Vec::new(),
+            release_result: ReleaseConfigFetchResult::default(),
             latest_error: None,
             release_error: None,
             requested_release_ids: Mutex::new(Vec::new()),
+            latest_failures_remaining: Mutex::new(0),
+            release_failures_remaining: Mutex::new(0),
         }
     }
 
@@ -52,6 +82,26 @@ impl FakeMarketplace {
         self.release_error = Some(error.into());
         self
     }
+
+    pub fn with_release_configs(mut self, configs: Vec<ExtensionConfig>) -> Self {
+        self.release_result.configs = configs;
+        self
+    }
+
+    pub fn with_release_failures(mut self, failures: Vec<ReleaseLookupFailure>) -> Self {
+        self.release_result.failures = failures;
+        self
+    }
+
+    pub fn fail_latest_attempts(mut self, attempts: u32) -> Self {
+        self.latest_failures_remaining = Mutex::new(attempts);
+        self
+    }
+
+    pub fn fail_release_attempts(mut self, attempts: u32) -> Self {
+        self.release_failures_remaining = Mutex::new(attempts);
+        self
+    }
 }
 
 impl MarketplaceClient for FakeMarketplace {
@@ -60,6 +110,15 @@ impl MarketplaceClient for FakeMarketplace {
         _target: Target,
         _site: &SiteConfig,
     ) -> anyhow::Result<MarketplaceFetchResult> {
+        let mut remaining = self.latest_failures_remaining.lock().unwrap();
+        if *remaining > 0 {
+            *remaining -= 1;
+            return Err(anyhow::anyhow!(
+                self.latest_error
+                    .clone()
+                    .unwrap_or_else(|| "transient latest failure".to_string())
+            ));
+        }
         if let Some(err) = &self.latest_error {
             return Err(anyhow::anyhow!(err.clone()));
         }
@@ -74,15 +133,24 @@ impl MarketplaceClient for FakeMarketplace {
         &self,
         _target: Target,
         ids: &[(Publisher, Name)],
-    ) -> anyhow::Result<Vec<ExtensionConfig>> {
+    ) -> anyhow::Result<ReleaseConfigFetchResult> {
         self.requested_release_ids
             .lock()
             .unwrap()
             .extend_from_slice(ids);
+        let mut remaining = self.release_failures_remaining.lock().unwrap();
+        if *remaining > 0 {
+            *remaining -= 1;
+            return Err(anyhow::anyhow!(
+                self.release_error
+                    .clone()
+                    .unwrap_or_else(|| "transient release failure".to_string())
+            ));
+        }
         if let Some(err) = &self.release_error {
             return Err(anyhow::anyhow!(err.clone()));
         }
-        Ok(self.releases.clone())
+        Ok(self.release_result.clone())
     }
 }
 
@@ -268,10 +336,25 @@ pub fn test_pipeline<'a, M, P>(
     marketplace: &'a M,
     prefetcher: &'a P,
 ) -> Pipeline<'a, M, P, TestLogger> {
+    let logger = Box::leak(Box::new(TestLogger::new()));
     Pipeline {
         config,
         marketplace,
         prefetcher,
-        logger: &TestLogger,
+        logger,
+    }
+}
+
+pub fn test_pipeline_with_logger<'a, M, P>(
+    config: &'a AppConfig,
+    marketplace: &'a M,
+    prefetcher: &'a P,
+    logger: &'a TestLogger,
+) -> Pipeline<'a, M, P, TestLogger> {
+    Pipeline {
+        config,
+        marketplace,
+        prefetcher,
+        logger,
     }
 }

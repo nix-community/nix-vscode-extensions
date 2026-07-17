@@ -7,6 +7,7 @@ use rayon::prelude::*;
 use reqwest::blocking::Client;
 use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
+use std::time::Duration;
 
 pub struct MarketplaceFetchResult {
     pub configs: Vec<ExtensionConfig>,
@@ -14,9 +15,26 @@ pub struct MarketplaceFetchResult {
     pub pages_fetched: Vec<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ReleaseLookupFailure {
+    pub publisher: Publisher,
+    pub name: Name,
+    pub error: String,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct ReleaseConfigFetchResult {
+    pub configs: Vec<ExtensionConfig>,
+    pub failures: Vec<ReleaseLookupFailure>,
+}
+
 pub trait MarketplaceClient {
     fn fetch_latest(&self, target: Target, site: &SiteConfig) -> anyhow::Result<MarketplaceFetchResult>;
-    fn fetch_release_configs(&self, target: Target, ids: &[(Publisher, Name)]) -> anyhow::Result<Vec<ExtensionConfig>>;
+    fn fetch_release_configs(
+        &self,
+        target: Target,
+        ids: &[(Publisher, Name)],
+    ) -> anyhow::Result<ReleaseConfigFetchResult>;
 }
 
 pub struct HttpMarketplaceClient {
@@ -24,9 +42,11 @@ pub struct HttpMarketplaceClient {
 }
 
 impl HttpMarketplaceClient {
-    pub fn new() -> anyhow::Result<Self> {
+    pub fn new(timeout_seconds: u64) -> anyhow::Result<Self> {
         Ok(Self {
-            client: Client::builder().build()?,
+            client: Client::builder()
+                .timeout(Duration::from_secs(timeout_seconds))
+                .build()?,
         })
     }
 
@@ -136,23 +156,33 @@ impl MarketplaceClient for HttpMarketplaceClient {
         })
     }
 
-    fn fetch_release_configs(&self, target: Target, ids: &[(Publisher, Name)]) -> anyhow::Result<Vec<ExtensionConfig>> {
+    fn fetch_release_configs(
+        &self,
+        target: Target,
+        ids: &[(Publisher, Name)],
+    ) -> anyhow::Result<ReleaseConfigFetchResult> {
         let pool = rayon::ThreadPoolBuilder::new().num_threads(ids.len().max(1)).build()?;
         let results = pool.install(|| {
             ids.par_iter()
                 .map(|(publisher, name)| match self.fetch_one_release(&target, publisher, name) {
-                    Ok(body) => Ok(body),
-                    Err(err) => Err(format!("{err:#}")),
+                    Ok(body) => Ok(((publisher.clone(), name.clone()), body)),
+                    Err(err) => Err(ReleaseLookupFailure {
+                        publisher: publisher.clone(),
+                        name: name.clone(),
+                        error: format!("{err:#}"),
+                    }),
                 })
                 .collect::<Vec<_>>()
         });
         let mut configs = Vec::new();
+        let mut failures = Vec::new();
         for result in results {
-            if let Ok(body) = result {
-                configs.extend(parse_release_response(&body)?);
+            match result {
+                Ok((_, body)) => configs.extend(parse_release_response(&body)?),
+                Err(err) => failures.push(err),
             }
         }
-        Ok(configs)
+        Ok(ReleaseConfigFetchResult { configs, failures })
     }
 }
 
