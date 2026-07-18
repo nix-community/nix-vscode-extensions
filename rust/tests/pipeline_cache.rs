@@ -1,10 +1,11 @@
 mod pipeline;
 
-use nix_vscode_extensions_updater::cache::{read_jsonl_cache, write_jsonl_cache};
+use nix_vscode_extensions_updater::cache::{read_jsonl_cache, tmp_path, write_jsonl_cache};
 use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
 use nix_vscode_extensions_updater::model::{CacheRecord, IsRelease, Name, Platform, Publisher};
 use pipeline::support::{
-    config, record, test_pipeline, FakeMarketplace, FakePrefetcher, TestEnv,
+    config, observed_platforms_for, record, test_pipeline, FakeMarketplace, FakePrefetcher,
+    TestEnv,
 };
 
 #[test]
@@ -23,11 +24,13 @@ fn pipeline_merges_and_keeps_retained_records() {
     };
     write_jsonl_cache(&cache_file, &[retained.clone()]).unwrap();
 
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("keep", "old", true, Platform::Universal, "1.1.0"),
             config("fresh", "ext", true, Platform::Universal, "2.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -55,11 +58,13 @@ fn dedup_latest_keeps_first_record_for_each_latest_key() {
     let env = TestEnv::new();
     let cache_file = env.cache_file("open-vsx");
 
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("keep", "ext", true, Platform::Universal, "1.0.0"),
             config("keep", "ext", true, Platform::Universal, "2.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -107,11 +112,13 @@ fn dedup_latest_prefers_the_first_record_seen_for_a_latest_key() {
     )
     .unwrap();
 
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("keep", "ext", true, Platform::Universal, "2.0.0"),
             config("other", "ext", true, Platform::Universal, "1.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -156,6 +163,7 @@ fn pipeline_propagates_latest_fetch_failure_without_writing_latest_debug_files()
 
     let marketplace = FakeMarketplace::new(MarketplaceFetchResult {
         configs: vec![],
+        observed_platforms: observed_platforms_for(&[]),
         pages_failed: vec![],
         pages_fetched: vec![],
     })
@@ -178,8 +186,10 @@ fn pipeline_propagates_release_fetch_failure_after_writing_latest_debug_files() 
     app_config.n_retry = 0;
     app_config.retry_delay = 0;
 
+    let latest_configs = vec![config("keep", "ext", false, Platform::Universal, "1.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("keep", "ext", false, Platform::Universal, "1.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec!["page-1-failed".into()],
         pages_fetched: vec!["page-1".into()],
     };
@@ -215,8 +225,10 @@ fn prerelease_debug_ids_only_include_latest_fetch_candidates() {
     )
     .unwrap();
 
+    let latest_configs = vec![config("fresh", "ext", false, Platform::Universal, "2.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("fresh", "ext", false, Platform::Universal, "2.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -246,8 +258,10 @@ fn dedup_latest_keeps_first_stale_cached_record_before_later_same_latest_key_rec
     )
     .unwrap();
 
+    let latest_configs = vec![config("keep", "ext", false, Platform::Universal, "2.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("keep", "ext", false, Platform::Universal, "2.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -260,4 +274,153 @@ fn dedup_latest_keeps_first_stale_cached_record_before_later_same_latest_key_rec
     let cached = read_jsonl_cache(&cache_file).unwrap();
     assert_eq!(cached.len(), 1);
     assert_eq!(cached[0].hash, "sha256-stale");
+}
+
+#[test]
+fn open_vsx_skips_unobserved_universal_release_prefetch_and_writes_debug_output() {
+    let env = TestEnv::new();
+    let latest_configs = vec![config("need", "ext", false, Platform::LinuxX64, "2.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let release_configs = vec![config("need", "ext", true, Platform::Universal, "1.9.0")];
+    let marketplace = FakeMarketplace::new(latest)
+        .with_release_configs(release_configs)
+        .with_release_observed_platforms(observed_platforms_for(&[config(
+            "need",
+            "ext",
+            true,
+            Platform::LinuxX64,
+            "1.9.0",
+        )]));
+    let prefetcher = FakePrefetcher::new(vec![Ok(record(
+        "need",
+        "ext",
+        false,
+        Platform::LinuxX64,
+        "2.0.0",
+        "sha256-need-pre",
+    ))]);
+    let pipeline = test_pipeline(&env.config, &marketplace, &prefetcher);
+
+    pipeline.run().unwrap();
+
+    let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(fetched.len(), 1);
+    assert_eq!(fetched[0].platform, Platform::LinuxX64);
+
+    let skipped = std::fs::read_to_string(
+        env.data_dir
+            .join("debug")
+            .join("open-vsx")
+            .join("skipped-artifact-prefetches.jsonl"),
+    )
+    .unwrap();
+    assert!(skipped.contains("\"P\":0"));
+    assert!(skipped.contains("\"observed_platforms\":[1]"));
+}
+
+#[test]
+fn open_vsx_prefetches_universal_prerelease_when_latest_observed_it() {
+    let env = TestEnv::new();
+    let latest_configs = vec![config("need", "ext", false, Platform::Universal, "2.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(vec![Ok(record(
+        "need",
+        "ext",
+        false,
+        Platform::Universal,
+        "2.0.0",
+        "sha256-need-pre",
+    ))]);
+    let pipeline = test_pipeline(&env.config, &marketplace, &prefetcher);
+
+    pipeline.run().unwrap();
+
+    let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(fetched.len(), 1);
+    assert_eq!(fetched[0].platform, Platform::Universal);
+}
+
+#[test]
+fn open_vsx_prefetches_universal_release_when_release_lookup_observed_it() {
+    let env = TestEnv::new();
+    let latest_configs = vec![config("need", "ext", false, Platform::LinuxX64, "2.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest).with_release_configs(vec![config(
+        "need",
+        "ext",
+        true,
+        Platform::Universal,
+        "1.9.0",
+    )]);
+    let prefetcher = FakePrefetcher::new(vec![
+        Ok(record(
+            "need",
+            "ext",
+            false,
+            Platform::LinuxX64,
+            "2.0.0",
+            "sha256-need-pre",
+        )),
+        Ok(record(
+            "need",
+            "ext",
+            true,
+            Platform::Universal,
+            "1.9.0",
+            "sha256-need-release",
+        )),
+    ]);
+    let pipeline = test_pipeline(&env.config, &marketplace, &prefetcher);
+
+    pipeline.run().unwrap();
+
+    let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(fetched.len(), 2);
+    assert!(fetched.iter().any(|record| {
+        record.is_release.0 && record.platform == Platform::Universal && record.hash == "sha256-need-release"
+    }));
+}
+
+#[test]
+fn open_vsx_prefetches_platform_specific_variant_when_observed() {
+    let env = TestEnv::new();
+    let latest_configs = vec![config("need", "ext", true, Platform::LinuxX64, "2.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(vec![Ok(record(
+        "need",
+        "ext",
+        true,
+        Platform::LinuxX64,
+        "2.0.0",
+        "sha256-need-linux",
+    ))]);
+    let pipeline = test_pipeline(&env.config, &marketplace, &prefetcher);
+
+    pipeline.run().unwrap();
+
+    let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(fetched.len(), 1);
+    assert_eq!(fetched[0].platform, Platform::LinuxX64);
 }

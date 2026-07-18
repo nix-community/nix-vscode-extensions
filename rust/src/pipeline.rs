@@ -5,13 +5,15 @@ use crate::cache::{
 use crate::config::{AppConfig, SiteConfig};
 use crate::logging::{stage, Level, Logger};
 use crate::marketplace::{
-    MarketplaceClient, MarketplaceFetchResult, ReleaseConfigFetchResult, ReleaseLookupFailure,
+    MarketplaceClient, MarketplaceFetchResult, ObservedPlatformMap, ReleaseConfigFetchResult,
+    ReleaseLookupFailure,
 };
-use crate::model::{CacheRecord, ExtensionConfig, Name, Publisher, Target};
+use crate::model::{CacheRecord, ExtensionConfig, Name, Platform, Publisher, Target};
 use crate::prefetch::{PrefetchLogContext, Prefetcher};
 use anyhow::Context;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
+use serde::Serialize;
 use std::collections::{HashMap, HashSet};
 use std::sync::Mutex;
 use std::thread;
@@ -34,6 +36,12 @@ struct StageCounts {
     fetched_record_count: usize,
     failed_record_count: usize,
     merged_cache_count: usize,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+struct SkippedOpenVsxPrefetch {
+    config: ExtensionConfig,
+    observed_platforms: Vec<Platform>,
 }
 
 struct ProgressTracker<'a, L> {
@@ -189,6 +197,24 @@ where
         let mut fetched = latest.configs;
         fetched.extend(release.configs);
         dedup_extension_configs(&mut fetched);
+        let observed_platforms = merge_observed_platform_maps(latest.observed_platforms, release.observed_platforms);
+        let (fetched, skipped_prefetch_configs) = if matches!(target, Target::OpenVsx) {
+            filter_open_vsx_prefetch_configs(fetched, &observed_platforms)
+        } else {
+            (fetched, Vec::new())
+        };
+
+        if matches!(target, Target::OpenVsx) {
+            write_jsonl(
+                &self
+                    .config
+                    .data_dir
+                    .join("debug")
+                    .join(site)
+                    .join("skipped-artifact-prefetches.jsonl"),
+                &skipped_prefetch_configs,
+            )?;
+        }
 
         let cache_by_full: HashMap<_, _> = cached.iter().map(|r| (r.key_full(), r.clone())).collect();
         let fetched_by_full: HashMap<_, _> =
@@ -563,4 +589,43 @@ fn dedup_latest(records: Vec<CacheRecord>) -> Vec<CacheRecord> {
         }
     }
     out
+}
+
+fn merge_observed_platform_maps(
+    latest: ObservedPlatformMap,
+    release: ObservedPlatformMap,
+) -> ObservedPlatformMap {
+    let mut merged = latest;
+    for (key, platforms) in release {
+        merged.entry(key).or_default().extend(platforms);
+    }
+    merged
+}
+
+fn filter_open_vsx_prefetch_configs(
+    configs: Vec<ExtensionConfig>,
+    observed_platforms: &ObservedPlatformMap,
+) -> (Vec<ExtensionConfig>, Vec<SkippedOpenVsxPrefetch>) {
+    let mut kept = Vec::new();
+    let mut skipped = Vec::new();
+
+    for config in configs {
+        let observed = observed_platforms.get(&config.observed_version_key());
+        let allowed = observed
+            .map(|platforms| platforms.contains(&config.platform))
+            .unwrap_or(false);
+
+        if allowed {
+            kept.push(config);
+        } else {
+            skipped.push(SkippedOpenVsxPrefetch {
+                config,
+                observed_platforms: observed
+                    .map(|platforms| platforms.iter().copied().collect())
+                    .unwrap_or_default(),
+            });
+        }
+    }
+
+    (kept, skipped)
 }

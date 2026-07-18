@@ -348,6 +348,14 @@ pub struct ExtensionConfig {
     pub engine_version: EngineVersion,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
+pub struct ObservedVersionKey {
+    pub publisher: Publisher,
+    pub name: Name,
+    pub is_release: IsRelease,
+    pub version: Version,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct CacheRecord {
     #[serde(rename = "p")]
@@ -405,6 +413,15 @@ impl ExtensionConfig {
             self.is_release,
             self.platform,
         )
+    }
+
+    pub fn observed_version_key(&self) -> ObservedVersionKey {
+        ObservedVersionKey {
+            publisher: self.publisher.clone(),
+            name: self.name.clone(),
+            is_release: self.is_release,
+            version: self.version.clone(),
+        }
     }
 }
 

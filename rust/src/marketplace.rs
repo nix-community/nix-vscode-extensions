@@ -1,6 +1,7 @@
 use crate::config::SiteConfig;
 use crate::model::{
-    EngineVersion, ExtensionConfig, IsRelease, Name, Platform, Publisher, Target, Version,
+    EngineVersion, ExtensionConfig, IsRelease, Name, ObservedVersionKey, Platform, Publisher,
+    Target, Version,
 };
 use anyhow::{anyhow, Context};
 use rayon::prelude::*;
@@ -9,8 +10,12 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::time::Duration;
 
+pub type ObservedPlatformMap = BTreeMap<ObservedVersionKey, BTreeSet<Platform>>;
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct MarketplaceFetchResult {
     pub configs: Vec<ExtensionConfig>,
+    pub observed_platforms: ObservedPlatformMap,
     pub pages_failed: Vec<String>,
     pub pages_fetched: Vec<String>,
 }
@@ -25,6 +30,7 @@ pub struct ReleaseLookupFailure {
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct ReleaseConfigFetchResult {
     pub configs: Vec<ExtensionConfig>,
+    pub observed_platforms: ObservedPlatformMap,
     pub failures: Vec<ReleaseLookupFailure>,
 }
 
@@ -140,17 +146,21 @@ impl MarketplaceClient for HttpMarketplaceClient {
         let mut pages_failed = Vec::new();
         let mut pages_fetched = Vec::new();
         let mut configs = Vec::new();
+        let mut observed_platforms = ObservedPlatformMap::new();
         for result in results {
             match result {
                 Ok((_, body)) => {
                     pages_fetched.push(body.clone());
-                    configs.extend(parse_latest_response(&body)?);
+                    let parsed = parse_latest_response_with_observed(&body)?;
+                    configs.extend(parsed.configs);
+                    merge_observed_platforms(&mut observed_platforms, parsed.observed_platforms);
                 }
                 Err(err) => pages_failed.push(err),
             }
         }
         Ok(MarketplaceFetchResult {
             configs,
+            observed_platforms,
             pages_failed,
             pages_fetched,
         })
@@ -175,20 +185,38 @@ impl MarketplaceClient for HttpMarketplaceClient {
                 .collect::<Vec<_>>()
         });
         let mut configs = Vec::new();
+        let mut observed_platforms = ObservedPlatformMap::new();
         let mut failures = Vec::new();
         for result in results {
             match result {
-                Ok((_, body)) => configs.extend(parse_release_response(&body)?),
+                Ok((_, body)) => {
+                    let parsed = parse_release_response_with_observed(&body)?;
+                    configs.extend(parsed.configs);
+                    merge_observed_platforms(&mut observed_platforms, parsed.observed_platforms);
+                }
                 Err(err) => failures.push(err),
             }
         }
-        Ok(ReleaseConfigFetchResult { configs, failures })
+        Ok(ReleaseConfigFetchResult {
+            configs,
+            observed_platforms,
+            failures,
+        })
     }
 }
 
 pub fn parse_latest_response(body: &str) -> anyhow::Result<Vec<ExtensionConfig>> {
+    Ok(parse_latest_response_with_observed(body)?.configs)
+}
+
+pub fn parse_release_response(body: &str) -> anyhow::Result<Vec<ExtensionConfig>> {
+    Ok(parse_release_response_with_observed(body)?.configs)
+}
+
+fn parse_latest_response_with_observed(body: &str) -> anyhow::Result<MarketplaceFetchResult> {
     let value: Value = serde_json::from_str(body)?;
     let mut out = Vec::new();
+    let mut observed_platforms = ObservedPlatformMap::new();
     let extensions = value
         .pointer("/results/0/extensions")
         .and_then(Value::as_array)
@@ -207,16 +235,23 @@ pub fn parse_latest_response(body: &str) -> anyhow::Result<Vec<ExtensionConfig>>
         let versions = ext.get("versions").and_then(Value::as_array).cloned().unwrap_or_default();
         for version_value in versions {
             if let Some(cfg) = parse_version_object(&version_value, &publisher, &name)? {
+                note_observed_platform(&mut observed_platforms, &cfg);
                 out.push(cfg);
             }
         }
     }
-    Ok(out)
+    Ok(MarketplaceFetchResult {
+        configs: out,
+        observed_platforms,
+        pages_failed: Vec::new(),
+        pages_fetched: Vec::new(),
+    })
 }
 
-pub fn parse_release_response(body: &str) -> anyhow::Result<Vec<ExtensionConfig>> {
+fn parse_release_response_with_observed(body: &str) -> anyhow::Result<ReleaseConfigFetchResult> {
     let value: Value = serde_json::from_str(body)?;
     let mut out = Vec::new();
+    let mut observed_platforms = ObservedPlatformMap::new();
     let extensions = value
         .pointer("/results/0/extensions")
         .and_then(Value::as_array)
@@ -237,13 +272,18 @@ pub fn parse_release_response(body: &str) -> anyhow::Result<Vec<ExtensionConfig>
         for version_value in versions {
             if let Some(cfg) = parse_version_object(&version_value, &publisher, &name)? {
                 if cfg.is_release.0 {
+                    note_observed_platform(&mut observed_platforms, &cfg);
                     per_platform.entry(cfg.platform).or_insert(cfg);
                 }
             }
         }
         out.extend(per_platform.into_values());
     }
-    Ok(out)
+    Ok(ReleaseConfigFetchResult {
+        configs: out,
+        observed_platforms,
+        failures: Vec::new(),
+    })
 }
 
 fn flags_allowed(ext: &Value) -> bool {
@@ -292,6 +332,19 @@ fn parse_version_object(version: &Value, publisher: &Publisher, name: &Name) -> 
         version: version_value,
         engine_version: EngineVersion::parse(engine_version).map_err(anyhow::Error::msg)?,
     }))
+}
+
+fn note_observed_platform(observed_platforms: &mut ObservedPlatformMap, config: &ExtensionConfig) {
+    observed_platforms
+        .entry(config.observed_version_key())
+        .or_default()
+        .insert(config.platform);
+}
+
+fn merge_observed_platforms(target: &mut ObservedPlatformMap, source: ObservedPlatformMap) {
+    for (key, platforms) in source {
+        target.entry(key).or_default().extend(platforms);
+    }
 }
 
 #[allow(dead_code)]

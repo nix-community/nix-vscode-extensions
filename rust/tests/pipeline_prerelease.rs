@@ -4,8 +4,8 @@ use nix_vscode_extensions_updater::logging::Level;
 use nix_vscode_extensions_updater::marketplace::{MarketplaceFetchResult, ReleaseLookupFailure};
 use nix_vscode_extensions_updater::model::{Name, Platform, Publisher};
 use pipeline::support::{
-    config, record, test_pipeline, test_pipeline_with_logger, FakeMarketplace, FakePrefetcher,
-    TestEnv, TestLogger,
+    config, observed_platforms_for, record, test_pipeline, test_pipeline_with_logger,
+    FakeMarketplace, FakePrefetcher, TestEnv, TestLogger,
 };
 
 #[test]
@@ -52,8 +52,10 @@ fn pipeline_requests_only_latest_prereleases_for_release_lookup() {
     )
     .unwrap();
 
+    let latest_configs = vec![config("latest", "ext", false, Platform::Universal, "3.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("latest", "ext", false, Platform::Universal, "3.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -91,11 +93,13 @@ fn pipeline_dedupes_duplicate_latest_prerelease_ids_and_ignores_cached_release_p
     )
     .unwrap();
 
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("dup", "ext", false, Platform::Universal, "3.0.0"),
             config("dup", "ext", false, Platform::Universal, "3.1.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -116,8 +120,10 @@ fn pipeline_dedupes_duplicate_latest_prerelease_ids_and_ignores_cached_release_p
 #[test]
 fn release_config_partial_failures_are_preserved_and_logged() {
     let env = TestEnv::new();
+    let latest_configs = vec![config("need", "ext", false, Platform::Universal, "1.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("need", "ext", false, Platform::Universal, "1.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -159,12 +165,14 @@ fn release_config_partial_failures_are_preserved_and_logged() {
 #[test]
 fn release_config_partial_success_summary_logs_exact_counts() {
     let env = TestEnv::new();
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("one", "ext", false, Platform::Universal, "1.0.0"),
             config("two", "ext", false, Platform::Universal, "1.0.0"),
             config("three", "ext", false, Platform::Universal, "1.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };

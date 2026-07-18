@@ -3,11 +3,12 @@
 use nix_vscode_extensions_updater::config::{AppConfig, SiteConfig};
 use nix_vscode_extensions_updater::logging::{Level, Logger};
 use nix_vscode_extensions_updater::marketplace::{
-    MarketplaceClient, MarketplaceFetchResult, ReleaseConfigFetchResult, ReleaseLookupFailure,
+    MarketplaceClient, MarketplaceFetchResult, ObservedPlatformMap, ReleaseConfigFetchResult,
+    ReleaseLookupFailure,
 };
 use nix_vscode_extensions_updater::model::{
-    CacheRecord, EngineVersion, ExtensionConfig, IsRelease, Name, Platform, Publisher, Target,
-    Version,
+    CacheRecord, EngineVersion, ExtensionConfig, IsRelease, Name, ObservedVersionKey, Platform,
+    Publisher, Target, Version,
 };
 use nix_vscode_extensions_updater::pipeline::Pipeline;
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
@@ -84,7 +85,18 @@ impl FakeMarketplace {
     }
 
     pub fn with_release_configs(mut self, configs: Vec<ExtensionConfig>) -> Self {
+        self.release_result.observed_platforms = observed_platforms_for(&configs);
         self.release_result.configs = configs;
+        self
+    }
+
+    pub fn with_release_observed_platforms(mut self, observed_platforms: ObservedPlatformMap) -> Self {
+        self.release_result.observed_platforms = observed_platforms;
+        self
+    }
+
+    pub fn with_latest_observed_platforms(mut self, observed_platforms: ObservedPlatformMap) -> Self {
+        self.latest.observed_platforms = observed_platforms;
         self
     }
 
@@ -124,6 +136,7 @@ impl MarketplaceClient for FakeMarketplace {
         }
         Ok(MarketplaceFetchResult {
             configs: self.latest.configs.clone(),
+            observed_platforms: self.latest.observed_platforms.clone(),
             pages_failed: self.latest.pages_failed.clone(),
             pages_fetched: self.latest.pages_fetched.clone(),
         })
@@ -257,6 +270,22 @@ pub fn record(
         engine_version: engine("^1.0.0"),
         hash: hash.to_string(),
     }
+}
+
+pub fn observed_platforms_for(configs: &[ExtensionConfig]) -> ObservedPlatformMap {
+    let mut observed = ObservedPlatformMap::new();
+    for config in configs {
+        observed
+            .entry(ObservedVersionKey {
+                publisher: config.publisher.clone(),
+                name: config.name.clone(),
+                is_release: config.is_release,
+                version: config.version.clone(),
+            })
+            .or_default()
+            .insert(config.platform);
+    }
+    observed
 }
 
 pub fn assert_latest_fixture(

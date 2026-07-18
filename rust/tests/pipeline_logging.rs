@@ -6,8 +6,8 @@ use nix_vscode_extensions_updater::model::{CacheRecord, ExtensionConfig, Platfor
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use pipeline::assertions::log_messages;
 use pipeline::support::{
-    config, record, test_pipeline_with_logger, FakeMarketplace, FakePrefetcher, TestEnv,
-    TestLogger,
+    config, observed_platforms_for, record, test_pipeline_with_logger, FakeMarketplace,
+    FakePrefetcher, TestEnv, TestLogger,
 };
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -87,8 +87,10 @@ impl Prefetcher for KeyedPrefetcher {
 #[test]
 fn pipeline_logs_stage_boundaries_and_summaries() {
     let env = TestEnv::new();
+    let latest_configs = vec![config("fresh", "ext", true, Platform::Universal, "2.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("fresh", "ext", true, Platform::Universal, "2.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -136,8 +138,10 @@ fn vscode_marketplace_target_skips_open_vsx_prerelease_release_fetch_logging() {
     let mut app_config = env.config.clone();
     app_config.open_vsx.enable = false;
     app_config.vscode_marketplace.enable = true;
+    let latest_configs = vec![config("fresh", "ext", true, Platform::Universal, "2.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("fresh", "ext", true, Platform::Universal, "2.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -195,11 +199,13 @@ fn open_vsx_prerelease_logging_reports_latest_only_counts() {
     )
     .unwrap();
 
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("fresh", "ext", false, Platform::Universal, "2.0.0"),
             config("fresh", "ext", false, Platform::Universal, "2.1.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -228,6 +234,7 @@ fn zero_work_target_still_logs_prefetch_and_cache_lifecycle() {
     let env = TestEnv::new();
     let latest = MarketplaceFetchResult {
         configs: vec![],
+        observed_platforms: observed_platforms_for(&[]),
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -253,8 +260,10 @@ fn zero_work_target_still_logs_prefetch_and_cache_lifecycle() {
 #[test]
 fn prefetch_failures_log_context() {
     let env = TestEnv::new();
+    let latest_configs = vec![config("broken", "ext", true, Platform::LinuxX64, "2.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("broken", "ext", true, Platform::LinuxX64, "2.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -282,8 +291,10 @@ fn prefetch_failures_log_context() {
 #[test]
 fn prefetch_success_logs_at_debug_only() {
     let env = TestEnv::new();
+    let latest_configs = vec![config("ok", "ext", true, Platform::Universal, "1.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("ok", "ext", true, Platform::Universal, "1.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -321,11 +332,13 @@ fn progress_logging_emits_updates_and_failure_counts() {
     let env = TestEnv::new();
     let mut app_config = env.config.clone();
     app_config.processed_logger_delay = 0;
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("one", "ext", true, Platform::Universal, "1.0.0"),
             config("two", "ext", true, Platform::Universal, "1.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -360,13 +373,15 @@ fn prefetch_runs_concurrently_with_a_bounded_cap() {
     let env = TestEnv::new();
     let mut app_config = env.config.clone();
     app_config.open_vsx.artifact_prefetch_threads = Some(2);
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("one", "ext", true, Platform::Universal, "1.0.0"),
             config("two", "ext", true, Platform::Universal, "1.0.0"),
             config("three", "ext", true, Platform::Universal, "1.0.0"),
             config("four", "ext", true, Platform::Universal, "1.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
@@ -389,12 +404,14 @@ fn concurrent_prefetch_collects_successes_and_failures_once_each() {
     let env = TestEnv::new();
     let mut app_config = env.config.clone();
     app_config.open_vsx.artifact_prefetch_threads = Some(2);
-    let latest = MarketplaceFetchResult {
-        configs: vec![
+    let latest_configs = vec![
             config("one", "ext", true, Platform::Universal, "1.0.0"),
             config("two", "ext", true, Platform::Universal, "1.0.0"),
             config("three", "ext", true, Platform::Universal, "1.0.0"),
-        ],
+        ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };

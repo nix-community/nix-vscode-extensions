@@ -4,8 +4,8 @@ use nix_vscode_extensions_updater::logging::Level;
 use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
 use nix_vscode_extensions_updater::model::Platform;
 use pipeline::support::{
-    config, record, test_pipeline_with_logger, FakeMarketplace, FakePrefetcher, TestEnv,
-    TestLogger,
+    config, observed_platforms_for, record, test_pipeline_with_logger, FakeMarketplace,
+    FakePrefetcher, TestEnv, TestLogger,
 };
 
 #[test]
@@ -16,6 +16,7 @@ fn retry_logs_exhaustion_for_latest_fetch() {
     app_config.retry_delay = 0;
     let marketplace = FakeMarketplace::new(MarketplaceFetchResult {
         configs: vec![],
+        observed_platforms: observed_platforms_for(&[]),
         pages_failed: vec![],
         pages_fetched: vec![],
     })
@@ -58,6 +59,7 @@ fn retry_with_zero_retries_exhausts_immediately() {
     app_config.retry_delay = 0;
     let marketplace = FakeMarketplace::new(MarketplaceFetchResult {
         configs: vec![],
+        observed_platforms: observed_platforms_for(&[]),
         pages_failed: vec![],
         pages_fetched: vec![],
     })
@@ -101,8 +103,10 @@ fn retry_logs_recovery_for_release_fetch() {
     let mut app_config = env.config.clone();
     app_config.n_retry = 1;
     app_config.retry_delay = 0;
+    let latest_configs = vec![config("need", "ext", false, Platform::Universal, "1.0.0")];
     let latest = MarketplaceFetchResult {
-        configs: vec![config("need", "ext", false, Platform::Universal, "1.0.0")],
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
         pages_failed: vec![],
         pages_fetched: vec!["page-1".into()],
     };
