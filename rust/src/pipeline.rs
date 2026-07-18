@@ -330,6 +330,10 @@ where
                 .par_iter()
                 .map(|config| {
                     let context = PrefetchLogContext::new(target.clone(), config);
+                    self.logger.log(
+                        Level::Debug,
+                        &stage(site, &format!("Prefetch start: {}", context.render())),
+                    );
                     let result = self
                         .prefetcher
                         .prefetch(target.clone(), config, self.config.request_response_timeout);

@@ -275,6 +275,17 @@ fn prefetch_failures_log_context() {
     pipeline.run().unwrap();
 
     let messages = log_messages(&logger);
+    let start = messages
+        .iter()
+        .find(|message| message.contains("[open-vsx] Prefetch start:"))
+        .unwrap();
+    assert!(start.contains("extension=broken.ext"));
+    assert!(start.contains("version=2.0.0"));
+    assert!(start.contains("platform=linux-x64"));
+    assert!(start.contains("target=open-vsx"));
+    assert!(start.contains(
+        "url=https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/broken.ext-2.0.0@linux-x64.vsix"
+    ));
     let failure = messages
         .iter()
         .find(|message| message.contains("[open-vsx] Prefetch failed:"))
@@ -313,6 +324,12 @@ fn prefetch_success_logs_at_debug_only() {
     pipeline.run().unwrap();
 
     let entries = logger.entries();
+    assert!(entries.iter().any(|entry| {
+        entry.level == nix_vscode_extensions_updater::logging::Level::Debug
+            && entry
+                .message
+                .contains("[open-vsx] Prefetch start: extension=ok.ext")
+    }));
     assert!(entries.iter().any(|entry| {
         entry.level == nix_vscode_extensions_updater::logging::Level::Debug
             && entry
