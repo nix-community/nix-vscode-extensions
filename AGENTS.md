@@ -15,7 +15,7 @@
 - Allowed scopes are:
 - `readme` for `README.md`
 - `agents` for `AGENTS.md`
-- `nix` for `nix/`, `flake.nix`, and `default.nix`
+- `nix` for `nix/`, `nix-dev/`, `flake.nix`, and `default.nix`
 - `extensions` for tracked files under `extensions/`
 - `github` for tracked files under `.github/`
 - `vscode` for tracked files under `.vscode/`
