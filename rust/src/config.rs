@@ -4,15 +4,16 @@ use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
 #[derive(Clone, Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct SiteConfig {
     #[serde(default = "default_page_size", rename = "pageSize")]
     pub page_size: usize,
     #[serde(default = "default_page_count", rename = "pageCount")]
     pub page_count: usize,
-    #[serde(default = "default_n_threads", rename = "nThreads")]
-    pub n_threads: usize,
-    #[serde(default, rename = "prefetchThreads")]
-    pub prefetch_threads: Option<usize>,
+    #[serde(default = "default_metadata_fetch_threads", rename = "metadataFetchThreads")]
+    pub metadata_fetch_threads: usize,
+    #[serde(default, rename = "artifactPrefetchThreads")]
+    pub artifact_prefetch_threads: Option<usize>,
     #[serde(default = "default_true")]
     pub enable: bool,
 }
@@ -25,7 +26,7 @@ fn default_page_count() -> usize {
     10
 }
 
-fn default_n_threads() -> usize {
+fn default_metadata_fetch_threads() -> usize {
     30
 }
 
@@ -38,16 +39,17 @@ impl Default for SiteConfig {
         Self {
             page_size: default_page_size(),
             page_count: default_page_count(),
-            n_threads: default_n_threads(),
-            prefetch_threads: None,
+            metadata_fetch_threads: default_metadata_fetch_threads(),
+            artifact_prefetch_threads: None,
             enable: true,
         }
     }
 }
 
 impl SiteConfig {
-    pub fn effective_prefetch_threads(&self) -> usize {
-        self.prefetch_threads.unwrap_or(self.n_threads)
+    pub fn effective_artifact_prefetch_threads(&self) -> usize {
+        self.artifact_prefetch_threads
+            .unwrap_or(self.metadata_fetch_threads)
     }
 }
 
@@ -124,8 +126,8 @@ impl Default for AppConfig {
             vscode_marketplace: SiteConfig {
                 page_size: 1000,
                 page_count: 100,
-                n_threads: 100,
-                prefetch_threads: None,
+                metadata_fetch_threads: 100,
+                artifact_prefetch_threads: None,
                 enable: true,
             },
         }

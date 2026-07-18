@@ -80,39 +80,76 @@ fn prefetch_output_parsing() {
 }
 
 #[test]
-fn config_prefetch_threads_defaults_to_n_threads_when_omitted() {
+fn config_artifact_prefetch_threads_defaults_to_metadata_fetch_threads_when_omitted() {
     let config: AppConfig = serde_yaml::from_str(
         r#"
 openVSX:
-  nThreads: 7
+  metadataFetchThreads: 7
 vscodeMarketplace:
-  nThreads: 9
+  metadataFetchThreads: 9
 "#,
     )
     .unwrap();
 
-    assert_eq!(config.open_vsx.prefetch_threads, None);
-    assert_eq!(config.open_vsx.effective_prefetch_threads(), 7);
-    assert_eq!(config.vscode_marketplace.prefetch_threads, None);
-    assert_eq!(config.vscode_marketplace.effective_prefetch_threads(), 9);
+    assert_eq!(config.open_vsx.artifact_prefetch_threads, None);
+    assert_eq!(config.open_vsx.effective_artifact_prefetch_threads(), 7);
+    assert_eq!(config.vscode_marketplace.artifact_prefetch_threads, None);
+    assert_eq!(
+        config.vscode_marketplace.effective_artifact_prefetch_threads(),
+        9
+    );
 }
 
 #[test]
-fn config_prefetch_threads_deserializes_and_overrides_n_threads() {
+fn config_artifact_prefetch_threads_deserializes_and_overrides_metadata_fetch_threads() {
     let config: AppConfig = serde_yaml::from_str(
         r#"
 openVSX:
-  nThreads: 7
-  prefetchThreads: 3
+  metadataFetchThreads: 7
+  artifactPrefetchThreads: 3
 vscodeMarketplace:
-  nThreads: 9
-  prefetchThreads: 4
+  metadataFetchThreads: 9
+  artifactPrefetchThreads: 4
 "#,
     )
     .unwrap();
 
-    assert_eq!(config.open_vsx.prefetch_threads, Some(3));
-    assert_eq!(config.open_vsx.effective_prefetch_threads(), 3);
-    assert_eq!(config.vscode_marketplace.prefetch_threads, Some(4));
-    assert_eq!(config.vscode_marketplace.effective_prefetch_threads(), 4);
+    assert_eq!(config.open_vsx.artifact_prefetch_threads, Some(3));
+    assert_eq!(config.open_vsx.effective_artifact_prefetch_threads(), 3);
+    assert_eq!(
+        config.vscode_marketplace.artifact_prefetch_threads,
+        Some(4)
+    );
+    assert_eq!(
+        config.vscode_marketplace.effective_artifact_prefetch_threads(),
+        4
+    );
+}
+
+#[test]
+fn config_metadata_fetch_threads_deserializes() {
+    let config: AppConfig = serde_yaml::from_str(
+        r#"
+openVSX:
+  metadataFetchThreads: 7
+"#,
+    )
+    .unwrap();
+
+    assert_eq!(config.open_vsx.metadata_fetch_threads, 7);
+}
+
+#[test]
+fn config_rejects_legacy_thread_keys() {
+    for legacy_key in ["fetchThreads", "prefetchThreads", "nThreads"] {
+        let err = serde_yaml::from_str::<AppConfig>(&format!(
+            r#"
+openVSX:
+  {legacy_key}: 7
+"#
+        ))
+        .unwrap_err();
+
+        assert!(err.to_string().contains(&format!("unknown field `{legacy_key}`")));
+    }
 }

@@ -303,7 +303,7 @@ where
             fetched_not_cached.len(),
         ));
         let pool = ThreadPoolBuilder::new()
-            .num_threads(site_config.effective_prefetch_threads())
+            .num_threads(site_config.effective_artifact_prefetch_threads())
             .build()
             .expect("prefetch thread pool should build");
         let results = pool.install(|| {
@@ -378,10 +378,10 @@ where
             &stage(
                 site,
                 &format!(
-                    "Latest-page fetch finish: requested_pages={} page_size={} threads={} succeeded_pages={} failed_pages={} latest_configs={}",
+                    "Latest-page fetch finish: requested_pages={} page_size={} metadata_fetch_threads={} succeeded_pages={} failed_pages={} latest_configs={}",
                     site_cfg.page_count,
                     site_cfg.page_size,
-                    site_cfg.n_threads,
+                    site_cfg.metadata_fetch_threads,
                     result.pages_fetched.len(),
                     result.pages_failed.len(),
                     result.configs.len()

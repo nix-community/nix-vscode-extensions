@@ -309,7 +309,7 @@ fn progress_logging_emits_updates_and_failure_counts() {
 fn prefetch_runs_concurrently_with_a_bounded_cap() {
     let env = TestEnv::new();
     let mut app_config = env.config.clone();
-    app_config.open_vsx.prefetch_threads = Some(2);
+    app_config.open_vsx.artifact_prefetch_threads = Some(2);
     let latest = MarketplaceFetchResult {
         configs: vec![
             config("one", "ext", true, Platform::Universal, "1.0.0"),
@@ -338,7 +338,7 @@ fn prefetch_runs_concurrently_with_a_bounded_cap() {
 fn concurrent_prefetch_collects_successes_and_failures_once_each() {
     let env = TestEnv::new();
     let mut app_config = env.config.clone();
-    app_config.open_vsx.prefetch_threads = Some(2);
+    app_config.open_vsx.artifact_prefetch_threads = Some(2);
     let latest = MarketplaceFetchResult {
         configs: vec![
             config("one", "ext", true, Platform::Universal, "1.0.0"),

@@ -126,7 +126,7 @@ impl HttpMarketplaceClient {
 impl MarketplaceClient for HttpMarketplaceClient {
     fn fetch_latest(&self, target: Target, site: &SiteConfig) -> anyhow::Result<MarketplaceFetchResult> {
         let pool = rayon::ThreadPoolBuilder::new()
-            .num_threads(site.n_threads)
+            .num_threads(site.metadata_fetch_threads)
             .build()?;
         let results = pool.install(|| {
             (1..=site.page_count)
