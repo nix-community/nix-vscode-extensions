@@ -27,9 +27,7 @@ pub struct Pipeline<'a, M, P, L> {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct StageCounts {
     latest_prerelease_count: usize,
-    cached_prerelease_without_release_count: usize,
     latest_config_count: usize,
-    combined_prerelease_count: usize,
     fetched_not_cached_count: usize,
     cached_present_and_fetched_count: usize,
     cached_not_fetched_count: usize,
@@ -168,26 +166,23 @@ where
 
         let latest = self.fetch_latest(target.clone())?;
         let latest_prerelease_ids = prerelease_ids_from_latest(&latest.configs);
-        let cached_prerelease_without_release_ids = cached_prerelease_without_release(&cached);
 
-        let (release, combined_prerelease_count) = if matches!(target, Target::OpenVsx) {
-            let ids = combined_prerelease_ids(&latest_prerelease_ids, &cached_prerelease_without_release_ids);
+        let release = if matches!(target, Target::OpenVsx) {
+            let ids = latest_prerelease_ids.iter().cloned().collect::<Vec<_>>();
             self.logger.log(
                 Level::Info,
                 &stage(
                     site,
                     &format!(
-                        "Open VSX prerelease candidates: latest={} cached_without_release={} combined={}",
+                        "Open VSX prerelease candidates from latest: count={}",
                         latest_prerelease_ids.len(),
-                        cached_prerelease_without_release_ids.len(),
-                        ids.len()
                     ),
                 ),
             );
             write_jsonl(&debug_path(&self.config.data_dir, site, "ids-pre-release-configs"), &ids)?;
-            (self.fetch_release_configs(target.clone(), &ids)?, ids.len())
+            self.fetch_release_configs(target.clone(), &ids)?
         } else {
-            (ReleaseConfigFetchResult::default(), 0)
+            ReleaseConfigFetchResult::default()
         };
 
         let latest_config_count = latest.configs.len();
@@ -273,9 +268,7 @@ where
 
         let counts = StageCounts {
             latest_prerelease_count: latest_prerelease_ids.len(),
-            cached_prerelease_without_release_count: cached_prerelease_without_release_ids.len(),
             latest_config_count,
-            combined_prerelease_count,
             fetched_not_cached_count: fetched_not_cached.len(),
             cached_present_and_fetched_count: cached_present_and_fetched.len(),
             cached_not_fetched_count: cached_not_fetched.len(),
@@ -455,10 +448,8 @@ where
                 &stage(
                     site,
                     &format!(
-                        "Open VSX prerelease candidate counts: latest={} cached_without_release={} combined_unique_ids={}",
-                        counts.latest_prerelease_count,
-                        counts.cached_prerelease_without_release_count,
-                        counts.combined_prerelease_count
+                        "Open VSX prerelease candidate count from latest: {}",
+                        counts.latest_prerelease_count
                     ),
                 ),
             );
@@ -556,29 +547,6 @@ fn prerelease_ids_from_latest(latest: &[ExtensionConfig]) -> HashSet<(Publisher,
         .filter(|config| !config.is_release.0)
         .map(|config| (config.publisher.clone(), config.name.clone()))
         .collect()
-}
-
-fn cached_prerelease_without_release(cached: &[CacheRecord]) -> HashSet<(Publisher, Name)> {
-    let cached_pre = cached
-        .iter()
-        .filter(|record| !record.is_release.0)
-        .map(|record| (record.publisher.clone(), record.name.clone()))
-        .collect::<HashSet<_>>();
-    let cached_release = cached
-        .iter()
-        .filter(|record| record.is_release.0)
-        .map(|record| (record.publisher.clone(), record.name.clone()))
-        .collect::<HashSet<_>>();
-    cached_pre.difference(&cached_release).cloned().collect()
-}
-
-fn combined_prerelease_ids(
-    latest_ids: &HashSet<(Publisher, Name)>,
-    cached_ids: &HashSet<(Publisher, Name)>,
-) -> Vec<(Publisher, Name)> {
-    let mut ids = latest_ids.clone();
-    ids.extend(cached_ids.iter().cloned());
-    ids.into_iter().collect()
 }
 
 fn dedup_extension_configs(configs: &mut Vec<ExtensionConfig>) {

@@ -9,7 +9,7 @@ use pipeline::support::{
 };
 
 #[test]
-fn pipeline_requests_only_cached_prereleases_without_release_counterparts() {
+fn pipeline_requests_only_latest_prereleases_for_release_lookup() {
     let env = TestEnv::new();
     let cache_file = env.cache_file("open-vsx");
 
@@ -64,16 +64,13 @@ fn pipeline_requests_only_cached_prereleases_without_release_counterparts() {
 
     let mut requested = marketplace.requested_release_ids.lock().unwrap().clone();
     requested.sort();
-    let mut expected = vec![
-        (Publisher("latest".into()), Name("ext".into())),
-        (Publisher("need".into()), Name("ext".into())),
-    ];
+    let mut expected = vec![(Publisher("latest".into()), Name("ext".into()))];
     expected.sort();
     assert_eq!(requested, expected);
 }
 
 #[test]
-fn pipeline_dedupes_duplicate_prerelease_ids_and_ignores_cached_release_pairs() {
+fn pipeline_dedupes_duplicate_latest_prerelease_ids_and_ignores_cached_release_pairs() {
     let env = TestEnv::new();
     let cache_file = env.cache_file("open-vsx");
 
@@ -112,10 +109,7 @@ fn pipeline_dedupes_duplicate_prerelease_ids_and_ignores_cached_release_pairs() 
     requested.sort();
     assert_eq!(
         requested,
-        vec![
-            (Publisher("dup".into()), Name("ext".into())),
-            (Publisher("need".into()), Name("ext".into())),
-        ]
+        vec![(Publisher("dup".into()), Name("ext".into()))]
     );
 }
 

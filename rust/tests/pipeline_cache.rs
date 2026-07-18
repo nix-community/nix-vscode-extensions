@@ -202,6 +202,37 @@ fn pipeline_propagates_release_fetch_failure_after_writing_latest_debug_files() 
 }
 
 #[test]
+fn prerelease_debug_ids_only_include_latest_fetch_candidates() {
+    let env = TestEnv::new();
+    let cache_file = env.cache_file("open-vsx");
+
+    write_jsonl_cache(
+        &cache_file,
+        &[
+            record("stale", "ext", false, Platform::Universal, "1.0.0", "sha256-stale-pre"),
+            record("fresh", "ext", false, Platform::Universal, "2.0.0", "sha256-fresh-pre"),
+        ],
+    )
+    .unwrap();
+
+    let latest = MarketplaceFetchResult {
+        configs: vec![config("fresh", "ext", false, Platform::Universal, "2.0.0")],
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(Vec::new());
+    let pipeline = test_pipeline(&env.config, &marketplace, &prefetcher);
+
+    pipeline.run().unwrap();
+
+    let debug_ids =
+        std::fs::read_to_string(env.debug_file("open-vsx", "ids-pre-release-configs")).unwrap();
+    assert!(debug_ids.contains("fresh"));
+    assert!(!debug_ids.contains("stale"));
+}
+
+#[test]
 fn dedup_latest_keeps_first_stale_cached_record_before_later_same_latest_key_records() {
     let env = TestEnv::new();
     let cache_file = env.cache_file("open-vsx");

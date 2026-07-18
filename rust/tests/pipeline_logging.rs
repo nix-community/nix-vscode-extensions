@@ -174,6 +174,56 @@ fn vscode_marketplace_target_skips_open_vsx_prerelease_release_fetch_logging() {
 }
 
 #[test]
+fn open_vsx_prerelease_logging_reports_latest_only_counts() {
+    let env = TestEnv::new();
+    let cache_file = env.cache_file("open-vsx");
+
+    nix_vscode_extensions_updater::cache::write_jsonl_cache(
+        &cache_file,
+        &[
+            record("stale", "ext", false, Platform::Universal, "1.0.0", "sha256-stale-pre"),
+            record("paired", "ext", false, Platform::Universal, "1.0.0", "sha256-paired-pre"),
+            record(
+                "paired",
+                "ext",
+                true,
+                Platform::Universal,
+                "1.0.0",
+                "sha256-paired-release",
+            ),
+        ],
+    )
+    .unwrap();
+
+    let latest = MarketplaceFetchResult {
+        configs: vec![
+            config("fresh", "ext", false, Platform::Universal, "2.0.0"),
+            config("fresh", "ext", false, Platform::Universal, "2.1.0"),
+        ],
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(Vec::new());
+    let logger = TestLogger::new();
+    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+
+    pipeline.run().unwrap();
+
+    let messages = log_messages(&logger);
+    assert!(messages.iter().any(|message| {
+        message.contains("[open-vsx] Open VSX prerelease candidates from latest: count=1")
+    }));
+    assert!(messages.iter().any(|message| {
+        message.contains("[open-vsx] Open VSX prerelease candidate count from latest: 1")
+    }));
+    assert!(!messages
+        .iter()
+        .any(|message| message.contains("cached_without_release")));
+    assert!(!messages.iter().any(|message| message.contains("combined_unique_ids")));
+}
+
+#[test]
 fn zero_work_target_still_logs_prefetch_and_cache_lifecycle() {
     let env = TestEnv::new();
     let latest = MarketplaceFetchResult {
