@@ -33,3 +33,12 @@ Run the Rust test suite from inside the shell:
 ```console
 cargo test
 ```
+
+Run the split pipeline integration targets individually when iterating on pipeline behavior:
+
+```console
+cargo test --test pipeline_cache
+cargo test --test pipeline_prerelease
+cargo test --test pipeline_logging
+cargo test --test pipeline_retry
+```
