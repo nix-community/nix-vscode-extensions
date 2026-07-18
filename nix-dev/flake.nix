@@ -60,6 +60,8 @@
           ...
         }:
         let
+          rust = import ../rust;
+
           devshells.default = {
             commandGroups = {
               tools = [
@@ -87,14 +89,6 @@
               value
           );
 
-          rustUpdater = pkgs.rustPlatform.buildRustPackage {
-            pname = "nix-vscode-extensions-updater";
-            version = "0.1.0";
-            src = ../rust;
-            cargoLock.lockFile = ../rust/Cargo.lock;
-            meta.mainProgram = "nix-vscode-extensions-updater";
-          };
-
           packages = {
             default = import ../nix/vscode-with-extensions.nix {
               inherit system nixpkgs;
@@ -102,7 +96,7 @@
           }
           // mkShellApps {
             updateExtensions = {
-              text = ''${lib.meta.getExe rustUpdater} "$@"'';
+              text = ''${lib.meta.getExe rust.outputs.packages.${system}.default} "$@"'';
               meta.description = "Update extensions";
             };
             updateExtraExtensions = {
@@ -132,6 +126,7 @@
                 (mkSaveFromGC {
                   inputs = {
                     self.inputs = inputs;
+                    inherit rust;
                   };
                   derivations = [
                     self'.packages.updateExtensions
