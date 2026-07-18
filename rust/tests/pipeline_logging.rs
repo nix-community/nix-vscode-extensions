@@ -1,12 +1,88 @@
 mod pipeline;
 
+use nix_vscode_extensions_updater::cache::{read_jsonl_cache, tmp_path};
 use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
-use nix_vscode_extensions_updater::model::Platform;
+use nix_vscode_extensions_updater::model::{CacheRecord, ExtensionConfig, Platform, Target};
+use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use pipeline::assertions::log_messages;
 use pipeline::support::{
     config, record, test_pipeline_with_logger, FakeMarketplace, FakePrefetcher, TestEnv,
     TestLogger,
 };
+use std::collections::HashMap;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::Arc;
+use std::thread;
+use std::time::Duration;
+
+struct TrackingPrefetcher {
+    active: AtomicUsize,
+    max_active: AtomicUsize,
+}
+
+impl TrackingPrefetcher {
+    fn new() -> Self {
+        Self {
+            active: AtomicUsize::new(0),
+            max_active: AtomicUsize::new(0),
+        }
+    }
+
+    fn max_active(&self) -> usize {
+        self.max_active.load(Ordering::SeqCst)
+    }
+}
+
+impl Prefetcher for TrackingPrefetcher {
+    fn prefetch(
+        &self,
+        _target: Target,
+        config: &ExtensionConfig,
+        _timeout_seconds: u64,
+    ) -> anyhow::Result<CacheRecord> {
+        let active = self.active.fetch_add(1, Ordering::SeqCst) + 1;
+        let _ = self
+            .max_active
+            .fetch_update(Ordering::SeqCst, Ordering::SeqCst, |current| {
+                (active > current).then_some(active)
+            });
+        thread::sleep(Duration::from_millis(40));
+        self.active.fetch_sub(1, Ordering::SeqCst);
+        Ok(record(
+            &config.publisher.0,
+            &config.name.0,
+            config.is_release.0,
+            config.platform,
+            config.version.raw(),
+            &format!("sha256-{}", config.version.raw()),
+        ))
+    }
+}
+
+struct KeyedPrefetcher {
+    results: HashMap<String, anyhow::Result<CacheRecord>>,
+}
+
+impl KeyedPrefetcher {
+    fn new(results: HashMap<String, anyhow::Result<CacheRecord>>) -> Self {
+        Self { results }
+    }
+}
+
+impl Prefetcher for KeyedPrefetcher {
+    fn prefetch(
+        &self,
+        _target: Target,
+        config: &ExtensionConfig,
+        _timeout_seconds: u64,
+    ) -> anyhow::Result<CacheRecord> {
+        match self.results.get(&format!("{}.{}", config.publisher.0, config.name.0)) {
+            Some(Ok(record)) => Ok(record.clone()),
+            Some(Err(err)) => Err(anyhow::anyhow!(err.to_string())),
+            None => panic!("missing keyed prefetch response"),
+        }
+    }
+}
 
 #[test]
 fn pipeline_logs_stage_boundaries_and_summaries() {
@@ -227,4 +303,94 @@ fn progress_logging_emits_updates_and_failure_counts() {
     assert!(messages
         .iter()
         .any(|message| message.contains("[open-vsx] Processed (2/2) extensions, failures=1")));
+}
+
+#[test]
+fn prefetch_runs_concurrently_with_a_bounded_cap() {
+    let env = TestEnv::new();
+    let mut app_config = env.config.clone();
+    app_config.open_vsx.prefetch_threads = Some(2);
+    let latest = MarketplaceFetchResult {
+        configs: vec![
+            config("one", "ext", true, Platform::Universal, "1.0.0"),
+            config("two", "ext", true, Platform::Universal, "1.0.0"),
+            config("three", "ext", true, Platform::Universal, "1.0.0"),
+            config("four", "ext", true, Platform::Universal, "1.0.0"),
+        ],
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = Arc::new(TrackingPrefetcher::new());
+    let logger = TestLogger::new();
+    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, prefetcher.as_ref(), &logger);
+
+    pipeline.run().unwrap();
+
+    assert_eq!(prefetcher.max_active(), 2);
+    let messages = log_messages(&logger);
+    assert!(messages.iter().any(|message| {
+        message.contains("[open-vsx] Prefetch finish: fetched records=4 failed records=0")
+    }));
+}
+
+#[test]
+fn concurrent_prefetch_collects_successes_and_failures_once_each() {
+    let env = TestEnv::new();
+    let mut app_config = env.config.clone();
+    app_config.open_vsx.prefetch_threads = Some(2);
+    let latest = MarketplaceFetchResult {
+        configs: vec![
+            config("one", "ext", true, Platform::Universal, "1.0.0"),
+            config("two", "ext", true, Platform::Universal, "1.0.0"),
+            config("three", "ext", true, Platform::Universal, "1.0.0"),
+        ],
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = KeyedPrefetcher::new(HashMap::from([
+        (
+            "one.ext".to_string(),
+            Ok(record(
+                "one",
+                "ext",
+                true,
+                Platform::Universal,
+                "1.0.0",
+                "sha256-one",
+            )),
+        ),
+        ("two.ext".to_string(), Err(anyhow::anyhow!("boom two"))),
+        (
+            "three.ext".to_string(),
+            Ok(record(
+                "three",
+                "ext",
+                true,
+                Platform::Universal,
+                "1.0.0",
+                "sha256-three",
+            )),
+        ),
+    ]));
+    let logger = TestLogger::new();
+    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
+
+    pipeline.run().unwrap();
+
+    let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(fetched.len(), 2);
+    assert!(fetched.iter().any(|record| record.publisher.0 == "one"));
+    assert!(fetched.iter().any(|record| record.publisher.0 == "three"));
+
+    let failed_text =
+        std::fs::read_to_string(tmp_path(&env.data_dir, "failed", "open-vsx")).unwrap();
+    let failed: Vec<ExtensionConfig> = failed_text
+        .lines()
+        .filter(|line| !line.is_empty())
+        .map(|line| serde_json::from_str(line).unwrap())
+        .collect();
+    assert_eq!(failed.len(), 1);
+    assert_eq!(failed[0].publisher.0, "two");
 }

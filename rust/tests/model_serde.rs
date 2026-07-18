@@ -1,5 +1,6 @@
 mod support;
 
+use nix_vscode_extensions_updater::config::AppConfig;
 use nix_vscode_extensions_updater::model::{EngineVersionModifier, IsRelease, Platform, Version};
 use nix_vscode_extensions_updater::prefetch::parse_prefetch_output;
 use serde_json::json;
@@ -76,4 +77,42 @@ fn engine_version_parsing_accepts_supported_forms_and_rejects_bad_inputs() {
 #[test]
 fn prefetch_output_parsing() {
     assert_eq!(parse_prefetch_output(r#"{"hash":"sha256-xyz"}"#).unwrap(), "sha256-xyz");
+}
+
+#[test]
+fn config_prefetch_threads_defaults_to_n_threads_when_omitted() {
+    let config: AppConfig = serde_yaml::from_str(
+        r#"
+openVSX:
+  nThreads: 7
+vscodeMarketplace:
+  nThreads: 9
+"#,
+    )
+    .unwrap();
+
+    assert_eq!(config.open_vsx.prefetch_threads, None);
+    assert_eq!(config.open_vsx.effective_prefetch_threads(), 7);
+    assert_eq!(config.vscode_marketplace.prefetch_threads, None);
+    assert_eq!(config.vscode_marketplace.effective_prefetch_threads(), 9);
+}
+
+#[test]
+fn config_prefetch_threads_deserializes_and_overrides_n_threads() {
+    let config: AppConfig = serde_yaml::from_str(
+        r#"
+openVSX:
+  nThreads: 7
+  prefetchThreads: 3
+vscodeMarketplace:
+  nThreads: 9
+  prefetchThreads: 4
+"#,
+    )
+    .unwrap();
+
+    assert_eq!(config.open_vsx.prefetch_threads, Some(3));
+    assert_eq!(config.open_vsx.effective_prefetch_threads(), 3);
+    assert_eq!(config.vscode_marketplace.prefetch_threads, Some(4));
+    assert_eq!(config.vscode_marketplace.effective_prefetch_threads(), 4);
 }

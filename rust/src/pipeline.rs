@@ -10,7 +10,10 @@ use crate::marketplace::{
 use crate::model::{CacheRecord, ExtensionConfig, Name, Publisher, Target};
 use crate::prefetch::{PrefetchLogContext, Prefetcher};
 use anyhow::Context;
+use rayon::prelude::*;
+use rayon::ThreadPoolBuilder;
 use std::collections::{HashMap, HashSet};
+use std::sync::Mutex;
 use std::thread;
 use std::time::{Duration, Instant};
 
@@ -104,8 +107,8 @@ where
 impl<'a, M, P, L> Pipeline<'a, M, P, L>
 where
     M: MarketplaceClient,
-    P: Prefetcher,
-    L: Logger,
+    P: Prefetcher + Sync,
+    L: Logger + Sync,
 {
     pub fn run(&self) -> anyhow::Result<()> {
         self.ensure_dirs()?;
@@ -221,7 +224,8 @@ where
             &fetched_not_cached,
         )?;
 
-        let (fetched_records, failed_records) = self.prefetch_missing(target.clone(), site, &fetched_not_cached);
+        let (fetched_records, failed_records) =
+            self.prefetch_missing(target.clone(), site, site_config(self.config, &target), &fetched_not_cached);
 
         write_jsonl(
             &tmp_path(&self.config.data_dir, "fetched", site),
@@ -288,38 +292,58 @@ where
         &self,
         target: Target,
         site: &str,
+        site_config: &SiteConfig,
         fetched_not_cached: &[ExtensionConfig],
     ) -> (Vec<CacheRecord>, Vec<ExtensionConfig>) {
         self.logger.log(Level::Info, &stage(site, "Prefetch start"));
+        let progress = Mutex::new(ProgressTracker::new(
+            self.logger,
+            site,
+            self.config.processed_logger_delay,
+            fetched_not_cached.len(),
+        ));
+        let pool = ThreadPoolBuilder::new()
+            .num_threads(site_config.effective_prefetch_threads())
+            .build()
+            .expect("prefetch thread pool should build");
+        let results = pool.install(|| {
+            fetched_not_cached
+                .par_iter()
+                .map(|config| {
+                    let context = PrefetchLogContext::new(target.clone(), config);
+                    let result = self
+                        .prefetcher
+                        .prefetch(target.clone(), config, self.config.request_response_timeout);
+                    match result {
+                        Ok(record) => {
+                            self.logger.log(
+                                Level::Debug,
+                                &stage(site, &format!("Prefetch success: {}", context.render())),
+                            );
+                            progress.lock().unwrap().record(false);
+                            Ok(record)
+                        }
+                        Err(err) => {
+                            self.logger.log(
+                                Level::Error,
+                                &stage(site, &format!("Prefetch failed: {} error={err:#}", context.render())),
+                            );
+                            progress.lock().unwrap().record(true);
+                            Err(config.clone())
+                        }
+                    }
+                })
+                .collect::<Vec<_>>()
+        });
         let mut fetched_records = Vec::new();
         let mut failed_records = Vec::new();
-        let mut progress =
-            ProgressTracker::new(self.logger, site, self.config.processed_logger_delay, fetched_not_cached.len());
-        for config in fetched_not_cached {
-            let context = PrefetchLogContext::new(target.clone(), config);
-            match self
-                .prefetcher
-                .prefetch(target.clone(), config, self.config.request_response_timeout)
-            {
-                Ok(record) => {
-                    self.logger.log(
-                        Level::Debug,
-                        &stage(site, &format!("Prefetch success: {}", context.render())),
-                    );
-                    fetched_records.push(record);
-                    progress.record(false);
-                }
-                Err(err) => {
-                    failed_records.push(config.clone());
-                    self.logger.log(
-                        Level::Error,
-                        &stage(site, &format!("Prefetch failed: {} error={err:#}", context.render())),
-                    );
-                    progress.record(true);
-                }
+        for result in results {
+            match result {
+                Ok(record) => fetched_records.push(record),
+                Err(config) => failed_records.push(config),
             }
         }
-        progress.finish();
+        progress.lock().unwrap().finish();
         self.logger.log(
             Level::Info,
             &stage(

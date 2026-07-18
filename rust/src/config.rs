@@ -11,6 +11,8 @@ pub struct SiteConfig {
     pub page_count: usize,
     #[serde(default = "default_n_threads", rename = "nThreads")]
     pub n_threads: usize,
+    #[serde(default, rename = "prefetchThreads")]
+    pub prefetch_threads: Option<usize>,
     #[serde(default = "default_true")]
     pub enable: bool,
 }
@@ -37,8 +39,15 @@ impl Default for SiteConfig {
             page_size: default_page_size(),
             page_count: default_page_count(),
             n_threads: default_n_threads(),
+            prefetch_threads: None,
             enable: true,
         }
+    }
+}
+
+impl SiteConfig {
+    pub fn effective_prefetch_threads(&self) -> usize {
+        self.prefetch_threads.unwrap_or(self.n_threads)
     }
 }
 
@@ -116,6 +125,7 @@ impl Default for AppConfig {
                 page_size: 1000,
                 page_count: 100,
                 n_threads: 100,
+                prefetch_threads: None,
                 enable: true,
             },
         }

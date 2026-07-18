@@ -267,12 +267,14 @@ pub fn test_config(data_dir: &Path) -> AppConfig {
             page_count: 1,
             page_size: 1,
             n_threads: 1,
+            prefetch_threads: None,
         },
         vscode_marketplace: SiteConfig {
             enable: false,
             page_count: 1,
             page_size: 1,
             n_threads: 1,
+            prefetch_threads: None,
         },
         ..AppConfig::default()
     }
