@@ -83,10 +83,10 @@ fn prefetch_output_parsing() {
 fn config_artifact_prefetch_threads_defaults_to_metadata_fetch_threads_when_omitted() {
     let config: AppConfig = serde_yaml::from_str(
         r#"
-openVSX:
-  metadataFetchThreads: 7
-vscodeMarketplace:
-  metadataFetchThreads: 9
+open_vsx:
+  metadata_fetch_threads: 7
+vscode_marketplace:
+  metadata_fetch_threads: 9
 "#,
     )
     .unwrap();
@@ -104,12 +104,12 @@ vscodeMarketplace:
 fn config_artifact_prefetch_threads_deserializes_and_overrides_metadata_fetch_threads() {
     let config: AppConfig = serde_yaml::from_str(
         r#"
-openVSX:
-  metadataFetchThreads: 7
-  artifactPrefetchThreads: 3
-vscodeMarketplace:
-  metadataFetchThreads: 9
-  artifactPrefetchThreads: 4
+open_vsx:
+  metadata_fetch_threads: 7
+  artifact_prefetch_threads: 3
+vscode_marketplace:
+  metadata_fetch_threads: 9
+  artifact_prefetch_threads: 4
 "#,
     )
     .unwrap();
@@ -130,8 +130,8 @@ vscodeMarketplace:
 fn config_metadata_fetch_threads_deserializes() {
     let config: AppConfig = serde_yaml::from_str(
         r#"
-openVSX:
-  metadataFetchThreads: 7
+open_vsx:
+  metadata_fetch_threads: 7
 "#,
     )
     .unwrap();
@@ -144,7 +144,7 @@ fn config_rejects_legacy_thread_keys() {
     for legacy_key in ["fetchThreads", "prefetchThreads", "nThreads"] {
         let err = serde_yaml::from_str::<AppConfig>(&format!(
             r#"
-openVSX:
+open_vsx:
   {legacy_key}: 7
 "#
         ))
@@ -152,4 +152,99 @@ openVSX:
 
         assert!(err.to_string().contains(&format!("unknown field `{legacy_key}`")));
     }
+}
+
+#[test]
+fn config_snake_case_keys_deserialize() {
+    let config: AppConfig = serde_yaml::from_str(
+        r#"
+collect_garbage: true
+garbage_collector_delay: 10
+program_timeout: 3600
+log_severity: Info
+data_dir: custom-data
+queue_capacity: 512
+request_response_timeout: 45
+open_vsx:
+  enable: true
+  page_count: 10
+  page_size: 1000
+  metadata_fetch_threads: 50
+  artifact_prefetch_threads: 20
+vscode_marketplace:
+  enable: false
+  page_count: 100
+  page_size: 1000
+  metadata_fetch_threads: 30
+"#,
+    )
+    .unwrap();
+
+    assert!(config.collect_garbage);
+    assert_eq!(config.garbage_collector_delay, 10);
+    assert_eq!(config.program_timeout, 3600);
+    assert_eq!(config.log_severity, nix_vscode_extensions_updater::config::LogSeverity::Info);
+    assert_eq!(config.data_dir, std::path::PathBuf::from("custom-data"));
+    assert_eq!(config.queue_capacity, 512);
+    assert_eq!(config.request_response_timeout, 45);
+    assert_eq!(config.open_vsx.page_count, 10);
+    assert_eq!(config.open_vsx.page_size, 1000);
+    assert_eq!(config.open_vsx.metadata_fetch_threads, 50);
+    assert_eq!(config.open_vsx.artifact_prefetch_threads, Some(20));
+    assert!(!config.vscode_marketplace.enable);
+    assert_eq!(config.vscode_marketplace.page_count, 100);
+}
+
+#[test]
+fn config_rejects_legacy_camel_case_keys() {
+    for legacy_key in [
+        "collectGarbage",
+        "garbageCollectorDelay",
+        "programTimeout",
+        "logSeverity",
+        "dataDir",
+        "queueCapacity",
+        "requestResponseTimeout",
+        "openVSX",
+        "vscodeMarketplace",
+    ] {
+        let yaml = if legacy_key == "openVSX" {
+            "openVSX:\n  metadata_fetch_threads: 7\n".to_string()
+        } else if legacy_key == "vscodeMarketplace" {
+            "vscodeMarketplace:\n  metadata_fetch_threads: 7\n".to_string()
+        } else {
+            format!("{legacy_key}: 1\n")
+        };
+
+        let err = serde_yaml::from_str::<AppConfig>(&yaml).unwrap_err();
+        assert!(err.to_string().contains(&format!("unknown field `{legacy_key}`")));
+    }
+
+    for legacy_key in ["pageSize", "metadataFetchThreads", "artifactPrefetchThreads"] {
+        let err = serde_yaml::from_str::<AppConfig>(&format!(
+            r#"
+open_vsx:
+  {legacy_key}: 7
+"#
+        ))
+        .unwrap_err();
+
+        assert!(err.to_string().contains(&format!("unknown field `{legacy_key}`")));
+    }
+}
+
+#[test]
+fn sample_config_yaml_uses_supported_snake_case_schema() {
+    let config_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../config.yaml");
+    let yaml = std::fs::read_to_string(config_path).unwrap();
+    let config: AppConfig = serde_yaml::from_str(&yaml).unwrap();
+
+    assert!(config.collect_garbage);
+    assert_eq!(config.garbage_collector_delay, 10);
+    assert_eq!(config.program_timeout, 3600);
+    assert_eq!(config.open_vsx.page_count, 10);
+    assert_eq!(config.open_vsx.page_size, 1000);
+    assert_eq!(config.open_vsx.metadata_fetch_threads, 50);
+    assert_eq!(config.vscode_marketplace.page_count, 100);
+    assert_eq!(config.vscode_marketplace.page_size, 1000);
 }

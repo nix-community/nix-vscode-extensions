@@ -4,15 +4,15 @@ use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
 #[derive(Clone, Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "snake_case")]
 pub struct SiteConfig {
-    #[serde(default = "default_page_size", rename = "pageSize")]
+    #[serde(default = "default_page_size")]
     pub page_size: usize,
-    #[serde(default = "default_page_count", rename = "pageCount")]
+    #[serde(default = "default_page_count")]
     pub page_count: usize,
-    #[serde(default = "default_metadata_fetch_threads", rename = "metadataFetchThreads")]
+    #[serde(default = "default_metadata_fetch_threads")]
     pub metadata_fetch_threads: usize,
-    #[serde(default, rename = "artifactPrefetchThreads")]
+    #[serde(default)]
     pub artifact_prefetch_threads: Option<usize>,
     #[serde(default = "default_true")]
     pub enable: bool,
@@ -54,30 +54,31 @@ impl SiteConfig {
 }
 
 #[derive(Clone, Debug, Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "snake_case")]
 pub struct AppConfig {
-    #[serde(default = "default_processed_logger_delay", rename = "processedLoggerDelay")]
+    #[serde(default = "default_processed_logger_delay")]
     pub processed_logger_delay: u64,
-    #[serde(default = "default_garbage_collector_delay", rename = "garbageCollectorDelay")]
+    #[serde(default = "default_garbage_collector_delay")]
     pub garbage_collector_delay: u64,
-    #[serde(default, rename = "collectGarbage")]
+    #[serde(default)]
     pub collect_garbage: bool,
-    #[serde(default = "default_program_timeout", rename = "programTimeout")]
+    #[serde(default = "default_program_timeout")]
     pub program_timeout: u64,
-    #[serde(default = "default_retry_delay", rename = "retryDelay")]
+    #[serde(default = "default_retry_delay")]
     pub retry_delay: u64,
-    #[serde(default = "default_n_retry", rename = "nRetry")]
+    #[serde(default = "default_n_retry")]
     pub n_retry: u32,
-    #[serde(default = "default_log_severity", rename = "logSeverity")]
+    #[serde(default = "default_log_severity")]
     pub log_severity: LogSeverity,
-    #[serde(default = "default_data_dir", rename = "dataDir")]
+    #[serde(default = "default_data_dir")]
     pub data_dir: PathBuf,
-    #[serde(default = "default_queue_capacity", rename = "queueCapacity")]
+    #[serde(default = "default_queue_capacity")]
     pub queue_capacity: usize,
-    #[serde(default = "default_request_timeout", rename = "requestResponseTimeout")]
+    #[serde(default = "default_request_timeout")]
     pub request_response_timeout: u64,
-    #[serde(default, rename = "openVSX")]
+    #[serde(default)]
     pub open_vsx: SiteConfig,
-    #[serde(default, rename = "vscodeMarketplace")]
+    #[serde(default)]
     pub vscode_marketplace: SiteConfig,
 }
 
