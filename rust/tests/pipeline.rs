@@ -504,7 +504,7 @@ fn prefetch_failures_log_context() {
     assert!(failure.contains("version=2.0.0"));
     assert!(failure.contains("platform=linux-x64"));
     assert!(failure.contains("target=open-vsx"));
-    assert!(failure.contains("url=https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/"));
+    assert!(failure.contains("url=https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/broken.ext-2.0.0@linux-x64.vsix"));
 }
 
 #[test]

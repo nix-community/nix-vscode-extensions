@@ -65,9 +65,8 @@ impl NixPrefetcher {
                     format!("@{}", config.platform)
                 };
                 format!(
-                    "https://open-vsx.org/api/{}/{name}{platform_infix}/{version}/file/{}-{version}{platform_suffix}.vsix",
-                    config.publisher.0,
-                    config.publisher.0,
+                    "https://open-vsx.org/api/{publisher}/{name}{platform_infix}/{version}/file/{publisher}.{name}-{version}{platform_suffix}.vsix",
+                    publisher = config.publisher.0,
                     name = config.name.0,
                     version = config.version.raw(),
                     platform_infix = platform_infix,
