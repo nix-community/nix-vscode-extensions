@@ -1,12 +1,13 @@
 mod pipeline;
 
 use nix_vscode_extensions_updater::cache::{read_jsonl_cache, tmp_path, write_jsonl_cache};
-use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
+use nix_vscode_extensions_updater::marketplace::{parse_latest_response, MarketplaceFetchResult};
 use nix_vscode_extensions_updater::model::{CacheRecord, IsRelease, Name, Platform, Publisher};
 use pipeline::support::{
     config, observed_platforms_for, record, test_pipeline, FakeMarketplace, FakePrefetcher,
     TestEnv,
 };
+use serde_json::json;
 
 #[test]
 fn pipeline_merges_and_keeps_retained_records() {
@@ -423,4 +424,42 @@ fn open_vsx_prefetches_platform_specific_variant_when_observed() {
     let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
     assert_eq!(fetched.len(), 1);
     assert_eq!(fetched[0].platform, Platform::LinuxX64);
+}
+
+#[test]
+fn open_vsx_unknown_platform_entries_do_not_become_universal_prefetch_candidates() {
+    let env = TestEnv::new();
+    let body = json!({
+        "results": [{
+            "extensions": [{
+                "flags": "public",
+                "extensionName": "sample",
+                "publisher": {"publisherName": "alice"},
+                "versions": [{
+                    "version": "1.2.3",
+                    "targetPlatform": "fancy-os",
+                    "properties": [
+                        {"key": "Microsoft.VisualStudio.Code.Engine", "value": "^1.0.0"}
+                    ]
+                }]
+            }]
+        }]
+    });
+    let latest_configs = parse_latest_response(&body.to_string()).unwrap();
+    assert!(latest_configs.is_empty());
+
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(Vec::new());
+    let pipeline = test_pipeline(&env.config, &marketplace, &prefetcher);
+
+    pipeline.run().unwrap();
+
+    let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert!(fetched.is_empty());
 }

@@ -30,14 +30,6 @@ fn latest_response_parses_real_marketplace_payload() {
                 "AdaCore",
                 "ada",
                 "2026.3.202607051",
-                Platform::Universal,
-                true,
-                "^1.88.0",
-            ),
-            (
-                "AdaCore",
-                "ada",
-                "2026.3.202607051",
                 Platform::LinuxX64,
                 true,
                 "^1.88.0",
@@ -67,14 +59,6 @@ fn release_response_parses_real_marketplace_payload() {
     assert_release_fixture(
         include_str!("fixtures/vscode-adacore-ada-release.json"),
         &[
-            (
-                "AdaCore",
-                "ada",
-                "2026.3.202607051",
-                Platform::Universal,
-                true,
-                "^1.88.0",
-            ),
             (
                 "AdaCore",
                 "ada",
@@ -371,7 +355,7 @@ fn marketplace_parsers_reject_missing_engine_versions() {
 }
 
 #[test]
-fn marketplace_parsers_handle_prerelease_and_unknown_platforms() {
+fn marketplace_parsers_skip_unknown_platforms_and_keep_real_universals() {
     let body = json!({
         "results": [{
             "extensions": [
@@ -393,6 +377,13 @@ fn marketplace_parsers_handle_prerelease_and_unknown_platforms() {
                                 {"key": "Microsoft.VisualStudio.Code.Engine", "value": "^1.0.0"},
                                 {"key": "Microsoft.VisualStudio.Code.PreRelease", "value": "true"}
                             ]
+                        },
+                        {
+                            "version": "1.2.5",
+                            "targetPlatform": "universal",
+                            "properties": [
+                                {"key": "Microsoft.VisualStudio.Code.Engine", "value": "^1.0.0"}
+                            ]
                         }
                     ]
                 }
@@ -402,10 +393,12 @@ fn marketplace_parsers_handle_prerelease_and_unknown_platforms() {
 
     let parsed = parse_latest_response(&body.to_string()).unwrap();
     assert_eq!(parsed.len(), 2);
+    assert_eq!(parsed[0].version, version("1.2.4-insider"));
     assert_eq!(parsed[0].platform, Platform::Universal);
-    assert_eq!(parsed[0].is_release, IsRelease(true));
+    assert_eq!(parsed[0].is_release, IsRelease(false));
+    assert_eq!(parsed[1].version, version("1.2.5"));
     assert_eq!(parsed[1].platform, Platform::Universal);
-    assert_eq!(parsed[1].is_release, IsRelease(false));
+    assert_eq!(parsed[1].is_release, IsRelease(true));
 }
 
 #[test]

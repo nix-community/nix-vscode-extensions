@@ -308,7 +308,8 @@ fn parse_version_object(version: &Value, publisher: &Publisher, name: &Name) -> 
         Some("linux-arm64") => Platform::LinuxArm64,
         Some("darwin-x64") => Platform::DarwinX64,
         Some("darwin-arm64") => Platform::DarwinArm64,
-        Some(_) | None => Platform::Universal,
+        Some("universal") | None => Platform::Universal,
+        Some(_) => return Ok(None),
     };
     let properties = version
         .get("properties")
