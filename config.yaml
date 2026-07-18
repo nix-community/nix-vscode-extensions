@@ -1,12 +1,12 @@
-collectGarbage: true
-garbageCollectorDelay: 10
-logSeverity: Info
-programTimeout: 3600
-openVSX:
+collect_garbage: true
+garbage_collector_delay: 10
+log_severity: Info
+program_timeout: 3600
+open_vsx:
   enable: true
-  pageCount: 10
-  pageSize: 1000
-  metadataFetchThreads: 50
-vscodeMarketplace:
-  pageCount: 100
-  pageSize: 1000
+  page_count: 10
+  page_size: 1000
+  metadata_fetch_threads: 50
+vscode_marketplace:
+  page_count: 100
+  page_size: 1000
