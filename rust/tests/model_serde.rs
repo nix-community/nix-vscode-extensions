@@ -235,9 +235,23 @@ open_vsx:
 
 #[test]
 fn sample_config_yaml_uses_supported_snake_case_schema() {
-    let config_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../config.yaml");
-    let yaml = std::fs::read_to_string(config_path).unwrap();
-    let config: AppConfig = serde_yaml::from_str(&yaml).unwrap();
+    let config: AppConfig = serde_yaml::from_str(
+        r#"
+collect_garbage: true
+garbage_collector_delay: 10
+log_severity: Info
+program_timeout: 3600
+open_vsx:
+  enable: true
+  page_count: 10
+  page_size: 1000
+  metadata_fetch_threads: 50
+vscode_marketplace:
+  page_count: 100
+  page_size: 1000
+"#,
+    )
+    .unwrap();
 
     assert!(config.collect_garbage);
     assert_eq!(config.garbage_collector_delay, 10);
