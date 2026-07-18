@@ -6,7 +6,7 @@ openVSX:
   enable: true
   pageCount: 10
   pageSize: 1000
-  nThreads: 50
+  metadataFetchThreads: 50
 vscodeMarketplace:
   pageCount: 100
   pageSize: 1000
