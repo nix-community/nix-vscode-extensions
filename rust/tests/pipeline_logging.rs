@@ -4,10 +4,10 @@ use nix_vscode_extensions_updater::cache::{read_jsonl_cache, tmp_path};
 use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
 use nix_vscode_extensions_updater::model::{CacheRecord, ExtensionConfig, Platform, Target};
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
-use pipeline::assertions::log_messages;
 use pipeline::support::{
-    config, observed_platforms_for, record, test_pipeline_with_logger, FakeMarketplace,
-    FakePrefetcher, TestEnv, TestLogger,
+    assert_has_line, assert_line_prefix, assert_no_line, capture_pipeline_logs, config,
+    count_lines, find_line, info_lines, observed_platforms_for, record, FakeMarketplace,
+    FakePrefetcher, TestEnv,
 };
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -103,33 +103,17 @@ fn pipeline_logs_stage_boundaries_and_summaries() {
         "2.0.0",
         "sha256-fresh",
     ))]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&env.config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let messages = log_messages(&logger);
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[run] Starting extension updater run")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Target start")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Latest-page fetch start")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Prefetch start")));
-    assert!(messages.iter().any(|message| {
-        message.contains("[open-vsx] Cache write finish: merged cache count=1")
-    }));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Latest configs fetched count: 1")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[run] Finished extension updater run")));
+    let lines = logs.lines();
+    assert_has_line(&lines, "[ START  ] [run] Starting extension updater run");
+    assert_has_line(&lines, "[ START  ] [open-vsx] Target start");
+    assert_has_line(&lines, "[ START  ] [open-vsx] Latest-page fetch start");
+    assert_has_line(&lines, "[ START  ] [open-vsx] Prefetch start");
+    assert_has_line(&lines, "[ FINISH ] [open-vsx] Cache write finish: merged cache count=1");
+    assert_has_line(&lines, "[  INFO  ] [open-vsx] Latest configs fetched count: 1");
+    assert_has_line(&lines, "[ FINISH ] [run] Finished extension updater run");
 }
 
 #[test]
@@ -154,27 +138,15 @@ fn vscode_marketplace_target_skips_open_vsx_prerelease_release_fetch_logging() {
         "2.0.0",
         "sha256-fresh",
     ))]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let messages = log_messages(&logger);
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[vscode-marketplace] Target start")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[vscode-marketplace] Latest-page fetch start")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[vscode-marketplace] Prefetch start")));
-    assert!(!messages
-        .iter()
-        .any(|message| message.contains("Open VSX prerelease candidate")));
-    assert!(!messages
-        .iter()
-        .any(|message| message.contains("Release-config fetch")));
+    let lines = logs.lines();
+    assert_has_line(&lines, "[vscode-marketplace] Target start");
+    assert_has_line(&lines, "[vscode-marketplace] Latest-page fetch start");
+    assert_has_line(&lines, "[vscode-marketplace] Prefetch start");
+    assert_no_line(&lines, "Open VSX prerelease candidate");
+    assert_no_line(&lines, "Release-config fetch");
 }
 
 #[test]
@@ -211,22 +183,20 @@ fn open_vsx_prerelease_logging_reports_latest_only_counts() {
     };
     let marketplace = FakeMarketplace::new(latest);
     let prefetcher = FakePrefetcher::new(Vec::new());
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&env.config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let messages = log_messages(&logger);
-    assert!(messages.iter().any(|message| {
-        message.contains("[open-vsx] Open VSX prerelease candidates from latest: count=1")
-    }));
-    assert!(messages.iter().any(|message| {
-        message.contains("[open-vsx] Open VSX prerelease candidate count from latest: 1")
-    }));
-    assert!(!messages
-        .iter()
-        .any(|message| message.contains("cached_without_release")));
-    assert!(!messages.iter().any(|message| message.contains("combined_unique_ids")));
+    let lines = logs.lines();
+    assert_has_line(
+        &lines,
+        "[open-vsx] Open VSX prerelease candidates from latest: count=1",
+    );
+    assert_has_line(
+        &lines,
+        "[open-vsx] Open VSX prerelease candidate count from latest: 1",
+    );
+    assert_no_line(&lines, "cached_without_release");
+    assert_no_line(&lines, "combined_unique_ids");
 }
 
 #[test]
@@ -240,26 +210,23 @@ fn zero_work_target_still_logs_prefetch_and_cache_lifecycle() {
     };
     let marketplace = FakeMarketplace::new(latest);
     let prefetcher = FakePrefetcher::new(Vec::new());
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&env.config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let messages = log_messages(&logger);
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Processed (0/0) extensions")));
-    assert!(messages.iter().any(|message| {
-        message.contains("[open-vsx] Prefetch finish: fetched records=0 failed records=0")
-    }));
-    assert!(messages.iter().any(|message| {
-        message.contains("[open-vsx] Cache write finish: merged cache count=0")
-    }));
+    let lines = logs.lines();
+    assert_has_line(&lines, "[open-vsx] Processed (0/0) extensions failures=0");
+    assert_has_line(
+        &lines,
+        "[open-vsx] Prefetch finish: fetched records=0 failed records=0",
+    );
+    assert_has_line(&lines, "[open-vsx] Cache write finish: merged cache count=0");
 }
 
 #[test]
 fn prefetch_failures_log_context() {
     let env = TestEnv::new();
+    let mut debug_config = env.config.clone();
+    debug_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
     let latest_configs = vec![config("broken", "ext", true, Platform::LinuxX64, "2.0.0")];
     let latest = MarketplaceFetchResult {
         observed_platforms: observed_platforms_for(&latest_configs),
@@ -269,16 +236,11 @@ fn prefetch_failures_log_context() {
     };
     let marketplace = FakeMarketplace::new(latest);
     let prefetcher = FakePrefetcher::new(vec![Err(anyhow::anyhow!("stderr exploded"))]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&debug_config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let messages = log_messages(&logger);
-    let start = messages
-        .iter()
-        .find(|message| message.contains("[open-vsx] Prefetch start:"))
-        .unwrap();
+    let lines = logs.lines();
+    let start = find_line(&lines, "[open-vsx] Prefetch start extension=broken.ext");
     assert!(start.contains("extension=broken.ext"));
     assert!(start.contains("version=2.0.0"));
     assert!(start.contains("platform=linux-x64"));
@@ -286,10 +248,7 @@ fn prefetch_failures_log_context() {
     assert!(start.contains(
         "url=https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/broken.ext-2.0.0@linux-x64.vsix"
     ));
-    let failure = messages
-        .iter()
-        .find(|message| message.contains("[open-vsx] Prefetch failed:"))
-        .unwrap();
+    let failure = find_line(&lines, "[open-vsx] Prefetch failed extension=broken.ext");
     assert!(failure.contains("extension=broken.ext"));
     assert!(failure.contains("version=2.0.0"));
     assert!(failure.contains("platform=linux-x64"));
@@ -318,30 +277,21 @@ fn prefetch_success_logs_at_debug_only() {
         "1.0.0",
         "sha256-ok",
     ))]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let mut debug_config = env.config.clone();
+    debug_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
+    let (logs, result) = capture_pipeline_logs(&debug_config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let entries = logger.entries();
-    assert!(entries.iter().any(|entry| {
-        entry.level == nix_vscode_extensions_updater::logging::Level::Debug
-            && entry
-                .message
-                .contains("[open-vsx] Prefetch start: extension=ok.ext")
-    }));
-    assert!(entries.iter().any(|entry| {
-        entry.level == nix_vscode_extensions_updater::logging::Level::Debug
-            && entry
-                .message
-                .contains("[open-vsx] Prefetch success: extension=ok.ext")
-    }));
-    assert!(!entries.iter().any(|entry| {
-        entry.level == nix_vscode_extensions_updater::logging::Level::Info
-            && entry
-                .message
-                .contains("[open-vsx] Prefetch success: extension=ok.ext")
-    }));
+    let lines = logs.lines();
+    assert_line_prefix(&lines, "DEBUG", "[open-vsx] Prefetch start extension=ok.ext");
+    assert_line_prefix(&lines, "DEBUG", "[open-vsx] Prefetch success extension=ok.ext");
+    assert_eq!(
+        info_lines(&lines)
+            .into_iter()
+            .filter(|line| line.contains("Prefetch success"))
+            .count(),
+        0
+    );
 }
 
 #[test]
@@ -371,18 +321,12 @@ fn progress_logging_emits_updates_and_failure_counts() {
         )),
         Err(anyhow::anyhow!("boom prefetch")),
     ]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let messages = log_messages(&logger);
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Processed (1/2) extensions")));
-    assert!(messages
-        .iter()
-        .any(|message| message.contains("[open-vsx] Processed (2/2) extensions, failures=1")));
+    let lines = logs.lines();
+    assert_has_line(&lines, "[open-vsx] Processed (1/2) extensions failures=0");
+    assert_has_line(&lines, "[open-vsx] Processed (2/2) extensions failures=1");
 }
 
 #[test]
@@ -404,16 +348,15 @@ fn prefetch_runs_concurrently_with_a_bounded_cap() {
     };
     let marketplace = FakeMarketplace::new(latest);
     let prefetcher = Arc::new(TrackingPrefetcher::new());
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, prefetcher.as_ref(), &logger);
-
-    pipeline.run().unwrap();
+    let (logs, result) = capture_pipeline_logs(&app_config, &marketplace, prefetcher.as_ref());
+    result.unwrap();
 
     assert_eq!(prefetcher.max_active(), 2);
-    let messages = log_messages(&logger);
-    assert!(messages.iter().any(|message| {
-        message.contains("[open-vsx] Prefetch finish: fetched records=4 failed records=0")
-    }));
+    let lines = logs.lines();
+    assert_has_line(
+        &lines,
+        "[open-vsx] Prefetch finish: fetched records=4 failed records=0",
+    );
 }
 
 #[test]
@@ -458,10 +401,9 @@ fn concurrent_prefetch_collects_successes_and_failures_once_each() {
             )),
         ),
     ]));
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
-
-    pipeline.run().unwrap();
+    let (logs, result) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    result.unwrap();
+    assert_eq!(count_lines(&logs.lines(), "Prefetch failed"), 1);
 
     let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
     assert_eq!(fetched.len(), 2);

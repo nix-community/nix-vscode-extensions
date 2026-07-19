@@ -1,7 +1,7 @@
 use clap::Parser;
 use nix_vscode_extensions_updater::{
     config::AppConfig,
-    logging::{Level, StdoutLogger},
+    logging::{init_tracing, lifecycle_field, render_effective_config, Lifecycle},
     marketplace::HttpMarketplaceClient,
     pipeline::Pipeline,
     prefetch::NixPrefetcher,
@@ -17,14 +17,18 @@ struct Args {
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let config = AppConfig::load(args.config.as_deref())?;
-    let logger = StdoutLogger::new(Level::from(config.log_severity));
+    init_tracing(&config)?;
+    tracing::info!(
+        stage = "run",
+        lifecycle = lifecycle_field(Lifecycle::Info),
+        summary = %format!("Effective config\n{}", render_effective_config(&config)?)
+    );
     let marketplace = HttpMarketplaceClient::new(config.program_timeout)?;
     let prefetcher = NixPrefetcher;
     let pipeline = Pipeline {
         config: &config,
         marketplace: &marketplace,
         prefetcher: &prefetcher,
-        logger: &logger,
     };
     pipeline.run()
 }

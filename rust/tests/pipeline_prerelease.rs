@@ -1,11 +1,10 @@
 mod pipeline;
 
-use nix_vscode_extensions_updater::logging::Level;
 use nix_vscode_extensions_updater::marketplace::{MarketplaceFetchResult, ReleaseLookupFailure};
 use nix_vscode_extensions_updater::model::{Name, Platform, Publisher};
 use pipeline::support::{
-    config, observed_platforms_for, record, test_pipeline, test_pipeline_with_logger,
-    FakeMarketplace, FakePrefetcher, TestEnv, TestLogger,
+    assert_has_line, assert_line_prefix, capture_pipeline_logs, config, observed_platforms_for,
+    record, test_pipeline, FakeMarketplace, FakePrefetcher, TestEnv,
 };
 
 #[test]
@@ -142,24 +141,18 @@ fn release_config_partial_failures_are_preserved_and_logged() {
         "1.0.0",
         "sha256-need-pre",
     ))]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let mut debug_config = env.config.clone();
+    debug_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
+    let (logs, result) = capture_pipeline_logs(&debug_config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let entries = logger.entries();
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Info
-            && entry
-                .message
-                .contains("[open-vsx] Release lookups failed for 1 extensions")
-    }));
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Debug
-            && entry
-                .message
-                .contains("[open-vsx] Release lookup failure: need.ext error=boom release lookup")
-    }));
+    let lines = logs.lines();
+    assert_has_line(&lines, "[open-vsx] Release lookups failed for 1 extensions");
+    assert_line_prefix(
+        &lines,
+        "DEBUG",
+        "[open-vsx] Release lookup failure extension=need.ext error=boom release lookup",
+    );
 }
 
 #[test]
@@ -230,16 +223,12 @@ fn release_config_partial_success_summary_logs_exact_counts() {
             "sha256-one-release",
         )),
     ]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&env.config, &marketplace, &prefetcher, &logger);
+    let (logs, result) = capture_pipeline_logs(&env.config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let entries = logger.entries();
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Info
-            && entry.message.contains(
-                "[open-vsx] Release-config fetch finish: attempted_ids=3 succeeded_responses=1 failed_responses=2 parsed_configs=1"
-            )
-    }));
+    let lines = logs.lines();
+    assert_has_line(
+        &lines,
+        "[open-vsx] Release-config fetch finish: attempted_ids=3 succeeded_responses=1 failed_responses=2 parsed_configs=1",
+    );
 }

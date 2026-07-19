@@ -1,11 +1,10 @@
 mod pipeline;
 
-use nix_vscode_extensions_updater::logging::Level;
 use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
 use nix_vscode_extensions_updater::model::Platform;
 use pipeline::support::{
-    config, observed_platforms_for, record, test_pipeline_with_logger, FakeMarketplace,
-    FakePrefetcher, TestEnv, TestLogger,
+    assert_line_prefix, assert_no_line, capture_pipeline_logs, config, count_lines,
+    observed_platforms_for, record, FakeMarketplace, FakePrefetcher, TestEnv,
 };
 
 #[test]
@@ -22,33 +21,25 @@ fn retry_logs_exhaustion_for_latest_fetch() {
     })
     .with_latest_error("boom latest");
     let prefetcher = FakePrefetcher::new(Vec::new());
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
-
-    let err = pipeline.run().unwrap_err();
+    app_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
+    let (logs, err) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    let err = err.unwrap_err();
     assert!(err
         .to_string()
         .contains("failed to fetch latest configs for open-vsx"));
 
-    let entries = logger.entries();
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Debug
-            && entry
-                .message
-                .contains("[open-vsx] latest-page fetch attempt 1/2 start")
-    }));
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Error
-            && entry
-                .message
-                .contains("[open-vsx] latest-page fetch attempt 1/2 failed; retrying in 0s: boom latest")
-    }));
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Error
-            && entry
-                .message
-                .contains("[open-vsx] latest-page fetch exhausted after 2/2 attempts: boom latest")
-    }));
+    let lines = logs.lines();
+    assert_line_prefix(&lines, "DEBUG", "[open-vsx] latest-page fetch attempt 1/2 start");
+    assert_line_prefix(
+        &lines,
+        "ERROR",
+        "[open-vsx] latest-page fetch attempt 1/2 failed; retrying in 0s: boom latest",
+    );
+    assert_line_prefix(
+        &lines,
+        "ERROR",
+        "[open-vsx] latest-page fetch exhausted after 2/2 attempts: boom latest",
+    );
 }
 
 #[test]
@@ -65,36 +56,21 @@ fn retry_with_zero_retries_exhausts_immediately() {
     })
     .with_latest_error("boom latest");
     let prefetcher = FakePrefetcher::new(Vec::new());
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
-
-    let err = pipeline.run().unwrap_err();
+    app_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
+    let (logs, err) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    let err = err.unwrap_err();
     assert!(err
         .to_string()
         .contains("failed to fetch latest configs for open-vsx"));
 
-    let entries = logger.entries();
-    assert_eq!(
-        entries
-            .iter()
-            .filter(|entry| {
-                entry.level == Level::Debug
-                    && entry
-                        .message
-                        .contains("[open-vsx] latest-page fetch attempt 1/1 start")
-            })
-            .count(),
-        1
+    let lines = logs.lines();
+    assert_eq!(count_lines(&lines, "latest-page fetch attempt 1/1 start"), 1);
+    assert_no_line(&lines, "retrying in 0s");
+    assert_line_prefix(
+        &lines,
+        "ERROR",
+        "[open-vsx] latest-page fetch exhausted after 1/1 attempts: boom latest",
     );
-    assert!(!entries
-        .iter()
-        .any(|entry| entry.message.contains("retrying in 0s")));
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Error
-            && entry
-                .message
-                .contains("[open-vsx] latest-page fetch exhausted after 1/1 attempts: boom latest")
-    }));
 }
 
 #[test]
@@ -119,22 +95,19 @@ fn retry_logs_recovery_for_release_fetch() {
         "1.0.0",
         "sha256-need-pre",
     ))]);
-    let logger = TestLogger::new();
-    let pipeline = test_pipeline_with_logger(&app_config, &marketplace, &prefetcher, &logger);
+    app_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
+    let (logs, result) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    result.unwrap();
 
-    pipeline.run().unwrap();
-
-    let entries = logger.entries();
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Error
-            && entry.message.contains(
-                "[open-vsx] release-config fetch attempt 1/2 failed; retrying in 0s: transient release failure"
-            )
-    }));
-    assert!(entries.iter().any(|entry| {
-        entry.level == Level::Info
-            && entry
-                .message
-                .contains("[open-vsx] release-config fetch recovered on attempt 2/2")
-    }));
+    let lines = logs.lines();
+    assert_line_prefix(
+        &lines,
+        "ERROR",
+        "[open-vsx] release-config fetch attempt 1/2 failed; retrying in 0s: transient release failure",
+    );
+    assert_line_prefix(
+        &lines,
+        "INFO ",
+        "[open-vsx] release-config fetch recovered on attempt 2/2",
+    );
 }
