@@ -2,9 +2,9 @@ use crate::config::{AppConfig, LogSeverity};
 use anstream::AutoStream;
 use serde_json::to_string_pretty;
 use std::fmt;
-use std::io::{self, Stdout};
+use std::io::{self, IsTerminal, Stdout};
 use tracing::{Event, Level, Subscriber};
-use tracing_subscriber::filter::LevelFilter;
+use tracing_subscriber::filter::{filter_fn, FilterExt, LevelFilter};
 use tracing_subscriber::fmt::format::{FormatEvent, FormatFields, Writer};
 use tracing_subscriber::fmt::FmtContext;
 use tracing_subscriber::layer::SubscriberExt;
@@ -41,7 +41,15 @@ impl Lifecycle {
 }
 
 #[derive(Clone, Copy, Debug, Default)]
-pub struct HumanFormatter;
+pub struct HumanFormatter {
+    ansi: bool,
+}
+
+impl HumanFormatter {
+    pub const fn with_ansi(ansi: bool) -> Self {
+        Self { ansi }
+    }
+}
 
 #[derive(Clone, Debug, Default)]
 struct EventFields {
@@ -103,17 +111,35 @@ pub fn render_effective_config(config: &AppConfig) -> anyhow::Result<String> {
     Ok(to_string_pretty(config)?)
 }
 
+pub fn first_party_filter<S>() -> impl tracing_subscriber::layer::Filter<S> + Clone
+where
+    S: Subscriber,
+{
+    filter_fn(|metadata| is_first_party_metadata(metadata))
+}
+
 pub fn init_tracing(config: &AppConfig) -> anyhow::Result<()> {
     let writer = || AutoStream::new(io::stdout(), anstream::ColorChoice::Auto);
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::fmt::layer()
-                .event_format(HumanFormatter)
+                .event_format(HumanFormatter::with_ansi(io::stdout().is_terminal()))
                 .with_writer(writer)
-                .with_filter(level_filter(config.log_severity)),
+                .with_filter(level_filter(config.log_severity).and(first_party_filter())),
         )
         .try_init()?;
     Ok(())
+}
+
+fn is_first_party_metadata(metadata: &tracing::Metadata<'_>) -> bool {
+    is_first_party_namespace(metadata.target())
+        || metadata
+            .module_path()
+            .is_some_and(is_first_party_namespace)
+}
+
+fn is_first_party_namespace(value: &str) -> bool {
+    value.starts_with("nix_vscode_extensions_updater")
 }
 
 impl<S, N> FormatEvent<S, N> for HumanFormatter
@@ -137,7 +163,7 @@ where
             _ => Lifecycle::Info,
         };
 
-        write_level(&mut writer, level)?;
+        write_level(&mut writer, level, self.ansi)?;
         write!(writer, " [ {:^6} ] ", lifecycle.marker())?;
         write!(writer, "[{}] ", fields.stage.as_deref().unwrap_or("general"))?;
         if let Some(summary) = fields.summary {
@@ -158,9 +184,8 @@ where
     }
 }
 
-fn write_level(writer: &mut Writer<'_>, level: Level) -> fmt::Result {
-    let has_ansi = writer.has_ansi_escapes();
-    let (prefix, suffix) = if has_ansi {
+fn write_level(writer: &mut Writer<'_>, level: Level, ansi: bool) -> fmt::Result {
+    let (prefix, suffix) = if ansi {
         match level {
             Level::ERROR => ("\u{1b}[31;1m", "\u{1b}[0m"),
             Level::WARN => ("\u{1b}[33;1m", "\u{1b}[0m"),
@@ -182,10 +207,14 @@ pub type StdoutLogWriter = AutoStream<Stdout>;
 
 #[cfg(test)]
 mod tests {
-    use super::{level_filter, lifecycle_field, render_effective_config, HumanFormatter, Lifecycle};
+    use super::{
+        first_party_filter, level_filter, lifecycle_field, render_effective_config,
+        HumanFormatter, Lifecycle,
+    };
     use crate::config::{AppConfig, LogSeverity};
     use std::io::{self, Write};
     use std::sync::{Arc, Mutex};
+    use tracing_subscriber::filter::FilterExt;
     use tracing_subscriber::fmt;
     use tracing_subscriber::layer::SubscriberExt;
     use tracing_subscriber::prelude::*;
@@ -233,9 +262,9 @@ mod tests {
         let writer = SharedWriter::default();
         let subscriber = tracing_subscriber::registry().with(
             fmt::layer()
-                .event_format(HumanFormatter)
+                .event_format(HumanFormatter::default())
                 .with_writer(writer.clone())
-                .with_filter(level_filter(severity)),
+                .with_filter(level_filter(severity).and(first_party_filter())),
         );
         tracing::subscriber::with_default(subscriber, emit);
         writer.rendered()
@@ -300,5 +329,15 @@ mod tests {
         assert!(rendered.contains("Effective config"));
         assert!(rendered.contains("\"processed_logger_delay\""));
         assert!(rendered.contains("\"open_vsx\""));
+    }
+
+    #[test]
+    fn first_party_namespace_matches_only_repo_events() {
+        assert!(super::is_first_party_namespace("nix_vscode_extensions_updater"));
+        assert!(super::is_first_party_namespace(
+            "nix_vscode_extensions_updater::pipeline"
+        ));
+        assert!(!super::is_first_party_namespace("reqwest::connect"));
+        assert!(!super::is_first_party_namespace("hyper_util::client::legacy::pool"));
     }
 }

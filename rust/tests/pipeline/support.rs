@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 use nix_vscode_extensions_updater::config::{AppConfig, SiteConfig};
-use nix_vscode_extensions_updater::logging::{level_filter, HumanFormatter};
+use nix_vscode_extensions_updater::logging::{first_party_filter, level_filter, HumanFormatter};
 use nix_vscode_extensions_updater::marketplace::{
     MarketplaceClient, MarketplaceFetchResult, ObservedPlatformMap, ReleaseConfigFetchResult,
     ReleaseLookupFailure,
@@ -17,6 +17,7 @@ use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use tempfile::TempDir;
+use tracing_subscriber::filter::FilterExt;
 use tracing_subscriber::fmt;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::prelude::*;
@@ -68,9 +69,9 @@ where
     let logs = CapturedLogs::default();
     let subscriber = tracing_subscriber::registry().with(
         fmt::layer()
-            .event_format(HumanFormatter)
+            .event_format(HumanFormatter::default())
             .with_writer(logs.clone())
-            .with_filter(level_filter(config.log_severity)),
+            .with_filter(level_filter(config.log_severity).and(first_party_filter())),
     );
     let value = tracing::subscriber::with_default(subscriber, run);
     (logs, value)
