@@ -10,7 +10,7 @@ use nix_vscode_extensions_updater::model::{
     CacheRecord, EngineVersion, ExtensionConfig, IsRelease, Name, ObservedVersionKey, Platform,
     Publisher, Target, Version,
 };
-use nix_vscode_extensions_updater::pipeline::Pipeline;
+use nix_vscode_extensions_updater::pipeline::{Pipeline, ShutdownSignal};
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use std::collections::VecDeque;
 use std::io::{self, Write};
@@ -21,6 +21,8 @@ use tracing_subscriber::filter::FilterExt;
 use tracing_subscriber::fmt;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::prelude::*;
+
+static NO_SHUTDOWN: ShutdownSignal = ShutdownSignal::new();
 
 #[derive(Clone, Default)]
 pub struct CapturedLogs {
@@ -83,7 +85,20 @@ pub fn capture_pipeline_logs<M, P>(
     prefetcher: &P,
 ) -> (CapturedLogs, anyhow::Result<()>)
 where
-    M: MarketplaceClient,
+    M: MarketplaceClient + Sync,
+    P: Prefetcher + Sync,
+{
+    capture_pipeline_logs_with_shutdown(config, marketplace, prefetcher, &NO_SHUTDOWN)
+}
+
+pub fn capture_pipeline_logs_with_shutdown<M, P>(
+    config: &AppConfig,
+    marketplace: &M,
+    prefetcher: &P,
+    shutdown: &ShutdownSignal,
+) -> (CapturedLogs, anyhow::Result<()>)
+where
+    M: MarketplaceClient + Sync,
     P: Prefetcher + Sync,
 {
     capture_logs(config, || {
@@ -91,6 +106,7 @@ where
             config,
             marketplace,
             prefetcher,
+            shutdown,
         };
         pipeline.run()
     })
@@ -423,9 +439,19 @@ pub fn test_pipeline<'a, M, P>(
     marketplace: &'a M,
     prefetcher: &'a P,
 ) -> Pipeline<'a, M, P> {
+    test_pipeline_with_shutdown(config, marketplace, prefetcher, &NO_SHUTDOWN)
+}
+
+pub fn test_pipeline_with_shutdown<'a, M, P>(
+    config: &'a AppConfig,
+    marketplace: &'a M,
+    prefetcher: &'a P,
+    shutdown: &'a ShutdownSignal,
+) -> Pipeline<'a, M, P> {
     Pipeline {
         config,
         marketplace,
         prefetcher,
+        shutdown,
     }
 }

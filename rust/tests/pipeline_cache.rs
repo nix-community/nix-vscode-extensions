@@ -3,11 +3,69 @@ mod pipeline;
 use nix_vscode_extensions_updater::cache::{read_jsonl_cache, tmp_path, write_jsonl_cache};
 use nix_vscode_extensions_updater::marketplace::{parse_latest_response, MarketplaceFetchResult};
 use nix_vscode_extensions_updater::model::{CacheRecord, IsRelease, Name, Platform, Publisher};
+use nix_vscode_extensions_updater::pipeline::ShutdownSignal;
+use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use pipeline::support::{
-    config, observed_platforms_for, record, test_pipeline, FakeMarketplace, FakePrefetcher,
-    TestEnv,
+    config, observed_platforms_for, record, test_pipeline, test_pipeline_with_shutdown,
+    FakeMarketplace, FakePrefetcher, TestEnv,
 };
 use serde_json::json;
+use std::collections::HashMap;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex};
+
+fn prefetch_key(config: &nix_vscode_extensions_updater::model::ExtensionConfig) -> String {
+    format!("{}.{}@{}", config.publisher.0, config.name.0, config.version.raw())
+}
+
+struct RecordingPrefetcher {
+    records: HashMap<String, CacheRecord>,
+    calls: Arc<Mutex<Vec<String>>>,
+    shutdown: Option<(usize, Arc<ShutdownSignal>)>,
+    seen: AtomicUsize,
+}
+
+impl RecordingPrefetcher {
+    fn new(records: HashMap<String, CacheRecord>) -> Self {
+        Self {
+            records,
+            calls: Arc::new(Mutex::new(Vec::new())),
+            shutdown: None,
+            seen: AtomicUsize::new(0),
+        }
+    }
+
+    fn with_shutdown_after(mut self, call: usize, shutdown: Arc<ShutdownSignal>) -> Self {
+        self.shutdown = Some((call, shutdown));
+        self
+    }
+
+    fn calls(&self) -> Vec<String> {
+        self.calls.lock().unwrap().clone()
+    }
+}
+
+impl Prefetcher for RecordingPrefetcher {
+    fn prefetch(
+        &self,
+        _target: nix_vscode_extensions_updater::model::Target,
+        config: &nix_vscode_extensions_updater::model::ExtensionConfig,
+        _timeout_seconds: u64,
+    ) -> anyhow::Result<CacheRecord> {
+        let key = prefetch_key(config);
+        self.calls.lock().unwrap().push(key.clone());
+        let seen = self.seen.fetch_add(1, Ordering::SeqCst) + 1;
+        if let Some((shutdown_after, shutdown)) = &self.shutdown {
+            if seen == *shutdown_after {
+                shutdown.request();
+            }
+        }
+        self.records
+            .get(&key)
+            .cloned()
+            .ok_or_else(|| anyhow::anyhow!("missing prefetch response for {key}"))
+    }
+}
 
 #[test]
 fn pipeline_merges_and_keeps_retained_records() {
@@ -462,4 +520,222 @@ fn open_vsx_unknown_platform_entries_do_not_become_universal_prefetch_candidates
 
     let fetched = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
     assert!(fetched.is_empty());
+}
+
+#[test]
+fn interrupted_run_checkpoints_progress_and_next_run_resumes_without_refetching_completed_records() {
+    let env = TestEnv::new();
+    let mut app_config = env.config.clone();
+    app_config.open_vsx.artifact_prefetch_threads = Some(1);
+    let latest_configs = vec![
+        config("one", "ext", true, Platform::Universal, "1.0.0"),
+        config("two", "ext", true, Platform::Universal, "2.0.0"),
+    ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let shutdown = Arc::new(ShutdownSignal::new());
+    let first_prefetcher = RecordingPrefetcher::new(HashMap::from([
+        (
+            "one.ext@1.0.0".to_string(),
+            record("one", "ext", true, Platform::Universal, "1.0.0", "sha256-one"),
+        ),
+        (
+            "two.ext@2.0.0".to_string(),
+            record("two", "ext", true, Platform::Universal, "2.0.0", "sha256-two"),
+        ),
+    ]))
+    .with_shutdown_after(1, shutdown.clone());
+    let marketplace = FakeMarketplace::new(latest.clone());
+    let first_run = test_pipeline_with_shutdown(
+        &app_config,
+        &marketplace,
+        &first_prefetcher,
+        shutdown.as_ref(),
+    )
+    .run();
+    assert!(first_run.unwrap_err().to_string().contains("interrupted by shutdown signal"));
+
+    let fetched_tmp = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(fetched_tmp.len(), 1);
+    assert_eq!(fetched_tmp[0].publisher.0, "one");
+
+    let checkpointed_cache = read_jsonl_cache(&env.cache_file("open-vsx")).unwrap();
+    assert_eq!(checkpointed_cache.len(), 1);
+    assert_eq!(checkpointed_cache[0].publisher.0, "one");
+
+    let second_prefetcher = RecordingPrefetcher::new(HashMap::from([(
+        "two.ext@2.0.0".to_string(),
+        record("two", "ext", true, Platform::Universal, "2.0.0", "sha256-two"),
+    )]));
+    let second_marketplace = FakeMarketplace::new(latest);
+    test_pipeline(
+        &app_config,
+        &second_marketplace,
+        &second_prefetcher,
+    )
+    .run()
+    .unwrap();
+
+    assert_eq!(second_prefetcher.calls(), vec!["two.ext@2.0.0".to_string()]);
+    let merged = read_jsonl_cache(&env.cache_file("open-vsx")).unwrap();
+    assert_eq!(merged.len(), 2);
+    assert!(merged.iter().any(|record| record.publisher.0 == "one"));
+    assert!(merged.iter().any(|record| record.publisher.0 == "two"));
+}
+
+#[test]
+fn resumed_records_outside_current_target_set_are_discarded() {
+    let env = TestEnv::new();
+    let latest_configs = vec![config("keep", "ext", true, Platform::Universal, "1.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    write_jsonl_cache(
+        &tmp_path(&env.data_dir, "fetched", "open-vsx"),
+        &[
+            record("keep", "ext", true, Platform::Universal, "1.0.0", "sha256-keep"),
+            record("drop", "ext", true, Platform::Universal, "1.0.0", "sha256-drop"),
+        ],
+    )
+    .unwrap();
+
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(Vec::new());
+    test_pipeline(&env.config, &marketplace, &prefetcher).run().unwrap();
+
+    let resumed = read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx")).unwrap();
+    assert_eq!(resumed.len(), 1);
+    assert_eq!(resumed[0].publisher.0, "keep");
+}
+
+#[test]
+fn older_than_cache_resumed_records_are_dropped_before_resume() {
+    let env = TestEnv::new();
+    let cache_file = env.cache_file("open-vsx");
+    write_jsonl_cache(
+        &cache_file,
+        &[record(
+            "keep",
+            "ext",
+            true,
+            Platform::Universal,
+            "2.0.0",
+            "sha256-cached",
+        )],
+    )
+    .unwrap();
+    write_jsonl_cache(
+        &tmp_path(&env.data_dir, "fetched", "open-vsx"),
+        &[record(
+            "keep",
+            "ext",
+            true,
+            Platform::Universal,
+            "1.0.0",
+            "sha256-stale",
+        )],
+    )
+    .unwrap();
+
+    let latest_configs = vec![config("keep", "ext", true, Platform::Universal, "1.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let prefetcher = RecordingPrefetcher::new(HashMap::from([(
+        "keep.ext@1.0.0".to_string(),
+        record("keep", "ext", true, Platform::Universal, "1.0.0", "sha256-refetched"),
+    )]));
+    let marketplace = FakeMarketplace::new(latest);
+    test_pipeline(&env.config, &marketplace, &prefetcher).run().unwrap();
+
+    assert_eq!(prefetcher.calls(), vec!["keep.ext@1.0.0".to_string()]);
+    assert!(read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx"))
+        .unwrap()
+        .is_empty());
+    let cached = read_jsonl_cache(&cache_file).unwrap();
+    assert_eq!(cached.len(), 1);
+    assert_eq!(cached[0].version, pipeline::support::version("2.0.0"));
+}
+
+#[test]
+fn older_than_cache_newly_fetched_records_are_dropped() {
+    let env = TestEnv::new();
+    let cache_file = env.cache_file("open-vsx");
+    write_jsonl_cache(
+        &cache_file,
+        &[record(
+            "keep",
+            "ext",
+            true,
+            Platform::Universal,
+            "2.0.0",
+            "sha256-cached",
+        )],
+    )
+    .unwrap();
+
+    let latest_configs = vec![config("keep", "ext", true, Platform::Universal, "1.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let prefetcher = RecordingPrefetcher::new(HashMap::from([(
+        "keep.ext@1.0.0".to_string(),
+        record("keep", "ext", true, Platform::Universal, "1.0.0", "sha256-stale"),
+    )]));
+    let marketplace = FakeMarketplace::new(latest);
+    test_pipeline(&env.config, &marketplace, &prefetcher).run().unwrap();
+
+    assert_eq!(prefetcher.calls(), vec!["keep.ext@1.0.0".to_string()]);
+    assert!(read_jsonl_cache(&tmp_path(&env.data_dir, "fetched", "open-vsx"))
+        .unwrap()
+        .is_empty());
+    let cached = read_jsonl_cache(&cache_file).unwrap();
+    assert_eq!(cached.len(), 1);
+    assert_eq!(cached[0].version, pipeline::support::version("2.0.0"));
+}
+
+#[test]
+fn failed_tmp_records_do_not_suppress_retries() {
+    let env = TestEnv::new();
+    let failed_tmp = tmp_path(&env.data_dir, "failed", "open-vsx");
+    std::fs::create_dir_all(failed_tmp.parent().unwrap()).unwrap();
+    std::fs::write(
+        &failed_tmp,
+        format!(
+            "{}\n",
+            serde_json::to_string(&config("retry", "ext", true, Platform::Universal, "1.0.0")).unwrap()
+        ),
+    )
+    .unwrap();
+    let latest_configs = vec![config("retry", "ext", true, Platform::Universal, "1.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let prefetcher = RecordingPrefetcher::new(HashMap::from([(
+        "retry.ext@1.0.0".to_string(),
+        record("retry", "ext", true, Platform::Universal, "1.0.0", "sha256-retry"),
+    )]));
+    let marketplace = FakeMarketplace::new(latest);
+    test_pipeline(&env.config, &marketplace, &prefetcher).run().unwrap();
+
+    assert_eq!(prefetcher.calls(), vec!["retry.ext@1.0.0".to_string()]);
+    let cached = read_jsonl_cache(&env.cache_file("open-vsx")).unwrap();
+    assert_eq!(cached.len(), 1);
+    assert_eq!(cached[0].publisher.0, "retry");
 }

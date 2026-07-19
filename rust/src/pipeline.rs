@@ -1,6 +1,6 @@
 use crate::cache::{
-    cache_path, debug_path, read_jsonl_cache, tmp_path, write_json_pretty, write_jsonl,
-    write_jsonl_cache,
+    append_jsonl_record, cache_path, debug_path, read_jsonl_cache, read_tmp_fetched,
+    rewrite_jsonl_atomic, tmp_path, write_json_pretty, write_jsonl, write_jsonl_cache,
 };
 use crate::config::{AppConfig, SiteConfig};
 use crate::logging::{lifecycle_field, Lifecycle};
@@ -8,22 +8,65 @@ use crate::marketplace::{
     MarketplaceClient, MarketplaceFetchResult, ObservedPlatformMap, ReleaseConfigFetchResult,
     ReleaseLookupFailure,
 };
-use crate::model::{CacheRecord, ExtensionConfig, Name, Platform, Publisher, Target};
+use crate::model::{CacheRecord, ExtensionConfig, IsRelease, Name, Platform, Publisher, Target};
 use crate::prefetch::{is_expected_missing_artifact_error, PrefetchLogContext, Prefetcher};
-use anyhow::Context;
-use rayon::prelude::*;
-use rayon::ThreadPoolBuilder;
+use anyhow::{bail, Context};
 use serde::Serialize;
 use std::collections::{HashMap, HashSet};
-use std::sync::Mutex;
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+use std::sync::{mpsc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 use tracing::dispatcher::Dispatch;
+
+const CHECKPOINT_RECORD_INTERVAL: usize = 100;
+const CHECKPOINT_TIME_INTERVAL: Duration = Duration::from_secs(5);
 
 pub struct Pipeline<'a, M, P> {
     pub config: &'a AppConfig,
     pub marketplace: &'a M,
     pub prefetcher: &'a P,
+    pub shutdown: &'a ShutdownSignal,
+}
+
+pub struct ShutdownSignal {
+    requested: AtomicBool,
+    logged: AtomicBool,
+}
+
+impl ShutdownSignal {
+    pub const fn new() -> Self {
+        Self {
+            requested: AtomicBool::new(false),
+            logged: AtomicBool::new(false),
+        }
+    }
+
+    pub fn request(&self) {
+        self.requested.store(true, Ordering::SeqCst);
+    }
+
+    fn is_requested(&self) -> bool {
+        self.requested.load(Ordering::SeqCst)
+    }
+
+    fn note_if_requested(&self, site: &str) -> bool {
+        let requested = self.is_requested();
+        if requested && !self.logged.swap(true, Ordering::SeqCst) {
+            tracing::warn!(
+                stage = site,
+                lifecycle = lifecycle_field(Lifecycle::Info),
+                summary = "Shutdown requested"
+            );
+        }
+        requested
+    }
+}
+
+impl Default for ShutdownSignal {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -42,6 +85,87 @@ struct StageCounts {
 struct SkippedOpenVsxPrefetch {
     config: ExtensionConfig,
     observed_platforms: Vec<Platform>,
+}
+
+#[derive(Debug)]
+struct PrefetchState {
+    fetched_records: Vec<CacheRecord>,
+    failed_records: Vec<ExtensionConfig>,
+    discarded_older_than_cache_count: usize,
+    interrupted: bool,
+}
+
+#[derive(Debug)]
+enum PrefetchMessage {
+    Fetched(CacheRecord),
+    Failed(ExtensionConfig),
+}
+
+struct CheckpointState<'a> {
+    site: &'a str,
+    cache_file: &'a std::path::Path,
+    stable_base: Vec<CacheRecord>,
+    accepted_records: Vec<CacheRecord>,
+    accepted_since_checkpoint: usize,
+    last_checkpoint_at: Instant,
+}
+
+impl<'a> CheckpointState<'a> {
+    fn new(
+        site: &'a str,
+        cache_file: &'a std::path::Path,
+        stable_base: Vec<CacheRecord>,
+        accepted_records: Vec<CacheRecord>,
+    ) -> Self {
+        Self {
+            site,
+            cache_file,
+            stable_base,
+            accepted_records,
+            accepted_since_checkpoint: 0,
+            last_checkpoint_at: Instant::now(),
+        }
+    }
+
+    fn accepted_records(&self) -> &[CacheRecord] {
+        &self.accepted_records
+    }
+
+    fn push(&mut self, record: CacheRecord) {
+        self.accepted_records.push(record);
+        self.accepted_since_checkpoint += 1;
+    }
+
+    fn should_checkpoint(&self) -> bool {
+        self.accepted_since_checkpoint >= CHECKPOINT_RECORD_INTERVAL
+            || self.last_checkpoint_at.elapsed() >= CHECKPOINT_TIME_INTERVAL
+    }
+
+    fn checkpoint(&mut self, reason: &str) -> anyhow::Result<usize> {
+        tracing::info!(
+            stage = self.site,
+            lifecycle = lifecycle_field(Lifecycle::Start),
+            summary = %format!(
+                "Checkpoint start: reason={} accepted_fetched_records={}",
+                reason,
+                self.accepted_records.len()
+            )
+        );
+        let merged = merge_for_cache(&self.stable_base, &self.accepted_records);
+        write_jsonl_cache(self.cache_file, &merged)?;
+        tracing::info!(
+            stage = self.site,
+            lifecycle = lifecycle_field(Lifecycle::Finish),
+            summary = %format!(
+                "Checkpoint finish: reason={} merged cache count={}",
+                reason,
+                merged.len()
+            )
+        );
+        self.accepted_since_checkpoint = 0;
+        self.last_checkpoint_at = Instant::now();
+        Ok(merged.len())
+    }
 }
 
 struct ProgressTracker<'a> {
@@ -107,7 +231,7 @@ impl<'a> ProgressTracker<'a> {
 
 impl<'a, M, P> Pipeline<'a, M, P>
 where
-    M: MarketplaceClient,
+    M: MarketplaceClient + Sync,
     P: Prefetcher + Sync,
 {
     pub fn run(&self) -> anyhow::Result<()> {
@@ -139,6 +263,9 @@ where
         );
 
         for target in enabled_targets {
+            if self.shutdown.note_if_requested("run") {
+                return interrupted_error();
+            }
             self.run_target(target)?;
         }
 
@@ -161,8 +288,12 @@ where
 
     fn run_target(&self, target: Target) -> anyhow::Result<()> {
         let site = site_name(&target);
+        if self.shutdown.note_if_requested(site) {
+            return interrupted_error();
+        }
         let cache_file = cache_path(&self.config.data_dir, site);
         let cached = read_jsonl_cache(&cache_file)?;
+        let cached_by_latest = first_record_by_latest_key(&cached);
 
         tracing::info!(
             stage = site,
@@ -176,6 +307,9 @@ where
         );
 
         let latest = self.fetch_latest(target.clone())?;
+        if self.shutdown.note_if_requested(site) {
+            return interrupted_error();
+        }
         let latest_prerelease_ids = prerelease_ids_from_latest(&latest.configs);
 
         let release = if matches!(target, Target::OpenVsx) {
@@ -193,6 +327,9 @@ where
         } else {
             ReleaseConfigFetchResult::default()
         };
+        if self.shutdown.note_if_requested(site) {
+            return interrupted_error();
+        }
 
         let latest_config_count = latest.configs.len();
         let mut fetched = latest.configs;
@@ -246,32 +383,31 @@ where
             &fetched_not_cached,
         )?;
 
-        let (fetched_records, failed_records) =
-            self.prefetch_missing(target.clone(), site, site_config(self.config, &target), &fetched_not_cached);
-
-        write_jsonl(
-            &tmp_path(&self.config.data_dir, "fetched", site),
-            &fetched_records,
+        let resumed_records = self.resume_prefetched_records(site, &cached_by_latest, &fetched_not_cached)?;
+        let stable_base = cache_checkpoint_base(&cached_not_fetched, &cached_present_and_fetched);
+        let prefetch = self.prefetch_missing(
+            target.clone(),
+            site,
+            site_config(self.config, &target),
+            &fetched_not_cached,
+            resumed_records,
+            stable_base.clone(),
+            &cache_file,
+            &cached_by_latest,
         )?;
-        write_jsonl(
-            &tmp_path(&self.config.data_dir, "failed", site),
-            &failed_records,
-        )?;
+        let fetched_records = prefetch.fetched_records;
+        let failed_records = prefetch.failed_records;
+        let discarded_older_than_cache_count = prefetch.discarded_older_than_cache_count;
+        let merged = merge_for_cache(&stable_base, &fetched_records);
 
-        let mut merged = Vec::new();
-        merged.extend(fetched_records.clone());
-        merged.extend(cached_not_fetched.clone());
-        merged.extend(cached_present_and_fetched.clone());
-        merged = dedup_latest(merged);
-        merged.sort_by(|a, b| {
-            a.publisher
-                .0
-                .cmp(&b.publisher.0)
-                .then(a.name.0.cmp(&b.name.0))
-                .then(a.is_release.cmp(&b.is_release))
-                .then(a.platform.cmp(&b.platform))
-                .then(a.version.cmp(&b.version))
-        });
+        tracing::info!(
+            stage = site,
+            lifecycle = lifecycle_field(Lifecycle::Info),
+            summary = %format!(
+                "Discarded older-than-cache count={}",
+                discarded_older_than_cache_count
+            )
+        );
 
         tracing::info!(
             stage = site,
@@ -309,6 +445,9 @@ where
             merged_cache_count: merged.len(),
         };
         self.log_target_summary(&target, site, counts);
+        if prefetch.interrupted {
+            return interrupted_error();
+        }
         tracing::info!(
             stage = site,
             lifecycle = lifecycle_field(Lifecycle::Finish),
@@ -323,121 +462,171 @@ where
         site: &str,
         site_config: &SiteConfig,
         fetched_not_cached: &[ExtensionConfig],
-    ) -> (Vec<CacheRecord>, Vec<ExtensionConfig>) {
+        resumed_records: Vec<CacheRecord>,
+        stable_base: Vec<CacheRecord>,
+        cache_file: &std::path::Path,
+        cached_by_latest: &HashMap<(Publisher, Name, IsRelease, Platform), CacheRecord>,
+    ) -> anyhow::Result<PrefetchState> {
         tracing::info!(
             stage = site,
             lifecycle = lifecycle_field(Lifecycle::Start),
             summary = "Prefetch start"
         );
+        let resumed_keys: HashSet<_> = resumed_records.iter().map(CacheRecord::key_full).collect();
+        let pending_configs = fetched_not_cached
+            .iter()
+            .filter(|config| !resumed_keys.contains(&config.key_full()))
+            .cloned()
+            .collect::<Vec<_>>();
+        let fetched_tmp = tmp_path(&self.config.data_dir, "fetched", site);
+        let failed_tmp = tmp_path(&self.config.data_dir, "failed", site);
+        rewrite_jsonl_atomic(&failed_tmp, &Vec::<ExtensionConfig>::new())?;
         let progress = Mutex::new(ProgressTracker::new(
             site,
             self.config.processed_logger_delay,
-            fetched_not_cached.len(),
+            pending_configs.len(),
         ));
         let dispatch = current_dispatch();
-        let pool = ThreadPoolBuilder::new()
-            .num_threads(site_config.effective_artifact_prefetch_threads())
-            .build()
-            .expect("prefetch thread pool should build");
-        let results = pool.install(|| {
-            fetched_not_cached
-                .par_iter()
-                .map(|config| {
-                    tracing::dispatcher::with_default(&dispatch, || {
-                        let context = PrefetchLogContext::new(target.clone(), config);
-                        tracing::debug!(
-                            stage = site,
-                            lifecycle = lifecycle_field(Lifecycle::Info),
-                            summary = "Prefetch start",
-                            extension = %context.extension_id,
-                            version = %context.version,
-                            platform = %context.platform,
-                            target = %context.target,
-                            url = %context.url,
-                        );
-                        let result = self
-                            .prefetcher
-                            .prefetch(target.clone(), config, self.config.request_response_timeout);
-                        match result {
-                            Ok(record) => {
-                                tracing::info!(
-                                    stage = site,
-                                    lifecycle = lifecycle_field(Lifecycle::Info),
-                                    summary = "Prefetch success",
-                                    extension = %context.extension_id,
-                                    version = %context.version,
-                                    platform = %context.platform,
-                                    target = %context.target,
-                                    url = %context.url,
-                                );
-                                progress.lock().unwrap().record(false);
-                                Ok(record)
-                            }
-                            Err(err) => {
-                                if is_expected_missing_artifact_error(&err) {
-                                    tracing::warn!(
-                                        stage = site,
-                                        lifecycle = lifecycle_field(Lifecycle::Info),
-                                        summary = "Prefetch failed",
-                                        extension = %context.extension_id,
-                                        version = %context.version,
-                                        platform = %context.platform,
-                                        target = %context.target,
-                                        url = %context.url,
-                                        error = %format!("{err:#}"),
-                                    );
-                                } else {
-                                    tracing::error!(
-                                        stage = site,
-                                        lifecycle = lifecycle_field(Lifecycle::Info),
-                                        summary = "Prefetch failed",
-                                        extension = %context.extension_id,
-                                        version = %context.version,
-                                        platform = %context.platform,
-                                        target = %context.target,
-                                        url = %context.url,
-                                        error = %format!("{err:#}"),
-                                    );
-                                }
-                                progress.lock().unwrap().record(true);
-                                Err(config.clone())
-                            }
+        let mut checkpoint = CheckpointState::new(site, cache_file, stable_base, resumed_records);
+        let next_index = AtomicUsize::new(0);
+        let (tx, rx) = mpsc::channel();
+
+        thread::scope(|scope| {
+            for _ in 0..site_config.effective_artifact_prefetch_threads() {
+                let tx = tx.clone();
+                let dispatch = dispatch.clone();
+                let target = target.clone();
+                let next_index = &next_index;
+                let pending_configs = &pending_configs;
+                let progress = &progress;
+                scope.spawn(move || {
+                    loop {
+                        if self.shutdown.is_requested() {
+                            break;
                         }
-                    })
-                })
-                .collect::<Vec<_>>()
-        });
-        let mut fetched_records = Vec::new();
-        let mut failed_records = Vec::new();
-        for result in results {
-            match result {
-                Ok(record) => fetched_records.push(record),
-                Err(config) => failed_records.push(config),
+                        let index = next_index.fetch_add(1, Ordering::SeqCst);
+                        let Some(config) = pending_configs.get(index) else {
+                            break;
+                        };
+                        tracing::dispatcher::with_default(&dispatch, || {
+                            let context = PrefetchLogContext::new(target.clone(), config);
+                            tracing::debug!(
+                                stage = site,
+                                lifecycle = lifecycle_field(Lifecycle::Info),
+                                summary = "Prefetch start",
+                                extension = %context.extension_id,
+                                version = %context.version,
+                                platform = %context.platform,
+                                target = %context.target,
+                                url = %context.url,
+                            );
+                            let result = self.prefetcher.prefetch(
+                                target.clone(),
+                                config,
+                                self.config.request_response_timeout,
+                            );
+                            match result {
+                                Ok(record) => {
+                                    tracing::info!(
+                                        stage = site,
+                                        lifecycle = lifecycle_field(Lifecycle::Info),
+                                        summary = "Prefetch success",
+                                        extension = %context.extension_id,
+                                        version = %context.version,
+                                        platform = %context.platform,
+                                        target = %context.target,
+                                        url = %context.url,
+                                    );
+                                    progress.lock().unwrap().record(false);
+                                    let _ = tx.send(PrefetchMessage::Fetched(record));
+                                }
+                                Err(err) => {
+                                    if is_expected_missing_artifact_error(&err) {
+                                        tracing::warn!(
+                                            stage = site,
+                                            lifecycle = lifecycle_field(Lifecycle::Info),
+                                            summary = "Prefetch failed",
+                                            extension = %context.extension_id,
+                                            version = %context.version,
+                                            platform = %context.platform,
+                                            target = %context.target,
+                                            url = %context.url,
+                                            error = %format!("{err:#}"),
+                                        );
+                                    } else {
+                                        tracing::error!(
+                                            stage = site,
+                                            lifecycle = lifecycle_field(Lifecycle::Info),
+                                            summary = "Prefetch failed",
+                                            extension = %context.extension_id,
+                                            version = %context.version,
+                                            platform = %context.platform,
+                                            target = %context.target,
+                                            url = %context.url,
+                                            error = %format!("{err:#}"),
+                                        );
+                                    }
+                                    progress.lock().unwrap().record(true);
+                                    let _ = tx.send(PrefetchMessage::Failed(config.clone()));
+                                }
+                            }
+                        });
+                    }
+                });
             }
-        }
-        progress.lock().unwrap().finish();
-        if failed_records.is_empty() {
-            tracing::info!(
-                stage = site,
-                lifecycle = lifecycle_field(Lifecycle::Finish),
-                summary = %format!(
-                    "Prefetch finish: fetched records={} failed records={}",
-                    fetched_records.len(),
-                    failed_records.len()
-                )
-            );
-        } else {
-            tracing::warn!(
-                stage = site,
-                lifecycle = lifecycle_field(Lifecycle::Finish),
-                summary = %format!(
-                    "Prefetch finish: fetched records={} failed records={}",
-                    fetched_records.len(),
-                    failed_records.len()
-                )
-            );
-        }
-        (fetched_records, failed_records)
+            drop(tx);
+            let mut failed_records = Vec::new();
+            let mut discarded_older_than_cache_count = 0;
+            while let Ok(message) = rx.recv() {
+                match message {
+                    PrefetchMessage::Fetched(record) => {
+                        if is_older_than_cached(&record, cached_by_latest) {
+                            discarded_older_than_cache_count += 1;
+                            continue;
+                        }
+                        append_jsonl_record(&fetched_tmp, &record)?;
+                        checkpoint.push(record);
+                        if checkpoint.should_checkpoint() {
+                            checkpoint.checkpoint("periodic")?;
+                        }
+                    }
+                    PrefetchMessage::Failed(config) => {
+                        append_jsonl_record(&failed_tmp, &config)?;
+                        failed_records.push(config);
+                    }
+                }
+            }
+            progress.lock().unwrap().finish();
+            let interrupted = self.shutdown.note_if_requested(site);
+            checkpoint.checkpoint(if interrupted { "shutdown" } else { "final" })?;
+            if failed_records.is_empty() {
+                tracing::info!(
+                    stage = site,
+                    lifecycle = lifecycle_field(Lifecycle::Finish),
+                    summary = %format!(
+                        "Prefetch finish: fetched records={} failed records={}",
+                        checkpoint.accepted_records().len(),
+                        failed_records.len()
+                    )
+                );
+            } else {
+                tracing::warn!(
+                    stage = site,
+                    lifecycle = lifecycle_field(Lifecycle::Finish),
+                    summary = %format!(
+                        "Prefetch finish: fetched records={} failed records={}",
+                        checkpoint.accepted_records().len(),
+                        failed_records.len()
+                    )
+                );
+            }
+            Ok(PrefetchState {
+                fetched_records: checkpoint.accepted_records,
+                failed_records,
+                discarded_older_than_cache_count,
+                interrupted,
+            })
+        })
     }
 
     fn fetch_latest(&self, target: Target) -> anyhow::Result<MarketplaceFetchResult> {
@@ -634,6 +823,47 @@ where
         }
         unreachable!("retry loop must return")
     }
+
+    fn resume_prefetched_records(
+        &self,
+        site: &str,
+        cached_by_latest: &HashMap<(Publisher, Name, IsRelease, Platform), CacheRecord>,
+        fetched_not_cached: &[ExtensionConfig],
+    ) -> anyhow::Result<Vec<CacheRecord>> {
+        let fetched_tmp = tmp_path(&self.config.data_dir, "fetched", site);
+        let requested_keys = fetched_not_cached
+            .iter()
+            .map(ExtensionConfig::key_full)
+            .collect::<HashSet<_>>();
+        let mut seen = HashSet::new();
+        let mut resumed_records = Vec::new();
+        let mut discarded_older_than_cache_count = 0;
+        for record in read_tmp_fetched(&fetched_tmp)? {
+            if !requested_keys.contains(&record.key_full()) || !seen.insert(record.key_full()) {
+                continue;
+            }
+            if is_older_than_cached(&record, cached_by_latest) {
+                discarded_older_than_cache_count += 1;
+                continue;
+            }
+            resumed_records.push(record);
+        }
+        tracing::info!(
+            stage = site,
+            lifecycle = lifecycle_field(Lifecycle::Info),
+            summary = %format!("Resumed fetched-record count={}", resumed_records.len())
+        );
+        tracing::info!(
+            stage = site,
+            lifecycle = lifecycle_field(Lifecycle::Info),
+            summary = %format!(
+                "Discarded older-than-cache count={}",
+                discarded_older_than_cache_count
+            )
+        );
+        rewrite_jsonl_atomic(&fetched_tmp, &resumed_records)?;
+        Ok(resumed_records)
+    }
 }
 
 fn current_dispatch() -> Dispatch {
@@ -676,6 +906,59 @@ fn dedup_latest(records: Vec<CacheRecord>) -> Vec<CacheRecord> {
         }
     }
     out
+}
+
+fn cache_checkpoint_base(
+    cached_not_fetched: &[CacheRecord],
+    cached_present_and_fetched: &[CacheRecord],
+) -> Vec<CacheRecord> {
+    let mut stable_base = Vec::new();
+    stable_base.extend(cached_not_fetched.iter().cloned());
+    stable_base.extend(cached_present_and_fetched.iter().cloned());
+    stable_base
+}
+
+fn merge_for_cache(stable_base: &[CacheRecord], fetched_records: &[CacheRecord]) -> Vec<CacheRecord> {
+    let mut merged = Vec::new();
+    merged.extend(fetched_records.iter().cloned());
+    merged.extend(stable_base.iter().cloned());
+    merged = dedup_latest(merged);
+    merged.sort_by(|a, b| {
+        a.publisher
+            .0
+            .cmp(&b.publisher.0)
+            .then(a.name.0.cmp(&b.name.0))
+            .then(a.is_release.cmp(&b.is_release))
+            .then(a.platform.cmp(&b.platform))
+            .then(a.version.cmp(&b.version))
+    });
+    merged
+}
+
+fn first_record_by_latest_key(
+    records: &[CacheRecord],
+) -> HashMap<(Publisher, Name, IsRelease, Platform), CacheRecord> {
+    let mut by_latest = HashMap::new();
+    for record in records {
+        by_latest
+            .entry(record.key_latest())
+            .or_insert_with(|| record.clone());
+    }
+    by_latest
+}
+
+fn is_older_than_cached(
+    record: &CacheRecord,
+    cached_by_latest: &HashMap<(Publisher, Name, IsRelease, Platform), CacheRecord>,
+) -> bool {
+    cached_by_latest
+        .get(&record.key_latest())
+        .map(|cached| record.version < cached.version)
+        .unwrap_or(false)
+}
+
+fn interrupted_error<T>() -> anyhow::Result<T> {
+    bail!("interrupted by shutdown signal")
 }
 
 fn merge_observed_platform_maps(

@@ -62,3 +62,36 @@ fn jsonl_cache_handles_empty_whitespace_and_malformed_input() {
     std::fs::create_dir(&unreadable).unwrap();
     assert!(read_jsonl_cache(&unreadable).is_err());
 }
+
+#[test]
+fn jsonl_cache_atomic_rewrite_replaces_file_without_truncation() {
+    let env = TestEnv::new();
+    let path = env.data_dir.join("cache-atomic.jsonl");
+
+    write_jsonl_cache(
+        &path,
+        &[record("one", "ext", true, Platform::Universal, "1.0.0", "sha256-one")],
+    )
+    .unwrap();
+    write_jsonl_cache(
+        &path,
+        &[
+            record("two", "ext", true, Platform::Universal, "2.0.0", "sha256-two"),
+            record(
+                "three",
+                "ext",
+                true,
+                Platform::Universal,
+                "3.0.0",
+                "sha256-three",
+            ),
+        ],
+    )
+    .unwrap();
+
+    let rewritten = read_jsonl_cache(&path).unwrap();
+    assert_eq!(rewritten.len(), 2);
+    assert_eq!(rewritten[0].publisher.0, "two");
+    assert_eq!(rewritten[1].publisher.0, "three");
+    assert!(!path.with_file_name("cache-atomic.jsonl.tmp").exists());
+}

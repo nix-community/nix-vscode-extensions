@@ -1,6 +1,6 @@
 use crate::model::{CacheRecord, ExtensionConfig};
 use anyhow::Context;
-use std::fs::{self, File};
+use std::fs::{self, File, OpenOptions};
 use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
 
@@ -27,6 +27,50 @@ pub fn ensure_empty_file(path: &Path) -> anyhow::Result<()> {
 }
 
 pub fn read_jsonl_cache(path: &Path) -> anyhow::Result<Vec<CacheRecord>> {
+    read_jsonl(path)
+}
+
+pub fn read_tmp_fetched(path: &Path) -> anyhow::Result<Vec<CacheRecord>> {
+    read_jsonl(path)
+}
+
+pub fn write_jsonl_cache(path: &Path, records: &[CacheRecord]) -> anyhow::Result<()> {
+    rewrite_jsonl_atomic(path, records)
+}
+
+pub fn append_jsonl_record<T: serde::Serialize>(path: &Path, value: &T) -> anyhow::Result<()> {
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    let mut file = OpenOptions::new().create(true).append(true).open(path)?;
+    writeln!(file, "{}", serde_json::to_string(value)?)?;
+    file.flush()?;
+    file.sync_data()?;
+    Ok(())
+}
+
+pub fn rewrite_jsonl_atomic<T: serde::Serialize>(path: &Path, values: &[T]) -> anyhow::Result<()> {
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    let file_name = path
+        .file_name()
+        .and_then(|name| name.to_str())
+        .unwrap_or("tmp.jsonl");
+    let tmp_path = path.with_file_name(format!("{file_name}.tmp"));
+    {
+        let mut file = File::create(&tmp_path)?;
+        for value in values {
+            writeln!(file, "{}", serde_json::to_string(value)?)?;
+        }
+        file.flush()?;
+        file.sync_data()?;
+    }
+    fs::rename(&tmp_path, path)?;
+    Ok(())
+}
+
+fn read_jsonl<T: serde::de::DeserializeOwned>(path: &Path) -> anyhow::Result<Vec<T>> {
     ensure_empty_file(path)?;
     let file = File::open(path).with_context(|| format!("failed to open {}", path.display()))?;
     let reader = BufReader::new(file);
@@ -39,17 +83,6 @@ pub fn read_jsonl_cache(path: &Path) -> anyhow::Result<Vec<CacheRecord>> {
         out.push(serde_json::from_str(&line)?);
     }
     Ok(out)
-}
-
-pub fn write_jsonl_cache(path: &Path, records: &[CacheRecord]) -> anyhow::Result<()> {
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent)?;
-    }
-    let mut file = File::create(path)?;
-    for record in records {
-        writeln!(file, "{}", serde_json::to_string(record)?)?;
-    }
-    Ok(())
 }
 
 pub fn write_jsonl<T: serde::Serialize>(path: &Path, values: &[T]) -> anyhow::Result<()> {
@@ -86,4 +119,3 @@ pub fn records_from_configs(configs: &[ExtensionConfig]) -> Vec<CacheRecord> {
         })
         .collect()
 }
-

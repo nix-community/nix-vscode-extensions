@@ -3,11 +3,12 @@ mod pipeline;
 use nix_vscode_extensions_updater::cache::{read_jsonl_cache, tmp_path};
 use nix_vscode_extensions_updater::marketplace::MarketplaceFetchResult;
 use nix_vscode_extensions_updater::model::{CacheRecord, ExtensionConfig, Platform, Target};
+use nix_vscode_extensions_updater::pipeline::ShutdownSignal;
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use pipeline::support::{
-    assert_has_line, assert_line_prefix, assert_no_line, capture_pipeline_logs, config,
-    count_lines, find_line, info_lines, observed_platforms_for, record, warn_lines,
-    FakeMarketplace, FakePrefetcher, TestEnv,
+    assert_has_line, assert_line_prefix, assert_no_line, capture_pipeline_logs,
+    capture_pipeline_logs_with_shutdown, config, count_lines, find_line, info_lines,
+    observed_platforms_for, record, warn_lines, FakeMarketplace, FakePrefetcher, TestEnv,
 };
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -81,6 +82,41 @@ impl Prefetcher for KeyedPrefetcher {
             Some(Err(err)) => Err(anyhow::anyhow!(err.to_string())),
             None => panic!("missing keyed prefetch response"),
         }
+    }
+}
+
+struct ShutdownAfterFirstPrefetcher {
+    shutdown: Arc<ShutdownSignal>,
+    calls: AtomicUsize,
+}
+
+impl ShutdownAfterFirstPrefetcher {
+    fn new(shutdown: Arc<ShutdownSignal>) -> Self {
+        Self {
+            shutdown,
+            calls: AtomicUsize::new(0),
+        }
+    }
+}
+
+impl Prefetcher for ShutdownAfterFirstPrefetcher {
+    fn prefetch(
+        &self,
+        _target: Target,
+        config: &ExtensionConfig,
+        _timeout_seconds: u64,
+    ) -> anyhow::Result<CacheRecord> {
+        if self.calls.fetch_add(1, Ordering::SeqCst) == 0 {
+            self.shutdown.request();
+        }
+        Ok(record(
+            &config.publisher.0,
+            &config.name.0,
+            config.is_release.0,
+            config.platform,
+            config.version.raw(),
+            &format!("sha256-{}", config.version.raw()),
+        ))
     }
 }
 
@@ -480,4 +516,39 @@ fn warn_summary_lines_appear_when_failure_counts_are_non_zero() {
     assert!(warn_lines.iter().any(|line| line.contains("Processed (1/1) extensions failures=1")));
     assert!(warn_lines.iter().any(|line| line.contains("Prefetch finish: fetched records=0 failed records=1")));
     assert!(warn_lines.iter().any(|line| line.contains("Fetched records count=0 failed records count=1 merged cache count=0")));
+}
+
+#[test]
+fn shutdown_logs_checkpoint_and_prevents_later_targets() {
+    let env = TestEnv::new();
+    let mut app_config = env.config.clone();
+    app_config.vscode_marketplace.enable = true;
+    app_config.open_vsx.artifact_prefetch_threads = Some(1);
+    let latest_configs = vec![
+        config("one", "ext", true, Platform::Universal, "1.0.0"),
+        config("two", "ext", true, Platform::Universal, "2.0.0"),
+    ];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let shutdown = Arc::new(ShutdownSignal::new());
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = ShutdownAfterFirstPrefetcher::new(shutdown.clone());
+    let (logs, result) = capture_pipeline_logs_with_shutdown(
+        &app_config,
+        &marketplace,
+        &prefetcher,
+        shutdown.as_ref(),
+    );
+
+    assert!(result.unwrap_err().to_string().contains("interrupted by shutdown signal"));
+    let lines = logs.lines();
+    assert_has_line(&lines, "[vscode-marketplace] Shutdown requested");
+    assert_has_line(&lines, "[vscode-marketplace] Checkpoint start: reason=shutdown");
+    assert_has_line(&lines, "[vscode-marketplace] Checkpoint finish: reason=shutdown");
+    assert_has_line(&lines, "[vscode-marketplace] Resumed fetched-record count=0");
+    assert_no_line(&lines, "[open-vsx] Target start");
 }
