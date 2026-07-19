@@ -259,7 +259,7 @@ fn prefetch_failures_log_context() {
 }
 
 #[test]
-fn prefetch_success_logs_at_debug_only() {
+fn prefetch_success_logs_at_info() {
     let env = TestEnv::new();
     let latest_configs = vec![config("ok", "ext", true, Platform::Universal, "1.0.0")];
     let latest = MarketplaceFetchResult {
@@ -284,13 +284,13 @@ fn prefetch_success_logs_at_debug_only() {
 
     let lines = logs.lines();
     assert_line_prefix(&lines, "DEBUG", "[open-vsx] Prefetch start extension=ok.ext");
-    assert_line_prefix(&lines, "DEBUG", "[open-vsx] Prefetch success extension=ok.ext");
+    assert_line_prefix(&lines, "INFO", "[open-vsx] Prefetch success extension=ok.ext");
     assert_eq!(
         info_lines(&lines)
             .into_iter()
             .filter(|line| line.contains("Prefetch success"))
             .count(),
-        0
+        1
     );
 }
 

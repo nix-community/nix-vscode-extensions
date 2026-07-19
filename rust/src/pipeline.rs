@@ -351,7 +351,7 @@ where
                             .prefetch(target.clone(), config, self.config.request_response_timeout);
                         match result {
                             Ok(record) => {
-                                tracing::debug!(
+                                tracing::info!(
                                     stage = site,
                                     lifecycle = lifecycle_field(Lifecycle::Info),
                                     summary = "Prefetch success",
