@@ -9,7 +9,7 @@ use crate::marketplace::{
     ReleaseLookupFailure,
 };
 use crate::model::{CacheRecord, ExtensionConfig, Name, Platform, Publisher, Target};
-use crate::prefetch::{PrefetchLogContext, Prefetcher};
+use crate::prefetch::{is_expected_missing_artifact_error, PrefetchLogContext, Prefetcher};
 use anyhow::Context;
 use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
@@ -87,12 +87,21 @@ impl<'a> ProgressTracker<'a> {
     }
 
     fn log(&self) {
-        tracing::info!(
-            stage = self.site,
-            lifecycle = lifecycle_field(Lifecycle::Info),
-            summary = %format!("Processed ({}/{}) extensions", self.processed, self.total),
-            failures = self.failures,
-        );
+        if self.failures > 0 {
+            tracing::warn!(
+                stage = self.site,
+                lifecycle = lifecycle_field(Lifecycle::Info),
+                summary = %format!("Processed ({}/{}) extensions", self.processed, self.total),
+                failures = self.failures,
+            );
+        } else {
+            tracing::info!(
+                stage = self.site,
+                lifecycle = lifecycle_field(Lifecycle::Info),
+                summary = %format!("Processed ({}/{}) extensions", self.processed, self.total),
+                failures = self.failures,
+            );
+        }
     }
 }
 
@@ -365,17 +374,31 @@ where
                                 Ok(record)
                             }
                             Err(err) => {
-                                tracing::error!(
-                                    stage = site,
-                                    lifecycle = lifecycle_field(Lifecycle::Info),
-                                    summary = "Prefetch failed",
-                                    extension = %context.extension_id,
-                                    version = %context.version,
-                                    platform = %context.platform,
-                                    target = %context.target,
-                                    url = %context.url,
-                                    error = %format!("{err:#}"),
-                                );
+                                if is_expected_missing_artifact_error(&err) {
+                                    tracing::warn!(
+                                        stage = site,
+                                        lifecycle = lifecycle_field(Lifecycle::Info),
+                                        summary = "Prefetch failed",
+                                        extension = %context.extension_id,
+                                        version = %context.version,
+                                        platform = %context.platform,
+                                        target = %context.target,
+                                        url = %context.url,
+                                        error = %format!("{err:#}"),
+                                    );
+                                } else {
+                                    tracing::error!(
+                                        stage = site,
+                                        lifecycle = lifecycle_field(Lifecycle::Info),
+                                        summary = "Prefetch failed",
+                                        extension = %context.extension_id,
+                                        version = %context.version,
+                                        platform = %context.platform,
+                                        target = %context.target,
+                                        url = %context.url,
+                                        error = %format!("{err:#}"),
+                                    );
+                                }
                                 progress.lock().unwrap().record(true);
                                 Err(config.clone())
                             }
@@ -393,15 +416,27 @@ where
             }
         }
         progress.lock().unwrap().finish();
-        tracing::info!(
-            stage = site,
-            lifecycle = lifecycle_field(Lifecycle::Finish),
-            summary = %format!(
-                "Prefetch finish: fetched records={} failed records={}",
-                fetched_records.len(),
-                failed_records.len()
-            )
-        );
+        if failed_records.is_empty() {
+            tracing::info!(
+                stage = site,
+                lifecycle = lifecycle_field(Lifecycle::Finish),
+                summary = %format!(
+                    "Prefetch finish: fetched records={} failed records={}",
+                    fetched_records.len(),
+                    failed_records.len()
+                )
+            );
+        } else {
+            tracing::warn!(
+                stage = site,
+                lifecycle = lifecycle_field(Lifecycle::Finish),
+                summary = %format!(
+                    "Prefetch finish: fetched records={} failed records={}",
+                    fetched_records.len(),
+                    failed_records.len()
+                )
+            );
+        }
         (fetched_records, failed_records)
     }
 
@@ -468,7 +503,7 @@ where
             )
         );
         if !result.failures.is_empty() {
-            tracing::info!(
+            tracing::warn!(
                 stage = site,
                 lifecycle = lifecycle_field(Lifecycle::Info),
                 summary = %format!("Release lookups failed for {} extensions", result.failures.len())
@@ -481,7 +516,7 @@ where
     }
 
     fn log_release_failure(&self, site: &str, failure: &ReleaseLookupFailure) {
-        tracing::debug!(
+        tracing::warn!(
             stage = site,
             lifecycle = lifecycle_field(Lifecycle::Info),
             summary = "Release lookup failure",
@@ -516,14 +551,25 @@ where
                 counts.cached_not_fetched_count
             )
         );
-        tracing::info!(
-            stage = site,
-            lifecycle = lifecycle_field(Lifecycle::Info),
-            summary = %format!(
-                "Fetched records count={} failed records count={} merged cache count={}",
-                counts.fetched_record_count, counts.failed_record_count, counts.merged_cache_count
-            )
-        );
+        if counts.failed_record_count == 0 {
+            tracing::info!(
+                stage = site,
+                lifecycle = lifecycle_field(Lifecycle::Info),
+                summary = %format!(
+                    "Fetched records count={} failed records count={} merged cache count={}",
+                    counts.fetched_record_count, counts.failed_record_count, counts.merged_cache_count
+                )
+            );
+        } else {
+            tracing::warn!(
+                stage = site,
+                lifecycle = lifecycle_field(Lifecycle::Info),
+                summary = %format!(
+                    "Fetched records count={} failed records count={} merged cache count={}",
+                    counts.fetched_record_count, counts.failed_record_count, counts.merged_cache_count
+                )
+            );
+        }
     }
 
     fn retry<T, F>(&self, site: &str, phase: &str, mut op: F) -> anyhow::Result<T>

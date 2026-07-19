@@ -2,7 +2,9 @@ mod support;
 
 use nix_vscode_extensions_updater::model::Platform;
 use nix_vscode_extensions_updater::model::Target;
-use nix_vscode_extensions_updater::prefetch::{NixPrefetcher, PrefetchCommandOutput};
+use nix_vscode_extensions_updater::prefetch::{
+    is_expected_missing_artifact_error, NixPrefetcher, PrefetchCommandOutput,
+};
 use std::io;
 use support::config;
 
@@ -41,6 +43,26 @@ fn prefetch_reports_non_zero_exit_with_context() {
     assert!(message.contains("exited with status 17"));
     assert!(message.contains("stderr=prefetch exploded"));
     assert_prefetch_context(&message);
+    assert!(!is_expected_missing_artifact_error(&err));
+}
+
+#[test]
+fn prefetch_classifies_http_404_as_expected_missing_artifact() {
+    let config = config("broken", "ext", true, Platform::LinuxX64, "2.0.0");
+
+    let err = NixPrefetcher::prefetch_with_output(
+        Target::OpenVsx,
+        &config,
+        Ok(PrefetchCommandOutput {
+            status_code: Some(1),
+            stdout: Vec::new(),
+            stderr: b"error: unable to download 'https://open-vsx.org/file.vsix': HTTP error 404"
+                .to_vec(),
+        }),
+    )
+    .unwrap_err();
+
+    assert!(is_expected_missing_artifact_error(&err));
 }
 
 #[test]

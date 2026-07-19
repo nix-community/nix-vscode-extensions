@@ -146,6 +146,13 @@ pub fn info_lines(lines: &[String]) -> Vec<&str> {
         .collect()
 }
 
+pub fn warn_lines(lines: &[String]) -> Vec<&str> {
+    lines.iter()
+        .filter(|line| line.starts_with("WARN "))
+        .map(String::as_str)
+        .collect()
+}
+
 pub fn error_lines(lines: &[String]) -> Vec<&str> {
     lines.iter()
         .filter(|line| line.starts_with("ERROR"))

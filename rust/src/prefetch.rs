@@ -188,3 +188,10 @@ pub fn parse_prefetch_output(output: &str) -> anyhow::Result<String> {
     let response: PrefetchResponse = serde_json::from_str(output)?;
     Ok(response.hash)
 }
+
+pub fn is_expected_missing_artifact_error(err: &anyhow::Error) -> bool {
+    err.chain().any(|cause| {
+        let message = cause.to_string();
+        message.contains("HTTP error 404") || message.contains("status code 404")
+    })
+}

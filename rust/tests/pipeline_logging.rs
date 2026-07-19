@@ -6,8 +6,8 @@ use nix_vscode_extensions_updater::model::{CacheRecord, ExtensionConfig, Platfor
 use nix_vscode_extensions_updater::prefetch::Prefetcher;
 use pipeline::support::{
     assert_has_line, assert_line_prefix, assert_no_line, capture_pipeline_logs, config,
-    count_lines, find_line, info_lines, observed_platforms_for, record, FakeMarketplace,
-    FakePrefetcher, TestEnv,
+    count_lines, find_line, info_lines, observed_platforms_for, record, warn_lines,
+    FakeMarketplace, FakePrefetcher, TestEnv,
 };
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -235,7 +235,9 @@ fn prefetch_failures_log_context() {
         pages_fetched: vec!["page-1".into()],
     };
     let marketplace = FakeMarketplace::new(latest);
-    let prefetcher = FakePrefetcher::new(vec![Err(anyhow::anyhow!("stderr exploded"))]);
+    let prefetcher = FakePrefetcher::new(vec![Err(anyhow::anyhow!(
+        "nix store prefetch-file exited with status 1 for extension=broken.ext version=2.0.0 platform=linux-x64 target=open-vsx url=https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/broken.ext-2.0.0@linux-x64.vsix stderr=error: unable to download 'https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/broken.ext-2.0.0@linux-x64.vsix': HTTP error 404"
+    ))]);
     let (logs, result) = capture_pipeline_logs(&debug_config, &marketplace, &prefetcher);
     result.unwrap();
 
@@ -256,6 +258,7 @@ fn prefetch_failures_log_context() {
     assert!(failure.contains(
         "url=https://open-vsx.org/api/broken/ext/linux-x64/2.0.0/file/broken.ext-2.0.0@linux-x64.vsix"
     ));
+    assert_line_prefix(&lines, "WARN", "[open-vsx] Prefetch failed extension=broken.ext");
 }
 
 #[test]
@@ -327,6 +330,17 @@ fn progress_logging_emits_updates_and_failure_counts() {
     let lines = logs.lines();
     assert_has_line(&lines, "[open-vsx] Processed (1/2) extensions failures=0");
     assert_has_line(&lines, "[open-vsx] Processed (2/2) extensions failures=1");
+    assert_line_prefix(&lines, "WARN", "[open-vsx] Processed (2/2) extensions failures=1");
+    assert_line_prefix(
+        &lines,
+        "WARN",
+        "[open-vsx] Prefetch finish: fetched records=1 failed records=1",
+    );
+    assert_line_prefix(
+        &lines,
+        "WARN",
+        "[open-vsx] Fetched records count=1 failed records count=1 merged cache count=1",
+    );
 }
 
 #[test]
@@ -419,4 +433,51 @@ fn concurrent_prefetch_collects_successes_and_failures_once_each() {
         .collect();
     assert_eq!(failed.len(), 1);
     assert_eq!(failed[0].publisher.0, "two");
+}
+
+#[test]
+fn infrastructure_prefetch_failures_still_log_at_error() {
+    let env = TestEnv::new();
+    let mut debug_config = env.config.clone();
+    debug_config.log_severity = nix_vscode_extensions_updater::config::LogSeverity::Debug;
+    let latest_configs = vec![config("broken", "ext", true, Platform::LinuxX64, "2.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(vec![Err(anyhow::anyhow!("failed to spawn nix"))]);
+    let (logs, result) = capture_pipeline_logs(&debug_config, &marketplace, &prefetcher);
+    result.unwrap();
+
+    let lines = logs.lines();
+    assert_line_prefix(&lines, "ERROR", "[open-vsx] Prefetch failed extension=broken.ext");
+}
+
+#[test]
+fn warn_summary_lines_appear_when_failure_counts_are_non_zero() {
+    let env = TestEnv::new();
+    let mut app_config = env.config.clone();
+    app_config.processed_logger_delay = 0;
+    let latest_configs = vec![config("one", "ext", true, Platform::Universal, "1.0.0")];
+    let latest = MarketplaceFetchResult {
+        observed_platforms: observed_platforms_for(&latest_configs),
+        configs: latest_configs,
+        pages_failed: vec![],
+        pages_fetched: vec!["page-1".into()],
+    };
+    let marketplace = FakeMarketplace::new(latest);
+    let prefetcher = FakePrefetcher::new(vec![Err(anyhow::anyhow!(
+        "nix store prefetch-file exited with status 1 for extension=one.ext version=1.0.0 platform=universal target=open-vsx url=https://open-vsx.org/api/one/ext/1.0.0/file/one.ext-1.0.0.vsix stderr=error: unable to download 'https://open-vsx.org/api/one/ext/1.0.0/file/one.ext-1.0.0.vsix': HTTP error 404"
+    ))]);
+    let (logs, result) = capture_pipeline_logs(&app_config, &marketplace, &prefetcher);
+    result.unwrap();
+
+    let lines = logs.lines();
+    let warn_lines = warn_lines(&lines);
+    assert!(warn_lines.iter().any(|line| line.contains("Processed (1/1) extensions failures=1")));
+    assert!(warn_lines.iter().any(|line| line.contains("Prefetch finish: fetched records=0 failed records=1")));
+    assert!(warn_lines.iter().any(|line| line.contains("Fetched records count=0 failed records count=1 merged cache count=0")));
 }

@@ -147,10 +147,10 @@ fn release_config_partial_failures_are_preserved_and_logged() {
     result.unwrap();
 
     let lines = logs.lines();
-    assert_has_line(&lines, "[open-vsx] Release lookups failed for 1 extensions");
+    assert_line_prefix(&lines, "WARN", "[open-vsx] Release lookups failed for 1 extensions");
     assert_line_prefix(
         &lines,
-        "DEBUG",
+        "WARN",
         "[open-vsx] Release lookup failure extension=need.ext error=boom release lookup",
     );
 }
