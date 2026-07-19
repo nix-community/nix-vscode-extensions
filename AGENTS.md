@@ -22,4 +22,4 @@
 - `rust` for tracked files under `rust/`
 - Mixed-area commits are not allowed. A commit must touch files from exactly one mapped scope.
 - Include a body that explains the change.
-- Include a `Co-authored-by: <assistant/provider name> <current model name> <model-specific no-reply email>` line.
+- Include a `Co-authored-by: OpenAI GPT 5.4 medium <noreply@openai.com>` line.
