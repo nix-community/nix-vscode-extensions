@@ -25,7 +25,7 @@ pkgs.vscode-with-extensions.override {
       vlanguage.vscode-vlang
       rust-lang.rust-analyzer
       ms-dotnettools.vscode-dotnet-runtime
-      mkhl.direnv
+      # mkhl.direnv
       jnoortheen.nix-ide
       tamasfe.even-better-toml
       ms-python.python
