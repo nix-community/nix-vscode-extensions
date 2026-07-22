@@ -55,7 +55,7 @@ You can search for an extension in the repository history:
 
 ## Example
 
-The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [`vscode-with-extensions`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/with-extensions.nix).
+The [`./nix/vscode-with-extensions.nix`](./nix/vscode-with-extensions.nix) provides an example of [`vscode-with-extensions`](https://github.com/NixOS/nixpkgs/blob/a16c3fde2ffeab7f6326f50f460aaffde7ae066d/pkgs/applications/editors/vscode/with-extensions.nix).
 
 This package is `VS Code` with a couple of extensions.
 
@@ -161,7 +161,7 @@ Prerequisites:
 #### Get `nixpkgs` with flakes
 
 ```console
-nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a7ecea3deccfbdbf22945a89984fcc5a169da8aa
+nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a16c3fde2ffeab7f6326f50f460aaffde7ae066d
 ```
 
 #### Get `nixpkgs` without flakes
@@ -170,7 +170,7 @@ nix-repl> nixpkgs = builtins.getFlake github:NixOS/nixpkgs/a7ecea3deccfbdbf22945
 nix-repl> nixpkgs = (import (builtins.fetchGit {
             url = "https://github.com/NixOS/nixpkgs";
             ref = "refs/heads/master";
-            rev = "a7ecea3deccfbdbf22945a89984fcc5a169da8aa";
+            rev = "a16c3fde2ffeab7f6326f50f460aaffde7ae066d";
           }))
 ```
 
@@ -457,12 +457,12 @@ These extensions are disabled via [`./nix/removed.nix`](./nix/removed.nix).
 ### Override an extension
 
 Most of the extensions have the [`override`](https://nixos.org/manual/nixpkgs/stable/#sec-pkg-override) attribute.
-This attribute allows you to override the arguments passed to [`buildVscodeMarketplaceExtension`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/extensions/vscode-utils.nix#L91-L116).
+This attribute allows you to override the arguments passed to [`buildVscodeMarketplaceExtension`](https://github.com/NixOS/nixpkgs/blob/a16c3fde2ffeab7f6326f50f460aaffde7ae066d/pkgs/applications/editors/vscode/extensions/vscode-utils.nix#L91-L116).
 
 Also see:
 
-- [`buildVscodeExtension`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/pkgs/applications/editors/vscode/extensions/vscode-utils.nix#L21-L86)
-- [`extendMkDerivation`](https://github.com/NixOS/nixpkgs/blob/a7ecea3deccfbdbf22945a89984fcc5a169da8aa/lib/customisation.nix#L764-L903)
+- [`buildVscodeExtension`](https://github.com/NixOS/nixpkgs/blob/a16c3fde2ffeab7f6326f50f460aaffde7ae066d/pkgs/applications/editors/vscode/extensions/vscode-utils.nix#L21-L86)
+- [`extendMkDerivation`](https://github.com/NixOS/nixpkgs/blob/a16c3fde2ffeab7f6326f50f460aaffde7ae066d/lib/customisation.nix#L764-L903)
 
 Example:
 
