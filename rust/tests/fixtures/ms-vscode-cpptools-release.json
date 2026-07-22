@@ -1,0 +1,61 @@
+{
+  "results": [
+    {
+      "extensions": [
+        {
+          "flags": "validated, public",
+          "extensionName": "cpptools",
+          "publisher": {
+            "publisherName": "ms-vscode"
+          },
+          "versions": [
+            {
+              "version": "1.32.2",
+              "targetPlatform": "linux-arm64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.67.0"
+                }
+              ]
+            },
+            {
+              "version": "1.32.2",
+              "targetPlatform": "linux-x64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.67.0"
+                }
+              ]
+            },
+            {
+              "version": "1.32.2",
+              "targetPlatform": "darwin-x64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.67.0"
+                }
+              ]
+            },
+            {
+              "version": "1.32.2",
+              "targetPlatform": "darwin-arm64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.67.0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

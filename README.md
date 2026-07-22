@@ -62,9 +62,9 @@ nix repl
 
 You can search for an extension in the repository history:
 
-- Get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.json`
+- Get commits containing the extension: `git log -S '"copilot"' --oneline data/cache/vscode-marketplace-latest.jsonl`
 - Select a commit, e.g.: `0910d1e`
-- Search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.json`
+- Search in that commit: `git grep '"copilot"' 0910d1e -- data/cache/vscode-marketplace-latest.jsonl`
 
 ## Example
 
@@ -502,8 +502,8 @@ See:
 See:
 
 - [`./data/cache`](./data/cache)
-- [`./data/cache/open-vsx-latest.json`](./data/cache/open-vsx-latest.json)
-- [`./data/cache/vscode-marketplace-latest.json`](./data/cache/vscode-marketplace-latest.json)
+- [`./data/cache/open-vsx-latest.jsonl`](./data/cache/open-vsx-latest.jsonl)
+- [`./data/cache/vscode-marketplace-latest.jsonl`](./data/cache/vscode-marketplace-latest.jsonl)
 
 ### Cache object example
 
@@ -588,7 +588,7 @@ These functions don't modify the license of ([unfree](https://wiki.nixos.org/wik
 
 ### Haskell script
 
-See the [`./haskell/README.md`](./haskell/README.md#quick-start).
+See the [`./rust/README.md`](./rust/README.md#quick-start).
 
 ## Troubleshooting
 

@@ -1,0 +1,72 @@
+{
+  "results": [
+    {
+      "extensions": [
+        {
+          "flags": "validated, public",
+          "extensionName": "rust-analyzer",
+          "publisher": {
+            "publisherName": "rust-lang"
+          },
+          "versions": [
+            {
+              "version": "0.3.2971",
+              "targetPlatform": null,
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.93.0"
+                }
+              ]
+            },
+            {
+              "version": "0.3.2971",
+              "targetPlatform": "linux-x64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.93.0"
+                }
+              ]
+            },
+            {
+              "version": "0.3.2971",
+              "targetPlatform": "linux-arm64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.93.0"
+                }
+              ]
+            },
+            {
+              "version": "0.3.2971",
+              "targetPlatform": "darwin-x64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.93.0"
+                }
+              ]
+            },
+            {
+              "version": "0.3.2971",
+              "targetPlatform": "darwin-arm64",
+              "flags": "validated",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.93.0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

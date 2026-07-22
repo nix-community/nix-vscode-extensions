@@ -1,0 +1,409 @@
+{
+  "results": [
+    {
+      "extensions": [
+        {
+          "flags": "validated, public",
+          "extensionName": "ada",
+          "publisher": {
+            "publisherName": "AdaCore"
+          },
+          "versions": [
+            {
+              "version": "2026.3.202607051",
+              "targetPlatform": "darwin-arm64",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Getstarted",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Support",
+                  "value": "https://github.com/AdaCore/ada_language_server/issues"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Learn",
+                  "value": "https://github.com/AdaCore/ada_language_server#readme"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Source",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.GitHub",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.88.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionDependencies",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionPack",
+                  "value": "ms-vscode.cpptools,ms-sarifvscode.sarif-viewer,ms-vscode.live-server"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.LocalizedLanguages",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionKind",
+                  "value": "workspace"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Content.Pricing",
+                  "value": "Free"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.EnabledApiProposals",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExecutesCode",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.VsixSha256",
+                  "value": "0e12429dc0e92e5bd95644d6abd0532468457ea50304904e44818b48e6f68a43"
+                }
+              ]
+            },
+            {
+              "version": "2026.3.202607051",
+              "targetPlatform": "linux-arm64",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Getstarted",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Support",
+                  "value": "https://github.com/AdaCore/ada_language_server/issues"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Learn",
+                  "value": "https://github.com/AdaCore/ada_language_server#readme"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Source",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.GitHub",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.88.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionDependencies",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionPack",
+                  "value": "ms-vscode.cpptools,ms-sarifvscode.sarif-viewer,ms-vscode.live-server"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.LocalizedLanguages",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionKind",
+                  "value": "workspace"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Content.Pricing",
+                  "value": "Free"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.EnabledApiProposals",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExecutesCode",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.VsixSha256",
+                  "value": "6163ade5b805aa699d1a63a88e20ab20f36eb2358305acf0313421a2ecc4a5cc"
+                }
+              ]
+            },
+            {
+              "version": "2026.3.202607051",
+              "targetPlatform": "win32-x64",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Getstarted",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Support",
+                  "value": "https://github.com/AdaCore/ada_language_server/issues"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Learn",
+                  "value": "https://github.com/AdaCore/ada_language_server#readme"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Source",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.GitHub",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.88.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionDependencies",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionPack",
+                  "value": "ms-vscode.cpptools,ms-sarifvscode.sarif-viewer,ms-vscode.live-server"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.LocalizedLanguages",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionKind",
+                  "value": "workspace"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Content.Pricing",
+                  "value": "Free"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.EnabledApiProposals",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExecutesCode",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.VsixSha256",
+                  "value": "d7d101de008be442c64f3ab4e07ed399c25838234f008c1e3cfdcfb1d983b035"
+                }
+              ]
+            },
+            {
+              "version": "2026.3.202607051",
+              "targetPlatform": "linux-x64",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Getstarted",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Support",
+                  "value": "https://github.com/AdaCore/ada_language_server/issues"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Learn",
+                  "value": "https://github.com/AdaCore/ada_language_server#readme"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Source",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.GitHub",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.88.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionDependencies",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionPack",
+                  "value": "ms-vscode.cpptools,ms-sarifvscode.sarif-viewer,ms-vscode.live-server"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.LocalizedLanguages",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionKind",
+                  "value": "workspace"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Content.Pricing",
+                  "value": "Free"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.EnabledApiProposals",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExecutesCode",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.VsixSha256",
+                  "value": "bcc41e6df9b002842377fe69341a64021c1a197bc8a10cf9ba5f03aa76ba0287"
+                }
+              ]
+            },
+            {
+              "version": "2026.3.202607051",
+              "targetPlatform": "darwin-x64",
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Getstarted",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Support",
+                  "value": "https://github.com/AdaCore/ada_language_server/issues"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Learn",
+                  "value": "https://github.com/AdaCore/ada_language_server#readme"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Source",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.GitHub",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.88.0"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionDependencies",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionPack",
+                  "value": "ms-vscode.cpptools,ms-sarifvscode.sarif-viewer,ms-vscode.live-server"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.LocalizedLanguages",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionKind",
+                  "value": "workspace"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Content.Pricing",
+                  "value": "Free"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.EnabledApiProposals",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExecutesCode",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.VsixSha256",
+                  "value": "c93f37233fadace6866db4a03d001d8a7fbe12c2c86b06e7c17bcedf04317684"
+                }
+              ]
+            },
+            {
+              "version": "24.0.6",
+              "targetPlatform": null,
+              "properties": [
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Getstarted",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Support",
+                  "value": "https://github.com/AdaCore/ada_language_server/issues"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Learn",
+                  "value": "https://github.com/AdaCore/ada_language_server#readme"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.Source",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Links.GitHub",
+                  "value": "https://github.com/AdaCore/ada_language_server.git"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.Engine",
+                  "value": "^1.83.1"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown",
+                  "value": "true"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionDependencies",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionPack",
+                  "value": "ms-vscode.cpptools"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.LocalizedLanguages",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.ExtensionKind",
+                  "value": "workspace"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.Content.Pricing",
+                  "value": "Free"
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Code.EnabledApiProposals",
+                  "value": ""
+                },
+                {
+                  "key": "Microsoft.VisualStudio.Services.VsixSha256",
+                  "value": "a0686f56e84b0447271cb63e22db6e6820adcd32fc11cff1c22a63510851a81b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

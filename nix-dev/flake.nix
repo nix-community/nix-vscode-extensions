@@ -59,6 +59,8 @@
           ...
         }:
         let
+          rust = import ../rust;
+
           devshells.default = {
             commandGroups = {
               tools = [
@@ -86,8 +88,6 @@
               value
           );
 
-          haskell = import ../haskell;
-
           packages = {
             default = import ../nix/vscode-with-extensions.nix {
               inherit system nixpkgs;
@@ -95,7 +95,7 @@
           }
           // mkShellApps {
             updateExtensions = {
-              text = ''${lib.meta.getExe haskell.outputs.packages.${system}.default} "$@"'';
+              text = ''${lib.meta.getExe rust.outputs.packages.${system}.default} "$@"'';
               meta.description = "Update extensions";
             };
             updateExtraExtensions = {
@@ -125,7 +125,7 @@
                 (mkSaveFromGC {
                   inputs = {
                     self.inputs = inputs;
-                    inherit haskell;
+                    inherit rust;
                   };
                   derivations = [
                     self'.packages.updateExtensions
