@@ -12,6 +12,19 @@ We have a permission from MS to use a crawler on their API (see the [discussion]
 
 Don't abuse this flake!
 
+## Limitations
+
+### Supported platforms
+
+- `x86_64-linux`
+- `aarch64-linux`
+- `aarch64-darwin`
+
+Also see:
+
+- [Platforms](#platforms)
+- [`x86_64-darwin` was dropped in `nixpkgs` 26.11](https://github.com/NixOS/nixpkgs/blob/c1fe1675b8c7d1dfa4a9752fc36e2657d67d46be/doc/release-notes/rl-2611.section.md#backward-incompatibilities-sec-nixpkgs-release-2611-incompatibilities)
+
 ## Prerequisites
 
 ### Read NixOS wiki
@@ -225,7 +238,13 @@ nix-repl> extensions = nix-vscode-extensions.extensions.${system}
 
 We provide attrsets that contain both universal and platform-specific extensions.
 
-We use a reasonable mapping between the sites target platforms and Nix-supported platforms (see `systemPlatform` in [`./nix/overlay.nix`](./nix/overlay.nix), [issue](https://github.com/nix-community/nix-vscode-extensions/issues/20)).
+We use a reasonable mapping between the sites target platforms and Nix-supported platforms.
+See:
+
+- [Supported platforms](#supported-platforms)
+- [`nix/systemPlatform.nix`](./nix/systemPlatform.nix)
+- [`numberToPlatform`] in [`nix/overlay.nix`](./nix/overlay.nix)
+- [Discussion on the platform mapping](https://github.com/nix-community/nix-vscode-extensions/issues/20)
 
 ### The `extensions` attrset
 
