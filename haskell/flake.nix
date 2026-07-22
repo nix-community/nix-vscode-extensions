@@ -3,7 +3,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/0c2094806c9e542f31785ef3569ab9e900e3ce9c";
     nixpkgs-lib.url = "github:nixos/nixpkgs/0c2094806c9e542f31785ef3569ab9e900e3ce9c?dir=lib";
-    systems.url = "github:nix-systems/default";
+    systems.url = "github:nix-systems/default/future-26.11";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs-lib";
