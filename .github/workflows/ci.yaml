@@ -24,8 +24,8 @@ jobs:
         os:
           - ubuntu-24.04
           - ubuntu-24.04-arm
-          - macos-14
           - macos-15
+          - macos-26
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
@@ -150,8 +150,8 @@ jobs:
         os:
           - ubuntu-24.04
           - ubuntu-24.04-arm
-          - macos-14
           - macos-15
+          - macos-26
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout this repo

@@ -70,7 +70,9 @@ data Platform
     PUniversal
   | PLinux_x64
   | PLinux_arm64
-  | PDarwin_x64
+  -- | PDarwin_x64
+  -- darwin-x64 is dropped
+  -- See https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11
   | PDarwin_arm64
   deriving stock (Generic, Eq, Ord, Enum, Bounded)
   deriving anyclass (Hashable)
@@ -139,14 +141,14 @@ _PlatformHumanReadable = prism' embed_ match_
     PUniversal -> "universal"
     PLinux_x64 -> "linux-x64"
     PLinux_arm64 -> "linux-arm64"
-    PDarwin_x64 -> "darwin-x64"
+    -- PDarwin_x64 -> "darwin-x64"
     PDarwin_arm64 -> "darwin-arm64"
   match_ :: Text -> Maybe Platform
   match_ x
     | x == embed_ PUniversal = Just PUniversal
     | x == embed_ PLinux_x64 = Just PLinux_x64
     | x == embed_ PLinux_arm64 = Just PLinux_arm64
-    | x == embed_ PDarwin_x64 = Just PDarwin_x64
+    -- | x == embed_ PDarwin_x64 = Just PDarwin_x64
     | x == embed_ PDarwin_arm64 = Just PDarwin_arm64
     | otherwise = Nothing
 
@@ -158,14 +160,14 @@ _PlatformNumeric = prism' embed_ match_
     PUniversal -> 0
     PLinux_x64 -> 1
     PLinux_arm64 -> 2
-    PDarwin_x64 -> 3
+    -- PDarwin_x64 -> 3
     PDarwin_arm64 -> 4
   match_ :: Int -> Maybe Platform
   match_ x
     | x == embed_ PUniversal = Just PUniversal
     | x == embed_ PLinux_x64 = Just PLinux_x64
     | x == embed_ PLinux_arm64 = Just PLinux_arm64
-    | x == embed_ PDarwin_x64 = Just PDarwin_x64
+    -- | x == embed_ PDarwin_x64 = Just PDarwin_x64
     | x == embed_ PDarwin_arm64 = Just PDarwin_arm64
     | otherwise = Nothing
 
