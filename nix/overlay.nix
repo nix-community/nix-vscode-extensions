@@ -16,10 +16,10 @@ let
     {
       "0" = platformUniversal;
       "1" = systemPlatform.x86_64-linux;
+      "2" = systemPlatform.aarch64-linux;
       # x86_64-darwin is dropped
       # See https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11
       # "3" = systemPlatform.x86_64-darwin;
-      "2" = systemPlatform.aarch64-linux;
       "4" = systemPlatform.aarch64-darwin;
     }
     .${builtins.toString number} or (builtins.throw "Platform not recognized: ${numberStr}");
