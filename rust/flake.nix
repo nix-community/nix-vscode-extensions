@@ -32,8 +32,10 @@
             packages = with pkgs; [
               cargo
               rustc
+              rustPlatform.rustLibSrc
               rust-analyzer
             ];
+            RUST_SRC_PATH = pkgs.rustPlatform.rustLibSrc;
           };
 
           packages.default =
