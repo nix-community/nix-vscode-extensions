@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/a16c3fde2ffeab7f6326f50f460aaffde7ae066d";
+    nixpkgs.url = "github:nixos/nixpkgs/0c2094806c9e542f31785ef3569ab9e900e3ce9c";
     cache-nix-action = {
       url = "github:nix-community/cache-nix-action/e2cf51da82e145785f5db595f553f7cbc2ca54df";
       flake = false;

@@ -1,8 +1,8 @@
 {
   description = "srid/haskell-template: Nix template for Haskell projects";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/a16c3fde2ffeab7f6326f50f460aaffde7ae066d";
-    nixpkgs-lib.url = "github:nixos/nixpkgs/a16c3fde2ffeab7f6326f50f460aaffde7ae066d?dir=lib";
+    nixpkgs.url = "github:nixos/nixpkgs/0c2094806c9e542f31785ef3569ab9e900e3ce9c";
+    nixpkgs-lib.url = "github:nixos/nixpkgs/0c2094806c9e542f31785ef3569ab9e900e3ce9c?dir=lib";
     systems.url = "github:nix-systems/default";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
