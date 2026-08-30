@@ -16,9 +16,9 @@ semver.tests
       .success;
     expected = false;
   };
-  "test: ms-vscode.cpptools passes only on Linux" = {
+  "test: ms-vscode.cpptools passes both on Linux and macOS" = {
     expr = (builtins.tryEval vscode-marketplace.ms-vscode.cpptools).success;
-    expected = builtins.elem system lib.platforms.linux;
+    expected = true;
   };
   "test: ms-python.vscode-pylance passes if not unfree" = {
     expr = (builtins.tryEval (resetLicense vscode-marketplace.ms-python.vscode-pylance)).success;
