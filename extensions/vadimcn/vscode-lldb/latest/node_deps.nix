@@ -19,6 +19,17 @@ buildNpmPackage {
 
   inherit npmDepsHash;
 
+  postPatch = ''
+    # In 1.12.3, upstream bumped the `@vscode/test-cli` and `@vscode/test-electron`
+    # devDependencies in `package.json` without updating `package-lock.json`,
+    # which makes `npm ci` try to fetch missing packuments offline
+    # and fail with `ENOTCACHED`.
+    # Align `package.json` with `package-lock.json`.
+    substituteInPlace package.json \
+      --replace-warn '"@vscode/test-cli": "^0.0.15"' '"@vscode/test-cli": "^0.0.11"' \
+      --replace-warn '"@vscode/test-electron": "^3.1.0"' '"@vscode/test-electron": "^2.5.2"'
+  '';
+
   nativeBuildInputs = [
     python3
     pkg-config
