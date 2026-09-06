@@ -319,7 +319,7 @@
 , {"p":"Al-rimi","n":"tomcat","r":1,"P":0,"v":"4.2.5","e":"^1.56.0","h":"sha256-sHGyR27C9h7gH2xmqzu3kHwwNZ5G3GynEY0DDUwdjcA="}
 , {"p":"AlDuncanson","n":"react-hooks-snippets","r":1,"P":0,"v":"3.1.3","e":"^1.85.0","h":"sha256-BfcIP6gRjfV4ksnJsweLh2kFgDp0M5Y2krXcwNHa7Hc="}
 , {"p":"AlFontal","n":"rmd-notebooks-vscode","r":1,"P":0,"v":"0.5.0","e":"^1.88.0","h":"sha256-ZlrXUkLS8y5F5Vt2BdKWTscVF7YXvfbc6eXzMWGFWeM="}
-, {"p":"AlayaNeW","n":"aladdin","r":1,"P":0,"v":"3.0.3","e":"^1.93.0","h":"sha256-LpuWe1rN//PQd7KwYuo1OiQmbt8VUIQY6EF44R0acDQ="}
+, {"p":"AlayaNeW","n":"aladdin","r":1,"P":0,"v":"3.1.0","e":"^1.93.0","h":"sha256-J7pNxpLEEixnCA6WG7Zn1sTjw665fA4NFwtitAQ0hGU="}
 , {"p":"AlbertoBarrago","n":"git-oracle","r":1,"P":0,"v":"1.0.9","e":"^1.84.0","h":"sha256-gF+3twEKA3fw73Ze0hBE9tpUCiVtKID5xvi58L+KZy0="}
 , {"p":"AlbertoRota","n":"dasshboard","r":1,"P":0,"v":"2.2.5","e":"^1.70.0","h":"sha256-UXOJ1PRvY5qdVfHB219r0gnafHMwbLaY5XUWW2VfvSg="}
 , {"p":"Albertweiku","n":"pe-elf-viewer","r":1,"P":0,"v":"2.1.2","e":"^1.60.0","h":"sha256-mYQBZMBcVDQlvuOrtwhLbyyoz4zSzkKrescDFN0Ei1o="}
@@ -2682,7 +2682,7 @@
 , {"p":"Leandix","n":"leandix-atlas","r":1,"P":0,"v":"1.0.6","e":"^1.90.0","h":"sha256-T7e8suLIyb/fyaPzWdRYURQoFSaimKbVlefed9/OLWs="}
 , {"p":"Leandix","n":"leandix-atlas-editor","r":1,"P":0,"v":"1.0.2","e":"^1.90.0","h":"sha256-/c5V9l+KVeyXvuNhOC4SnkxYZGeYbONpXbchysSYPJE="}
 , {"p":"LeandixCortex","n":"leandix-cortex","r":1,"P":0,"v":"0.1.0","e":"^1.85.0","h":"sha256-c2aM6tES1kdpRnco1XQdBvJCZU3rGR8wWOhl2tEDR7w="}
-, {"p":"LeandroDettmer","n":"fivedollars","r":1,"P":0,"v":"0.0.35","e":"^1.85.0","h":"sha256-xWeRSH/aJWcOlACslqSZ8Hn5HKOLOANVpRZsIm9i1Bo="}
+, {"p":"LeandroDettmer","n":"fivedollars","r":1,"P":0,"v":"0.0.36","e":"^1.85.0","h":"sha256-9tuKjn/z+j+q7qDTUTsrT2Zmvo0/RRh2hBU+64uQaes="}
 , {"p":"Leathong","n":"openscad-language-support","r":1,"P":0,"v":"2.0.1","e":"^1.90.0","h":"sha256-aM900TrVxf23lMLqky7kQ/lem1E7gwuGkaRvAxZoozc="}
 , {"p":"LedgerHQ","n":"ledger-dev-tools","r":1,"P":0,"v":"2.6.0","e":"^1.103.0","h":"sha256-3hveCvUJo9kCblSiLUL7vxrM6TDkseIPbu60JWuE2Gg="}
 , {"p":"LeeGunHee","n":"quick-search","r":1,"P":0,"v":"0.2.2","e":"^1.80.0","h":"sha256-+byKSKNw+mejiiMux7eoCURV3avRx4JJEvg9wLlQIaA="}
@@ -16030,7 +16030,7 @@
 , {"p":"renpy","n":"language-renpy","r":1,"P":0,"v":"805.1.0","e":"^1.103.0","h":"sha256-uJQl38DTXFTAKwVU5eTmdT/wsFRnvDkjqfUyVtHYWwI="}
 , {"p":"renux918","n":"renux-project-actions","r":1,"P":0,"v":"1.2.0","e":"^1.85.0","h":"sha256-wzEN3yCRTiASRS4OymC/JmNanj2WKoSqzR6X/6kjLGk="}
 , {"p":"renxzen","n":"google-colab-theme","r":1,"P":0,"v":"0.0.3","e":"^1.56.0","h":"sha256-wH7my9yd5HCfuiLX031gPy1dVO+DagG5dYFrxQvPV/E="}
-, {"p":"repetere","n":"gpdoc","r":1,"P":0,"v":"3.14.2","e":"^1.95.0","h":"sha256-Gbg7h3gibZfy60iKkOg2LcRdNHh7Gt9l6UvfiS7gjWo="}
+, {"p":"repetere","n":"gpdoc","r":1,"P":0,"v":"3.14.7","e":"^1.95.0","h":"sha256-vWKPRr0ZlOmNnGMpRdp5Bn5y4Vo1VYqYqL0tBiiQp9c="}
 , {"p":"repltile","n":"repltile-clojure-repl","r":1,"P":0,"v":"1.0.1-beta","e":"^1.80.0","h":"sha256-U+hSYRTcR87TykjRAQ/zftZSR4BrOyucCkbf9N5OWMc="}
 , {"p":"repo-copilot","n":"repo-copilot","r":1,"P":0,"v":"0.0.1","e":"^1.85.0","h":"sha256-F70mNvMdCdSLvynbfHNBqpjayaEHTkC0NWvQF60drE4="}
 , {"p":"repoloom","n":"repoloom","r":1,"P":0,"v":"0.1.0","e":"^1.85.0","h":"sha256-lS1NIohOYAJJ4KoDV2cVFPIBtSk31iqDfR32K+frmQg="}
