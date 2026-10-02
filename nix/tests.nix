@@ -1,7 +1,9 @@
 {
   system,
   nixpkgs,
-  vscode-marketplace ? (import ./extensions.nix { inherit system nixpkgs; }).vscode-marketplace,
+  extensions ? import ./extensions.nix { inherit system nixpkgs; },
+  vscode-marketplace ? extensions.vscode-marketplace,
+  vscode-marketplace-release ? extensions.vscode-marketplace-release,
   lib ? nixpkgs.lib,
   resetLicense ? import ./resetLicense.nix,
   semver ? import ./semver.nix { inherit lib; },
@@ -45,6 +47,13 @@ semver.tests
         extensions = pkgs.nix-vscode-extensions;
       in
       (builtins.tryEval extensions.vscode-marketplace.b4dm4n.nixpkgs-fmt).success;
+    expected = true;
+  };
+  "test: haskell.haskell prefers a release newer than the pre-release" = {
+    # https://github.com/nix-community/nix-vscode-extensions/issues/184
+    expr =
+      semver.compareSemVer vscode-marketplace.haskell.haskell.version vscode-marketplace-release.haskell.haskell.version
+      >= 0;
     expected = true;
   };
 }

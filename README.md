@@ -257,17 +257,17 @@ This attrset contains several attributes described in the sections [Extension at
 
 ### Extension attrsets
 
-We have no reliable way to choose the semantically latest cached version of an extension (see [cache files](#cache-files)).
+For each extension, the [cache files](#cache-files) contain at most one version for each combination of these properties:
 
-Therefore, we used the following method:
+- whether a version is pre-release or release;
+- whether a version is universal or platform-specific.
 
-1. We chose properties of extension versions that may predict whether a version is the latest one:
-   - whether a version is pre-release or release;
-   - whether a version is universal or platform-specific.
-1. We prioritized all combinations of property values.
+We used the following method to choose a version:
+
 1. We created several attrsets of extensions with constraints on possible combinations of property values.
 1. We named attrsets to show additional constraints. E.g., `vscode-marketplace*` attrsets contain only extensions from the `VS Code Marketplace`.
-1. In each attrset, for each extension whose versions could be in that attrset, we provided a single highest-priority version of that extension.
+1. In each attrset, for each extension whose versions could be in that attrset, we provided the [SemVer](https://semver.org/)-highest version of that extension. So, a pre-release version older than a release version is not chosen.
+1. When several versions are equally high, we chose the one whose combination of property values has the highest priority.
 
 The next sections show permitted property combinations and their priorities in corresponding attrsets (1 - the highest priority).
 
