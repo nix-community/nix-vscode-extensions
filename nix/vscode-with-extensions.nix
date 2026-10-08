@@ -32,6 +32,7 @@ pkgs.vscode-with-extensions.override {
       drmerfy.overtype
       marlinfirmware.auto-build
       jj-view.jj-view
+      timonwong.shellcheck
     ])
     ++ (lib.lists.optionals (builtins.elem system lib.platforms.linux) (
       with extensions.vscode-marketplace;
