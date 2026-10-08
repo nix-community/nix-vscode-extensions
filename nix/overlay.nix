@@ -48,6 +48,25 @@ let
       compareSemVer vscodeVersion (lib.strings.removePrefix "^" engineVersion) >= 0
     else
       compareSemVer vscodeVersion engineVersion == 0;
+  # Compare two candidate versions of an extension
+  # by SemVer, then by `isRelease` (pre-release first),
+  # then by platform (platform-specific first).
+  compareCandidates =
+    a: b:
+    let
+      cVersion = compareSemVer a.mktplcRef.version b.mktplcRef.version;
+      boolToInt = x: if x then 1 else 0;
+      cIsRelease = lib.compare (boolToInt b.isRelease) (boolToInt a.isRelease);
+      cPlatform = lib.compare (boolToInt (b.platform == platformUniversal)) (
+        boolToInt (a.platform == platformUniversal)
+      );
+    in
+    if cVersion != 0 then
+      cVersion
+    else if cIsRelease != 0 then
+      cIsRelease
+    else
+      cPlatform;
   checkVSCodeVersion =
     { doCheckVSCodeVersion, vscodeVersion }:
     (x: if doCheckVSCodeVersion then isCompatibleVersion vscodeVersion x.engineVersion else true);
@@ -234,10 +253,16 @@ let
                   ''
                 else
                   value;
-              # We have no reliable way to find the semantically latest version
-              # of an extension.
+              # At this point, we process a list of objects (cache).
 
-              # Therefore, for an extension, we prioritize its versions
+              # There is at most one universal and at most one platform-specific version
+              # among any of pre-release and release versions.
+
+              # For an extension, we choose the version with the highest SemVer
+              # (so, a pre-release version older than
+              # the release version is not chosen).
+
+              # When versions are equal, we prioritize them
               # and choose one with the highest priority.
 
               # Here are the priorities (1 - highest) and properties:
@@ -246,25 +271,9 @@ let
               # 3. release platform-specific
               # 4. release universal
 
-              # When there are no pre-release platform-specific versions,
-              # we choose a pre-release universal version etc.
-
-              # At this point, we process a list of objects (cache).
-
-              # There is at most one universal and at most one platform-specific version
-              # among any of pre-release and release versions.
-
-              # When we need the latest version,
-              # we keep an existing version in the accumulator attrset
-              # except for the case when a platform-specific version
-              # with the same `isRelease` is available.
-
               valueSelected =
-                if acc ? ${name} then
-                  if acc.${name}.passthru.isRelease == valueValidated.passthru.isRelease then
-                    valueValidated
-                  else
-                    acc.${name}
+                if acc ? ${name} && compareCandidates acc.${name}.passthru value.passthru > 0 then
+                  acc.${name}
                 else
                   valueValidated;
             in
@@ -292,7 +301,8 @@ let
       # Below are priorities and corresponding combinations
       # of properties that can appear in an attrset.
       # For each extension, the attrset stores
-      # a version with the the highest priority.
+      # the highest version, using the priorities
+      # to choose among equal versions.
 
       # ---
 
