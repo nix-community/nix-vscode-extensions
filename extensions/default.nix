@@ -32,6 +32,8 @@ in
 
   sumneko.lua = callPackage ./sumneko/lua/latest;
 
+  timonwong.shellcheck = callPackage ./timonwong/shellcheck/latest;
+
   vadimcn.vscode-lldb = callPackage ./vadimcn/vscode-lldb/latest;
 
   drmerfy.overtype = callPackage (import ./lib.nix).handleGzippedZip;
