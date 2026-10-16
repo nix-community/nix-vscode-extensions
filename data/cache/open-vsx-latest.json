@@ -1539,7 +1539,7 @@
 , {"p":"Duvaragesh","n":"ibm-iagentx","r":1,"P":0,"v":"0.2.4","e":"^1.99.0","h":"sha256-QOzZjPbMRvKTmzWcIHdCUOe+Np1L6nXFZrUGKVulQ80="}
 , {"p":"Dvitash","n":"verde","r":1,"P":0,"v":"0.2.20","e":"^1.74.0","h":"sha256-TnL27wGgJYlxBIygEO7G5sys2nybJ6b66dr+cJPl0+0="}
 , {"p":"Dwtexe","n":"cursor-stats","r":1,"P":0,"v":"1.1.4","e":"^1.96.0","h":"sha256-419b8Rsiw1HocBIBczUaHuUm47qK+kQCwCrnk38/wec="}
-, {"p":"DynamicEngineering","n":"dynamic-siemens-language-support","r":1,"P":0,"v":"2.17.2","e":"^1.99.0","h":"sha256-lYcHzPuJ0CdrNIAb3htFqOoYgPWsh51hnaip0yj4HBY="}
+, {"p":"DynamicEngineering","n":"dynamic-siemens-language-support","r":1,"P":0,"v":"2.18.0","e":"^1.99.0","h":"sha256-2d5zatMXl9PAb9Xnt3umPLPBAkiJZ6M3VefYsrhDJtI="}
 , {"p":"Dynatrace","n":"dynatrace-apps","r":1,"P":0,"v":"0.39.2","e":"^1.85.0","h":"sha256-h04dj8GAFV/b8uKmq41UnRcu8O4az6gOVqAWhiMI6CI="}
 , {"p":"Dynatrace","n":"dynatrace-auth-provider","r":1,"P":0,"v":"0.2.4","e":"^1.115.0","h":"sha256-GKFRc6DDTXgeexKOeK5vHWcOaPKxb+InoK8w/vDjeVs="}
 , {"p":"Dynatrace","n":"dynatrace-debugging-extension","r":1,"P":0,"v":"3.1.0","e":"^1.103.0","h":"sha256-FknWa+b6/mfXJxUREIsRy+uBR1DbrzsExWE1+Ed6Mt8="}
@@ -4334,7 +4334,7 @@
 , {"p":"ReadyStack","n":"crashlytics-migration-lint","r":1,"P":0,"v":"1.0.3","e":"^1.75.0","h":"sha256-rsr7+87AEgjHEl4EkA0nv28ue8mYVQc+zbyyLmiaxsg="}
 , {"p":"ReadyStack","n":"cron-schedule-lint","r":1,"P":0,"v":"0.1.15","e":"^1.75.0","h":"sha256-CBjqoURhjKBtkK7mFRfhjw+vH5PT4YxABHsx5eCaJpU="}
 , {"p":"ReadyStack","n":"crypto-export-notice-lint","r":1,"P":0,"v":"1.0.10","e":"^1.75.0","h":"sha256-BxYZz21Yo9p0157EOQdVn42+2hXlrwbgtw4wSD8diY0="}
-, {"p":"ReadyStack","n":"csaf-advisory-check-cra-2026","r":1,"P":0,"v":"0.1.12","e":"^1.75.0","h":"sha256-JYOzGrRd6Q0p3I707N1+zpSoht2/91BBEA1Mv8e1/kg="}
+, {"p":"ReadyStack","n":"csaf-advisory-check-cra-2026","r":1,"P":0,"v":"0.1.13","e":"^1.75.0","h":"sha256-MgDtfRTsAP50Nl+xsodDY/gEriiO7VEYqKi0q51ZmZQ="}
 , {"p":"ReadyStack","n":"currency-minor-unit-lint","r":1,"P":0,"v":"0.1.7","e":"^1.75.0","h":"sha256-+f5WDvtIDy9+rxNVe8+EdDzpC8xfh5UWRVXPD7lUkC4="}
 , {"p":"ReadyStack","n":"cyanotype-theme","r":1,"P":0,"v":"1.0.1","e":"^1.75.0","h":"sha256-MLa3y21JQD260fMjhOCJwrSmVwbjCqmVXXNK+ZxwUnQ="}
 , {"p":"ReadyStack","n":"data-act-switching-lint","r":1,"P":0,"v":"1.0.13","e":"^1.75.0","h":"sha256-egi2mWkhlO7Ix86hS9FkgBojCJmpyKbaG8MDRzx6tVE="}
