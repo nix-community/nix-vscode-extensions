@@ -36,7 +36,7 @@ let
     .${builtins.toString number}
     or (builtins.throw "Value for `isRelease` not recognized: ${numberStr}");
 
-  pkgs = prev;
+  pkgs = final;
   inherit (pkgs) lib;
   system = final.stdenv.hostPlatform.system;
   platformCurrent = systemPlatform.${system};
