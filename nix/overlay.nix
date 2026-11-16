@@ -42,12 +42,16 @@ let
   platformCurrent = systemPlatform.${system};
   inherit (import ./semver.nix { inherit lib; }) compareSemVer;
 
+  # nixpkgs versions VS Code as `major.minor` and pads it the same way for downloads.
   isCompatibleVersion =
     vscodeVersion: engineVersion:
+    let
+      version = lib.versions.pad 3 vscodeVersion;
+    in
     if lib.strings.hasPrefix "^" engineVersion then
-      compareSemVer vscodeVersion (lib.strings.removePrefix "^" engineVersion) >= 0
+      compareSemVer version (lib.strings.removePrefix "^" engineVersion) >= 0
     else
-      compareSemVer vscodeVersion engineVersion == 0;
+      compareSemVer version engineVersion == 0;
   # Compare two candidate versions of an extension
   # by SemVer, then by `isRelease` (pre-release first),
   # then by platform (platform-specific first).
